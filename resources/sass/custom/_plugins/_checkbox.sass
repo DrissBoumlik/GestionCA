@@ -1,0 +1,40 @@
+.data-status:checked + .status
+    background: #fff //#9FD6AE
+    border: 4px solid #9FD6AE
+
+
+.data-status:checked + .status:after
+    left: 45%
+    background-color: #9FD6AE
+
+.data-status + .status:after
+    border-radius: 1rem
+    background: #fff
+    transition: all .2s ease
+
+.data-status + .status:after
+    left: 5%
+    background-color: #cacaca
+
+.data-status + .status:after //, .data-status + .status:before
+    position: absolute
+    top: .1rem
+    display: block
+    content: ""
+    width: 50%
+    height: 1.3rem
+
+
+.data-status + .status
+    background: #fff //#cacaca //f0f0f0
+    border: 4px solid #cacaca
+    border-radius: 2rem
+    padding: 2px
+    transition: all .4s ease
+
+    outline: 0
+    display: block
+    width: 4rem
+    height: 2rem
+    position: relative
+    user-select: none
