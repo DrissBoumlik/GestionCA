@@ -81,7 +81,7 @@
                                         <div class="user-picture">
                                             <img src="{{ getPicture(Auth::user()) }}" id="user-picture" alt=""
                                                  class="round auth-w">
-                                            <label for="picture">
+                                            <label for="picture" class="pointer">
                                                 <input type="file" class="custom-file-input d-none" id="picture"
                                                        accept="image/png, image/jpeg">
                                                 <input type="hidden" class="custom-file-input d-none" id="picture-data"
