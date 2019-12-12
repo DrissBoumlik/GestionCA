@@ -35,6 +35,7 @@ class StatsTableSeeder extends Seeder
                     'Id_Externe' => $rowItems[$index++],
                     'Date_Création' => $rowItems[$index++],
                     'Code_Postal_Site' => $rowItems[$index++],
+                    'Departement' => $rowItems[$index++],
                     'Drapeaux' => $rowItems[$index++],
                     'Code_Type_Intervention' => $rowItems[$index++],
                     'Date_Rdv' => $rowItems[$index++],

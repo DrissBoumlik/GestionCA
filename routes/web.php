@@ -64,4 +64,5 @@ Route::get('/getCollaborators/{project?}', 'ProjectController@getCollaborators')
 
 Route::get('/unauthorized', 'ToolController@unauthorized');
 
-Route::get('results', 'DemoController@demo');
+Route::get('results', 'DemoController@dashboard');
+Route::get('getStats', 'DemoController@getStats');

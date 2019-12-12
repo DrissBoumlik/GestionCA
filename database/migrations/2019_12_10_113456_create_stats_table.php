@@ -24,6 +24,7 @@ class CreateStatsTable extends Migration
             $table->string('Id_Externe')->nullable();
             $table->string('Date_Création')->nullable();
             $table->string('Code_Postal_Site')->nullable();
+            $table->string('Departement')->nullable();
             $table->string('Drapeaux')->nullable();
             $table->string('Code_Type_Intervention')->nullable();
             $table->string('Date_Rdv')->nullable();

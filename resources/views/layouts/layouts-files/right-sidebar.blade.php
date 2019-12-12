@@ -9,7 +9,7 @@
 
         <!-- User Info -->
         <div class="ml-2">
-            <a class="link-fx text-dark font-w600" href="javascript:void(0)">{{ Auth::user()->firstname . ' ' . Auth::user()->lastname }}</a>
+            <a class="link-fx text-dark font-w600" href="javascript:void(0)">Driss</a>
         </div>
         <!-- END User Info -->
 
