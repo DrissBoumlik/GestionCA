@@ -46,20 +46,35 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header d-none">
-                            <h3 class="card-title float-left">Users</h3>
-                            {{--                        <button class="btn btn-primary mgl-10 round" title="Add User">--}}
-                            <a href="/users/create" class="link btn btn-primary mgl-10 round" title="Add User"><i
-                                    class="fas fa-plus"></i></a>
-                            {{--                        </button>--}}
+                        <div class="card-header">
+                            <h3 class="card-title float-left">Résultats Appels (Clients Joints)</h3>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
                             <table id="stats" class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
+                                    <th>Résultats Appels Préalables "Client Joignables"</th>
+                                    @foreach($regions as $key => $region)
+                                        <th>{{ $region }}</th>
+                                    @endforeach
+                                    <th>Total</th>
                                 </tr>
                                 </thead>
+                                <tbody>
+                                @foreach($calls as $key => $call)
+                                    <tr>
+                                        <td>{{ $call['Resultat_Appel'] }}</td>
+                                        @foreach($call['zones'] as $zone)
+                                            <td>{{ $zone }} %</td>
+                                        @endforeach
+                                        @for ($i = 0; $i < count($regions) - count($call['zones']); $i++)
+                                            <td>0.00 %</td>
+                                        @endfor
+                                        <td>{{ $call['total'] }}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
                             </table>
                         </div>
                         <!-- /.card-body -->
@@ -80,5 +95,5 @@
     <script src={{ asset("/add_ons/datatables/jquery.dataTables.js") }}></script>
     <script src={{ asset("/add_ons/datatables-bs4/js/dataTables.bootstrap4.js") }}></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
-    <script src="{{ asset("/add_ons/stats/datatable.js") }}"></script>
+{{--    <script src="{{ asset("/add_ons/stats/datatable.js") }}"></script>--}}
 @endsection
