@@ -64,70 +64,62 @@ class Stats extends Model
 
         $regions = $regions->map(function ($region) use (&$regions_names) {
             $row = [];
-            $row['zones'] = [];
+            $row['regions'] = [];
             $item = $region->map(function ($call, $index) use (&$row, &$regions_names) {
                 $regions_names[] = $call->Nom_Region;
                 $row['Resultat_Appel'] = $call->Resultat_Appel;
                 $nom_region = $call->Nom_Region;
-                $row['zones']['zone_' . $index] = $call->$nom_region;
+                $row['regions']['zone_' . $index] = $call->$nom_region;
                 $row[$nom_region] = $call->$nom_region;
-                $row['total'] = round(array_sum($row['zones']) / count($row['zones']), 2);
+                $row['total'] = round(array_sum($row['regions']) / count($row['regions']), 2);
                 return $row;
             });
             return $item->last();
         });
         $regions_names = collect($regions_names)->unique()->values();
         $regions = $regions->values();
-        $data = ['regions' => $regions_names, 'calls' => $regions];
+        $data = ['regions_names' => $regions_names, 'calls' => $regions];
         return $data;
     }
 
-    public static function getCodes()
+    public static function getClientsByCallState($state)
     {
-//        $codes = \DB::table('stats')
-//            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(*) as total'))
-//            ->groupBy('Code_Intervention', 'Nom_Region')
-//            ->where('')
-//            ->get();
-//        $totalCount = Stats::all()->count();
 
         // ========================================
 
         $codes = \DB::table('stats')
-            ->select('Code_Intervention]', 'Nom_Region', \DB::raw('count(*) as total'))
-            ->groupBy('Code_Intervention]', 'Nom_Region')
+            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(*) as total'))
+            ->groupBy('Code_Intervention', 'Nom_Region')
+            ->where('Gpmt_Appel_Pré', $state)
             ->get();
         $totalCount = Stats::all()->count();
-        $codes = $codes->map(function ($region) use ($totalCount) {
-            $Region = $region->Nom_Region;
-            $region->$Region = round($region->total * 100 / $totalCount, 2);;
-            return $region;
+        $codes = $codes->map(function ($code) use ($totalCount) {
+            $Code = $code->Code_Intervention;
+            $code->$Code = round($code->total * 100 / $totalCount, 2);;
+            return $code;
         });
-        $codes = $codes->groupBy(['Resultat_Appel']);
+        $codes = $codes->groupBy(['Nom_Region']);
 
-        $regions_names = [];
+        $codes_names = [];
 
-        $codes = $codes->map(function ($region) use (&$regions_names) {
+        $codes = $codes->map(function ($region) use (&$codes_names) {
             $row = [];
-            $row['zones'] = [];
-            $item = $region->map(function ($call, $index) use (&$row, &$regions_names) {
-                $regions_names[] = $call->Nom_Region;
-                $row['Resultat_Appel'] = $call->Resultat_Appel;
-                $nom_region = $call->Nom_Region;
-                $row['zones']['zone_' . $index] = $call->$nom_region;
-                $row[$nom_region] = $call->$nom_region;
-                $row['total'] = round(array_sum($row['zones']) / count($row['zones']), 2);
+            $row['codes'] = [];
+            $item = $region->map(function ($call, $index) use (&$row, &$codes_names) {
+                $codes_names[] = $call->Code_Intervention;
+                $row['Nom_Region'] = $call->Nom_Region;
+                $code_intervention = $call->Code_Intervention;
+                $row['codes']['code_' . $index] = $call->$code_intervention;
+                $row[$code_intervention] = $call->$code_intervention;
+                $row['total'] = round(array_sum($row['codes']) / count($row['codes']), 2);
                 return $row;
             });
             return $item->last();
         });
-        $regions_names = collect($regions_names)->unique()->values();
+        $codes_names = collect($codes_names)->unique()->values();
         $codes = $codes->values();
-        $data = ['regions' => $regions_names, 'calls' => $codes];
-        return $data;
-        // ========================================
 
-        $data = ['codes' => $codes, 'regions' => $codes];
+        $data = ['codes_names' => $codes_names, 'regions' => $codes];
         return $data;
     }
 }

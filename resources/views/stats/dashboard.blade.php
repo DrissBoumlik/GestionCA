@@ -55,23 +55,107 @@
                                 <thead>
                                 <tr>
                                     <th>Résultats Appels Préalables "Client Joignables"</th>
-                                    @foreach($regions as $key => $region)
-                                        <th>{{ $region }}</th>
+                                    @foreach($regions['regions_names'] as $key => $region_name)
+                                        <th>{{ $region_name }}</th>
                                     @endforeach
                                     <th>Total</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($calls as $key => $call)
+                                @foreach($regions['calls'] as $key => $call)
                                     <tr>
                                         <td>{{ $call['Resultat_Appel'] }}</td>
-                                        @foreach($call['zones'] as $zone)
-                                            <td>{{ $zone }} %</td>
+                                        @foreach($call['regions'] as $region)
+                                            <td>{{ $region }} %</td>
                                         @endforeach
-                                        @for ($i = 0; $i < count($regions) - count($call['zones']); $i++)
+                                        @for ($i = 0; $i < count($regions['regions_names']) - count($call['regions']); $i++)
                                             <td>0.00 %</td>
                                         @endfor
-                                        <td>{{ $call['total'] }}</td>
+                                        <td>{{ $call['total'] }} %</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title float-left">Code Interventions liés aux RDV Confirmés (Clients Joignables)</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="stats" class="table table-bordered table-striped table-valign-middle capitalize">
+                                <thead>
+                                <tr>
+                                    <th>Résultats Appels Préalables "Client Joignables"</th>
+                                    @foreach($joignable['codes_names'] as $key => $code)
+                                        <th>{{ $code }}</th>
+                                    @endforeach
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($joignable['regions'] as $key => $region)
+                                    <tr>
+                                        <td>{{ $region['Nom_Region'] }}</td>
+                                        @foreach($region['codes'] as $code)
+                                            <td>{{ $code }} %</td>
+                                        @endforeach
+                                        @for ($i = 0; $i < count($joignable['codes_names']) - count($region['codes']); $i++)
+                                            <td>0.00 %</td>
+                                        @endfor
+                                        <td>{{ $region['total'] }} %</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title float-left">Code Interventions liés aux RDV Non Confirmés (Clients Joignables)</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="stats" class="table table-bordered table-striped table-valign-middle capitalize">
+                                <thead>
+                                <tr>
+                                    <th>Résultats Appels Préalables "Client Injoignables"</th>
+                                    @foreach($inJoignable['codes_names'] as $key => $code)
+                                        <th>{{ $code }}</th>
+                                    @endforeach
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($inJoignable['regions'] as $key => $region)
+                                    <tr>
+                                        <td>{{ $region['Nom_Region'] }}</td>
+                                        @foreach($region['codes'] as $code)
+                                            <td>{{ $code }} %</td>
+                                        @endforeach
+                                        @for ($i = 0; $i < count($inJoignable['codes_names']) - count($region['codes']); $i++)
+                                            <td>0.00 %</td>
+                                        @endfor
+                                        <td>{{ $region['total'] }} %</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
