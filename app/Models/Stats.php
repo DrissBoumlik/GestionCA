@@ -46,12 +46,18 @@ class Stats extends Model
         'EXPORT_ALL_Date_VALIDATION',
     ];
 
-    public static function getRegions()
+    public static function getRegions($dates = null)
     {
         $regions = \DB::table('stats')
-            ->select('Nom_Region', 'Resultat_Appel', \DB::raw('count(*) as total'))
-            ->groupBy('Nom_Region', 'Resultat_Appel')
-            ->get();
+            ->select('Nom_Region', 'Resultat_Appel', \DB::raw('count(*) as total'));
+        if ($dates) {
+            $regions = $regions->whereIn('Date_Note', $dates);
+        }
+//        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
+
+        $regions = $regions->groupBy('Nom_Region', 'Resultat_Appel')->get();
+        dd($regions);
+
         $totalCount = Stats::all()->count();
         $regions = $regions->map(function ($region) use ($totalCount) {
             $Region = $region->Nom_Region;
@@ -84,9 +90,6 @@ class Stats extends Model
 
     public static function getClientsByCallState($state)
     {
-
-        // ========================================
-
         $codes = \DB::table('stats')
             ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(*) as total'))
             ->groupBy('Code_Intervention', 'Nom_Region')
@@ -101,21 +104,30 @@ class Stats extends Model
         $codes = $codes->groupBy(['Nom_Region']);
 
         $codes_names = [];
-
-        $codes = $codes->map(function ($region) use (&$codes_names) {
+        $total[] = 'Total';
+//        $total = collect($total);
+        $codes = $codes->map(function ($region) use (&$codes_names, &$total) {
             $row = [];
             $row['codes'] = [];
-            $item = $region->map(function ($call, $index) use (&$row, &$codes_names) {
+            $item = $region->map(function ($call, $index) use (&$row, &$codes_names, &$total) {
                 $codes_names[] = $call->Code_Intervention;
                 $row['Nom_Region'] = $call->Nom_Region;
                 $code_intervention = $call->Code_Intervention;
                 $row['codes']['code_' . $index] = $call->$code_intervention;
                 $row[$code_intervention] = $call->$code_intervention;
                 $row['total'] = round(array_sum($row['codes']) / count($row['codes']), 2);
+
+                try {
+                    $total[$index] += $call->$code_intervention;
+                } catch (\Exception $e) {
+                    $total[] = 0;
+                }
+
                 return $row;
             });
             return $item->last();
         });
+//        dd($total, $codes);
         $codes_names = collect($codes_names)->unique()->values();
         $codes = $codes->values();
 

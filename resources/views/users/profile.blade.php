@@ -187,14 +187,15 @@
                                                 <label for="status">Status</label>
                                             </div>
                                             <div class="col-8">
-                                                <label class="alert alert-{{ ($user->status ? 'success' : 'danger') }}">{{ $user->status ? 'Active' : 'Inactive' }}</label>
-{{--                                                <label for="status-{{ $user->id }}">--}}
-{{--                                                    <input class='data-status d-none' id="status-{{ $user->id }}"--}}
-{{--                                                           type='checkbox'--}}
-{{--                                                           {{ ($user->status ? 'checked' : '') }}--}}
-{{--                                                           name='status' disabled>--}}
-{{--                                                    <span class='status'></span>--}}
-{{--                                                </label>--}}
+                                                <label
+                                                    class="alert alert-{{ ($user->status ? 'success' : 'danger') }}">{{ $user->status ? 'Active' : 'Inactive' }}</label>
+                                                {{--                                                <label for="status-{{ $user->id }}">--}}
+                                                {{--                                                    <input class='data-status d-none' id="status-{{ $user->id }}"--}}
+                                                {{--                                                           type='checkbox'--}}
+                                                {{--                                                           {{ ($user->status ? 'checked' : '') }}--}}
+                                                {{--                                                           name='status' disabled>--}}
+                                                {{--                                                    <span class='status'></span>--}}
+                                                {{--                                                </label>--}}
                                             </div>
                                         </div>
                                     </div>
@@ -224,8 +225,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
                 <!-- /.row -->
@@ -241,7 +240,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <!-- /.row -->

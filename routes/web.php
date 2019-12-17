@@ -20,7 +20,7 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::get('/', 'HomeController@dashboard')->name('home');
+//Route::get('/', 'HomeController@dashboard')->name('home');
 Route::get('/dashboard', 'HomeController@dashboard')->name('home');
 
 // User Routes
@@ -64,4 +64,6 @@ Route::get('/getCollaborators/{project?}', 'ProjectController@getCollaborators')
 
 Route::get('/unauthorized', 'ToolController@unauthorized');
 
-Route::get('results', 'DemoController@dashboard');
+Route::get('/', 'StatsController@dashboard');
+Route::post('/getRegionsByDate', 'StatsController@getRegionsByDate');
+Route::get('/getDates', 'StatsController@getDates');
