@@ -316,6 +316,9 @@
                                         <td>{{ $call['total'] }} %</td>
                                     </tr>
                                 @endforeach
+                                @if (!count($regions['calls']))
+                                    <tr><td colspan="100">Pas de résultats</td></tr>
+                                @endif
                                 </tbody>
                             </table>
                         </div>

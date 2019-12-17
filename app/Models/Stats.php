@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Stats extends Model
 {
@@ -51,12 +52,12 @@ class Stats extends Model
         $regions = \DB::table('stats')
             ->select('Nom_Region', 'Resultat_Appel', \DB::raw('count(*) as total'));
         if ($dates) {
+            $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
         }
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
 
         $regions = $regions->groupBy('Nom_Region', 'Resultat_Appel')->get();
-        dd($regions);
 
         $totalCount = Stats::all()->count();
         $regions = $regions->map(function ($region) use ($totalCount) {
@@ -134,4 +135,57 @@ class Stats extends Model
         $data = ['codes_names' => $codes_names, 'regions' => $codes];
         return $data;
     }
+
+    public static function getDateNotes()
+    {
+        $dates = self::distinct()->orderBy('Date_Note', 'desc')->pluck('Date_Note');
+        $dates = $dates->map(function ($date, $index) {
+            $date = explode('-', $date);
+            $item = new \stdClass();
+            $item->year = $date[0];
+            $item->month = $date[1];
+            $item->day = $date[2];
+            $date = $item;
+            return $date;
+        });
+        $dates = collect($dates)->groupBy(['year', 'month']);
+        $dates = $dates->map(function ($year, $index) use ($dates) {
+            $_year = new \stdClass();
+//            $item->year = new \stdClass();
+            $_year->name = $index;
+            $_year->months = [];
+            $year->map(function ($month, $index) use (&$_year) {
+                $_month = new \stdClass();
+//                $item2->month = new \stdClass();
+                $_month->name = $index;
+                $_month->days = [];
+                $_year->months[] = $_month;
+                $month->map(function ($day, $index) use (&$_month) {
+                    $_month->days[] = collect($day)->implode('-');
+                });
+            });
+//            $item->year->months = $year->keys()->toArray();
+            return $_year;
+        });
+//        dd($_dates->values());
+//        $_dates = $dates->mapWithKeys(function ($month) {
+//            dump($month);
+//            $month->map(function ($day) {
+//                dump($day);
+//            });
+//            dd(1);
+//        });
+//        dd($_dates);
+
+//        $dates = $dates->map(function ($date, $index) {
+//            $item = new \stdClass();
+//            $item->date = $date;
+//            $item->id = $index;
+////            $date = ['date' => $date, 'id' => $date];
+//            return $item;
+//        });
+
+        return $dates;
+    }
+
 }

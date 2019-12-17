@@ -10,6 +10,9 @@ class StatsController extends Controller
 {
     public function dashboard(Request $request)
     {
+        $dates = Stats::getDateNotes();
+        return $dates;
+
         $regions = Stats::getRegions();
         $joignable = Stats::getClientsByCallState('Joignable');
         $inJoignable = Stats::getClientsByCallState('Injoignable');
@@ -57,7 +60,19 @@ class StatsController extends Controller
         });
 //        dd($data);
         $regions = Stats::getRegions($data);
-
-        dd($regions);
+        $joignable = Stats::getClientsByCallState('Joignable');
+        $inJoignable = Stats::getClientsByCallState('Injoignable');
+//        return [$regions, $joignable, $inJoignable];
+        if ($request->exists('json'))
+            return [
+                'regions' => $regions,
+                'joignable' => $joignable,
+                'inJoignable' => $inJoignable
+            ];
+        return view('stats.dashboard', [
+            'regions' => $regions,
+            'joignable' => $joignable,
+            'inJoignable' => $inJoignable
+        ]);
     }
 }
