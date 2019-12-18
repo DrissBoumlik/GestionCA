@@ -10,21 +10,25 @@ class StatsController extends Controller
 {
     public function dashboard(Request $request)
     {
-        $dates = Stats::getDateNotes();
-        return $dates;
-
         $regions = Stats::getRegions();
+        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
+        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
+//        return [$folders, $regions];
         $joignable = Stats::getClientsByCallState('Joignable');
         $inJoignable = Stats::getClientsByCallState('Injoignable');
 //        return [$regions, $joignable, $inJoignable];
         if ($request->exists('json'))
             return [
                 'regions' => $regions,
+                'foldersByIntervType' => $foldersByIntervType,
+                'foldersByIntervCode' => $foldersByIntervCode,
                 'joignable' => $joignable,
                 'inJoignable' => $inJoignable
             ];
-        return view('stats.dashboard', [
+        return view('stats.dashboard')->with([
             'regions' => $regions,
+            'foldersByIntervType' => $foldersByIntervType,
+            'foldersByIntervCode' => $foldersByIntervCode,
             'joignable' => $joignable,
             'inJoignable' => $inJoignable
         ]);
@@ -32,33 +36,16 @@ class StatsController extends Controller
 
     public function getDates(Request $request)
     {
-        $dates = Stats::distinct()->pluck('Date_Note');
-
-        $dates = $dates->map(function ($date, $index) {
-            $item = new \stdClass();
-            $item->date = $date;
-            $item->id = $index;
-//            $date = ['date' => $date, 'id' => $date];
-            return $item;
-        });
-
-
-        if ($request->searchTerm) {
-            $dates = $dates->filter(function ($date) use ($request) {
-                return Str::contains(strtolower($date->date), strtolower($request->searchTerm));
-            })->values();
-            return ['dates' => $dates];
-        }
+        $dates = Stats::getDateNotes();
         return ['dates' => $dates];
     }
 
     public function getRegionsByDate(Request $request)
     {
-//        dd($request->dates);
         $data = array_filter($request->dates, function ($date) {
             return $date != null;
         });
-//        dd($data);
+
         $regions = Stats::getRegions($data);
         $joignable = Stats::getClientsByCallState('Joignable');
         $inJoignable = Stats::getClientsByCallState('Injoignable');
@@ -69,7 +56,7 @@ class StatsController extends Controller
                 'joignable' => $joignable,
                 'inJoignable' => $inJoignable
             ];
-        return view('stats.dashboard', [
+        return back()->with([
             'regions' => $regions,
             'joignable' => $joignable,
             'inJoignable' => $inJoignable

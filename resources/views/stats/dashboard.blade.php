@@ -31,6 +31,74 @@
     <script src="{{ asset("/add_ons/stats/stats.js") }}"></script>
     <script>
         $(function () {
+            $.ajax({
+                url: '/getDates',
+                method: 'GET',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                success: function (response) {
+                    console.log(response);
+                    let data = response.dates;
+                    let tree = new Tree('.tree-view', {
+                        data: [{id: '-1', text: 'Dates', children: data}],
+                        closeDepth: 2,
+                        loaded: function () {
+                            // this.values = ['0-0-0', '0-1-1', '0-0-2'];
+                            // console.log(this.selectedNodes);
+                            // console.log(this.values);
+                            // this.disables = ['0-0-0', '0-0-1', '0-0-2']
+                        },
+                        onChange: function () {
+                            console.log(this.values);
+                        }
+                    });
+                    // $('#tree-view .treejs-label').attr('name', 'dates[]');
+                    // $('#tree-view .treejs-checkbox').attr('name', 'dates[]');
+                    $('.tree-view .treejs-placeholder').each(function (index) {
+                        $(this).append('<input type="hidden" name="dates[]" class="treejs-input" id="' + index + '" />');
+                    });
+                    var called = false;
+                    $('.treejs-node').on('click', function (e) {
+                        // console.log(e.target.classList);
+                        if (e.target.className !== 'treejs-switcher') {
+                            if (!called) {
+                                // e.stopPropagation();
+                                // let input = $(this).find('.treejs-input');
+                                let label = $(this).find('.treejs-placeholder .treejs-label');
+                                console.log(label);
+                                label.each(function (index) {
+                                    // debugger
+                                    // console.log($(this));
+                                    let input = $(this).next('.treejs-input');
+                                    $(input).val(!$(this).parent().hasClass('treejs-node__checked') ? $(this).text() : '');
+                                });
+                                // console.log($(chbx).prop('checked'));
+                                // $(chbx).prop('checked', !$(chbx).prop('checked'));
+                                // $(chbx).attr('value','koko');
+                                // $(chbx).prop('checked', !$(this).hasClass('treejs-node__checked') && !$(this).hasClass('treejs-node__halfchecked'));
+                                // $(input).val(!$(this).hasClass('treejs-node__checked') ? label.text() : '');
+                                setTimeout(function () {
+                                    called = false;
+                                }, 150);
+                            }
+                            called = true;
+                        }
+                    });
+                    $('.treejs-node.treejs-placeholder').on('click', function (e) {
+                        // test parent with class treejs-placeholder
+                        let input = $(this).find('.treejs-input');
+                        let label = $(this).find('.treejs-label');
+                        // $(chbx).prop('checked', !$(this).hasClass('treejs-node__checked'));
+                        $(input).val(!$(this).hasClass('treejs-node__checked') ? label.text() : '');
+                    });
+                    $('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }
+            });
+
+
             @if($errors->any())
             swal(
                 'Error!',
@@ -44,192 +112,7 @@
                 '{{ session()->get('message') }}',
                 'success'
             );
-                @endif
-
-            let data = [
-                    {
-                        "id": "2019",
-                        "text": "2019",
-                        "name": "truc",
-                        "children": [
-                            {
-                                "id": "2019-02",
-                                "text": "2019-02",
-                                "children": [
-                                    {
-                                        "id": "2019-02-02",
-                                        "text": "2019-02-02"
-                                    },
-                                    {
-                                        "id": "2019-02-05",
-                                        "text": "2019-02-05"
-                                    },
-                                    {
-                                        "id": "2019-02-15",
-                                        "text": "2019-02-15"
-                                    }
-                                ]
-                            },
-                            {
-                                "id": "2019-05",
-                                "text": "2019-05",
-                                "children": [
-                                    {
-                                        "id": "2019-05-10",
-                                        "text": "2019-05-10"
-                                    }
-                                    ,
-                                    {
-                                        "id": "2019-05-13",
-                                        "text": "2019-05-13"
-                                    },
-                                    {
-                                        "id": "2019-05-22",
-                                        "text": "2019-05-22"
-                                    }
-                                ]
-                            },
-                            {
-                                "id": "2019-09",
-                                "text": "2019-09",
-                                "children": [
-                                    {
-                                        "id": "2019-09-06",
-                                        "text": "2019-09-06"
-                                    },
-                                    {
-                                        "id": "2019-09-16",
-                                        "text": "2019-09-16"
-                                    },
-                                    {
-                                        "id": "2019-09-18",
-                                        "text": "2019-09-18"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "id": "2018",
-                        "text": "2018",
-                        "children": [
-                            {
-                                "id": "2018-04",
-                                "text": "2018-04",
-                                "children": [
-                                    {
-                                        "id": "2018-04-05",
-                                        "text": "2018-04-05"
-                                    },
-                                    {
-                                        "id": "2018-04-10",
-                                        "text": "2018-04-10"
-                                    },
-                                    {
-                                        "id": "2018-04-22",
-                                        "text": "2018-04-22"
-                                    }
-                                ]
-                            },
-                            {
-                                "id": "2018-07",
-                                "text": "2018-07",
-                                "children": [
-                                    {
-                                        "id": "2018-07-04",
-                                        "text": "2018-07-04"
-                                    },
-                                    {
-                                        "id": "2018-07-06",
-                                        "text": "2018-07-06"
-                                    },
-                                    {
-                                        "id": "2018-07-19",
-                                        "text": "2018-07-19"
-                                    }
-                                ]
-                            },
-                        ]
-                    },
-                    {
-                        "id": "2017",
-                        "text": "2017",
-                        "children": [
-                            {
-                                "id": "2017-06",
-                                "text": "2017-06",
-                                "children": [
-                                    {
-                                        "id": "2017-06-05",
-                                        "text": "2017-06-05"
-                                    },
-                                    {
-
-                                        "id": "2017-06-17",
-                                        "text": "2017-06-17"
-                                    },
-                                    {
-                                        "id": "2017-06-25",
-                                        "text": "2017-06-25"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ];
-
-            let tree = new Tree('#tree-view', {
-                data: [{id: '-1', text: 'Dates', children: data}],
-                closeDepth: 2,
-                loaded: function () {
-                    // this.values = ['0-0-0', '0-1-1', '0-0-2'];
-                    // console.log(this.selectedNodes);
-                    // console.log(this.values);
-                    // this.disables = ['0-0-0', '0-0-1', '0-0-2']
-                },
-                onChange: function () {
-                    console.log(this.values);
-                }
-            });
-            // $('#tree-view .treejs-label').attr('name', 'dates[]');
-            // $('#tree-view .treejs-checkbox').attr('name', 'dates[]');
-            $('#tree-view .treejs-placeholder').each(function (index) {
-                $(this).append('<input type="hidden" name="dates[]" class="treejs-input" id="' + index + '" />');
-            });
-            var called = false;
-            $('.treejs-node').on('click', function (e) {
-                // console.log(e.target.classList);
-                if (e.target.className !== 'treejs-switcher') {
-                    if (!called) {
-                        // e.stopPropagation();
-                        // let input = $(this).find('.treejs-input');
-                        let label = $(this).find('.treejs-placeholder .treejs-label');
-                        console.log(label);
-                        label.each(function (index) {
-                            // debugger
-                            // console.log($(this));
-                            let input = $(this).next('.treejs-input');
-                            $(input).val(!$(this).parent().hasClass('treejs-node__checked') ? $(this).text() : '');
-                        });
-                        // console.log($(chbx).prop('checked'));
-                        // $(chbx).prop('checked', !$(chbx).prop('checked'));
-                        // $(chbx).attr('value','koko');
-                        // $(chbx).prop('checked', !$(this).hasClass('treejs-node__checked') && !$(this).hasClass('treejs-node__halfchecked'));
-                        // $(input).val(!$(this).hasClass('treejs-node__checked') ? label.text() : '');
-                        setTimeout(function () {
-                            called = false;
-                        }, 150);
-                    }
-                    called = true;
-                }
-            });
-            $('.treejs-node.treejs-placeholder').on('click', function (e) {
-                // test parent with class treejs-placeholder
-                let input = $(this).find('.treejs-input');
-                let label = $(this).find('.treejs-label');
-                // $(chbx).prop('checked', !$(this).hasClass('treejs-node__checked'));
-                $(input).val(!$(this).hasClass('treejs-node__checked') ? label.text() : '');
-            });
+            @endif
         })
     </script>
 @endsection
@@ -273,22 +156,12 @@
                         <div class="card-header">
                             <h3 class="card-title d-inline-block">Résultats Appels (Clients Joints)</h3>
                             <hr>
-                            <form action="/getRegionsByDate" method="POST">
+                            <form action="/" method="POST">
                                 @csrf
-                                <div id="tree-view"></div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-4">
-                                        <div class="select2-wrapper d-inline">
-                                            <select name="_dates[]" id="dates" class="w-100"></select>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <button type="submit" class="btn btn-primary">
-                                            <span class="btn-field font-weight-normal position-relative">Refresh</span>
-                                        </button>
-                                    </div>
-                                </div>
+                                <div class="tree-view d-inline-block"></div>
+                                <button type="submit" class="btn btn-primary float-right">
+                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                </button>
                             </form>
                         </div>
                         <!-- /.card-header -->
@@ -306,18 +179,20 @@
                                 <tbody>
                                 @foreach($regions['calls'] as $key => $call)
                                     <tr>
-                                        <td>{{ $call['Resultat_Appel'] }}</td>
-                                        @foreach($call['regions'] as $region)
+                                        <td>{{ $call->Resultat_Appel }}</td>
+                                        @foreach($call->regions as $region)
                                             <td>{{ $region }} %</td>
                                         @endforeach
-                                        @for ($i = 0; $i < count($regions['regions_names']) - count($call['regions']); $i++)
+                                        @for ($i = 0; $i < count($regions['regions_names']) - count($call->regions); $i++)
                                             <td>0.00 %</td>
                                         @endfor
-                                        <td>{{ $call['total'] }} %</td>
+                                        <td>{{ $call->total }} %</td>
                                     </tr>
                                 @endforeach
                                 @if (!count($regions['calls']))
-                                    <tr><td colspan="100">Pas de résultats</td></tr>
+                                    <tr>
+                                        <td colspan="100">Pas de résultats</td>
+                                    </tr>
                                 @endif
                                 </tbody>
                             </table>
@@ -334,8 +209,16 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title float-left">Code Interventions liés aux RDV Confirmés (Clients
+                            <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Confirmés (Clients
                                 Joignables)</h3>
+                            <hr>
+                            <form action="/" method="POST">
+                                @csrf
+                                <div class="tree-view d-inline-block"></div>
+                                <button type="submit" class="btn btn-primary float-right">
+                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                </button>
+                            </form>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
@@ -352,14 +235,14 @@
                                 <tbody>
                                 @foreach($joignable['regions'] as $key => $region)
                                     <tr>
-                                        <td>{{ $region['Nom_Region'] }}</td>
-                                        @foreach($region['codes'] as $code)
+                                        <td>{{ $region->Nom_Region }}</td>
+                                        @foreach($region->codes as $code)
                                             <td>{{ $code }} %</td>
                                         @endforeach
-                                        @for ($i = 0; $i < count($joignable['codes_names']) - count($region['codes']); $i++)
+                                        @for ($i = 0; $i < count($joignable['codes_names']) - count($region->codes); $i++)
                                             <td>0.00 %</td>
                                         @endfor
-                                        <td>{{ $region['total'] }} %</td>
+                                        <td>{{ $region->total }} %</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -377,8 +260,16 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title float-left">Code Interventions liés aux RDV Non Confirmés (Clients
+                            <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Non Confirmés (Clients
                                 Injoignables)</h3>
+                            <hr>
+                            <form action="/" method="POST">
+                                @csrf
+                                <div class="tree-view d-inline-block"></div>
+                                <button type="submit" class="btn btn-primary float-right">
+                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                </button>
+                            </form>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
@@ -395,16 +286,72 @@
                                 <tbody>
                                 @foreach($inJoignable['regions'] as $key => $region)
                                     <tr>
-                                        <td>{{ $region['Nom_Region'] }}</td>
-                                        @foreach($region['codes'] as $code)
+                                        <td>{{ $region->Nom_Region }}</td>
+                                        @foreach($region->codes as $code)
                                             <td>{{ $code }} %</td>
                                         @endforeach
-                                        @for ($i = 0; $i < count($inJoignable['codes_names']) - count($region['codes']); $i++)
+                                        @for ($i = 0; $i < count($inJoignable['codes_names']) - count($region->codes); $i++)
                                             <td>0.00 %</td>
                                         @endfor
-                                        <td>{{ $region['total'] }} %</td>
+                                        <td>{{ $region->total }} %</td>
                                     </tr>
                                 @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Répartition des dossiers non validés pas code
+                                intervention</h3>
+                            <hr>
+                            <form action="/" method="POST">
+                                @csrf
+                                <div class="tree-view d-inline-block"></div>
+                                <button type="submit" class="btn btn-primary float-right">
+                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                </button>
+                            </form>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="stats" class="table table-bordered table-striped table-valign-middle capitalize">
+                                <thead>
+                                <tr>
+                                    <th>Type Traitement</th>
+                                    @foreach($folders['regions_names'] as $key => $region_name)
+                                        <th>{{ $region_name }}</th>
+                                    @endforeach
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($folders['codes'] as $key => $code)
+                                    <tr>
+                                        <td>{{ $code->Code_Type_Intervention }}</td>
+                                        @foreach($code->regions as $region)
+                                            <td>{{ $region }} %</td>
+                                        @endforeach
+                                        @for ($i = 0; $i < count($regions['regions_names']) - count($code->regions); $i++)
+                                            <td>0.00 %</td>
+                                        @endfor
+                                        <td>{{ $code->total }} %</td>
+                                    </tr>
+                                @endforeach
+                                @if (!count($folders['codes']))
+                                    <tr>
+                                        <td colspan="100">Pas de résultats</td>
+                                    </tr>
+                                @endif
                                 </tbody>
                             </table>
                         </div>

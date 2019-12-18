@@ -70,15 +70,15 @@ class Stats extends Model
         $regions_names = [];
 
         $regions = $regions->map(function ($region) use (&$regions_names) {
-            $row = [];
-            $row['regions'] = [];
+            $row = new \stdClass();
+            $row->regions = [];
             $item = $region->map(function ($call, $index) use (&$row, &$regions_names) {
                 $regions_names[] = $call->Nom_Region;
-                $row['Resultat_Appel'] = $call->Resultat_Appel;
+                $row->Resultat_Appel = $call->Resultat_Appel;
                 $nom_region = $call->Nom_Region;
-                $row['regions']['zone_' . $index] = $call->$nom_region;
-                $row[$nom_region] = $call->$nom_region;
-                $row['total'] = round(array_sum($row['regions']) / count($row['regions']), 2);
+                $row->regions['zone_' . $index] = $call->$nom_region;
+                $row->$nom_region = $call->$nom_region;
+                $row->total = round(array_sum($row->regions) / count($row->regions), 2);
                 return $row;
             });
             return $item->last();
@@ -89,13 +89,75 @@ class Stats extends Model
         return $data;
     }
 
-    public static function getClientsByCallState($state)
+    public static function getNonValidatedFolders($intervCol, $dates = null)
+    {
+        $regions = \DB::table('stats')
+            ->select('Nom_Region', $intervCol, \DB::raw('count(*) as total'));
+        if ($dates) {
+            $dates = array_values($dates);
+            $regions = $regions->whereIn('Date_Note', $dates);
+        }
+        $regions = $regions->groupBy('Nom_Region', $intervCol)->get();
+
+        $totalCount = Stats::all()->count();
+        $regions = $regions->map(function ($region) use ($totalCount) {
+            $Region = $region->Nom_Region;
+            $region->$Region = round($region->total * 100 / $totalCount, 2);;
+            return $region;
+        });
+        $regions = $regions->groupBy([$intervCol]);
+
+        $regions_names = [];
+
+        $regions = $regions->map(function ($region) use (&$regions_names) {
+            $row = new \stdClass();
+            $row->regions = [];
+            $item = $region->map(function ($call, $index) use (&$row, &$regions_names) {
+                $regions_names[] = $call->Nom_Region;
+//                dump(isset($call->Code_Type_Intervention), ($call->Code_Intervention));
+//                dump(22, property_exists($call, 'Code_Type_Intervention'));
+//                dump(33, property_exists($call, 'Code_Intervention'));
+//                if (isset($call->Code_Type_Intervention) != false)
+//                    dd(0);
+//                if (isset($call->Code_Intervention) != false)
+//                    dd(1);
+//                dd($call);
+//                dd($call->Code_Intervention, $call->Code_Type_Intervention);
+
+
+                if (property_exists($call, 'Code_Type_Intervention')) {
+                    $row->Code_Type_Intervention = $call->Code_Type_Intervention;
+                } elseif (property_exists($call, 'Code_Intervention')) {
+                    $row->Code_Intervention = $call->Code_Intervention;
+                }
+
+
+                $nom_region = $call->Nom_Region;
+                $row->regions['zone_' . $index] = $call->$nom_region;
+                $row->$nom_region = $call->$nom_region;
+                $row->total = round(array_sum($row->regions) / count($row->regions), 2);
+                return $row;
+            });
+            return $item->last();
+        });
+        $regions_names = collect($regions_names)->unique()->values();
+        $regions = $regions->values();
+        $data = ['regions_names' => $regions_names, 'codes' => $regions];
+        return $data;
+    }
+
+    public static function getClientsByCallState($state, $dates = null)
     {
         $codes = \DB::table('stats')
             ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(*) as total'))
-            ->groupBy('Code_Intervention', 'Nom_Region')
-            ->where('Gpmt_Appel_Pré', $state)
-            ->get();
+            ->where('Gpmt_Appel_Pré', $state);
+//            ->groupBy('Code_Intervention', 'Nom_Region')
+//            ->get();
+        if ($dates) {
+            $dates = array_values($dates);
+            $codes = $codes->whereIn('Date_Note', $dates);
+        }
+        $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
         $totalCount = Stats::all()->count();
         $codes = $codes->map(function ($code) use ($totalCount) {
             $Code = $code->Code_Intervention;
@@ -105,30 +167,29 @@ class Stats extends Model
         $codes = $codes->groupBy(['Nom_Region']);
 
         $codes_names = [];
-        $total[] = 'Total';
-//        $total = collect($total);
+        $total = new \stdClass();
         $codes = $codes->map(function ($region) use (&$codes_names, &$total) {
-            $row = [];
-            $row['codes'] = [];
+            $row = new \stdClass(); //[];
+            $row->codes = [];
             $item = $region->map(function ($call, $index) use (&$row, &$codes_names, &$total) {
                 $codes_names[] = $call->Code_Intervention;
-                $row['Nom_Region'] = $call->Nom_Region;
+                $row->Nom_Region = $call->Nom_Region;
                 $code_intervention = $call->Code_Intervention;
-                $row['codes']['code_' . $index] = $call->$code_intervention;
-                $row[$code_intervention] = $call->$code_intervention;
-                $row['total'] = round(array_sum($row['codes']) / count($row['codes']), 2);
-
-                try {
-                    $total[$index] += $call->$code_intervention;
-                } catch (\Exception $e) {
-                    $total[] = 0;
-                }
+                $row->codes['code_' . $index] = $call->$code_intervention;
+//                $row->$code_intervention = $call->$code_intervention;
+                $row->total = round(array_sum($row->codes) / count($row->codes), 2);
+//                dump($code_intervention ? $total->{$code_intervention}[0] : 1);
+//                if ($code_intervention)
+//                    $total->$code_intervention =
+//                        $total->$index == 0 ?
+//                        $total->$index + $call->$code_intervention : 0;
+//                    $total[$index] += $call->$code_intervention;
 
                 return $row;
             });
             return $item->last();
         });
-//        dd($total, $codes);
+//        dd($total);
         $codes_names = collect($codes_names)->unique()->values();
         $codes = $codes->values();
 
@@ -149,43 +210,30 @@ class Stats extends Model
             return $date;
         });
         $dates = collect($dates)->groupBy(['year', 'month']);
-        $dates = $dates->map(function ($year, $index) use ($dates) {
+        $dates = $dates->map(function ($year, $index) {
             $_year = new \stdClass();
-//            $item->year = new \stdClass();
-            $_year->name = $index;
-            $_year->months = [];
+            $_year->id = $index; // year name
+            $_year->text = $index; // year name
+            $_year->children = []; // months
             $year->map(function ($month, $index) use (&$_year) {
                 $_month = new \stdClass();
-//                $item2->month = new \stdClass();
-                $_month->name = $index;
-                $_month->days = [];
-                $_year->months[] = $_month;
+                $_month->id = $_year->text . '-' . $index; // month name
+                $_month->text = $_year->text . '-' . $index; // month name
+                $_month->children = []; // days
+                $_year->children[] = $_month;
                 $month->map(function ($day, $index) use (&$_month) {
-                    $_month->days[] = collect($day)->implode('-');
+                    $_day = new \stdClass();
+                    $_day->id = collect($day)->implode('-'); // day name
+                    $_day->text = collect($day)->implode('-'); // day name
+                    $_month->children[] = $_day; // collect($day)->implode('-');
+                    return $_month;
                 });
+                return $_year;
             });
-//            $item->year->months = $year->keys()->toArray();
             return $_year;
         });
-//        dd($_dates->values());
-//        $_dates = $dates->mapWithKeys(function ($month) {
-//            dump($month);
-//            $month->map(function ($day) {
-//                dump($day);
-//            });
-//            dd(1);
-//        });
-//        dd($_dates);
 
-//        $dates = $dates->map(function ($date, $index) {
-//            $item = new \stdClass();
-//            $item->date = $date;
-//            $item->id = $index;
-////            $date = ['date' => $date, 'id' => $date];
-//            return $item;
-//        });
-
-        return $dates;
+        return $dates->values();
     }
 
 }
