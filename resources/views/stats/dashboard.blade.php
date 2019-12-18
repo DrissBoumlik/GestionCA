@@ -38,21 +38,23 @@
                 success: function (response) {
                     console.log(response);
                     let data = response.dates;
-                    let tree = new Tree('.tree-view', {
-                        data: [{id: '-1', text: 'Dates', children: data}],
-                        closeDepth: 2,
-                        loaded: function () {
-                            // this.values = ['0-0-0', '0-1-1', '0-0-2'];
-                            // console.log(this.selectedNodes);
-                            // console.log(this.values);
-                            // this.disables = ['0-0-0', '0-0-1', '0-0-2']
-                        },
-                        onChange: function () {
-                            console.log(this.values);
-                        }
+                    $('.tree-view').each(function (index, item) {
+                        console.log(index, item, $(this), $(this).attr('id'));
+                        new Tree('#' + $(this).attr('id'), {
+                            data: [{id: '-1', text: 'Dates', children: data}],
+                            closeDepth: 2,
+                            loaded: function () {
+                                // this.values = ['0-0-0', '0-1-1', '0-0-2'];
+                                // console.log(this.selectedNodes);
+                                // console.log(this.values);
+                                // this.disables = ['0-0-0', '0-0-1', '0-0-2']
+                            },
+                            onChange: function () {
+                                console.log(this.values);
+                            }
+                        });
+                        $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
                     });
-                    // $('#tree-view .treejs-label').attr('name', 'dates[]');
-                    // $('#tree-view .treejs-checkbox').attr('name', 'dates[]');
                     $('.tree-view .treejs-placeholder').each(function (index) {
                         $(this).append('<input type="hidden" name="dates[]" class="treejs-input" id="' + index + '" />');
                     });
@@ -90,7 +92,6 @@
                         // $(chbx).prop('checked', !$(this).hasClass('treejs-node__checked'));
                         $(input).val(!$(this).hasClass('treejs-node__checked') ? label.text() : '');
                     });
-                    $('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
 
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -158,7 +159,7 @@
                             <hr>
                             <form action="/" method="POST">
                                 @csrf
-                                <div class="tree-view d-inline-block"></div>
+                                <div id="tree-view-0" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Refresh</span>
                                 </button>
@@ -214,7 +215,7 @@
                             <hr>
                             <form action="/" method="POST">
                                 @csrf
-                                <div class="tree-view d-inline-block"></div>
+                                <div id="tree-view-1" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Refresh</span>
                                 </button>
@@ -265,7 +266,7 @@
                             <hr>
                             <form action="/" method="POST">
                                 @csrf
-                                <div class="tree-view d-inline-block"></div>
+                                <div id="tree-view-2" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Refresh</span>
                                 </button>
@@ -311,12 +312,12 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title d-inline-block">Répartition des dossiers non validés pas code
+                            <h3 class="card-title d-inline-block">Répartition des dossiers non validés par code
                                 intervention</h3>
                             <hr>
                             <form action="/" method="POST">
                                 @csrf
-                                <div class="tree-view d-inline-block"></div>
+                                <div id="tree-view-3" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Refresh</span>
                                 </button>
@@ -328,14 +329,14 @@
                                 <thead>
                                 <tr>
                                     <th>Type Traitement</th>
-                                    @foreach($folders['regions_names'] as $key => $region_name)
+                                    @foreach($foldersByIntervType['regions_names'] as $key => $region_name)
                                         <th>{{ $region_name }}</th>
                                     @endforeach
                                     <th>Total</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($folders['codes'] as $key => $code)
+                                @foreach($foldersByIntervType['codes'] as $key => $code)
                                     <tr>
                                         <td>{{ $code->Code_Type_Intervention }}</td>
                                         @foreach($code->regions as $region)
@@ -347,7 +348,63 @@
                                         <td>{{ $code->total }} %</td>
                                     </tr>
                                 @endforeach
-                                @if (!count($folders['codes']))
+                                @if (!count($foldersByIntervType['codes']))
+                                    <tr>
+                                        <td colspan="100">Pas de résultats</td>
+                                    </tr>
+                                @endif
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Répartition des dossiers non validés par code
+                                intervention</h3>
+                            <hr>
+                            <form action="/" method="POST">
+                                @csrf
+                                <div id="tree-view-4" class="tree-view d-inline-block"></div>
+                                <button type="submit" class="btn btn-primary float-right">
+                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                </button>
+                            </form>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="stats" class="table table-bordered table-striped table-valign-middle capitalize">
+                                <thead>
+                                <tr>
+                                    <th>Type Traitement</th>
+                                    @foreach($foldersByIntervCode['regions_names'] as $key => $region_name)
+                                        <th>{{ $region_name }}</th>
+                                    @endforeach
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($foldersByIntervCode['codes'] as $key => $code)
+                                    <tr>
+                                        <td>{{ $code->Code_Intervention }}</td>
+                                        @foreach($code->regions as $region)
+                                            <td>{{ $region }} %</td>
+                                        @endforeach
+                                        @for ($i = 0; $i < count($regions['regions_names']) - count($code->regions); $i++)
+                                            <td>0.00 %</td>
+                                        @endfor
+                                        <td>{{ $code->total }} %</td>
+                                    </tr>
+                                @endforeach
+                                @if (!count($foldersByIntervCode['codes']))
                                     <tr>
                                         <td colspan="100">Pas de résultats</td>
                                     </tr>
