@@ -25,8 +25,6 @@ class StatsTableSeeder extends Seeder
             $data->map(function ($rowItems, $index) use (&$db_data) {
                 $rowItems = collect($rowItems)->values()->all();
                 $_index = 0;
-//                if ($_index == 0)
-//                    dump($rowItems);
                 $db_data[] = [
                     'Type_Note' => $rowItems[$_index++],
                     'Utilisateur' => $rowItems[$_index++],

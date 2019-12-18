@@ -68,3 +68,11 @@ Route::get('/', 'StatsController@dashboard');
 Route::post('/', 'StatsController@getRegionsByDate');
 Route::get('/getDates', 'StatsController@getDates');
 Route::get('/agencies', 'StatsController@byAgency');
+
+
+
+// ===============
+
+Route::get('/tasks', 'TaskController@index')->name('tasks.index');
+Route::get('/tasks/get-tasks', 'TaskController@getTasks')->name('tasks.get-tasks');
+Route::post('/tasks/import-tasks', 'TaskController@importTasks')->name('tasks.import-tasks');
