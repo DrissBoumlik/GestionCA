@@ -139,6 +139,12 @@
                     </a>
                 </li>
             @endcan
+            <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('/agences') ? ' active' : '' }}" href="/agences">
+                    <i class="nav-main-link-icon si si-cursor"></i>
+                    <span class="nav-main-link-name">Agences</span>
+                </a>
+            </li>
             <ul class="d-none">
                 <li class="nav-main-heading">Various</li>
                 <li class="nav-main-item{{ request()->is('examples/*') ? ' open' : '' }}">

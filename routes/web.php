@@ -67,3 +67,4 @@ Route::get('/unauthorized', 'ToolController@unauthorized');
 Route::get('/', 'StatsController@dashboard');
 Route::post('/', 'StatsController@getRegionsByDate');
 Route::get('/getDates', 'StatsController@getDates');
+Route::get('/agencies', 'StatsController@byAgency');

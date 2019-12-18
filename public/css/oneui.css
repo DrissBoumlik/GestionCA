@@ -25479,6 +25479,10 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
   background-color: transparent;
 }
 
+.card-header {
+  background-color: #DDEBF7;
+}
+
 .profile .profile-wrapper {
   border-radius: 10px;
   padding: 20px;
@@ -25624,6 +25628,10 @@ td.details-control {
 
 .details td.details-control {
   background: url("/media/icons/details_close.png") no-repeat center center;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #DDEBF7;
 }
 
 .box-wrapper .box-container .box-content .box-content-wrapper {

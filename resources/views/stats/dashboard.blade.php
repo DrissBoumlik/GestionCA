@@ -36,10 +36,8 @@
                 method: 'GET',
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function (response) {
-                    console.log(response);
                     let data = response.dates;
                     $('.tree-view').each(function (index, item) {
-                        console.log(index, item, $(this), $(this).attr('id'));
                         new Tree('#' + $(this).attr('id'), {
                             data: [{id: '-1', text: 'Dates', children: data}],
                             closeDepth: 2,

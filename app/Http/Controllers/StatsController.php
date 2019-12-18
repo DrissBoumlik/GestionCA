@@ -8,6 +8,12 @@ use Illuminate\Support\Str;
 
 class StatsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function dashboard(Request $request)
     {
         $regions = Stats::getRegions();
@@ -61,5 +67,15 @@ class StatsController extends Controller
             'joignable' => $joignable,
             'inJoignable' => $inJoignable
         ]);
+    }
+
+    public function byAgency(Request $request)
+    {
+        return view('stats.agencies');
+    }
+
+    public function byAgencyJson()
+    {
+
     }
 }
