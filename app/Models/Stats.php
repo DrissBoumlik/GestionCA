@@ -39,7 +39,7 @@ class Stats extends Model
         'EXPORT_ALL_Nom_SITE',
         'EXPORT_ALL_Nom_TECHNICIEN',
         'EXPORT_ALL_PRENom_TECHNICIEN',
-        'EXPORT_ALL_Nom_CLIENT',
+//        'EXPORT_ALL_Nom_CLIENT',
         'EXPORT_ALL_Nom_EQUIPEMENT',
         'EXPORT_ALL_EXTRACT_CUI',
         'EXPORT_ALL_Date_CHARGEMENT_PDA',
@@ -114,23 +114,12 @@ class Stats extends Model
             $row->regions = [];
             $item = $region->map(function ($call, $index) use (&$row, &$regions_names) {
                 $regions_names[] = $call->Nom_Region;
-//                dump(isset($call->Code_Type_Intervention), ($call->Code_Intervention));
-//                dump(22, property_exists($call, 'Code_Type_Intervention'));
-//                dump(33, property_exists($call, 'Code_Intervention'));
-//                if (isset($call->Code_Type_Intervention) != false)
-//                    dd(0);
-//                if (isset($call->Code_Intervention) != false)
-//                    dd(1);
-//                dd($call);
-//                dd($call->Code_Intervention, $call->Code_Type_Intervention);
-
 
                 if (property_exists($call, 'Code_Type_Intervention')) {
                     $row->Code_Type_Intervention = $call->Code_Type_Intervention;
                 } elseif (property_exists($call, 'Code_Intervention')) {
                     $row->Code_Intervention = $call->Code_Intervention;
                 }
-
 
                 $nom_region = $call->Nom_Region;
                 $row->regions['zone_' . $index] = $call->$nom_region;

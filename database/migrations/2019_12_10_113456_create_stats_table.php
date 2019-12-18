@@ -24,7 +24,7 @@ class CreateStatsTable extends Migration
             $table->string('Id_Externe')->nullable();
             $table->string('Date_Création')->nullable();
             $table->string('Code_Postal_Site')->nullable();
-            $table->string('Departement')->nullable();
+//            $table->string('Departement')->nullable();
             $table->string('Drapeaux')->nullable();
             $table->string('Code_Type_Intervention')->nullable();
             $table->string('Date_Rdv')->nullable();
@@ -44,7 +44,7 @@ class CreateStatsTable extends Migration
             $table->string('EXPORT_ALL_Nom_SITE')->nullable();
             $table->string('EXPORT_ALL_Nom_TECHNICIEN')->nullable();
             $table->string('EXPORT_ALL_PRENom_TECHNICIEN')->nullable();
-            $table->string('EXPORT_ALL_Nom_CLIENT')->nullable();
+//            $table->string('EXPORT_ALL_Nom_CLIENT')->nullable();
             $table->string('EXPORT_ALL_Nom_EQUIPEMENT')->nullable();
             $table->string('EXPORT_ALL_EXTRACT_CUI')->nullable();
             $table->string('EXPORT_ALL_Date_CHARGEMENT_PDA')->nullable();
