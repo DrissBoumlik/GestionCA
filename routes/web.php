@@ -65,10 +65,16 @@ Route::get('/getCollaborators/{project?}', 'ProjectController@getCollaborators')
 Route::get('/unauthorized', 'ToolController@unauthorized');
 
 Route::get('/', 'StatsController@dashboard');
-Route::post('/', 'StatsController@getRegionsByDate');
+Route::post('/getRegionsByDates', 'StatsController@getRegionsByDate');
+Route::post('/getNonValidatedFoldersByCodeByDates', 'StatsController@getNonValidatedFoldersByCodeByDates');
+Route::post('/getNonValidatedFoldersByTypeByDates', 'StatsController@getNonValidatedFoldersByTypeByDates');
+Route::post('/getClientsByCallStateJoiByDates', 'StatsController@getClientsByCallStateJoiByDates');
+Route::post('/getClientsByCallStateInjByDates', 'StatsController@getClientsByCallStateInjByDates');
+
 Route::get('/getDates', 'StatsController@getDates');
 Route::get('/agencies', 'StatsController@byAgency');
 
+Route::get('/getRegions', 'StatsController@getRegions');
 
 
 // ===============

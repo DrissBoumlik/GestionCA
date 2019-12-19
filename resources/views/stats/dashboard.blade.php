@@ -6,7 +6,7 @@
 
 @section('css_after')
     <!-- DataTables -->
-    {{--    <link rel="stylesheet" href={{ asset("/add_ons/datatables-bs4/css/dataTables.bootstrap4.css") }}>--}}
+    <link rel="stylesheet" href={{ asset("/add_ons/datatables-bs4/css/dataTables.bootstrap4.css") }}>
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
     <!-- Select2 -->
@@ -18,8 +18,8 @@
 
 @section('js_after')
     <!-- DataTables -->
-    {{--    <script src={{ asset("/add_ons/datatables/jquery.dataTables.js") }}></script>--}}
-    {{--    <script src={{ asset("/add_ons/datatables-bs4/js/dataTables.bootstrap4.js") }}></script>--}}
+    <script src={{ asset("/add_ons/datatables/jquery.dataTables.js") }}></script>
+    <script src={{ asset("/add_ons/datatables-bs4/js/dataTables.bootstrap4.js") }}></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
     <!-- Select2 -->
     <script src="{{ asset("/add_ons/select2/js/select2.min.js") }}"></script>
@@ -53,24 +53,37 @@
                         });
                         $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
                     });
-                    $('.tree-view .treejs-placeholder').each(function (index) {
-                        $(this).append('<input type="hidden" name="dates[]" class="treejs-input" id="' + index + '" />');
+
+                    $('.tree-view').each(function (index) {
+                        console.log($(this).attr('id'));
+                        $(this).find('.treejs-placeholder').append('<input type="" name="dates_' + $(this).attr('id').replace('tree-view-', '') + '[]" class="treejs-input" id="' + index + '" />');
                     });
+                    //
+                    // $('.tree-view .treejs-placeholder').each(function (index) {
+                    //     $(this).append('<input type="hidden" name="dates[]" class="treejs-input" id="' + index + '" />');
+                    // });
                     var called = false;
                     $('.treejs-node').on('click', function (e) {
+                        let _this = $(this);
                         // console.log(e.target.classList);
                         if (e.target.className !== 'treejs-switcher') {
                             if (!called) {
                                 // e.stopPropagation();
                                 // let input = $(this).find('.treejs-input');
                                 let label = $(this).find('.treejs-placeholder .treejs-label');
-                                console.log(label);
-                                label.each(function (index) {
-                                    // debugger
-                                    // console.log($(this));
-                                    let input = $(this).next('.treejs-input');
-                                    $(input).val(!$(this).parent().hasClass('treejs-node__checked') ? $(this).text() : '');
-                                });
+                                console.log($(_this).attr('class'), $(_this).hasClass('treejs-node__checked'));
+                                if ($(_this).hasClass('treejs-node__checked')  || $(_this).hasClass('treejs-node__halfchecked')) {
+                                    $(_this).find('.treejs-input').val('');
+                                    console.log('uncheck all');
+                                } else {
+                                    label.each(function (index) {
+                                            let input = $(this).next('.treejs-input');
+                                            $(input).val($(this).text());
+                                    });
+                                    console.log('check all');
+                                }
+                                // console.log(label);
+
                                 // console.log($(chbx).prop('checked'));
                                 // $(chbx).prop('checked', !$(chbx).prop('checked'));
                                 // $(chbx).attr('value','koko');
@@ -155,7 +168,7 @@
                         <div class="card-header">
                             <h3 class="card-title d-inline-block">Résultats Appels (Clients Joints)</h3>
                             <hr>
-                            <form action="/" method="POST">
+                            <form action="/getRegionsByDates" method="POST">
                                 @csrf
                                 <div id="tree-view-0" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
@@ -211,7 +224,7 @@
                             <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Confirmés (Clients
                                 Joignables)</h3>
                             <hr>
-                            <form action="/" method="POST">
+                            <form action="/getClientsByCallStateJoiByDates" method="POST">
                                 @csrf
                                 <div id="tree-view-1" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
@@ -262,7 +275,7 @@
                             <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Non Confirmés (Clients
                                 Injoignables)</h3>
                             <hr>
-                            <form action="/" method="POST">
+                            <form action="/getClientsByCallStateInjByDates" method="POST">
                                 @csrf
                                 <div id="tree-view-2" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
@@ -313,7 +326,7 @@
                             <h3 class="card-title d-inline-block">Répartition des dossiers non validés par code
                                 intervention</h3>
                             <hr>
-                            <form action="/" method="POST">
+                            <form action="/getNonValidatedFoldersByTypeByDates" method="POST">
                                 @csrf
                                 <div id="tree-view-3" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
@@ -369,7 +382,7 @@
                             <h3 class="card-title d-inline-block">Répartition des dossiers non validés par code
                                 intervention</h3>
                             <hr>
-                            <form action="/" method="POST">
+                            <form action="/getNonValidatedFoldersByCodeByDates" method="POST">
                                 @csrf
                                 <div id="tree-view-4" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
