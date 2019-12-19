@@ -14,7 +14,7 @@ $(function () {
         processing: true,
         serverSide: true,
         searching: false,
-        ajax: '/getUsers',
+        ajax: 'getUsers',
         columns: [
             {
                 data: 'id', name: 'id',

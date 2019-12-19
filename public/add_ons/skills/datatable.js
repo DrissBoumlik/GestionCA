@@ -5,7 +5,7 @@ $(function () {
         processing: true,
         serverSide: true,
         searching: false,
-        ajax: '/getSkills?dt',
+        ajax: 'getSkills?dt',
         columns: [
             {data: 'name', name: 'name'},
             {

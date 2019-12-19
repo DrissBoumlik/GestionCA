@@ -21,7 +21,8 @@ Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 //Route::get('/', 'HomeController@dashboard')->name('home');
-Route::get('/dashboard', 'HomeController@dashboard')->name('home');
+Route::get('/_dashboard', 'HomeController@dashboard')->name('home');
+Route::get('/', 'ToolController@home');
 
 // User Routes
 //Route::get('/users/create', 'UserController@create');
@@ -64,8 +65,8 @@ Route::get('/getCollaborators/{project?}', 'ProjectController@getCollaborators')
 
 Route::get('/unauthorized', 'ToolController@unauthorized');
 
-Route::get('/', 'StatsController@dashboard');
-Route::post('/getRegionsByDates', 'StatsController@getRegionsByDate');
+Route::get('/dashboard', 'StatsController@dashboard');
+Route::post('/getRegionsByDates', 'StatsController@getRegionsByDates');
 Route::post('/getNonValidatedFoldersByCodeByDates', 'StatsController@getNonValidatedFoldersByCodeByDates');
 Route::post('/getNonValidatedFoldersByTypeByDates', 'StatsController@getNonValidatedFoldersByTypeByDates');
 Route::post('/getClientsByCallStateJoiByDates', 'StatsController@getClientsByCallStateJoiByDates');
@@ -82,3 +83,10 @@ Route::get('/getRegions', 'StatsController@getRegions');
 Route::get('/tasks', 'TaskController@index')->name('tasks.index');
 Route::get('/tasks/get-tasks', 'TaskController@getTasks')->name('tasks.get-tasks');
 Route::post('/tasks/import-tasks', 'TaskController@importTasks')->name('tasks.import-tasks');
+
+Route::get('/stats', 'StatsController@index')->name('stats.index');
+Route::post('/stats/import-stats', 'StatsController@importStats')->name('stats.import-stats');
+
+Route::get('/demo', 'DemoController@index');
+Route::get('/getRegionsJson', 'DemoController@getRegionsJson');
+Route::get('/getRegionsColumnJson', 'DemoController@getRegionsColumnJson');

@@ -10,4 +10,9 @@ class ToolController extends Controller
     {
         return view('tools.unauthorized');
     }
+
+    public function home()
+    {
+        return redirect('dashboard');
+    }
 }

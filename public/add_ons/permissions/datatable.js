@@ -5,7 +5,7 @@ $(function () {
         processing: true,
         serverSide: true,
         searching: false,
-        ajax: '/getPermissions',
+        ajax: 'getPermissions',
         columns: [
             {
                 data: 'id', name: 'id',

@@ -6,6 +6,7 @@
             <i class="fa fa-circle-notch text-primary"></i>
             <span class="smini-hide">
                 <span class="font-w700 font-size-h5">ne</span> <span class="font-w400">4.3</span>
+                <img src="{{ asset('media/circetwhite.png') }}" alt="" style="width: 100%">
             </span>
         </a>
         <!-- END Logo -->
@@ -97,7 +98,7 @@
     <div class="content-side content-side-full">
         <ul class="nav-main">
             <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('/') ? ' active' : '' }}" href="/">
+                <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="dashboard">
                     <i class="nav-main-link-icon si si-cursor"></i>
                     <span class="nav-main-link-name">Dashboard</span>
                 </a>
@@ -105,44 +106,50 @@
             @can('view', Auth::user())
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ (request()->is('users') || request()->is('users/*')) ? ' active' : '' }}"
-                       href="/users">
+                       href="users">
                         <i class="nav-main-link-icon si si-users"></i>
                         <span class="nav-main-link-name">Users</span>
                     </a>
                 </li>
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ (request()->is('roles') || request()->is('roles/*')) ? ' active' : '' }}"
-                       href="/roles">
+                       href="roles">
                         <i class="nav-main-link-icon si si-shield"></i>
                         <span class="nav-main-link-name">Roles</span>
                     </a>
                 </li>
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ (request()->is('permissions') || request()->is('permissions/*')) ? ' active' : '' }}"
-                       href="/permissions">
+                       href="permissions">
                         <i class="nav-main-link-icon si si-key"></i>
                         <span class="nav-main-link-name">Permissions</span>
                     </a>
                 </li>
-                <li class="nav-main-item">
-                    <a class="nav-main-link{{ (request()->is('skills') || request()->is('skills/*')) ? ' active' : '' }}"
-                       href="/skills">
-                        <i class="nav-main-link-icon si si-game-controller"></i>
-                        <span class="nav-main-link-name">Skills</span>
-                    </a>
-                </li>
-                <li class="nav-main-item">
-                    <a class="nav-main-link{{ (request()->is('projects') || request()->is('projects/*')) ? ' active' : '' }}"
-                       href="/projects">
-                        <i class="nav-main-link-icon si si-briefcase"></i>
-                        <span class="nav-main-link-name">Projects</span>
-                    </a>
-                </li>
+{{--                <li class="nav-main-item">--}}
+{{--                    <a class="nav-main-link{{ (request()->is('skills') || request()->is('skills/*')) ? ' active' : '' }}"--}}
+{{--                       href="skills">--}}
+{{--                        <i class="nav-main-link-icon si si-game-controller"></i>--}}
+{{--                        <span class="nav-main-link-name">Skills</span>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--                <li class="nav-main-item">--}}
+{{--                    <a class="nav-main-link{{ (request()->is('projects') || request()->is('projects/*')) ? ' active' : '' }}"--}}
+{{--                       href="projects">--}}
+{{--                        <i class="nav-main-link-icon si si-briefcase"></i>--}}
+{{--                        <span class="nav-main-link-name">Projects</span>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
             @endcan
             <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('/agences') ? ' active' : '' }}" href="/agences">
+                <a class="nav-main-link{{ request()->is('agences') ? ' active' : '' }}" href="agences">
                     <i class="nav-main-link-icon si si-cursor"></i>
                     <span class="nav-main-link-name">Agences</span>
+                </a>
+            </li>
+            <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('stats') ? ' active' : '' }}" href="stats">
+                    <i class="nav-main-link-icon si si-cursor"></i>
+                    <span class="nav-main-link-name">Import</span>
                 </a>
             </li>
             <ul class="d-none">
@@ -156,19 +163,19 @@
                     <ul class="nav-main-submenu">
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->is('examples/plugin-helper') ? ' active' : '' }}"
-                               href="/examples/plugin-helper">
+                               href="examples/plugin-helper">
                                 <span class="nav-main-link-name">Plugin with JS Helper</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->is('examples/plugin-init') ? ' active' : '' }}"
-                               href="/examples/plugin-init">
+                               href="examples/plugin-init">
                                 <span class="nav-main-link-name">Plugin with JS Init</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
                             <a class="nav-main-link{{ request()->is('examples/blank') ? ' active' : '' }}"
-                               href="/examples/blank">
+                               href="examples/blank">
                                 <span class="nav-main-link-name">Blank</span>
                             </a>
                         </li>

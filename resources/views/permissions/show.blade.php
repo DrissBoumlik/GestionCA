@@ -40,7 +40,7 @@
                 processing: true,
                 serverSide: true,
                 searching: false,
-                ajax: '/getPermissionRoles/{{ $permission->id }}',
+                ajax: 'getPermissionRoles/{{ $permission->id }}',
                 columns: [
                     {
                         data: 'id', name: 'id',

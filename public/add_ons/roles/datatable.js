@@ -5,7 +5,7 @@ $(function () {
         processing: true,
         serverSide: true,
         searching: false,
-        ajax: '/getRoles',
+        ajax: 'getRoles',
         columns: [
             {
                 data: 'id', name: 'id',

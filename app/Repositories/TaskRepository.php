@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Imports\StatsImport;
 use Exception;
 use App\Models\Task;
 use Datatables;

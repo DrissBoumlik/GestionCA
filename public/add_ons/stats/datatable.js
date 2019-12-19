@@ -5,7 +5,7 @@ $(function () {
         processing: true,
         serverSide: true,
         searching: false,
-        ajax: '/getStats',
+        ajax: 'getStats',
         columns: [
             // {data: 'Resultat_Appel', name: 'Resultat_Appel'},
             // {data: 'Nom_Region', name: 'Nom_Region'},

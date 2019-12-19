@@ -21,7 +21,7 @@ $(function () {
         processing: true,
         serverSide: true,
         searching: false,
-        ajax: '/getProjects?dt',
+        ajax: 'getProjects?dt',
         columns: [
             {
                 class: "details-control pointer",

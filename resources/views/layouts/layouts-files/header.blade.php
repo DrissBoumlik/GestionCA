@@ -70,34 +70,34 @@
                     </div>
                     <div class="p-2">
                         <h5 class="dropdown-header text-uppercase">User Options</h5>
-                        <a class="dropdown-item d-flex align-items-center justify-content-between"
-                           href="javascript:void(0)">
-                            <span>Inbox</span>
-                            <span>
-                                <span class="badge badge-pill badge-primary">3</span>
-                                <i class="si si-envelope-open ml-1"></i>
-                            </span>
-                        </a>
-                        <a class="dropdown-item d-flex align-items-center justify-content-between"
-                           href="/profile">
-                            <span>Profile</span>
-                            <span>
-                                <span class="badge badge-pill badge-success">1</span>
-                                <i class="si si-user ml-1"></i>
-                            </span>
-                        </a>
-                        <a class="dropdown-item d-flex align-items-center justify-content-between"
-                           href="javascript:void(0)">
-                            <span>Settings</span>
-                            <i class="si si-settings"></i>
-                        </a>
-                        <div role="separator" class="dropdown-divider"></div>
-                        <h5 class="dropdown-header text-uppercase">Actions</h5>
-                        <a class="dropdown-item d-flex align-items-center justify-content-between"
-                           href="javascript:void(0)">
-                            <span>Lock Account</span>
-                            <i class="si si-lock ml-1"></i>
-                        </a>
+{{--                        <a class="dropdown-item d-flex align-items-center justify-content-between"--}}
+{{--                           href="javascript:void(0)">--}}
+{{--                            <span>Inbox</span>--}}
+{{--                            <span>--}}
+{{--                                <span class="badge badge-pill badge-primary">3</span>--}}
+{{--                                <i class="si si-envelope-open ml-1"></i>--}}
+{{--                            </span>--}}
+{{--                        </a>--}}
+{{--                        <a class="dropdown-item d-flex align-items-center justify-content-between"--}}
+{{--                           href="/profile">--}}
+{{--                            <span>Profile</span>--}}
+{{--                            <span>--}}
+{{--                                <span class="badge badge-pill badge-success">1</span>--}}
+{{--                                <i class="si si-user ml-1"></i>--}}
+{{--                            </span>--}}
+{{--                        </a>--}}
+{{--                        <a class="dropdown-item d-flex align-items-center justify-content-between"--}}
+{{--                           href="javascript:void(0)">--}}
+{{--                            <span>Settings</span>--}}
+{{--                            <i class="si si-settings"></i>--}}
+{{--                        </a>--}}
+{{--                        <div role="separator" class="dropdown-divider"></div>--}}
+{{--                        <h5 class="dropdown-header text-uppercase">Actions</h5>--}}
+{{--                        <a class="dropdown-item d-flex align-items-center justify-content-between"--}}
+{{--                           href="javascript:void(0)">--}}
+{{--                            <span>Lock Account</span>--}}
+{{--                            <i class="si si-lock ml-1"></i>--}}
+{{--                        </a>--}}
                         <a class="dropdown-item d-flex align-items-center justify-content-between"
                            href="{{ route('logout') }}"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

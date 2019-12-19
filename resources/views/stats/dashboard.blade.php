@@ -32,7 +32,7 @@
     <script>
         $(function () {
             $.ajax({
-                url: '/getDates',
+                url: 'getDates',
                 method: 'GET',
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function (response) {
@@ -56,7 +56,7 @@
 
                     $('.tree-view').each(function (index) {
                         console.log($(this).attr('id'));
-                        $(this).find('.treejs-placeholder').append('<input type="" name="dates_' + $(this).attr('id').replace('tree-view-', '') + '[]" class="treejs-input" id="' + index + '" />');
+                        $(this).find('.treejs-placeholder').append('<input type="hidden" name="dates_' + $(this).attr('id').replace('tree-view-', '') + '[]" class="treejs-input" id="' + index + '" />');
                     });
                     //
                     // $('.tree-view .treejs-placeholder').each(function (index) {
@@ -145,8 +145,8 @@
                     <div class="flex-sm-00-auto mt-3 mt-sm-0 ml-sm-3">
                         <span class="d-inline-block invisible" data-toggle="appear" data-timeout="350">
                             <a class="btn btn-primary px-4 py-2" data-toggle="click-ripple"
-                               href="javascript:void(0)">
-                                <i class="fa fa-plus mr-1"></i> New Project
+                               href="stats">
+                                <i class="fa fa-plus mr-1"></i> New Import
                             </a>
                         </span>
                     </div>
@@ -168,7 +168,7 @@
                         <div class="card-header">
                             <h3 class="card-title d-inline-block">Résultats Appels (Clients Joints)</h3>
                             <hr>
-                            <form action="/getRegionsByDates" method="POST">
+                            <form action="getRegionsByDates" method="POST">
                                 @csrf
                                 <div id="tree-view-0" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
@@ -224,7 +224,7 @@
                             <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Confirmés (Clients
                                 Joignables)</h3>
                             <hr>
-                            <form action="/getClientsByCallStateJoiByDates" method="POST">
+                            <form action="getClientsByCallStateJoiByDates" method="POST">
                                 @csrf
                                 <div id="tree-view-1" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
@@ -275,7 +275,7 @@
                             <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Non Confirmés (Clients
                                 Injoignables)</h3>
                             <hr>
-                            <form action="/getClientsByCallStateInjByDates" method="POST">
+                            <form action="getClientsByCallStateInjByDates" method="POST">
                                 @csrf
                                 <div id="tree-view-2" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
@@ -326,7 +326,7 @@
                             <h3 class="card-title d-inline-block">Répartition des dossiers non validés par code
                                 intervention</h3>
                             <hr>
-                            <form action="/getNonValidatedFoldersByTypeByDates" method="POST">
+                            <form action="getNonValidatedFoldersByTypeByDates" method="POST">
                                 @csrf
                                 <div id="tree-view-3" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
@@ -382,7 +382,7 @@
                             <h3 class="card-title d-inline-block">Répartition des dossiers non validés par code
                                 intervention</h3>
                             <hr>
-                            <form action="/getNonValidatedFoldersByCodeByDates" method="POST">
+                            <form action="getNonValidatedFoldersByCodeByDates" method="POST">
                                 @csrf
                                 <div id="tree-view-4" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">

@@ -9,7 +9,7 @@
                 <div class="row justify-content-center">
                     <div class="col-md-8 col-lg-6 col-xl-4">
                         <!-- Sign In Block -->
-                        <div class="block block-themed block-fx-shadow mb-0">
+                        <div class="block block-themed block-fx-shadow mb-0" style="background-color: #d7d7d7">
                             <div class="block-header">
                                 <h3 class="block-title">Sign In</h3>
                                 <div class="block-options">
@@ -23,7 +23,8 @@
                             </div>
                             <div class="block-content">
                                 <div class="p-sm-3 px-lg-4 py-lg-5">
-                                    <h1 class="mb-2">OneUI</h1>
+{{--                                    <h1 class="mb-2">OneUI</h1>--}}
+                                    <img src="{{ asset('media/circetwhite.png') }}" alt="" style="width: 100%">
                                     <p>Welcome, please login.</p>
 
                                     <!-- Sign In Form -->

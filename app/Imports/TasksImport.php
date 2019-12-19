@@ -18,6 +18,7 @@ class TasksImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
+//        dd($row);
         return new Task([
             'date_reception_demande' => $this->transformDate($row['date_de_reception_de_la_demande']),
             'operateur' => $row['operateur'],

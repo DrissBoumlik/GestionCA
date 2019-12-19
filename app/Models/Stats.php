@@ -10,6 +10,8 @@ class Stats extends Model
 {
     use SoftDeletes;
 
+//    protected $guarded = ['id'];
+
     protected $fillable = [
         'Type_Note',
         'Utilisateur',
@@ -86,6 +88,7 @@ class Stats extends Model
         $regions_names = collect($regions_names)->unique()->values();
         $regions = $regions->values();
         $data = ['regions_names' => $regions_names, 'calls' => $regions];
+//        dd($regions, $regions_names);
         return $data;
     }
 

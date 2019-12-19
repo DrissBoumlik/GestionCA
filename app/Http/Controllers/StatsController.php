@@ -9,35 +9,22 @@ use Illuminate\Support\Str;
 class StatsController extends Controller
 {
 
-    public function __construct()
+    private $statsRepository;
+
+    public function __construct(StatsRepository $statsRepository)
     {
         $this->middleware('auth');
+        $this->statsRepository = $statsRepository;
     }
 
     public function dashboard(Request $request)
     {
-        $regions = Stats::getRegions();
-        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
-        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
-//        return [$folders, $regions];
-        $joignable = Stats::getClientsByCallState('Joignable');
-        $inJoignable = Stats::getClientsByCallState('Injoignable');
-//        return [$regions, $joignable, $inJoignable];
-        if ($request->exists('json'))
-            return [
-                'regions' => $regions,
-                'foldersByIntervType' => $foldersByIntervType,
-                'foldersByIntervCode' => $foldersByIntervCode,
-                'joignable' => $joignable,
-                'inJoignable' => $inJoignable
-            ];
-        return view('stats.dashboard')->with([
-            'regions' => $regions,
-            'foldersByIntervType' => $foldersByIntervType,
-            'foldersByIntervCode' => $foldersByIntervCode,
-            'joignable' => $joignable,
-            'inJoignable' => $inJoignable
-        ]);
+        $data = $this->statsRepository->dashboard($request);
+
+        if ($request->exists('json')) {
+            return $data;
+        }
+        return view('stats.dashboard')->with($data);
     }
 
     public function getDates(Request $request)
@@ -48,154 +35,52 @@ class StatsController extends Controller
 
     public function getRegionsByDates(Request $request)
     {
-        $data = array_filter($request->dates_1, function ($date) {
-            return $date != null;
-        });
+        $data = $this->statsRepository->getRegionsByDates($request);
 
-        $regions = Stats::getRegions($data);
-        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
-        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
-
-        $joignable = Stats::getClientsByCallState('Joignable');
-        $inJoignable = Stats::getClientsByCallState('Injoignable');
-//        return [$regions, $joignable, $inJoignable];
         if ($request->exists('json')) {
-            return [
-                'regions' => $regions,
-                'foldersByIntervType' => $foldersByIntervType,
-                'foldersByIntervCode' => $foldersByIntervCode,
-                'joignable' => $joignable,
-                'inJoignable' => $inJoignable
-            ];
+            return $data;
         }
-        return back()->with([
-            'regions' => $regions,
-            'foldersByIntervType' => $foldersByIntervType,
-            'foldersByIntervCode' => $foldersByIntervCode,
-            'joignable' => $joignable,
-            'inJoignable' => $inJoignable
-        ]);
+        return view('stats.dashboard')->with($data);
     }
 
     public function getNonValidatedFoldersByCodeByDates(Request $request)
     {
-        $data = array_filter($request->dates_4, function ($date) {
-            return $date != null;
-        });
+        $data = $this->statsRepository->getNonValidatedFoldersByCodeByDates($request);
 
-        $regions = Stats::getRegions();
-        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention', $data);
-        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
-//        return [$regions, $joignable, $inJoignable];
-        $joignable = Stats::getClientsByCallState('Joignable');
-        $inJoignable = Stats::getClientsByCallState('Injoignable');
         if ($request->exists('json')) {
-            return [
-                'regions' => $regions,
-                'foldersByIntervType' => $foldersByIntervType,
-                'foldersByIntervCode' => $foldersByIntervCode,
-                'joignable' => $joignable,
-                'inJoignable' => $inJoignable
-
-            ];
+            return $data;
         }
-        return back()->with([
-            'regions' => $regions,
-            'foldersByIntervType' => $foldersByIntervType,
-            'foldersByIntervCode' => $foldersByIntervCode,
-            'joignable' => $joignable,
-            'inJoignable' => $inJoignable
-        ]);
+        return view('stats.dashboard')->with($data);
     }
 
     public function getNonValidatedFoldersByTypeByDates(Request $request)
     {
-        $data = array_filter($request->dates_3, function ($date) {
-            return $date != null;
-        });
+        $data = $this->statsRepository->getNonValidatedFoldersByTypeByDates($request);
 
-        $regions = Stats::getRegions($data);
-        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
-        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention', $data);
-//        return [$regions, $joignable, $inJoignable];
-        $joignable = Stats::getClientsByCallState('Joignable');
-        $inJoignable = Stats::getClientsByCallState('Injoignable');
         if ($request->exists('json')) {
-            return [
-                'regions' => $regions,
-                'foldersByIntervType' => $foldersByIntervType,
-                'foldersByIntervCode' => $foldersByIntervCode,
-                'joignable' => $joignable,
-                'inJoignable' => $inJoignable
-            ];
+            return $data;
         }
-        return back()->with([
-            'regions' => $regions,
-            'foldersByIntervType' => $foldersByIntervType,
-            'foldersByIntervCode' => $foldersByIntervCode,
-            'joignable' => $joignable,
-            'inJoignable' => $inJoignable
-        ]);
+        return view('stats.dashboard')->with($data);
     }
 
     public function getClientsByCallStateJoiByDates(Request $request)
     {
-        $data = array_filter($request->dates_1, function ($date) {
-            return $date != null;
-        });
+        $data = $this->statsRepository->getClientsByCallStateJoiByDates($request);
 
-        $regions = Stats::getRegions($data);
-        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
-        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
-//        return [$regions, $joignable, $inJoignable];
-        $joignable = Stats::getClientsByCallState('Joignable', $data);
-        $inJoignable = Stats::getClientsByCallState('Injoignable');
         if ($request->exists('json')) {
-            return [
-                'regions' => $regions,
-                'foldersByIntervType' => $foldersByIntervType,
-                'foldersByIntervCode' => $foldersByIntervCode,
-                'joignable' => $joignable,
-                'inJoignable' => $inJoignable
-            ];
+            return $data;
         }
-        return back()->with([
-            'regions' => $regions,
-            'foldersByIntervType' => $foldersByIntervType,
-            'foldersByIntervCode' => $foldersByIntervCode,
-            'joignable' => $joignable,
-            'inJoignable' => $inJoignable
-        ]);
+        return view('stats.dashboard')->with($data);
     }
 
     public function getClientsByCallStateInjByDates(Request $request)
     {
-        $data = array_filter($request->dates_2, function ($date) {
-            return $date != null;
-        });
+        $data = $this->statsRepository->getClientsByCallStateInjByDates($request);
 
-        $regions = Stats::getRegions($data);
-        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
-        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
-//        return [$regions, $joignable, $inJoignable];
-        $joignable = Stats::getClientsByCallState('Joignable');
-        $inJoignable = Stats::getClientsByCallState('Injoignable', $data);
         if ($request->exists('json')) {
-            return [
-                'regions' => $regions,
-                'foldersByIntervType' => $foldersByIntervType,
-                'foldersByIntervCode' => $foldersByIntervCode,
-                'joignable' => $joignable,
-                'inJoignable' => $inJoignable
-            ];
+            return $data;
         }
-        return back()->with([
-            'regions' => $regions,
-            'foldersByIntervType' => $foldersByIntervType,
-            'foldersByIntervCode' => $foldersByIntervCode,
-            'joignable' => $joignable,
-            'inJoignable' => $inJoignable
-        ]);
+        return view('stats.dashboard')->with($data);
     }
 
 
@@ -258,4 +143,16 @@ class StatsController extends Controller
     {
 
     }
+
+
+    public function index()
+    {
+        return view('stats.import');
+    }
+
+    public function importStats(Request $request)
+    {
+        return response()->json($this->statsRepository->importStats($request));
+    }
+
 }
