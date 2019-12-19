@@ -31,86 +31,6 @@
     <script src="{{ asset("/add_ons/stats/stats.js") }}"></script>
     <script>
         $(function () {
-            $.ajax({
-                url: 'getDates',
-                method: 'GET',
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                success: function (response) {
-                    let data = response.dates;
-                    $('.tree-view').each(function (index, item) {
-                        new Tree('#' + $(this).attr('id'), {
-                            data: [{id: '-1', text: 'Dates', children: data}],
-                            closeDepth: 2,
-                            loaded: function () {
-                                // this.values = ['0-0-0', '0-1-1', '0-0-2'];
-                                // console.log(this.selectedNodes);
-                                // console.log(this.values);
-                                // this.disables = ['0-0-0', '0-0-1', '0-0-2']
-                            },
-                            onChange: function () {
-                                console.log(this.values);
-                            }
-                        });
-                        $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
-                    });
-
-                    $('.tree-view').each(function (index) {
-                        console.log($(this).attr('id'));
-                        $(this).find('.treejs-placeholder').append('<input type="hidden" name="dates_' + $(this).attr('id').replace('tree-view-', '') + '[]" class="treejs-input" id="' + index + '" />');
-                    });
-                    //
-                    // $('.tree-view .treejs-placeholder').each(function (index) {
-                    //     $(this).append('<input type="hidden" name="dates[]" class="treejs-input" id="' + index + '" />');
-                    // });
-                    var called = false;
-                    $('.treejs-node').on('click', function (e) {
-                        let _this = $(this);
-                        // console.log(e.target.classList);
-                        if (e.target.className !== 'treejs-switcher') {
-                            if (!called) {
-                                // e.stopPropagation();
-                                // let input = $(this).find('.treejs-input');
-                                let label = $(this).find('.treejs-placeholder .treejs-label');
-                                console.log($(_this).attr('class'), $(_this).hasClass('treejs-node__checked'));
-                                if ($(_this).hasClass('treejs-node__checked')  || $(_this).hasClass('treejs-node__halfchecked')) {
-                                    $(_this).find('.treejs-input').val('');
-                                    console.log('uncheck all');
-                                } else {
-                                    label.each(function (index) {
-                                        let input = $(this).next('.treejs-input');
-                                        $(input).val($(this).text());
-                                    });
-                                    console.log('check all');
-                                }
-                                // console.log(label);
-
-                                // console.log($(chbx).prop('checked'));
-                                // $(chbx).prop('checked', !$(chbx).prop('checked'));
-                                // $(chbx).attr('value','koko');
-                                // $(chbx).prop('checked', !$(this).hasClass('treejs-node__checked') && !$(this).hasClass('treejs-node__halfchecked'));
-                                // $(input).val(!$(this).hasClass('treejs-node__checked') ? label.text() : '');
-                                setTimeout(function () {
-                                    called = false;
-                                }, 150);
-                            }
-                            called = true;
-                        }
-                    });
-                    $('.treejs-node.treejs-placeholder').on('click', function (e) {
-                        // test parent with class treejs-placeholder
-                        let input = $(this).find('.treejs-input');
-                        let label = $(this).find('.treejs-label');
-                        // $(chbx).prop('checked', !$(this).hasClass('treejs-node__checked'));
-                        $(input).val(!$(this).hasClass('treejs-node__checked') ? label.text() : '');
-                    });
-
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-
-                }
-            });
-
-
             @if($errors->any())
             swal(
                 'Error!',
@@ -168,21 +88,61 @@
                         <div class="card-header">
                             <h3 class="card-title d-inline-block">Résultats Appels (Clients Joints)</h3>
                             <hr>
-                            <form action="getRegionsByDates" method="POST">
-                                @csrf
+                            <div class="refresh-form">
                                 <div id="tree-view-0" class="tree-view d-inline-block"></div>
-                                <button type="submit" class="btn btn-primary float-right">
+                                <button type="button" id="refresh" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Refresh</span>
                                 </button>
-                            </form>
+                            </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="stats" class="table table-bordered table-striped table-valign-middle capitalize">
+                            <table id="statsRegions" class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
+                                <tr>
+                                    <th>Résultats Appels Préalables "Client Joignables"</th>
+                                    @for($i = 1; $i < count($columns); $i++)
+                                        <th>{{ $columns[$i]->name }}</th>
+                                    @endfor
+                                </tr>
                                 </thead>
-                                <tbody>
-                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+
+
+            <hr>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Confirmés (Clients Joignables)</h3>
+                            <hr>
+                            <div class="refresh-form">
+                                <div id="tree-view-0" class="tree-view d-inline-block"></div>
+                                <button type="button" id="refresh" class="btn btn-primary float-right">
+                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="statsRegions" class="table table-bordered table-striped table-valign-middle capitalize">
+                                <thead>
+                                <tr>
+                                    <th>Résultats Appels Préalables "Client Joignables"</th>
+                                    @for($i = 1; $i < count($columns); $i++)
+                                        <th>{{ $columns[$i]->name }}</th>
+                                    @endfor
+                                </tr>
+                                </thead>
                             </table>
                         </div>
                         <!-- /.card-body -->
