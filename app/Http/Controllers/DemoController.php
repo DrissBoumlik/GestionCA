@@ -84,13 +84,17 @@ class DemoController extends Controller
         $regions = $regions->groupBy(['Resultat_Appel']);
 
         $regions_names = [];
+        $regions_names[0] = new \stdClass();
+        $regions_names[0]->data = 'Resultat_Appel';
+        $regions_names[0]->name = 'Resultat_Appel';
 
         $regions = $regions->map(function ($region) use (&$regions_names) {
             $row = new \stdClass();
             $row->regions = [];
             $item = $region->map(function ($call, $index) use (&$row, &$regions_names) {
-                $regions_names[$index] = new \stdClass();
-                $regions_names[$index]->data = $call->Nom_Region;
+                $regions_names[$index + 1] = new \stdClass();
+                $regions_names[$index + 1]->data = $call->Nom_Region;
+                $regions_names[$index + 1]->name = $call->Nom_Region;
                 $row->Resultat_Appel = $call->Resultat_Appel;
                 $nom_region = $call->Nom_Region;
                 $row->regions['zone_' . $index] = $call->$nom_region;
@@ -100,18 +104,23 @@ class DemoController extends Controller
             });
             return $item->last();
         });
+        $regions_names[] = new \stdClass();
+        $regions_names[count($regions_names) - 1]->data = 'total';
+        $regions_names[count($regions_names) - 1]->name = 'total';
+
         $regions_names = collect($regions_names)->unique()->filter()->values();
         $regions = $regions->values();
 //        dd($regions);
+
         $dt = DataTables::of($regions);
 //            ->setRowId(function ($role) {
 //                return 'region-' . $role->id;
 //            })
-
-        $map = $regions_names->map(function ($name) use ($dt) {
-            return $dt->rawColumns([$name, $name]);
-        });
-
+//        $dt = $regions_names->map(function ($region, $index) use ($dt, $regions) {
+////            return $dt->rawColumns([$region->data, $regions[0]->Resultat_Appel]);
+////            return $dt->rawColumns([$region->data, $regions[0]->Resultat_Appel]);
+////            return $dt->rawColumns([$region->data, $regions[0]->Resultat_Appel]);
+//        });
         $dt = $dt->toJson();
         return $dt;
     }
