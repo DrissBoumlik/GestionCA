@@ -101,8 +101,8 @@
                                 <thead>
                                 <tr>
                                     <th>Résultats Appels Préalables "Client Joignables"</th>
-                                    @for($i = 1; $i < count($regions_names); $i++)
-                                        <th>{{ $regions_names[$i]->name }}</th>
+                                    @for($i = 1; $i < count($calls_results); $i++)
+                                        <th>{{ $calls_results[$i]->name }}</th>
                                     @endfor
                                 </tr>
                                 </thead>

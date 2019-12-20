@@ -13,13 +13,14 @@ class StatsController extends Controller
 
     public function __construct(StatsRepository $statsRepository)
     {
-        $this->middleware('auth');
+//        $this->middleware('auth');
         $this->statsRepository = $statsRepository;
     }
 
     public function dashboard()
     {
-        $dataRegions = $this->GetDataRegions();
+        $dataRegionsCallResult = $this->GetDataRegions('Resultat_Appel');
+        $dataRegionsCallState = $this->GetDataRegions('Gpmt_Appel_Pre');
 
         $dataCallsPos = $this->getDataClientsByCallState('Joignable');
         $dataCallsNeg = $this->getDataClientsByCallState('Injoignable');
@@ -29,7 +30,8 @@ class StatsController extends Controller
 
 
         return view('stats.dashboard')->with([
-            'regions_names' => $dataRegions['regions_names'],
+            'calls_results' => $dataRegionsCallResult['regions_names'],
+            'calls_states' => $dataRegionsCallState['regions_names'],
             'regions_names_type' => $dataTypeInterv['regions_names'],
             'regions_names_code' => $dataCodeInterv['regions_names'],
             'calls_pos' => $dataCallsPos['codes_names'],
@@ -43,34 +45,34 @@ class StatsController extends Controller
         return ['dates' => $dates];
     }
 
-    #region Regions
+    #region Regions =====================================================
 
-    public function getRegionsColumn(Request $request)
+    public function getRegionsColumn(Request $request, $callResult)
     {
         $dates = $request->get('dates');
-        $data = $this->GetDataRegions($dates);
+        $data = $this->GetDataRegions($callResult, $dates);
         return ['columns' => $data['regions_names'], 'data' => $data['regions']];
     }
 
-    public function getRegions(Request $request)
+    public function getRegions(Request $request, $callResult)
     {
         $dates = $request->get('dates');
-        $data = $this->GetDataRegions($dates);
+        $data = $this->GetDataRegions($callResult, $dates);
         return DataTables::of($data['regions'])->toJson();
     }
 
-    private function GetDataRegions($dates = null)
+    private function GetDataRegions($callResult, $dates = null)
     {
         $regions = \DB::table('stats')
-            ->select('Nom_Region', 'Resultat_Appel', \DB::raw('count(*) as total'))
-            ->whereNotNull('Resultat_Appel');
+            ->select('Nom_Region', $callResult, \DB::raw('count(*) as total'))
+            ->whereNotNull($callResult);
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
         }
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
 
-        $regions = $regions->groupBy('Nom_Region', 'Resultat_Appel')->get();
+        $regions = $regions->groupBy('Nom_Region', $callResult)->get();
 
 
         $totalCount = Stats::all()->count();
@@ -82,41 +84,41 @@ class StatsController extends Controller
 
         $keys_regions = $regions->groupBy(['Nom_Region'])->keys();
 
-        $regions = $regions->groupBy(['Resultat_Appel']);
+        $regions = $regions->groupBy([$callResult]);
 //        $regions = $regions->groupBy(['Nom_Region']);
 
         $regions_names = [];
         $regions_names[0] = new \stdClass();
-        $regions_names[0]->data = 'Resultat_Appel';
-        $regions_names[0]->name = 'Resultat_Appel';
+        $regions_names[0]->data = $callResult;
+        $regions_names[0]->name = $callResult;
 
-        $regions = $regions->map(function ($region) use (&$regions_names, $keys_regions) {
+        $regions = $regions->map(function ($region) use (&$regions_names, $keys_regions, $callResult) {
             $row = new \stdClass();
             $row->regions = [];
 
             $col_arr = $keys_regions->all();
 
-            $item = $region->map(function ($call, $index) use (&$row, &$regions_names, &$col_arr) {
+            $item = $region->map(function ($call, $index) use (&$row, &$regions_names, &$col_arr, $callResult) {
                 $_index = $index + 1;
                 $regions_names[$_index] = new \stdClass();
                 $regions_names[$_index]->data = $call->Nom_Region;
                 $regions_names[$_index]->name = $call->Nom_Region;
-                $row->Resultat_Appel = $call->Resultat_Appel;
+                $row->$callResult = $call->$callResult;
                 $nom_region = $call->Nom_Region;
 
                 $col_arr = array_diff($col_arr, [$nom_region]);
 
-                $row->regions['zone_' . $index] = $call->$nom_region;
-                $row->$nom_region = $call->$nom_region;
-                $row->total = round(array_sum($row->regions) / count($row->regions), 2);
+                $row->regions['zone_' . $index] = $call->$nom_region . '%';
+                $row->$nom_region = $call->$nom_region . '%';
+                $row->total = round(array_sum($row->regions) / count($row->regions), 2) . '%';
                 return $row;
             });
 
             $_item = $item->last();
             $index = count($_item->regions);
             foreach ($col_arr as $col) {
-                $_item->regions['zone_' . $index++] = 0;
-                $_item->$col = 0;
+                $_item->regions['zone_' . $index++] = '0%';
+                $_item->$col = '0%';
             }
             return $_item;
         });
@@ -133,7 +135,7 @@ class StatsController extends Controller
 
     #endregion
 
-    #region NonValidatedFolders
+    #region NonValidatedFolders =====================================================
 
     public function getNonValidatedFoldersColumn(Request $request, $intervCol)
     {
@@ -153,7 +155,7 @@ class StatsController extends Controller
     {
         $regions = \DB::table('stats')
             ->select('Nom_Region', $intervCol, \DB::raw('count(*) as total'))
-            ->whereNotNull('Code_Intervention');
+            ->whereNotNull($intervCol);
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
@@ -174,36 +176,38 @@ class StatsController extends Controller
         $regions_names[0]->data = $intervCol;
         $regions_names[0]->name = $intervCol;
 
-        $regions = $regions->map(function ($region) use (&$regions_names, $keys_regions) {
+        $regions = $regions->map(function ($region) use (&$regions_names, $keys_regions, $intervCol) {
             $row = new \stdClass();
             $row->regions = [];
             $col_arr = $keys_regions->all();
-            $item = $region->map(function ($call, $index) use (&$row, &$regions_names, &$col_arr) {
+            $item = $region->map(function ($call, $index) use (&$row, &$regions_names, &$col_arr, $intervCol) {
                 $_index = $index + 1;
                 $regions_names[$_index] = new \stdClass();
                 $regions_names[$_index]->data = $call->Nom_Region;
                 $regions_names[$_index]->name = $call->Nom_Region;
 
-                if (property_exists($call, 'Code_Type_Intervention')) {
-                    $row->Code_Type_Intervention = $call->Code_Type_Intervention;
-                } elseif (property_exists($call, 'Code_Intervention')) {
-                    $row->Code_Intervention = $call->Code_Intervention;
-                }
+//                if (property_exists($call, 'Code_Type_Intervention')) {
+//                    $row->Code_Type_Intervention = $call->Code_Type_Intervention;
+//                } elseif (property_exists($call, 'Code_Intervention')) {
+//                    $row->Code_Intervention = $call->Code_Intervention;
+//                }
+
+                $row->$intervCol = $call->$intervCol;
 
                 $nom_region = $call->Nom_Region;
 
                 $col_arr = array_diff($col_arr, [$nom_region]);
 
-                $row->regions['zone_' . $index] = $call->$nom_region;
-                $row->$nom_region = $call->$nom_region;
-                $row->total = round(array_sum($row->regions) / count($row->regions), 2);
+                $row->regions['zone_' . $index] = $call->$nom_region . '%';
+                $row->$nom_region = $call->$nom_region . '%';
+                $row->total = round(array_sum($row->regions) / count($row->regions), 2) . '%';
                 return $row;
             });
             $_item = $item->last();
             $index = count($_item->regions);
             foreach ($col_arr as $col) {
-                $_item->regions['zone_' . $index++] = 0;
-                $_item->$col = 0;
+                $_item->regions['zone_' . $index++] = '0%';
+                $_item->$col = '0%';
             }
             return $_item;
 //            return $item->last();
@@ -220,7 +224,7 @@ class StatsController extends Controller
 
     #endregion
 
-    #region ClientsByCallState
+    #region ClientsByCallState =====================================================
 
     public function getClientsByCallStateColumn(Request $request, $callResult)
     {
@@ -283,10 +287,10 @@ class StatsController extends Controller
 
                 $col_arr = array_diff($col_arr, [$code_intervention]);
 
-                $row->codes['code_' . $index] = $call->$code_intervention;
-                $row->$code_intervention = $call->$code_intervention;
+                $row->codes['code_' . $index] = $call->$code_intervention . '%';
+                $row->$code_intervention = $call->$code_intervention . '%';
 //                $row->$code_intervention = $call->$code_intervention;
-                $row->total = round(array_sum($row->codes) / count($row->codes), 2);
+                $row->total = round(array_sum($row->codes) / count($row->codes), 2) . '%';
 //                dump($code_intervention ? $total->{$code_intervention}[0] : 1);
 //                if ($code_intervention)
 //                    $total->$code_intervention =
@@ -300,8 +304,8 @@ class StatsController extends Controller
             $_item = $item->last();
             $index = count($_item->codes);
             foreach ($col_arr as $col) {
-                $_item->codes['code_' . $index++] = 0;
-                $_item->$col = 0;
+                $_item->codes['code_' . $index++] = '0%';
+                $_item->$col = '0%';
             }
             return $_item;
 //            return $item->last();

@@ -101,8 +101,8 @@
                                 <thead>
                                 <tr>
                                     <th>Résultats Appels Préalables "Client Joignables"</th>
-                                    @for($i = 1; $i < count($regions_names); $i++)
-                                        <th>{{ $regions_names[$i]->name }}</th>
+                                    @for($i = 1; $i < count($calls_results); $i++)
+                                        <th>{{ $calls_results[$i]->name }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -119,6 +119,42 @@
             </div>
             <!-- /.row -->
 
+            <div class="row driss">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Résultats Appels (Clients Joints)</h3>
+                            <hr>
+                            <div class="refresh-form">
+                                <div id="tree-view-0" class="tree-view d-inline-block"></div>
+                                <button type="button" id="refreshCallStates" class="btn btn-primary float-right">
+                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="calls_states" class="table table-bordered table-striped table-valign-middle capitalize">
+                                <thead>
+                                <tr>
+                                    <th>Résultats Appels Préalables par agence</th>
+                                    @for($i = 1; $i < count($calls_states); $i++)
+                                        <th>{{ $calls_states[$i]->name }}</th>
+                                    @endfor
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="statsRegionsChart"></canvas>
+                </div>
+            </div>
+            <!-- /.row -->
             <hr>
             <div class="row">
                 <div class="col-12">

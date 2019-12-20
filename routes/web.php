@@ -75,7 +75,7 @@ Route::post('/getClientsByCallStateInjByDates', 'StatsController@getClientsByCal
 Route::get('/getDates', 'StatsController@getDates');
 Route::get('/agencies', 'StatsController@byAgency');
 
-Route::get('/getRegions', 'StatsController@getRegions');
+//Route::get('/getRegions', 'StatsController@getRegions');
 
 
 // ===============
@@ -88,8 +88,8 @@ Route::get('/stats', 'StatsController@index')->name('stats.index');
 Route::post('/stats/import-stats', 'StatsController@importStats')->name('stats.import-stats');
 
 Route::get('/demo', 'DemoController@index');
-Route::get('/getRegions', 'StatsController@getRegions');
-Route::get('/getRegionsColumn', 'StatsController@getRegionsColumn');
+Route::get('/getRegions/{callResult}', 'StatsController@getRegions');
+Route::get('/getRegionsColumn/{callResult}', 'StatsController@getRegionsColumn');
 
 Route::get('/getNonValidatedFolders/{intervCol}', 'StatsController@getNonValidatedFolders');
 Route::get('/getNonValidatedFoldersColumn/{intervCol}', 'StatsController@getNonValidatedFoldersColumn');

@@ -31,24 +31,40 @@ $(function () {
 
     let statsRegions = {element_dt: undefined, element: $('#statsRegions'), columns: undefined};
     let statsRegionsChart = {elementChart: undefined, element_id: 'statsRegionsChart', data: undefined};
-    getColumns('getRegionsColumn', 'getRegions', statsRegions, statsRegionsChart);
+    getColumns('getRegionsColumn/Resultat_Appel', 'getRegions/Resultat_Appel', statsRegions, statsRegionsChart);
     $('#refreshRegions').on('click', function () {
-        statsRegions.element_dt = InitDataTable(statsRegions, 'getRegions', {dates});
+        statsRegions.element_dt = InitDataTable(statsRegions, 'getRegions/Resultat_Appel', {dates});
     });
 
+    let calls_states = {element_dt: undefined, element: $('#calls_states'), columns: undefined};
+    getColumns('getRegionsColumn/Gpmt_Appel_Pre', 'getRegions/Gpmt_Appel_Pre', calls_states);
+    $('#refreshCallStates').on('click', function () {
+        calls_states.element_dt = InitDataTable(calls_states, 'getRegions/Gpmt_Appel_Pre', {dates});
+    });
 
     let statsFoldersByType = {element_dt: undefined, element: $('#statsTypes'), columns: undefined};
     getColumns('getNonValidatedFoldersColumn/Code_Type_Intervention', 'getNonValidatedFolders/Code_Type_Intervention', statsFoldersByType);
-
+    $('#refreshFoldersByType').on('click', function () {
+        statsFoldersByType.element_dt = InitDataTable(statsFoldersByType, 'getNonValidatedFolders/Code_Type_Intervention', {dates});
+    });
 
     let statsFoldersByCode = {element_dt: undefined, element: $('#statsCodes'), columns: undefined};
     getColumns('getNonValidatedFoldersColumn/Code_Intervention', 'getNonValidatedFolders/Code_Intervention', statsFoldersByCode);
+    $('#refreshFoldersByCode').on('click', function () {
+        statsFoldersByCode.element_dt = InitDataTable(statsFoldersByCode, 'getNonValidatedFolders/Code_Intervention', {dates});
+    });
 
     let statscallsPos = {element_dt: undefined, element: $('#statsCallsPos'), columns: undefined};
     getColumns('getClientsByCallStateColumn/Joignable', 'getClientsByCallState/Joignable', statscallsPos);
+    $('#refreshCallResultPos').on('click', function () {
+        statscallsPos.element_dt = InitDataTable(statscallsPos, 'getClientsByCallState/Joignable', {dates});
+    });
 
     let statscallsNeg = {element_dt: undefined, element: $('#statsCallsNeg'), columns: undefined};
     getColumns('getClientsByCallStateColumn/Injoignable', 'getClientsByCallState/Injoignable', statscallsNeg);
+    $('#refreshCallResultNeg').on('click', function () {
+        statscallsNeg.element_dt = InitDataTable(statscallsNeg, 'getClientsByCallState/Injoignable', {dates});
+    });
 
     // getColumns('getNonValidatedFoldersColumn', 'getNonValidatedFolders', stats, stats_dt);
 
@@ -88,22 +104,6 @@ $(function () {
             }
         });
     }
-
-    $('#refreshFoldersByType').on('click', function () {
-        statsFoldersByType.element_dt = InitDataTable(statsFoldersByType, 'getNonValidatedFolders/Code_Type_Intervention', {dates});
-    });
-    $('#refreshFoldersByCode').on('click', function () {
-        statsFoldersByCode.element_dt = InitDataTable(statsFoldersByCode, 'getNonValidatedFolders/Code_Intervention', {dates});
-    });
-
-
-    $('#refreshCallResultPos').on('click', function () {
-        statscallsPos.element_dt = InitDataTable(statscallsPos, 'getClientsByCallState/Joignable', {dates});
-    });
-    $('#refreshCallResultNeg').on('click', function () {
-        statscallsNeg.element_dt = InitDataTable(statscallsNeg, 'getClientsByCallState/Injoignable', {dates});
-    });
-
 
     function InitDataTable(object, route, data = null) {
         if ($.fn.DataTable.isDataTable(object.element_dt)) {
