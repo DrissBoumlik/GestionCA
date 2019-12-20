@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('page-title')
-    DEMO
+    Dashboard
 @endsection
 
 @section('css_after')
@@ -13,7 +13,7 @@
     <link href="{{ asset("/add_ons/select2/css/select2.min.css") }}" rel="stylesheet"/>
 
     {{--        <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4.3.2/css/metro-all.min.css">--}}
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
 @endsection
 
 @section('js_after')
@@ -27,7 +27,7 @@
     <!-- TREE VIEW -->
     {{--        <script src="https://cdn.metroui.org.ua/v4.3.2/js/metro.min.js"></script>--}}
     <script src="{{ asset("/add_ons/tree-view/tree.js") }}"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <script src="{{ asset("/add_ons/stats/stats.js") }}"></script>
     <script>
         $(function () {
@@ -82,7 +82,7 @@
     <div class="content content-narrow">
         <!-- Stats -->
         <div class="container-fluid">
-            <div class="row">
+            <div class="row driss">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -90,7 +90,7 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-0" class="tree-view d-inline-block"></div>
-                                <button type="button" id="refresh" class="btn btn-primary float-right">
+                                <button type="button" id="refreshRegions" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Refresh</span>
                                 </button>
                             </div>
@@ -101,8 +101,46 @@
                                 <thead>
                                 <tr>
                                     <th>Résultats Appels Préalables "Client Joignables"</th>
-                                    @for($i = 1; $i < count($columns); $i++)
-                                        <th>{{ $columns[$i]->name }}</th>
+                                    @for($i = 1; $i < count($regions_names); $i++)
+                                        <th>{{ $regions_names[$i]->name }}</th>
+                                    @endfor
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="statsRegionsChart"></canvas>
+                </div>
+            </div>
+            <!-- /.row -->
+
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Confirmés (Clients Joignables)</h3>
+                            <hr>
+                            <div class="refresh-form">
+                                <div id="tree-view-1" class="tree-view d-inline-block"></div>
+                                <button type="button" id="refreshCallResultPos" class="btn btn-primary float-right">
+                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="statsCallsPos" class="table table-bordered table-striped table-valign-middle capitalize">
+                                <thead>
+                                <tr>
+                                    <th>Résultats Appels Préalables</th>
+                                    @for($i = 1; $i < count($calls_pos); $i++)
+                                        <th>{{ $calls_pos[$i]->name }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -116,30 +154,97 @@
             </div>
             <!-- /.row -->
 
-
             <hr>
-
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Confirmés (Clients Joignables)</h3>
+                            <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)</h3>
                             <hr>
                             <div class="refresh-form">
-                                <div id="tree-view-0" class="tree-view d-inline-block"></div>
-                                <button type="button" id="refresh" class="btn btn-primary float-right">
+                                <div id="tree-view-2" class="tree-view d-inline-block"></div>
+                                <button type="button" id="refreshCallResultNeg" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Refresh</span>
                                 </button>
                             </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="statsRegions" class="table table-bordered table-striped table-valign-middle capitalize">
+                            <table id="statsCallsNeg" class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Résultats Appels Préalables "Client Joignables"</th>
-                                    @for($i = 1; $i < count($columns); $i++)
-                                        <th>{{ $columns[$i]->name }}</th>
+                                    <th>Résultats Appels Préalables</th>
+                                    @for($i = 1; $i < count($calls_neg); $i++)
+                                        <th>{{ $calls_neg[$i]->name }}</th>
+                                    @endfor
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+
+            <hr>
+            <div class="row driss">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Répartition des dossiers non validés par Code Type intervention</h3>
+                            <hr>
+                            <div class="refresh-form">
+                                <div id="tree-view-3" class="tree-view d-inline-block"></div>
+                                <button type="button" id="refreshFoldersByType" class="btn btn-primary float-right">
+                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="statsTypes" class="table table-bordered table-striped table-valign-middle capitalize">
+                                <thead>
+                                <tr>
+                                    <th>Type Intervention</th>
+                                    @for($i = 1; $i < count($regions_names_type); $i++)
+                                        <th>{{ $regions_names_type[$i]->name }}</th>
+                                    @endfor
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <hr>
+            <div class="row driss">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Répartition des dossiers non validés par code intervention</h3>
+                            <hr>
+                            <div class="refresh-form">
+                                <div id="tree-view-4" class="tree-view d-inline-block"></div>
+                                <button type="button" id="refreshFoldersByCode" class="btn btn-primary float-right">
+                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="statsCodes" class="table table-bordered table-striped table-valign-middle capitalize">
+                                <thead>
+                                <tr>
+                                    <th>Code Intervention</th>
+                                    @for($i = 1; $i < count($regions_names_code); $i++)
+                                        <th>{{ $regions_names_code[$i]->name }}</th>
                                     @endfor
                                 </tr>
                                 </thead>

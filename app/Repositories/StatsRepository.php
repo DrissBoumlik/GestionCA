@@ -14,11 +14,13 @@ class StatsRepository
     public function dashboard(Request $request)
     {
         $regions = Stats::getRegions();
+
+        $joignable = Stats::getClientsByCallState('Joignable');
+        $inJoignable = Stats::getClientsByCallState('Injoignable');
+
         $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
         $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
 //        return [$folders, $regions];
-        $joignable = Stats::getClientsByCallState('Joignable');
-        $inJoignable = Stats::getClientsByCallState('Injoignable');
 //        return [$regions, $joignable, $inJoignable];
         return [
             'regions' => $regions,

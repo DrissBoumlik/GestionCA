@@ -20,7 +20,7 @@ class Stats extends Model
         'Heure_Nveau_RDV',
         'Marge_Nveau_RDV',
         'Id_Externe',
-        'Date_Création',
+        'Date_Creation',
         'Code_Postal_Site',
         'Drapeaux',
         'Code_Type_Intervention',
@@ -36,7 +36,7 @@ class Stats extends Model
         'Date_Heure_Note_Semaine',
         'Date_Note',
         'Groupement',
-        'Gpmt_Appel_Pré',
+        'Gpmt_Appel_Pre',
         'Code_Intervention',
         'EXPORT_ALL_Nom_SITE',
         'EXPORT_ALL_Nom_TECHNICIEN',
@@ -142,7 +142,7 @@ class Stats extends Model
     {
         $codes = \DB::table('stats')
             ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(*) as total'))
-            ->where('Gpmt_Appel_Pré', $state);
+            ->where('Gpmt_Appel_Pre', $state);
 //            ->groupBy('Code_Intervention', 'Nom_Region')
 //            ->get();
         if ($dates) {

@@ -22,7 +22,7 @@ class CreateStatsTable extends Migration
             $table->string('Heure_Nveau_RDV')->nullable();
             $table->string('Marge_Nveau_RDV')->nullable();
             $table->string('Id_Externe')->nullable();
-            $table->string('Date_Création')->nullable();
+            $table->string('Date_Creation')->nullable();
             $table->string('Code_Postal_Site')->nullable();
 //            $table->string('Departement')->nullable();
             $table->string('Drapeaux')->nullable();
@@ -39,7 +39,7 @@ class CreateStatsTable extends Migration
             $table->string('Date_Heure_Note_Semaine')->nullable();
             $table->date('Date_Note')->nullable();
             $table->string('Groupement')->nullable();
-            $table->string('Gpmt_Appel_Pré')->nullable();
+            $table->string('Gpmt_Appel_Pre')->nullable();
             $table->string('Code_Intervention')->nullable();
             $table->string('EXPORT_ALL_Nom_SITE')->nullable();
             $table->string('EXPORT_ALL_Nom_TECHNICIEN')->nullable();

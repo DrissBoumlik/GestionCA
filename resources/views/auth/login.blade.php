@@ -1,5 +1,9 @@
 @extends('layouts.simple')
 
+@section('page-title')
+    Login
+@endsection
+
 @section('content')
 
     <!-- Page Content -->
@@ -23,7 +27,7 @@
                             </div>
                             <div class="block-content">
                                 <div class="p-sm-3 px-lg-4 py-lg-5">
-{{--                                    <h1 class="mb-2">OneUI</h1>--}}
+                                    {{--                                    <h1 class="mb-2">OneUI</h1>--}}
                                     <img src="{{ asset('media/circetwhite.png') }}" alt="" style="width: 100%">
                                     <p>Welcome, please login.</p>
 
@@ -34,11 +38,12 @@
                                         @csrf
                                         <div class="py-3">
                                             <div class="form-group">
-                                                <input type="text" class="form-control form-control-alt form-control-lg @error('email') is-invalid @enderror"
+                                                <input type="text"
+                                                       class="form-control form-control-alt form-control-lg @error('email') is-invalid @enderror"
                                                        id="email" name="email" value="{{ old('email') ?? 'a@a.a' }}"
                                                        required autocomplete="email" autofocus placeholder="Email">
                                                 @error('email')
-                                                    <span class="invalid-feedback" role="alert">
+                                                <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $message }}</strong>
                                                     </span>
                                                 @enderror
@@ -49,7 +54,7 @@
                                                        id="password" name="password" value="password"
                                                        required autocomplete="current-password" placeholder="Password">
                                                 @error('password')
-                                                    <span class="invalid-feedback" role="alert">
+                                                <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $message }}</strong>
                                                     </span>
                                                 @enderror
@@ -58,7 +63,8 @@
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input" name="remember"
                                                            id="remember" {{ old('remember') ? 'checked' : '' }}>
-                                                    <label class="custom-control-label font-w400" for="remember">Remember Me</label>
+                                                    <label class="custom-control-label font-w400" for="remember">Remember
+                                                        Me</label>
                                                 </div>
                                             </div>
                                         </div>
