@@ -38,10 +38,19 @@ $(function () {
         statsRegions.element_dt = InitDataTable(statsRegions, 'getRegions/Resultat_Appel', {dates});
     });
 
-    let calls_states = {element_dt: undefined, element: $('#calls_states'), columns: undefined};
-    getColumns('getRegionsColumn/Gpmt_Appel_Pre', 'getRegions/Gpmt_Appel_Pre', calls_states);
-    $('#refreshCallStates').on('click', function () {
-        calls_states.element_dt = InitDataTable(calls_states, 'getRegions/Gpmt_Appel_Pre', {dates});
+    /// ====================== CALLS STATS ==========================
+
+    let calls_states_agencies = {element_dt: undefined, element: $('#calls_states_agencies'), columns: undefined};
+    getColumns('getRegionsCallStateColumn/Nom_Region', 'getRegionsCallState/Nom_Region', calls_states_agencies);
+    $('#refreshCallStatesAgencies').on('click', function () {
+        calls_states_agencies.element_dt = InitDataTable(calls_states_agencies, 'getRegionsCallState/Nom_Region', {dates});
+    });
+
+
+    let calls_states_weeks = {element_dt: undefined, element: $('#calls_states_weeks'), columns: undefined};
+    getColumns('getRegionsCallStateColumn/Date_Heure_Note_Semaine', 'getRegionsCallState/Date_Heure_Note_Semaine', calls_states_weeks);
+    $('#refreshCallStatesWeeks').on('click', function () {
+        calls_states_weeks.element_dt = InitDataTable(calls_states_weeks, 'getRegionsCallState/Date_Heure_Note_Semaine', {dates});
     });
 
     /// ====================== FOLDERS ==========================
@@ -85,26 +94,26 @@ $(function () {
             success: function (response) {
                 object.columns = response.columns;
                 object.element_dt = InitDataTable(object, route);
-                console.log(objectChart);
-                if (objectChart !== null) {
-                    console.log(response.data);
-                    response.data.map(function (item) {
-                        console.log(item.regions);
-                    });
-                    let chartElement = document.getElementById(objectChart.element_id);
-                    let labels = response.columns;
-                    labels.pop();
-                    labels.shift();
-                    let chart = new Chart(chartElement, {
-                        type: 'bar',
-                        data: {
-                            labels: labels,
-                            datasets: response.data
-                        }
 
-
-                    });
-                }
+                // if (objectChart !== null) {
+                //     console.log(response.data);
+                //     response.data.map(function (item) {
+                //         console.log(item.regions);
+                //     });
+                //     let chartElement = document.getElementById(objectChart.element_id);
+                //     let labels = response.columns;
+                //     labels.pop();
+                //     labels.shift();
+                //     let chart = new Chart(chartElement, {
+                //         type: 'bar',
+                //         data: {
+                //             labels: labels,
+                //             datasets: response.data
+                //         }
+                //
+                //
+                //     });
+                // }
 
 
             },
