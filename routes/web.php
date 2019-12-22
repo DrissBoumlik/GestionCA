@@ -72,6 +72,7 @@ Route::post('/getNonValidatedFoldersByTypeByDates', 'StatsController@getNonValid
 Route::post('/getClientsByCallStateJoiByDates', 'StatsController@getClientsByCallStateJoiByDates');
 Route::post('/getClientsByCallStateInjByDates', 'StatsController@getClientsByCallStateInjByDates');
 
+//Route::get('/getDates', 'StatsController@getDates');
 Route::get('/getDates', 'StatsController@getDates');
 Route::get('/agencies', 'StatsController@byAgency');
 
@@ -90,6 +91,9 @@ Route::post('/stats/import-stats', 'StatsController@importStats')->name('stats.i
 Route::get('/demo', 'DemoController@index');
 Route::get('/getRegions/{callResult}', 'StatsController@getRegions');
 Route::get('/getRegionsColumn/{callResult}', 'StatsController@getRegionsColumn');
+
+Route::get('/getRegionsCallState/{column}', 'StatsController@getRegionsCallState'); // Nom_Region ---- Date_Heure_Note_Semaine
+Route::get('/getRegionsCallStateColumn/{column}', 'StatsController@getRegionsCallStateColumn');
 
 Route::get('/getNonValidatedFolders/{intervCol}', 'StatsController@getNonValidatedFolders');
 Route::get('/getNonValidatedFoldersColumn/{intervCol}', 'StatsController@getNonValidatedFoldersColumn');

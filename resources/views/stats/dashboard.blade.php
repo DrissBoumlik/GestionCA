@@ -82,7 +82,7 @@
     <div class="content content-narrow">
         <!-- Stats -->
         <div class="container-fluid">
-            <div class="row driss">
+            <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -120,28 +120,66 @@
             </div>
             <!-- /.row -->
             <hr>
-            <div class="row driss">
+            <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title d-inline-block">Résultats Appels (Clients Joints)</h3>
+                            <h3 class="card-title d-inline-block">Résultats Appels Préalables par agence</h3>
                             <hr>
                             <div class="refresh-form">
-                                <div id="tree-view-0" class="tree-view d-inline-block"></div>
-                                <button type="button" id="refreshCallStates" class="btn btn-primary float-right">
+                                <div id="tree-view-5" class="tree-view d-inline-block"></div>
+                                <button type="button" id="refreshCallStatesAgencies" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Refresh</span>
                                 </button>
                             </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="calls_states"
+                            <table id="calls_states_agencies"
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
                                     <th>Résultats Appels Préalables par agence</th>
-                                    @for($i = 1; $i < count($calls_states); $i++)
-                                        <th>{{ $calls_states[$i]->name }}</th>
+                                    @for($i = 1; $i < count($calls_states_regions); $i++)
+                                        <th>{{ $calls_states_regions[$i]->name }}</th>
+                                    @endfor
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="statsRegionsChart" class="d-none"></canvas>
+                </div>
+            </div>
+            <!-- /.row -->
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Résultats Appels Préalables par semaine</h3>
+                            <hr>
+                            <div class="refresh-form">
+                                <div id="tree-view-6" class="tree-view d-inline-block"></div>
+                                <button type="button" id="refreshCallStatesWeeks" class="btn btn-primary float-right">
+                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="calls_states_weeks"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
+                                <thead>
+                                <tr>
+                                    <th>Résultats Appels Préalables par agence</th>
+                                    @for($i = 1; $i < count($calls_states_weeks); $i++)
+                                        <th>{{ $calls_states_weeks[$i]->name }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -232,7 +270,7 @@
             <!-- /.row -->
 
             <hr>
-            <div class="row driss">
+            <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -268,7 +306,7 @@
             </div>
             <!-- /.row -->
             <hr>
-            <div class="row driss">
+            <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">

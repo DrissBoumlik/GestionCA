@@ -189,7 +189,7 @@ class Stats extends Model
         return $data;
     }
 
-    public static function getDateNotes()
+    public static function getDateNotes2()
     {
         $dates = self::distinct()->orderBy('Date_Note', 'desc')->pluck('Date_Note');
         $dates = $dates->map(function ($date, $index) {
@@ -226,5 +226,6 @@ class Stats extends Model
 
         return $dates->values();
     }
+
 
 }
