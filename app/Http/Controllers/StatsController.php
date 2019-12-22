@@ -111,6 +111,7 @@ class StatsController extends Controller
                 $row->regions['zone_' . $index] = $call->$nom_region . '%';
                 $row->$nom_region = $call->$nom_region . '%';
                 $row->total = round(array_sum($row->regions) / count($row->regions), 2) . '%';
+                $row->_total = $call->total;
                 return $row;
             });
 

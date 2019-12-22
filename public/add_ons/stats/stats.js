@@ -29,6 +29,8 @@ $(function () {
         }
     });
 
+    /// ====================== REGIONS ==========================
+
     let statsRegions = {element_dt: undefined, element: $('#statsRegions'), columns: undefined};
     let statsRegionsChart = {elementChart: undefined, element_id: 'statsRegionsChart', data: undefined};
     getColumns('getRegionsColumn/Resultat_Appel', 'getRegions/Resultat_Appel', statsRegions, statsRegionsChart);
@@ -42,6 +44,8 @@ $(function () {
         calls_states.element_dt = InitDataTable(calls_states, 'getRegions/Gpmt_Appel_Pre', {dates});
     });
 
+    /// ====================== FOLDERS ==========================
+
     let statsFoldersByType = {element_dt: undefined, element: $('#statsTypes'), columns: undefined};
     getColumns('getNonValidatedFoldersColumn/Code_Type_Intervention', 'getNonValidatedFolders/Code_Type_Intervention', statsFoldersByType);
     $('#refreshFoldersByType').on('click', function () {
@@ -53,6 +57,8 @@ $(function () {
     $('#refreshFoldersByCode').on('click', function () {
         statsFoldersByCode.element_dt = InitDataTable(statsFoldersByCode, 'getNonValidatedFolders/Code_Intervention', {dates});
     });
+
+    /// ====================== CALL STATS ==========================
 
     let statscallsPos = {element_dt: undefined, element: $('#statsCallsPos'), columns: undefined};
     getColumns('getClientsByCallStateColumn/Joignable', 'getClientsByCallState/Joignable', statscallsPos);
@@ -67,6 +73,9 @@ $(function () {
     });
 
     // getColumns('getNonValidatedFoldersColumn', 'getNonValidatedFolders', stats, stats_dt);
+
+
+    /// ====================== FUNCTIONS ==========================
 
     function getColumns(routeColumns, route, object, objectChart = null) {
         $.ajax({

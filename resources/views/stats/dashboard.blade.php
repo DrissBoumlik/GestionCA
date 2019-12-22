@@ -97,7 +97,8 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="statsRegions" class="table table-bordered table-striped table-valign-middle capitalize">
+                            <table id="statsRegions"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
                                     <th>Résultats Appels Préalables "Client Joignables"</th>
@@ -114,11 +115,11 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-12">
-                    <canvas id="statsRegionsChart"></canvas>
+                    <canvas id="statsRegionsChart" class="d-none"></canvas>
                 </div>
             </div>
             <!-- /.row -->
-
+            <hr>
             <div class="row driss">
                 <div class="col-12">
                     <div class="card">
@@ -134,7 +135,8 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="calls_states" class="table table-bordered table-striped table-valign-middle capitalize">
+                            <table id="calls_states"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
                                     <th>Résultats Appels Préalables par agence</th>
@@ -151,7 +153,7 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-12">
-                    <canvas id="statsRegionsChart"></canvas>
+                    <canvas id="statsRegionsChart" class="d-none"></canvas>
                 </div>
             </div>
             <!-- /.row -->
@@ -160,7 +162,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Confirmés (Clients Joignables)</h3>
+                            <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Confirmés (Clients
+                                Joignables)</h3>
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-1" class="tree-view d-inline-block"></div>
@@ -171,7 +174,8 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="statsCallsPos" class="table table-bordered table-striped table-valign-middle capitalize">
+                            <table id="statsCallsPos"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
                                     <th>Résultats Appels Préalables</th>
@@ -195,7 +199,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)</h3>
+                            <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Non Confirmés (Clients
+                                Injoignables)</h3>
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-2" class="tree-view d-inline-block"></div>
@@ -206,7 +211,8 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="statsCallsNeg" class="table table-bordered table-striped table-valign-middle capitalize">
+                            <table id="statsCallsNeg"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
                                     <th>Résultats Appels Préalables</th>
@@ -230,7 +236,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title d-inline-block">Répartition des dossiers non validés par Code Type intervention</h3>
+                            <h3 class="card-title d-inline-block">Répartition des dossiers non validés par Code Type
+                                intervention</h3>
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-3" class="tree-view d-inline-block"></div>
@@ -241,7 +248,8 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="statsTypes" class="table table-bordered table-striped table-valign-middle capitalize">
+                            <table id="statsTypes"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
                                     <th>Type Intervention</th>
@@ -264,7 +272,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title d-inline-block">Répartition des dossiers non validés par code intervention</h3>
+                            <h3 class="card-title d-inline-block">Répartition des dossiers non validés par code
+                                intervention</h3>
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-4" class="tree-view d-inline-block"></div>
@@ -275,7 +284,8 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="statsCodes" class="table table-bordered table-striped table-valign-middle capitalize">
+                            <table id="statsCodes"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
                                     <th>Code Intervention</th>
