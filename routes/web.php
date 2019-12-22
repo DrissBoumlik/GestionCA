@@ -95,8 +95,8 @@ Route::get('/getRegionsColumn/{callResult}', 'StatsController@getRegionsColumn')
 Route::get('/getRegionsCallState/{column}', 'StatsController@getRegionsCallState'); // Nom_Region ---- Date_Heure_Note_Semaine
 Route::get('/getRegionsCallStateColumn/{column}', 'StatsController@getRegionsCallStateColumn');
 
-Route::get('/getNonValidatedFolders/{intervCol}', 'StatsController@getNonValidatedFolders');
-Route::get('/getNonValidatedFoldersColumn/{intervCol}', 'StatsController@getNonValidatedFoldersColumn');
+Route::get('/getNonValidatedFolders/{column}', 'StatsController@getNonValidatedFolders'); // Code_Intervention ---- Code_Type_Intervention
+Route::get('/getNonValidatedFoldersColumn/{column}', 'StatsController@getNonValidatedFoldersColumn');
 
-Route::get('/getClientsByCallState/{callResult}', 'StatsController@getClientsByCallState');
+Route::get('/getClientsByCallState/{callResult}', 'StatsController@getClientsByCallState'); // Injoignable --- Joignable
 Route::get('/getClientsByCallStateColumn/{callResult}', 'StatsController@getClientsByCallStateColumn');

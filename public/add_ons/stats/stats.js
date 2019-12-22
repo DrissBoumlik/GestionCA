@@ -13,8 +13,8 @@ $(function () {
                     closeDepth: 2,
                     loaded: function () {
                         // this.values = ['0-0-0', '0-1-1', '0-0-2'];
-                        console.log(this.selectedNodes);
-                        console.log(this.values);
+                        // console.log(this.selectedNodes);
+                        // console.log(this.values);
                         // this.disables = ['0-0-0', '0-0-1', '0-0-2']
                     },
                     onChange: function () {
@@ -32,7 +32,7 @@ $(function () {
     /// ====================== REGIONS ==========================
 
     let statsRegions = {element_dt: undefined, element: $('#statsRegions'), columns: undefined};
-    let statsRegionsChart = {elementChart: undefined, element_id: 'statsRegionsChart', data: undefined};
+    let statsRegionsChart = {element_chart: undefined, element_id: 'statsRegionsChart', data: undefined};
     getColumns('getRegionsColumn/Resultat_Appel', 'getRegions/Resultat_Appel', statsRegions, statsRegionsChart);
     $('#refreshRegions').on('click', function () {
         statsRegions.element_dt = InitDataTable(statsRegions, 'getRegions/Resultat_Appel', {dates});
@@ -85,6 +85,12 @@ $(function () {
 
 
     /// ====================== FUNCTIONS ==========================
+    function dynamicColors() {
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+        return "rgb(" + r + "," + g + "," + b + ")";
+    };
 
     function getColumns(routeColumns, route, object, objectChart = null) {
         $.ajax({
@@ -94,7 +100,49 @@ $(function () {
             success: function (response) {
                 object.columns = response.columns;
                 object.element_dt = InitDataTable(object, route);
+                console.log(response);
+                if (objectChart !== null && objectChart !== undefined) {
+                    // console.log(objectChart);
+                    let labels = response.columns.map((column) => {
+                        return column.name;
+                    });
+                    labels.pop();
+                    labels.shift();
+                    let column = response.data.column;
+                    let datasets = response.data.data.map((item) => {
+                        let regions = Object.values(item.regions).map((value) => {
+                            return parseFloat(value.replace('%', ''));
+                        });
+                        let _dataItem = {label: item[column], backgroundColor: dynamicColors(), data: Object.values(regions)};
+                        return _dataItem;
+                    });
 
+                    var ctx = document.getElementById(objectChart.element_id).getContext('2d');
+                    let barChartData = {labels, datasets};
+                    let chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: barChartData,
+                        options: {
+                            title: {
+                                display: true,
+                                text: 'Résultats Appels (Clients Joints)'
+                            },
+                            tooltips: {
+                                mode: 'index',
+                                intersect: true
+                            },
+                            responsive: true,
+                            scales: {
+                                xAxes: [{
+                                    stacked: true,
+                                }],
+                                yAxes: [{
+                                    stacked: false
+                                }]
+                            }
+                        }
+                    });
+                }
                 // if (objectChart !== null) {
                 //     console.log(response.data);
                 //     response.data.map(function (item) {

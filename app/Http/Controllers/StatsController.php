@@ -59,6 +59,9 @@ class StatsController extends Controller
     {
         $dates = $request->get('dates');
         $data = $this->statsRepository->GetDataRegions($callResult, $dates);
+//        $_data = new \stdClass();
+//        $_data->data = $data['regions'];
+//        $_data->column = $callResult;
         return ['columns' => $data['regions_names'], 'data' => $data['regions']];
     }
 
@@ -93,17 +96,17 @@ class StatsController extends Controller
 
     #region NonValidatedFolders =====================================================
 
-    public function getNonValidatedFoldersColumn(Request $request, $intervCol)
+    public function getNonValidatedFoldersColumn(Request $request, $column)
     {
         $dates = $request->get('dates');
-        $data = $this->statsRepository->getDataNonValidatedFolders($intervCol, $dates);
-        return ['columns' => $data['regions_names']];
+        $data = $this->statsRepository->getDataNonValidatedFolders($column, $dates);
+        return ['columns' => $data['regions_names'], 'data' => $data['codes']];
     }
 
-    public function getNonValidatedFolders(Request $request, $intervCol)
+    public function getNonValidatedFolders(Request $request, $column)
     {
         $dates = $request->get('dates');
-        $data = $this->statsRepository->getDataNonValidatedFolders($intervCol, $dates);
+        $data = $this->statsRepository->getDataNonValidatedFolders($column, $dates);
         return DataTables::of($data['codes'])->toJson();
     }
 
@@ -115,7 +118,7 @@ class StatsController extends Controller
     {
         $dates = $request->get('dates');
         $data = $this->statsRepository->getDataClientsByCallState($callResult, $dates);
-        return ['columns' => $data['codes_names']];
+        return ['columns' => $data['codes_names'], 'data' => $data['regions']];
     }
 
     public function getClientsByCallState(Request $request, $callResult)

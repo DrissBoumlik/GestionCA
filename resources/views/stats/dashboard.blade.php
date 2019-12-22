@@ -115,7 +115,7 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-12">
-                    <canvas id="statsRegionsChart" class="d-none"></canvas>
+                    <canvas id="statsRegionsChart" class=""></canvas>
                 </div>
             </div>
             <!-- /.row -->
@@ -128,7 +128,8 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-5" class="tree-view d-inline-block"></div>
-                                <button type="button" id="refreshCallStatesAgencies" class="btn btn-primary float-right">
+                                <button type="button" id="refreshCallStatesAgencies"
+                                        class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Refresh</span>
                                 </button>
                             </div>
@@ -152,9 +153,6 @@
                     <!-- /.card -->
                 </div>
                 <!-- /.col -->
-                <div class="col-12">
-                    <canvas id="statsRegionsChart" class="d-none"></canvas>
-                </div>
             </div>
             <!-- /.row -->
             <hr>
@@ -190,9 +188,6 @@
                     <!-- /.card -->
                 </div>
                 <!-- /.col -->
-                <div class="col-12">
-                    <canvas id="statsRegionsChart" class="d-none"></canvas>
-                </div>
             </div>
             <!-- /.row -->
             <hr>
