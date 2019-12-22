@@ -198,8 +198,7 @@ class Stats extends Model
             $item->year = $date[0];
             $item->month = $date[1];
             $item->day = $date[2];
-            $date = $item;
-            return $date;
+            return $item;
         });
         $dates = collect($dates)->groupBy(['year', 'month']);
         $dates = $dates->map(function ($year, $index) {
