@@ -356,7 +356,6 @@ class StatsRepository
                 $_item->values[$col] = '0%';
                 $_item->$col = '0%';
             }
-            dd($_item);
             return $_item;
         });
 
