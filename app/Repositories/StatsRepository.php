@@ -301,10 +301,13 @@ class StatsRepository
             $code->$Code = round($code->total * 100 / $totalCount, 2);;
             return $code;
         });
-        $columns = $columns->map(function ($code) use ($totalCount) {
-            $Code = $code->Code_Intervention;
-            $code->$Code = round($code->total * 100 / $totalCount, 2);;
-            return $code;
+        $columns = $columns->filter(function ($code) use ($totalCount) {
+            if ($code->Code_Intervention) {
+                $Code = $code->Code_Intervention;
+                $code->$Code = round($code->total * 100 / $totalCount, 2);;
+                return $code;
+            }
+            return;
         });
         $keys = $columns->groupBy(['Code_Intervention'])->keys();
         $codes = $codes->groupBy(['Nom_Region']);
@@ -321,7 +324,6 @@ class StatsRepository
         $codes_names[] = new \stdClass();
         $codes_names[count($codes_names) - 1]->data = 'total';
         $codes_names[count($codes_names) - 1]->name = 'total';
-
         $total = new \stdClass();
         $codes = $codes->map(function ($region) use (&$codes_names, &$total, $keys) {
             $row = new \stdClass(); //[];
@@ -335,8 +337,8 @@ class StatsRepository
 
 
                 $col_arr = array_diff($col_arr, [$code_intervention]);
-
-                $row->values['value_' . $index] = $call->$code_intervention . '%';
+//                dd($call->Code_Intervention);
+                $row->values[$call->Code_Intervention] = $call->$code_intervention . '%';
                 $row->$code_intervention = $call->$code_intervention . '%';
 //                $row->$code_intervention = $call->$code_intervention;
                 $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
@@ -346,19 +348,18 @@ class StatsRepository
 //                        $total->$index == 0 ?
 //                        $total->$index + $call->$code_intervention : 0;
 //                    $total[$index] += $call->$code_intervention;
-
                 return $row;
             });
             $_item = $item->last();
             $index = count($_item->values);
             foreach ($col_arr as $col) {
-                $_item->values['value_' . $index++] = '0%';
+                $_item->values[$col] = '0%';
                 $_item->$col = '0%';
             }
+            dd($_item);
             return $_item;
         });
 
-        $codes_names = collect($codes_names)->unique()->values();
         $codes = $codes->values();
 
         $data = ['columns' => $codes_names, 'data' => $codes];

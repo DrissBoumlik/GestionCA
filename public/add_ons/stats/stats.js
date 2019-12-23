@@ -115,14 +115,15 @@ $(function () {
                     labels.pop();
                     labels.shift();
                     let datasets = response.data.map((item) => {
+                        console.log(item.values);
                         let regions = Object.values(item.values).map((value) => {
-
+                            // console.log(value);
                             return parseFloat(!Number(value) ? value.replace('%', '') : value);
                         });
                         let _dataItem = {label: item[column], backgroundColor: dynamicColors(), data: regions};
                         return _dataItem;
                     });
-
+                    console.log("====================================================================================");
                     var ctx = document.getElementById(objectChart.element_id).getContext('2d');
                     let barChartData = {labels, datasets};
                     let chart = new Chart(ctx, {

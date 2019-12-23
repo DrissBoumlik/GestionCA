@@ -1,5 +1,9 @@
 @extends('layouts.backend')
 
+@section('page-title')
+    Importation
+@endsection
+
 @section('css_before')
     <!-- Page JS Plugins CSS -->
     <link rel="stylesheet" href="{{ asset('js/plugins/datatables/dataTables.bootstrap4.css') }}">
@@ -17,7 +21,7 @@
     <script src="{{ asset('js/plugins/datatables/buttons/buttons.colVis.min.js') }}"></script>
 
     <!-- Page JS Code -->
-    <script src="{{ asset('js/pages/task.js') }}"></script>
+    <script src="{{ asset('js/pages/import-stats.js') }}"></script>
 @endsection
 
 @section('content')
@@ -26,14 +30,15 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <h1 class="flex-sm-fill h3 my-2">
-                    Les Tâches
+                    Choisissez un fichier excel
                 </h1>
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">Circet</li>
                         <li class="breadcrumb-item" aria-current="page">
-                            <a class="link-fx" href="{{ route('tasks.index') }}">Importation</a>
+                            <a class="link-fx" href="{{ route('stats.index') }}">Importation</a>
                         </li>
+                        ²
                     </ol>
                 </nav>
             </div>
@@ -50,45 +55,6 @@
                 </button>
             </div>
         </div>
-        <!-- Your Block -->
-        <div class="block d-none">
-            <div class="block-header">
-                <h3 class="block-title">Dynamic Table <small>Export Buttons</small></h3>
-            </div>
-            <div class="block-content block-content-full">
-                <div class="table-responsive">
-                    <table id="table-tasks" class="table table-bordered table-striped table-vcenter">
-                        <thead>
-                        <tr>
-                            <th>Date de réception</th>
-                            <th>Operateur</th>
-                            <th>Code projet operateur</th>
-                            <th>CDP Opérateur</th>
-                            <th>Agence</th>
-                            <th>CDP CIRCET</th>
-                            <th>OTC - UO</th>
-                            <th>Code Site</th>
-                            <th>Patrimoine</th>
-                            <th>Site B</th>
-                            <th>Clé</th>
-                            <th>Type d'OP</th>
-                            <th>Type support</th>
-                            <th>Conf</th>
-                            <th>Type EB Tiers</th>
-                            <th>Acteur</th>
-                            <th>Date Envoi EB</th>
-                            <th>Date de validation EB par le tiers</th>
-                            <th>Etape dans le process d'accueil chez le Tiers</th>
-                            <th>Commentaire</th>
-                            <th class="text-center">Statut</th>
-                        </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <!-- END Your Block -->
     </div>
     <!-- END Page Content -->
 
@@ -111,7 +77,8 @@
                                 <label>Bootstrap’s Custom File Input</label>
                                 <div class="custom-file">
                                     <!-- Populating custom file input label with the selected filename (data-toggle="custom-file-input" is initialized in Helpers.coreBootstrapCustomFileInput()) -->
-                                    <input type="file" class="custom-file-input" data-toggle="custom-file-input" id="file" name="file">
+                                    <input type="file" class="custom-file-input" data-toggle="custom-file-input"
+                                           id="file" name="file">
                                     <label class="custom-file-label" for="file">choisir le fichier</label>
                                 </div>
                             </div>
@@ -119,7 +86,9 @@
                     </div>
                     <div class="block-content block-content-full text-right border-top">
                         <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Fermer</button>
-                        <button type="button" class="btn btn-sm btn-primary" id="btn-import"><i class="fa fa-check mr-1"></i>Importer</button>
+                        <button type="button" class="btn btn-sm btn-primary" id="btn-import"><i
+                                class="fa fa-check mr-1"></i>Importer
+                        </button>
                     </div>
                 </div>
             </div>
