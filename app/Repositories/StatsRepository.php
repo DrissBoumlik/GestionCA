@@ -281,6 +281,7 @@ class StatsRepository
         return $data;
     }
 
+
     public function getDataClientsByCallState($callResult, $dates = null)
     {
         $codes = \DB::table('stats')
@@ -311,7 +312,7 @@ class StatsRepository
         });
         $keys = $columns->groupBy(['Code_Intervention'])->keys();
         $codes = $codes->groupBy(['Nom_Region']);
-
+//         TODO : SORT/SYNC COLUMNS & VALUES
         $codes_names = [];
         $codes_names[0] = new \stdClass();
         $codes_names[0]->data = 'Nom_Region';
@@ -320,10 +321,26 @@ class StatsRepository
             $codes_names[$index + 1] = new \stdClass();
             $codes_names[$index + 1]->data = $key;
             $codes_names[$index + 1]->name = $key;
+//            $_value = new \stdClass();
+//            $_value->data = $key;
+//            $_value->name = $key;
+//            return $_value;
         });
+//        $codes_names = $codes_names->all();
+//        dump($codes_names);
+//        usort($codes_names, function ($item1, $item2) {
+//            return ($item1->data == $item2->data) ? 0 :
+//                 ($item1->data < $item2->data) ? -1 : 1;
+//        });
+//        dd($codes_names);
+
+//        $codes_names[0] = new \stdClass();
+//        $codes_names[0]->data = 'Nom_Region';
+//        $codes_names[0]->name = 'Nom_Region';
         $codes_names[] = new \stdClass();
         $codes_names[count($codes_names) - 1]->data = 'total';
         $codes_names[count($codes_names) - 1]->name = 'total';
+
         $total = new \stdClass();
         $codes = $codes->map(function ($region) use (&$codes_names, &$total, $keys) {
             $row = new \stdClass(); //[];
@@ -356,6 +373,7 @@ class StatsRepository
                 $_item->values[$col] = '0%';
                 $_item->$col = '0%';
             }
+            ksort($_item->values);
             return $_item;
         });
 
