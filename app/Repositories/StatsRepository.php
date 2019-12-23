@@ -125,7 +125,7 @@ class StatsRepository
     {
         $regions = \DB::table('stats')
             ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'))
-            ->whereNotNull($column);
+            ->whereNotNull([$column, 'Gpmt_Appel_Pre']);
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
