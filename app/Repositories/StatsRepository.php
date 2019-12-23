@@ -50,8 +50,11 @@ class StatsRepository
     public function GetDataRegions($callResult, $dates = null)
     {
         $regions = \DB::table('stats')
-            ->select('Nom_Region', $callResult, \DB::raw('count(*) as total'))
-            ->whereNotNull($callResult);
+            ->select('Nom_Region', $callResult, \DB::raw('count(*) as total'));
+
+        $columns = $regions->groupBy('Nom_Region', $callResult)->get();
+
+        $regions = $regions->whereNotNull($callResult);
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
@@ -67,8 +70,13 @@ class StatsRepository
             $region->$Region = round($region->total * 100 / $totalCount, 2);
             return $region;
         });
+        $columns = $columns->map(function ($region) use ($totalCount) {
+            $Region = $region->Nom_Region;
+            $region->$Region = round($region->total * 100 / $totalCount, 2);
+            return $region;
+        });
 
-        $keys = $regions->groupBy(['Nom_Region'])->keys();
+        $keys = $columns->groupBy(['Nom_Region'])->keys();
 
         $regions = $regions->groupBy([$callResult]);
 //        $regions = $regions->groupBy(['Nom_Region']);
@@ -124,14 +132,16 @@ class StatsRepository
     public function GetDataRegionsCallState($column, $dates = null)
     {
         $regions = \DB::table('stats')
-            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'))
-            ->whereNotNull([$column, 'Gpmt_Appel_Pre']);
+            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'));
+
+        $columns = $regions->groupBy($column, 'Gpmt_Appel_Pre')->get();
+
+        $regions = $regions->whereNotNull([$column, 'Gpmt_Appel_Pre']);
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
         }
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
-
         $regions = $regions->groupBy($column, 'Gpmt_Appel_Pre')->get();
         $totalCount = Stats::all()->count();
         $regions = $regions->map(function ($region) use ($column) {
@@ -139,8 +149,13 @@ class StatsRepository
             $region->$Region = $region->total; //round($region->total * 100 / $totalCount, 2) . '%';
             return $region;
         });
+        $columns = $columns->map(function ($region) use ($column) {
+            $Region = $region->$column;
+            $region->$Region = $region->total; //round($region->total * 100 / $totalCount, 2) . '%';
+            return $region;
+        });
 
-        $keys = $regions->groupBy([$column])->keys();
+        $keys = $columns->groupBy([$column])->keys();
         $regions = $regions->groupBy(['Gpmt_Appel_Pre']);
 //        $regions = $regions->groupBy(['Nom_Region']);
 
@@ -156,7 +171,6 @@ class StatsRepository
         $columns[] = new \stdClass();
         $columns[count($columns) - 1]->data = 'total';
         $columns[count($columns) - 1]->name = 'total';
-
         $regions = $regions->map(function ($region, $index) use (&$columns, $keys, $column) {
 //            dd($index, $region);
             $row = new \stdClass();
@@ -164,7 +178,7 @@ class StatsRepository
 
             $col_arr = $keys->all();
             $total = 0;
-            $item = $region->map(function ($call, $index) use (&$row, &$columns, &$col_arr, &$total, $column) {
+            $item = $region->map(function ($call, $index) use (&$row, &$col_arr, &$total, $column) {
 //                dd($index, $call);
                 $row->Gpmt_Appel_Pre = $call->Gpmt_Appel_Pre;
                 $column_name = $call->$column;
@@ -196,8 +210,11 @@ class StatsRepository
     public function getDataNonValidatedFolders($intervCol, $dates = null)
     {
         $regions = \DB::table('stats')
-            ->select('Nom_Region', $intervCol, \DB::raw('count(*) as total'))
-            ->whereNotNull($intervCol);
+            ->select('Nom_Region', $intervCol, \DB::raw('count(*) as total'));
+
+        $columns = $regions->groupBy('Nom_Region', $intervCol)->get();
+
+        $regions = $regions->whereNotNull($intervCol);
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
@@ -210,7 +227,12 @@ class StatsRepository
             $region->$Region = round($region->total * 100 / $totalCount, 2);;
             return $region;
         });
-        $keys = $regions->groupBy(['Nom_Region'])->keys();
+        $columns = $columns->map(function ($region) use ($totalCount) {
+            $Region = $region->Nom_Region;
+            $region->$Region = round($region->total * 100 / $totalCount, 2);;
+            return $region;
+        });
+        $keys = $columns->groupBy(['Nom_Region'])->keys();
         $regions = $regions->groupBy([$intervCol]);
 
 
@@ -262,8 +284,9 @@ class StatsRepository
     public function getDataClientsByCallState($callResult, $dates = null)
     {
         $codes = \DB::table('stats')
-            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(*) as total'))
-            ->whereNotNull('Code_Intervention')
+            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(*) as total'));
+        $columns = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
+        $codes = $codes->whereNotNull('Code_Intervention')
             ->where('Gpmt_Appel_Pre', $callResult);
 //            ->groupBy('Code_Intervention', 'Nom_Region')
 //            ->get();
@@ -278,8 +301,12 @@ class StatsRepository
             $code->$Code = round($code->total * 100 / $totalCount, 2);;
             return $code;
         });
-
-        $keys = $codes->groupBy(['Code_Intervention'])->keys();
+        $columns = $columns->map(function ($code) use ($totalCount) {
+            $Code = $code->Code_Intervention;
+            $code->$Code = round($code->total * 100 / $totalCount, 2);;
+            return $code;
+        });
+        $keys = $columns->groupBy(['Code_Intervention'])->keys();
         $codes = $codes->groupBy(['Nom_Region']);
 
         $codes_names = [];
