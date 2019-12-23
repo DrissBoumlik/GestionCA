@@ -47,8 +47,6 @@ class StatsController extends Controller
 
     public function getDates(Request $request)
     {
-//        $dates = Stats::getDateNotes();
-//        $dates = Stats::getDateNotes2();
         $dates = $this->statsRepository->getDateNotes();
         return ['dates' => $dates];
     }

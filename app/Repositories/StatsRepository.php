@@ -12,24 +12,32 @@ class StatsRepository
 {
     public function getDateNotes()
     {
-        $dates = Stats::all()->groupBy(['Date_Heure_Note_Annee', 'Date_Heure_Note_Semaine', 'Date_Note']);
+        $dates = Stats::all()->groupBy(['Date_Heure_Note_Annee', 'Date_Heure_Note_Mois', 'Date_Heure_Note_Semaine', 'Date_Note']);
         $dates = $dates->map(function ($year, $index) {
             $_year = new \stdClass();
             $_year->id = $index; // year name
             $_year->text = $index; // year name
             $_year->children = []; // months
-            $year->map(function ($week, $index) use (&$_year) {
-                $_week = new \stdClass();
-                $_week->id = $_year->text . '-' . $index; // week name
-                $_week->text = $_year->text . '-' . $index; // week name
-                $_week->children = []; // days
-                $_year->children[] = $_week;
-                $week->map(function ($day, $index) use (&$_week) {
-                    $_day = new \stdClass();
-                    $_day->id = collect($index)->implode('-'); // day name
-                    $_day->text = collect($index)->implode('-'); // day name
-                    $_week->children[] = $_day; // collect($day)->implode('-');
-                    return $_week;
+            $year->map(function ($month, $index) use (&$_year) {
+                $_month = new \stdClass();
+                $_month->id = $_year->text . '-' . $index; // month name
+                $_month->text = $_year->text . '-' . $index; // month name
+                $_month->children = []; // months
+                $_year->children[] = $_month;
+                $month->map(function ($week, $index) use (&$_year, &$_month) {
+                    $_week = new \stdClass();
+                    $_week->id = $index; // week name
+                    $_week->text = $index; // week name
+                    $_week->children = []; // days
+                    $_month->children[] = $_week;
+                    $week->map(function ($day, $index) use (&$_week) {
+                        $_day = new \stdClass();
+                        $_day->id = collect($index)->implode('-'); // day name
+                        $_day->text = collect($index)->implode('-'); // day name
+                        $_week->children[] = $_day; // collect($day)->implode('-');
+                        return $_week;
+                    });
+                    return $_month;
                 });
                 return $_year;
             });
