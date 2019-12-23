@@ -117,6 +117,7 @@
                 <div class="col-12">
                     <canvas id="statsRegionsChart" class=""></canvas>
                 </div>
+                <!-- /.col -->
             </div>
             <!-- /.row -->
             <hr>
@@ -136,7 +137,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="calls_states_agencies"
+                            <table id="callsStatesAgencies"
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
@@ -151,6 +152,10 @@
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="callsStatesAgenciesChart" class=""></canvas>
                 </div>
                 <!-- /.col -->
             </div>
@@ -171,7 +176,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="calls_states_weeks"
+                            <table id="callsStatesWeeks"
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
@@ -186,6 +191,10 @@
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="callsStatesWeeksChart" class=""></canvas>
                 </div>
                 <!-- /.col -->
             </div>
@@ -224,6 +233,10 @@
                     <!-- /.card -->
                 </div>
                 <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="statsCallsPosChart" class=""></canvas>
+                </div>
+                <!-- /.col -->
             </div>
             <!-- /.row -->
 
@@ -259,6 +272,10 @@
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="statscallsNegChart" class=""></canvas>
                 </div>
                 <!-- /.col -->
             </div>

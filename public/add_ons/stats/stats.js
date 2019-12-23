@@ -31,57 +31,62 @@ $(function () {
 
     /// ====================== REGIONS ==========================
 
-    let statsRegions = {element_dt: undefined, element: $('#statsRegions'), columns: undefined};
+    let statsRegions = {element_dt: undefined, element: $('#statsRegions'), columns: undefined, routeCol: 'regions/columns/Resultat_Appel', routeData: 'regions/Resultat_Appel'};
     let statsRegionsChart = {element_chart: undefined, element_id: 'statsRegionsChart', data: undefined};
-    getColumns('getRegionsColumn/Resultat_Appel', 'getRegions/Resultat_Appel', statsRegions, statsRegionsChart);
+    getColumns(statsRegions, statsRegionsChart);
     $('#refreshRegions').on('click', function () {
-        statsRegions.element_dt = InitDataTable(statsRegions, 'getRegions/Resultat_Appel', {dates});
+        statsRegions.element_dt = InitDataTable(statsRegions, {dates});
     });
 
-    /// ====================== CALLS STATS ==========================
+    /// ====================== CALLS STATS AGENCIES / WEEKS ==========================
 
-    let calls_states_agencies = {element_dt: undefined, element: $('#calls_states_agencies'), columns: undefined};
-    getColumns('getRegionsCallStateColumn/Nom_Region', 'getRegionsCallState/Nom_Region', calls_states_agencies);
+    let callsStatesAgencies = {element_dt: undefined, element: $('#callsStatesAgencies'), columns: undefined, routeCol: 'regionsCallState/columns/Nom_Region', routeData: 'regionsCallState/Nom_Region'};
+    let callsStatesAgenciesChart = {element_chart: undefined, element_id: 'callsStatesAgenciesChart', data: undefined};
+    getColumns(callsStatesAgencies, callsStatesAgenciesChart);
     $('#refreshCallStatesAgencies').on('click', function () {
-        calls_states_agencies.element_dt = InitDataTable(calls_states_agencies, 'getRegionsCallState/Nom_Region', {dates});
+        callsStatesAgencies.element_dt = InitDataTable(callsStatesAgencies, {dates});
     });
 
 
-    let calls_states_weeks = {element_dt: undefined, element: $('#calls_states_weeks'), columns: undefined};
-    getColumns('getRegionsCallStateColumn/Date_Heure_Note_Semaine', 'getRegionsCallState/Date_Heure_Note_Semaine', calls_states_weeks);
+    let callsStatesWeeks = {element_dt: undefined, element: $('#callsStatesWeeks'), columns: undefined, routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine', routeData: 'regionsCallState/Date_Heure_Note_Semaine'};
+    let callsStatesWeeksChart = {element_chart: undefined, element_id: 'callsStatesWeeksChart', data: undefined};
+    getColumns(callsStatesWeeks, callsStatesWeeksChart);
     $('#refreshCallStatesWeeks').on('click', function () {
-        calls_states_weeks.element_dt = InitDataTable(calls_states_weeks, 'getRegionsCallState/Date_Heure_Note_Semaine', {dates});
+        callsStatesWeeks.element_dt = InitDataTable(callsStatesWeeks, {dates});
     });
 
-    /// ====================== FOLDERS ==========================
 
-    let statsFoldersByType = {element_dt: undefined, element: $('#statsTypes'), columns: undefined};
-    getColumns('getNonValidatedFoldersColumn/Code_Type_Intervention', 'getNonValidatedFolders/Code_Type_Intervention', statsFoldersByType);
-    $('#refreshFoldersByType').on('click', function () {
-        statsFoldersByType.element_dt = InitDataTable(statsFoldersByType, 'getNonValidatedFolders/Code_Type_Intervention', {dates});
-    });
+    /// ====================== CALL STATS Joignables / Injoignable ==========================
 
-    let statsFoldersByCode = {element_dt: undefined, element: $('#statsCodes'), columns: undefined};
-    getColumns('getNonValidatedFoldersColumn/Code_Intervention', 'getNonValidatedFolders/Code_Intervention', statsFoldersByCode);
-    $('#refreshFoldersByCode').on('click', function () {
-        statsFoldersByCode.element_dt = InitDataTable(statsFoldersByCode, 'getNonValidatedFolders/Code_Intervention', {dates});
-    });
-
-    /// ====================== CALL STATS ==========================
-
-    let statscallsPos = {element_dt: undefined, element: $('#statsCallsPos'), columns: undefined};
-    getColumns('getClientsByCallStateColumn/Joignable', 'getClientsByCallState/Joignable', statscallsPos);
+    let statscallsPos = {element_dt: undefined, element: $('#statsCallsPos'), columns: undefined, routeCol: 'clientsByCallState/columns/Joignable', routeData: 'clientsByCallState/Joignable'};
+    let statsCallsPosChart = {element_chart: undefined, element_id: 'statsCallsPosChart', data: undefined};
+    getColumns(statscallsPos, statsCallsPosChart);
     $('#refreshCallResultPos').on('click', function () {
-        statscallsPos.element_dt = InitDataTable(statscallsPos, 'getClientsByCallState/Joignable', {dates});
+        statscallsPos.element_dt = InitDataTable(statscallsPos, {dates});
     });
 
-    let statscallsNeg = {element_dt: undefined, element: $('#statsCallsNeg'), columns: undefined};
-    getColumns('getClientsByCallStateColumn/Injoignable', 'getClientsByCallState/Injoignable', statscallsNeg);
+    let statscallsNeg = {element_dt: undefined, element: $('#statsCallsNeg'), columns: undefined, routeCol: 'clientsByCallState/columns/Injoignable', routeData: 'clientsByCallState/Injoignable'};
+    let statscallsNegChart = {element_chart: undefined, element_id: 'statscallsNegChart', data: undefined};
+    getColumns(statscallsNeg, statscallsNegChart);
     $('#refreshCallResultNeg').on('click', function () {
-        statscallsNeg.element_dt = InitDataTable(statscallsNeg, 'getClientsByCallState/Injoignable', {dates});
+        statscallsNeg.element_dt = InitDataTable(statscallsNeg, {dates});
     });
 
-    // getColumns('getNonValidatedFoldersColumn', 'getNonValidatedFolders', stats, stats_dt);
+    /// ====================== FOLDERS CODE / TYPE ==========================
+
+    let statsFoldersByType = {element_dt: undefined, element: $('#statsTypes'), columns: undefined, routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention', routeData: 'nonValidatedFolders/Code_Type_Intervention'};
+    getColumns(statsFoldersByType);
+    $('#refreshFoldersByType').on('click', function () {
+        statsFoldersByType.element_dt = InitDataTable(statsFoldersByType, {dates});
+    });
+
+    let statsFoldersByCode = {element_dt: undefined, element: $('#statsCodes'), columns: undefined, routeCol: 'nonValidatedFolders/columns/Code_Intervention', routeData: 'nonValidatedFolders/Code_Intervention'};
+    getColumns(statsFoldersByCode);
+    $('#refreshFoldersByCode').on('click', function () {
+        statsFoldersByCode.element_dt = InitDataTable(statsFoldersByCode, {dates});
+    });
+
+    // getColumns('nonValidatedFoldersColumn', 'nonValidatedFolders', stats, stats_dt);
 
 
     /// ====================== FUNCTIONS ==========================
@@ -92,28 +97,31 @@ $(function () {
         return "rgb(" + r + "," + g + "," + b + ")";
     };
 
-    function getColumns(routeColumns, route, object, objectChart = null) {
+    function getColumns(object, objectChart = null) {
         $.ajax({
-            url: routeColumns,
+            url: object.routeCol,
             method: 'GET',
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function (response) {
                 object.columns = response.columns;
-                object.element_dt = InitDataTable(object, route);
-                console.log(response);
+                object.element_dt = InitDataTable(object);
+                // console.log(response);
                 if (objectChart !== null && objectChart !== undefined) {
                     // console.log(objectChart);
+                    console.log(response.columns);
                     let labels = response.columns.map((column) => {
                         return column.name;
                     });
+                    let column = labels[0];
                     labels.pop();
                     labels.shift();
-                    let column = response.data.column;
-                    let datasets = response.data.data.map((item) => {
-                        let regions = Object.values(item.regions).map((value) => {
-                            return parseFloat(value.replace('%', ''));
+                    console.log(response.columns);
+                    let datasets = response.data.map((item) => {
+                        let regions = Object.values(item.values).map((value) => {
+
+                            return parseFloat(!Number(value) ? value.replace('%', '') : value);
                         });
-                        let _dataItem = {label: item[column], backgroundColor: dynamicColors(), data: Object.values(regions)};
+                        let _dataItem = {label: item[column], backgroundColor: dynamicColors(), data: regions};
                         return _dataItem;
                     });
 
@@ -134,7 +142,7 @@ $(function () {
                             responsive: true,
                             scales: {
                                 xAxes: [{
-                                    stacked: true,
+                                    stacked: false,
                                 }],
                                 yAxes: [{
                                     stacked: false
@@ -143,27 +151,6 @@ $(function () {
                         }
                     });
                 }
-                // if (objectChart !== null) {
-                //     console.log(response.data);
-                //     response.data.map(function (item) {
-                //         console.log(item.regions);
-                //     });
-                //     let chartElement = document.getElementById(objectChart.element_id);
-                //     let labels = response.columns;
-                //     labels.pop();
-                //     labels.shift();
-                //     let chart = new Chart(chartElement, {
-                //         type: 'bar',
-                //         data: {
-                //             labels: labels,
-                //             datasets: response.data
-                //         }
-                //
-                //
-                //     });
-                // }
-
-
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log('error');
@@ -171,7 +158,7 @@ $(function () {
         });
     }
 
-    function InitDataTable(object, route, data = null) {
+    function InitDataTable(object, data = null) {
         if ($.fn.DataTable.isDataTable(object.element_dt)) {
             object.element_dt.destroy();
         }
@@ -182,7 +169,7 @@ $(function () {
             serverSide: true,
             searching: false,
             ajax: {
-                url: route,
+                url: object.routeData,
                 data: data,
             },
             columns: object.columns

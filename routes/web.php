@@ -89,14 +89,15 @@ Route::get('/stats', 'StatsController@index')->name('stats.index');
 Route::post('/stats/import-stats', 'StatsController@importStats')->name('stats.import-stats');
 
 Route::get('/demo', 'DemoController@index');
-Route::get('/getRegions/{callResult}', 'StatsController@getRegions');
-Route::get('/getRegionsColumn/{callResult}', 'StatsController@getRegionsColumn');
 
-Route::get('/getRegionsCallState/{column}', 'StatsController@getRegionsCallState'); // Nom_Region ---- Date_Heure_Note_Semaine
-Route::get('/getRegionsCallStateColumn/{column}', 'StatsController@getRegionsCallStateColumn');
+Route::get('/regions/{callResult}', 'StatsController@getRegions'); // Resultat_Appel
+Route::get('/regions/columns/{callResult}', 'StatsController@getRegionsColumn'); // Resultat_Appel
 
-Route::get('/getNonValidatedFolders/{column}', 'StatsController@getNonValidatedFolders'); // Code_Intervention ---- Code_Type_Intervention
-Route::get('/getNonValidatedFoldersColumn/{column}', 'StatsController@getNonValidatedFoldersColumn');
+Route::get('/regionsCallState/{column}', 'StatsController@getRegionsCallState'); // Nom_Region / Date_Heure_Note_Semaine
+Route::get('/regionsCallState/columns/{column}', 'StatsController@getRegionsCallStateColumn');
 
-Route::get('/getClientsByCallState/{callResult}', 'StatsController@getClientsByCallState'); // Injoignable --- Joignable
-Route::get('/getClientsByCallStateColumn/{callResult}', 'StatsController@getClientsByCallStateColumn');
+Route::get('/nonValidatedFolders/{column}', 'StatsController@getNonValidatedFolders'); // Code_Intervention / Code_Type_Intervention
+Route::get('/nonValidatedFolders/columns/{column}', 'StatsController@getNonValidatedFoldersColumn');
+
+Route::get('/clientsByCallState/{callResult}', 'StatsController@getClientsByCallState'); // Injoignable / Joignable
+Route::get('/clientsByCallState/columns/{callResult}', 'StatsController@getClientsByCallStateColumn');

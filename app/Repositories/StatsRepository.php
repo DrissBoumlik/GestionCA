@@ -72,7 +72,7 @@ class StatsRepository
 
         $regions = $regions->map(function ($region) use (&$regions_names, $keys_regions, $callResult) {
             $row = new \stdClass();
-            $row->regions = [];
+            $row->values = [];
 
             $col_arr = $keys_regions->all();
 
@@ -86,17 +86,18 @@ class StatsRepository
 
                 $col_arr = array_diff($col_arr, [$nom_region]);
 
-                $row->regions['zone_' . $index] = $call->$nom_region . '%';
+                $row->values['value_' . $index] = $call->$nom_region . '%';
                 $row->$nom_region = $call->$nom_region . '%';
-                $row->total = round(array_sum($row->regions) / count($row->regions), 2) . '%';
+                $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
                 $row->_total = $call->total;
+                $row->column = $callResult;
                 return $row;
             });
 
             $_item = $item->last();
-            $index = count($_item->regions);
+            $index = count($_item->values);
             foreach ($col_arr as $col) {
-                $_item->regions['zone_' . $index++] = '0%';
+                $_item->values['value_' . $index++] = '0%';
                 $_item->$col = '0%';
             }
             return $_item;
@@ -109,7 +110,7 @@ class StatsRepository
         $regions_names = collect($regions_names)->unique()->filter()->values();
         $regions = $regions->values();
 
-        return ['regions_names' => $regions_names, 'regions' => $regions];
+        return ['columns' => $regions_names, 'data' => $regions];
     }
 
     public function GetDataRegionsCallState($column, $dates = null)
@@ -158,6 +159,7 @@ class StatsRepository
                 $col_arr = array_diff($col_arr, [$column_name]);
                 $row->values['value_' . $index] = $call->$column_name;
                 $row->$column_name = $call->$column_name;
+                $row->column = $call->Gpmt_Appel_Pre;
                 $total += $call->total;
 //                $row->_total = $call->total;
                 $row->total = $total; //round(array_sum($row->regions) / count($row->regions), 2) . '%';
@@ -182,7 +184,7 @@ class StatsRepository
         $columns = collect($columns)->unique()->filter()->values();
         $regions = $regions->values();
 
-        return ['columns' => $columns, 'regions' => $regions];
+        return ['columns' => $columns, 'data' => $regions];
     }
 
     public function getDataNonValidatedFolders($intervCol, $dates = null)
@@ -212,7 +214,7 @@ class StatsRepository
 
         $regions = $regions->map(function ($region) use (&$regions_names, $keys_regions, $intervCol) {
             $row = new \stdClass();
-            $row->regions = [];
+            $row->values = [];
             $col_arr = $keys_regions->all();
             $item = $region->map(function ($call, $index) use (&$row, &$regions_names, &$col_arr, $intervCol) {
                 $_index = $index + 1;
@@ -220,27 +222,21 @@ class StatsRepository
                 $regions_names[$_index]->data = $call->Nom_Region;
                 $regions_names[$_index]->name = $call->Nom_Region;
 
-//                if (property_exists($call, 'Code_Type_Intervention')) {
-//                    $row->Code_Type_Intervention = $call->Code_Type_Intervention;
-//                } elseif (property_exists($call, 'Code_Intervention')) {
-//                    $row->Code_Intervention = $call->Code_Intervention;
-//                }
-
                 $row->$intervCol = $call->$intervCol;
 
                 $nom_region = $call->Nom_Region;
 
                 $col_arr = array_diff($col_arr, [$nom_region]);
 
-                $row->regions['zone_' . $index] = $call->$nom_region . '%';
+                $row->values['value_' . $index] = $call->$nom_region . '%';
                 $row->$nom_region = $call->$nom_region . '%';
-                $row->total = round(array_sum($row->regions) / count($row->regions), 2) . '%';
+                $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
                 return $row;
             });
             $_item = $item->last();
-            $index = count($_item->regions);
+            $index = count($_item->values);
             foreach ($col_arr as $col) {
-                $_item->regions['zone_' . $index++] = '0%';
+                $_item->values['value_' . $index++] = '0%';
                 $_item->$col = '0%';
             }
             return $_item;
@@ -252,7 +248,7 @@ class StatsRepository
 
         $regions_names = collect($regions_names)->unique()->values();
         $regions = $regions->values();
-        $data = ['regions_names' => $regions_names, 'codes' => $regions];
+        $data = ['columns' => $regions_names, 'data' => $regions];
         return $data;
     }
 
@@ -288,7 +284,7 @@ class StatsRepository
         $total = new \stdClass();
         $codes = $codes->map(function ($region) use (&$codes_names, &$total, $keys_codes) {
             $row = new \stdClass(); //[];
-            $row->codes = [];
+            $row->values = [];
             $col_arr = $keys_codes->all();
             $item = $region->map(function ($call, $index) use (&$row, &$codes_names, &$total, &$col_arr) {
                 $_index = $index + 1;
@@ -296,6 +292,8 @@ class StatsRepository
                 $codes_names[$_index]->data = $call->Code_Intervention;
                 $codes_names[$_index]->name = $call->Code_Intervention;
 
+                dump($call->Code_Intervention, $index);
+                dump('====');
 //                $codes_names[] = $call->Code_Intervention;
                 $row->Nom_Region = $call->Nom_Region;
                 $code_intervention = $call->Code_Intervention;
@@ -303,10 +301,10 @@ class StatsRepository
 
                 $col_arr = array_diff($col_arr, [$code_intervention]);
 
-                $row->codes['code_' . $index] = $call->$code_intervention . '%';
+                $row->values['value_' . $index] = $call->$code_intervention . '%';
                 $row->$code_intervention = $call->$code_intervention . '%';
 //                $row->$code_intervention = $call->$code_intervention;
-                $row->total = round(array_sum($row->codes) / count($row->codes), 2) . '%';
+                $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
 //                dump($code_intervention ? $total->{$code_intervention}[0] : 1);
 //                if ($code_intervention)
 //                    $total->$code_intervention =
@@ -318,9 +316,9 @@ class StatsRepository
             });
 //            dump($col_arr);
             $_item = $item->last();
-            $index = count($_item->codes);
+            $index = count($_item->values);
             foreach ($col_arr as $col) {
-                $_item->codes['code_' . $index++] = '0%';
+                $_item->values['value_' . $index++] = '0%';
                 $_item->$col = '0%';
             }
             return $_item;
@@ -334,145 +332,9 @@ class StatsRepository
         $codes_names = collect($codes_names)->unique()->values();
         $codes = $codes->values();
 
-        $data = ['codes_names' => $codes_names, 'regions' => $codes];
+        $data = ['columns' => $codes_names, 'data' => $codes];
         return $data;
     }
-
-    #region OldCode ==================================
-
-    public function dashboard(Request $request)
-    {
-        $regions = Stats::getRegions();
-
-        $joignable = Stats::getClientsByCallState('Joignable');
-        $inJoignable = Stats::getClientsByCallState('Injoignable');
-
-        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
-        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
-//        return [$folders, $regions];
-//        return [$regions, $joignable, $inJoignable];
-        return [
-            'regions' => $regions,
-            'foldersByIntervType' => $foldersByIntervType,
-            'foldersByIntervCode' => $foldersByIntervCode,
-            'joignable' => $joignable,
-            'inJoignable' => $inJoignable
-        ];
-    }
-
-    public function getRegionsByDates(Request $request)
-    {
-        $data = array_filter($request->dates_0, function ($date) {
-            return $date != null;
-        });
-
-        $regions = Stats::getRegions($data);
-        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
-        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
-
-        $joignable = Stats::getClientsByCallState('Joignable');
-        $inJoignable = Stats::getClientsByCallState('Injoignable');
-//        return [$regions, $joignable, $inJoignable];
-
-        return [
-            'regions' => $regions,
-            'foldersByIntervType' => $foldersByIntervType,
-            'foldersByIntervCode' => $foldersByIntervCode,
-            'joignable' => $joignable,
-            'inJoignable' => $inJoignable
-        ];
-
-    }
-
-    public function getNonValidatedFoldersByCodeByDates(Request $request)
-    {
-        $data = array_filter($request->dates_4, function ($date) {
-            return $date != null;
-        });
-
-        $regions = Stats::getRegions();
-        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention', $data);
-        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
-//        return [$regions, $joignable, $inJoignable];
-        $joignable = Stats::getClientsByCallState('Joignable');
-        $inJoignable = Stats::getClientsByCallState('Injoignable');
-        return [
-            'regions' => $regions,
-            'foldersByIntervType' => $foldersByIntervType,
-            'foldersByIntervCode' => $foldersByIntervCode,
-            'joignable' => $joignable,
-            'inJoignable' => $inJoignable
-
-        ];
-    }
-
-    public function getNonValidatedFoldersByTypeByDates(Request $request)
-    {
-        $data = array_filter($request->dates_3, function ($date) {
-            return $date != null;
-        });
-
-        $regions = Stats::getRegions($data);
-        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
-        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention', $data);
-//        return [$regions, $joignable, $inJoignable];
-        $joignable = Stats::getClientsByCallState('Joignable');
-        $inJoignable = Stats::getClientsByCallState('Injoignable');
-
-        return [
-            'regions' => $regions,
-            'foldersByIntervType' => $foldersByIntervType,
-            'foldersByIntervCode' => $foldersByIntervCode,
-            'joignable' => $joignable,
-            'inJoignable' => $inJoignable
-        ];
-    }
-
-    public function getClientsByCallStateJoiByDates(Request $request)
-    {
-        $data = array_filter($request->dates_1, function ($date) {
-            return $date != null;
-        });
-
-        $regions = Stats::getRegions($data);
-        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
-        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
-//        return [$regions, $joignable, $inJoignable];
-        $joignable = Stats::getClientsByCallState('Joignable', $data);
-        $inJoignable = Stats::getClientsByCallState('Injoignable');
-
-        return [
-            'regions' => $regions,
-            'foldersByIntervType' => $foldersByIntervType,
-            'foldersByIntervCode' => $foldersByIntervCode,
-            'joignable' => $joignable,
-            'inJoignable' => $inJoignable
-        ];
-    }
-
-    public function getClientsByCallStateInjByDates(Request $request)
-    {
-        $data = array_filter($request->dates_2, function ($date) {
-            return $date != null;
-        });
-
-        $regions = Stats::getRegions($data);
-        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
-        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
-//        return [$regions, $joignable, $inJoignable];
-        $joignable = Stats::getClientsByCallState('Joignable');
-        $inJoignable = Stats::getClientsByCallState('Injoignable', $data);
-
-        return [
-            'regions' => $regions,
-            'foldersByIntervType' => $foldersByIntervType,
-            'foldersByIntervCode' => $foldersByIntervCode,
-            'joignable' => $joignable,
-            'inJoignable' => $inJoignable
-        ];
-    }
-
-    #endregion
 
     public function importStats($request)
     {
@@ -489,4 +351,141 @@ class StatsRepository
             ];
         }
     }
+
+    #region OldCode ==================================
+
+//    public function dashboard(Request $request)
+//    {
+//        $regions = Stats::getRegions();
+//
+//        $joignable = Stats::getClientsByCallState('Joignable');
+//        $inJoignable = Stats::getClientsByCallState('Injoignable');
+//
+//        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
+//        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
+////        return [$folders, $regions];
+////        return [$regions, $joignable, $inJoignable];
+//        return [
+//            'regions' => $regions,
+//            'foldersByIntervType' => $foldersByIntervType,
+//            'foldersByIntervCode' => $foldersByIntervCode,
+//            'joignable' => $joignable,
+//            'inJoignable' => $inJoignable
+//        ];
+//    }
+//
+//    public function getRegionsByDates(Request $request)
+//    {
+//        $data = array_filter($request->dates_0, function ($date) {
+//            return $date != null;
+//        });
+//
+//        $regions = Stats::getRegions($data);
+//        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
+//        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
+//
+//        $joignable = Stats::getClientsByCallState('Joignable');
+//        $inJoignable = Stats::getClientsByCallState('Injoignable');
+////        return [$regions, $joignable, $inJoignable];
+//
+//        return [
+//            'regions' => $regions,
+//            'foldersByIntervType' => $foldersByIntervType,
+//            'foldersByIntervCode' => $foldersByIntervCode,
+//            'joignable' => $joignable,
+//            'inJoignable' => $inJoignable
+//        ];
+//
+//    }
+//
+//    public function getNonValidatedFoldersByCodeByDates(Request $request)
+//    {
+//        $data = array_filter($request->dates_4, function ($date) {
+//            return $date != null;
+//        });
+//
+//        $regions = Stats::getRegions();
+//        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention', $data);
+//        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
+////        return [$regions, $joignable, $inJoignable];
+//        $joignable = Stats::getClientsByCallState('Joignable');
+//        $inJoignable = Stats::getClientsByCallState('Injoignable');
+//        return [
+//            'regions' => $regions,
+//            'foldersByIntervType' => $foldersByIntervType,
+//            'foldersByIntervCode' => $foldersByIntervCode,
+//            'joignable' => $joignable,
+//            'inJoignable' => $inJoignable
+//
+//        ];
+//    }
+//
+//    public function getNonValidatedFoldersByTypeByDates(Request $request)
+//    {
+//        $data = array_filter($request->dates_3, function ($date) {
+//            return $date != null;
+//        });
+//
+//        $regions = Stats::getRegions($data);
+//        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
+//        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention', $data);
+////        return [$regions, $joignable, $inJoignable];
+//        $joignable = Stats::getClientsByCallState('Joignable');
+//        $inJoignable = Stats::getClientsByCallState('Injoignable');
+//
+//        return [
+//            'regions' => $regions,
+//            'foldersByIntervType' => $foldersByIntervType,
+//            'foldersByIntervCode' => $foldersByIntervCode,
+//            'joignable' => $joignable,
+//            'inJoignable' => $inJoignable
+//        ];
+//    }
+//
+//    public function getClientsByCallStateJoiByDates(Request $request)
+//    {
+//        $data = array_filter($request->dates_1, function ($date) {
+//            return $date != null;
+//        });
+//
+//        $regions = Stats::getRegions($data);
+//        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
+//        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
+////        return [$regions, $joignable, $inJoignable];
+//        $joignable = Stats::getClientsByCallState('Joignable', $data);
+//        $inJoignable = Stats::getClientsByCallState('Injoignable');
+//
+//        return [
+//            'regions' => $regions,
+//            'foldersByIntervType' => $foldersByIntervType,
+//            'foldersByIntervCode' => $foldersByIntervCode,
+//            'joignable' => $joignable,
+//            'inJoignable' => $inJoignable
+//        ];
+//    }
+//
+//    public function getClientsByCallStateInjByDates(Request $request)
+//    {
+//        $data = array_filter($request->dates_2, function ($date) {
+//            return $date != null;
+//        });
+//
+//        $regions = Stats::getRegions($data);
+//        $foldersByIntervCode = Stats::getNonValidatedFolders('Code_Intervention');
+//        $foldersByIntervType = Stats::getNonValidatedFolders('Code_Type_Intervention');
+////        return [$regions, $joignable, $inJoignable];
+//        $joignable = Stats::getClientsByCallState('Joignable');
+//        $inJoignable = Stats::getClientsByCallState('Injoignable', $data);
+//
+//        return [
+//            'regions' => $regions,
+//            'foldersByIntervType' => $foldersByIntervType,
+//            'foldersByIntervCode' => $foldersByIntervCode,
+//            'joignable' => $joignable,
+//            'inJoignable' => $inJoignable
+//        ];
+//    }
+
+    #endregion
+
 }

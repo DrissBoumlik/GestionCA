@@ -32,16 +32,16 @@ class StatsController extends Controller
 
 
         return view('stats.dashboard')->with([
-            'calls_results' => $dataRegionsCallResult['regions_names'],
+            'calls_results' => $dataRegionsCallResult['columns'],
 
             'calls_states_regions' => $dataRegionsCallStateByRegions['columns'],
             'calls_states_weeks' => $dataRegionsCallStateByWeek['columns'],
 
-            'regions_names_type' => $dataTypeInterv['regions_names'],
-            'regions_names_code' => $dataCodeInterv['regions_names'],
+            'regions_names_type' => $dataTypeInterv['columns'],
+            'regions_names_code' => $dataCodeInterv['columns'],
 
-            'calls_pos' => $dataCallsPos['codes_names'],
-            'calls_neg' => $dataCallsNeg['codes_names'],
+            'calls_pos' => $dataCallsPos['columns'],
+            'calls_neg' => $dataCallsNeg['columns'],
         ]);
     }
 
@@ -62,14 +62,14 @@ class StatsController extends Controller
 //        $_data = new \stdClass();
 //        $_data->data = $data['regions'];
 //        $_data->column = $callResult;
-        return ['columns' => $data['regions_names'], 'data' => $data['regions']];
+        return ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getRegions(Request $request, $callResult)
     {
         $dates = $request->get('dates');
         $data = $this->statsRepository->GetDataRegions($callResult, $dates);
-        return DataTables::of($data['regions'])->toJson();
+        return DataTables::of($data['data'])->toJson();
     }
 
 
@@ -82,14 +82,14 @@ class StatsController extends Controller
     {
         $dates = $request->get('dates');
         $data = $this->statsRepository->GetDataRegionsCallState($column, $dates);
-        return ['columns' => $data['columns'], 'data' => $data['regions']];
+        return ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getRegionsCallState(Request $request, $column)
     {
         $dates = $request->get('dates');
         $data = $this->statsRepository->GetDataRegionsCallState($column, $dates);
-        return DataTables::of($data['regions'])->toJson();
+        return DataTables::of($data['data'])->toJson();
     }
 
     #endregion
@@ -100,14 +100,14 @@ class StatsController extends Controller
     {
         $dates = $request->get('dates');
         $data = $this->statsRepository->getDataNonValidatedFolders($column, $dates);
-        return ['columns' => $data['regions_names'], 'data' => $data['codes']];
+        return ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getNonValidatedFolders(Request $request, $column)
     {
         $dates = $request->get('dates');
         $data = $this->statsRepository->getDataNonValidatedFolders($column, $dates);
-        return DataTables::of($data['codes'])->toJson();
+        return DataTables::of($data['data'])->toJson();
     }
 
     #endregion
@@ -118,14 +118,24 @@ class StatsController extends Controller
     {
         $dates = $request->get('dates');
         $data = $this->statsRepository->getDataClientsByCallState($callResult, $dates);
-        return ['columns' => $data['codes_names'], 'data' => $data['regions']];
+        return ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getClientsByCallState(Request $request, $callResult)
     {
         $dates = $request->get('dates');
         $data = $this->statsRepository->getDataClientsByCallState($callResult, $dates);
-        return DataTables::of($data['regions'])->toJson();
+        return DataTables::of($data['data'])->toJson();
+    }
+
+    public function index()
+    {
+        return view('stats.import');
+    }
+
+    public function importStats(Request $request)
+    {
+        return response()->json($this->statsRepository->importStats($request));
     }
 
     #endregion
@@ -267,15 +277,6 @@ class StatsController extends Controller
     //    }
     //
     //
-    //    public function index()
-    //    {
-    //        return view('stats.import');
-    //    }
-    //
-    //    public function importStats(Request $request)
-    //    {
-    //        return response()->json($this->statsRepository->importStats($request));
-    //    }
     #endregion
 
 }
