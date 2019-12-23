@@ -298,7 +298,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="statsTypes"
+                            <table id="statsFoldersByType"
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
@@ -313,6 +313,10 @@
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="statsFoldersByTypeChart" class=""></canvas>
                 </div>
                 <!-- /.col -->
             </div>
@@ -334,7 +338,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="statsCodes"
+                            <table id="statsFoldersByCode"
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
@@ -349,6 +353,10 @@
                         <!-- /.card-body -->
                     </div>
                     <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="statsFoldersByCodeChart" class=""></canvas>
                 </div>
                 <!-- /.col -->
             </div>

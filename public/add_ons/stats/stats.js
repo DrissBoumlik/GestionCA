@@ -2,7 +2,7 @@ $(function () {
     var dates = undefined;
 
     $.ajax({
-        url: 'getDates',
+        url: 'dates',
         method: 'GET',
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function (response) {
@@ -74,14 +74,16 @@ $(function () {
 
     /// ====================== FOLDERS CODE / TYPE ==========================
 
-    let statsFoldersByType = {element_dt: undefined, element: $('#statsTypes'), columns: undefined, routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention', routeData: 'nonValidatedFolders/Code_Type_Intervention'};
-    getColumns(statsFoldersByType);
+    let statsFoldersByType = {element_dt: undefined, element: $('#statsFoldersByType'), columns: undefined, routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention', routeData: 'nonValidatedFolders/Code_Type_Intervention'};
+    let statsFoldersByTypeChart = {element_chart: undefined, element_id: 'statsFoldersByTypeChart', data: undefined};
+    getColumns(statsFoldersByType, statsFoldersByTypeChart);
     $('#refreshFoldersByType').on('click', function () {
         statsFoldersByType.element_dt = InitDataTable(statsFoldersByType, {dates});
     });
 
-    let statsFoldersByCode = {element_dt: undefined, element: $('#statsCodes'), columns: undefined, routeCol: 'nonValidatedFolders/columns/Code_Intervention', routeData: 'nonValidatedFolders/Code_Intervention'};
-    getColumns(statsFoldersByCode);
+    let statsFoldersByCode = {element_dt: undefined, element: $('#statsFoldersByCode'), columns: undefined, routeCol: 'nonValidatedFolders/columns/Code_Intervention', routeData: 'nonValidatedFolders/Code_Intervention'};
+    let statsFoldersByCodeChart = {element_chart: undefined, element_id: 'statsFoldersByCodeChart', data: undefined};
+    getColumns(statsFoldersByCode, statsFoldersByCodeChart);
     $('#refreshFoldersByCode').on('click', function () {
         statsFoldersByCode.element_dt = InitDataTable(statsFoldersByCode, {dates});
     });
@@ -105,17 +107,13 @@ $(function () {
             success: function (response) {
                 object.columns = response.columns;
                 object.element_dt = InitDataTable(object);
-                // console.log(response);
                 if (objectChart !== null && objectChart !== undefined) {
-                    // console.log(objectChart);
-                    console.log(response.columns);
                     let labels = response.columns.map((column) => {
                         return column.name;
                     });
                     let column = labels[0];
                     labels.pop();
                     labels.shift();
-                    console.log(response.columns);
                     let datasets = response.data.map((item) => {
                         let regions = Object.values(item.values).map((value) => {
 

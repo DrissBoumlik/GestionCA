@@ -60,7 +60,7 @@ class StatsRepository
             return $region;
         });
 
-        $keys_regions = $regions->groupBy(['Nom_Region'])->keys();
+        $keys = $regions->groupBy(['Nom_Region'])->keys();
 
         $regions = $regions->groupBy([$callResult]);
 //        $regions = $regions->groupBy(['Nom_Region']);
@@ -69,18 +69,23 @@ class StatsRepository
         $regions_names[0] = new \stdClass();
         $regions_names[0]->data = $callResult;
         $regions_names[0]->name = $callResult;
+        $keys->map(function ($key, $index) use (&$regions_names) {
+            $regions_names[$index + 1] = new \stdClass();
+            $regions_names[$index + 1]->data = $key;
+            $regions_names[$index + 1]->name = $key;
+        });
+        $regions_names[] = new \stdClass();
+        $regions_names[count($regions_names) - 1]->data = 'total';
+        $regions_names[count($regions_names) - 1]->name = 'total';
 
-        $regions = $regions->map(function ($region) use (&$regions_names, $keys_regions, $callResult) {
+        $regions = $regions->map(function ($region) use (&$regions_names, $keys, $callResult) {
             $row = new \stdClass();
             $row->values = [];
 
-            $col_arr = $keys_regions->all();
+            $col_arr = $keys->all();
 
             $item = $region->map(function ($call, $index) use (&$row, &$regions_names, &$col_arr, $callResult) {
-                $_index = $index + 1;
-                $regions_names[$_index] = new \stdClass();
-                $regions_names[$_index]->data = $call->Nom_Region;
-                $regions_names[$_index]->name = $call->Nom_Region;
+
                 $row->$callResult = $call->$callResult;
                 $nom_region = $call->Nom_Region;
 
@@ -102,12 +107,7 @@ class StatsRepository
             }
             return $_item;
         });
-        $regions_names[] = new \stdClass();
-        $regions_names[count($regions_names) - 1]->data = 'total';
-        $regions_names[count($regions_names) - 1]->name = 'total';
 
-
-        $regions_names = collect($regions_names)->unique()->filter()->values();
         $regions = $regions->values();
 
         return ['columns' => $regions_names, 'data' => $regions];
@@ -140,6 +140,14 @@ class StatsRepository
         $columns[0] = new \stdClass();
         $columns[0]->data = 'Gpmt_Appel_Pre';
         $columns[0]->name = 'Gpmt_Appel_Pre';
+        $keys->map(function ($key, $index) use (&$columns) {
+            $columns[$index + 1] = new \stdClass();
+            $columns[$index + 1]->data = $key;
+            $columns[$index + 1]->name = $key;
+        });
+        $columns[] = new \stdClass();
+        $columns[count($columns) - 1]->data = 'total';
+        $columns[count($columns) - 1]->name = 'total';
 
         $regions = $regions->map(function ($region, $index) use (&$columns, $keys, $column) {
 //            dd($index, $region);
@@ -150,10 +158,6 @@ class StatsRepository
             $total = 0;
             $item = $region->map(function ($call, $index) use (&$row, &$columns, &$col_arr, &$total, $column) {
 //                dd($index, $call);
-                $_index = $index + 1;
-                $columns[$_index] = new \stdClass();
-                $columns[$_index]->data = $call->$column;
-                $columns[$_index]->name = $call->$column;
                 $row->Gpmt_Appel_Pre = $call->Gpmt_Appel_Pre;
                 $column_name = $call->$column;
                 $col_arr = array_diff($col_arr, [$column_name]);
@@ -176,12 +180,6 @@ class StatsRepository
         });
 
 
-        $columns[] = new \stdClass();
-        $columns[count($columns) - 1]->data = 'total';
-        $columns[count($columns) - 1]->name = 'total';
-
-
-        $columns = collect($columns)->unique()->filter()->values();
         $regions = $regions->values();
 
         return ['columns' => $columns, 'data' => $regions];
@@ -204,23 +202,29 @@ class StatsRepository
             $region->$Region = round($region->total * 100 / $totalCount, 2);;
             return $region;
         });
-        $keys_regions = $regions->groupBy(['Nom_Region'])->keys();
+        $keys = $regions->groupBy(['Nom_Region'])->keys();
         $regions = $regions->groupBy([$intervCol]);
+
 
         $regions_names = [];
         $regions_names[0] = new \stdClass();
         $regions_names[0]->data = $intervCol;
         $regions_names[0]->name = $intervCol;
+        $keys->map(function ($key, $index) use (&$regions_names) {
+            $regions_names[$index + 1] = new \stdClass();
+            $regions_names[$index + 1]->data = $key;
+            $regions_names[$index + 1]->name = $key;
+        });
+        $regions_names[] = new \stdClass();
+        $regions_names[count($regions_names) - 1]->data = 'total';
+        $regions_names[count($regions_names) - 1]->name = 'total';
 
-        $regions = $regions->map(function ($region) use (&$regions_names, $keys_regions, $intervCol) {
+
+        $regions = $regions->map(function ($region) use (&$regions_names, $keys, $intervCol) {
             $row = new \stdClass();
             $row->values = [];
-            $col_arr = $keys_regions->all();
+            $col_arr = $keys->all();
             $item = $region->map(function ($call, $index) use (&$row, &$regions_names, &$col_arr, $intervCol) {
-                $_index = $index + 1;
-                $regions_names[$_index] = new \stdClass();
-                $regions_names[$_index]->data = $call->Nom_Region;
-                $regions_names[$_index]->name = $call->Nom_Region;
 
                 $row->$intervCol = $call->$intervCol;
 
@@ -242,11 +246,6 @@ class StatsRepository
             return $_item;
 //            return $item->last();
         });
-        $regions_names[] = new \stdClass();
-        $regions_names[count($regions_names) - 1]->data = 'total';
-        $regions_names[count($regions_names) - 1]->name = 'total';
-
-        $regions_names = collect($regions_names)->unique()->values();
         $regions = $regions->values();
         $data = ['columns' => $regions_names, 'data' => $regions];
         return $data;
@@ -272,28 +271,29 @@ class StatsRepository
             return $code;
         });
 
-        $keys_codes = $codes->groupBy(['Code_Intervention'])->keys();
+        $keys = $codes->groupBy(['Code_Intervention'])->keys();
         $codes = $codes->groupBy(['Nom_Region']);
 
         $codes_names = [];
         $codes_names[0] = new \stdClass();
         $codes_names[0]->data = 'Nom_Region';
         $codes_names[0]->name = 'Nom_Region';
-
+        $keys->map(function ($key, $index) use (&$codes_names) {
+            $codes_names[$index + 1] = new \stdClass();
+            $codes_names[$index + 1]->data = $key;
+            $codes_names[$index + 1]->name = $key;
+        });
+        $codes_names[] = new \stdClass();
+        $codes_names[count($codes_names) - 1]->data = 'total';
+        $codes_names[count($codes_names) - 1]->name = 'total';
 
         $total = new \stdClass();
-        $codes = $codes->map(function ($region) use (&$codes_names, &$total, $keys_codes) {
+        $codes = $codes->map(function ($region) use (&$codes_names, &$total, $keys) {
             $row = new \stdClass(); //[];
             $row->values = [];
-            $col_arr = $keys_codes->all();
+            $col_arr = $keys->all();
             $item = $region->map(function ($call, $index) use (&$row, &$codes_names, &$total, &$col_arr) {
-                $_index = $index + 1;
-                $codes_names[$_index] = new \stdClass();
-                $codes_names[$_index]->data = $call->Code_Intervention;
-                $codes_names[$_index]->name = $call->Code_Intervention;
 
-                dump($call->Code_Intervention, $index);
-                dump('====');
 //                $codes_names[] = $call->Code_Intervention;
                 $row->Nom_Region = $call->Nom_Region;
                 $code_intervention = $call->Code_Intervention;
@@ -314,7 +314,6 @@ class StatsRepository
 
                 return $row;
             });
-//            dump($col_arr);
             $_item = $item->last();
             $index = count($_item->values);
             foreach ($col_arr as $col) {
@@ -322,12 +321,7 @@ class StatsRepository
                 $_item->$col = '0%';
             }
             return $_item;
-//            return $item->last();
         });
-//        dd($total);
-        $codes_names[] = new \stdClass();
-        $codes_names[count($codes_names) - 1]->data = 'total';
-        $codes_names[count($codes_names) - 1]->name = 'total';
 
         $codes_names = collect($codes_names)->unique()->values();
         $codes = $codes->values();
