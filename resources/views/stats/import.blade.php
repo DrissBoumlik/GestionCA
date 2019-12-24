@@ -1,4 +1,4 @@
-IMPORTATION DES TÂCHES@extends('layouts.backend')
+@extends('layouts.backend')
 
 @section('page-title')
     Importation
@@ -38,7 +38,6 @@ IMPORTATION DES TÂCHES@extends('layouts.backend')
                         <li class="breadcrumb-item" aria-current="page">
                             <a class="link-fx" href="{{ route('stats.index') }}">Importation</a>
                         </li>
-                        ²
                     </ol>
                 </nav>
             </div>
@@ -74,7 +73,7 @@ IMPORTATION DES TÂCHES@extends('layouts.backend')
                         <form id="form-import">
                             <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                             <div class="form-group">
-                                <label>Bootstrap’s Custom File Input</label>
+                                <label class="d-none">Bootstrap’s Custom File Input</label>
                                 <div class="custom-file">
                                     <!-- Populating custom file input label with the selected filename (data-toggle="custom-file-input" is initialized in Helpers.coreBootstrapCustomFileInput()) -->
                                     <input type="file" class="custom-file-input" data-toggle="custom-file-input"
