@@ -9,8 +9,7 @@
     <link rel="stylesheet" href={{ asset("/add_ons/datatables-bs4/css/dataTables.bootstrap4.css") }}>
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
-    <!-- Select2 -->
-    <link href="{{ asset("/add_ons/select2/css/select2.min.css") }}" rel="stylesheet"/>
+
 
     {{--        <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4.3.2/css/metro-all.min.css">--}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
@@ -21,8 +20,6 @@
     <script src={{ asset("/add_ons/datatables/jquery.dataTables.js") }}></script>
     <script src={{ asset("/add_ons/datatables-bs4/js/dataTables.bootstrap4.js") }}></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
-    <!-- Select2 -->
-    <script src="{{ asset("/add_ons/select2/js/select2.min.js") }}"></script>
 
     <!-- TREE VIEW -->
     {{--        <script src="https://cdn.metroui.org.ua/v4.3.2/js/metro.min.js"></script>--}}

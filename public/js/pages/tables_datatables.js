@@ -194,7 +194,7 @@ jQuery(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\Work\Projects\Circet\circet-stats-monitor\resources\js\pages\tables_datatables.js */"./resources/js/pages/tables_datatables.js");
+module.exports = __webpack_require__(/*! /home/karim/dev/gestionCA/resources/js/pages/tables_datatables.js */"./resources/js/pages/tables_datatables.js");
 
 
 /***/ })

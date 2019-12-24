@@ -4,11 +4,6 @@
         <!-- Logo -->
         <a class="font-w600 text-dual" href="/">
             <img src="{{ asset('media/circetwhite.png') }}" alt="" class="logo">
-{{--            <i class="fa fa-circle-notch text-primary"></i>--}}
-{{--            <span class="smini-hide">--}}
-{{--                <span class="font-w700 font-size-h5">ne</span> <span class="font-w400">4.3</span>--}}
-{{--                <img src="{{ asset('media/circetwhite.png') }}" alt="" class="logo">--}}
-{{--            </span>--}}
         </a>
         <!-- END Logo -->
 
@@ -126,27 +121,40 @@
                         <span class="nav-main-link-name">Permissions</span>
                     </a>
                 </li>
-{{--                <li class="nav-main-item">--}}
-{{--                    <a class="nav-main-link{{ (request()->is('skills') || request()->is('skills/*')) ? ' active' : '' }}"--}}
-{{--                       href="skills">--}}
-{{--                        <i class="nav-main-link-icon si si-game-controller"></i>--}}
-{{--                        <span class="nav-main-link-name">Skills</span>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
-{{--                <li class="nav-main-item">--}}
-{{--                    <a class="nav-main-link{{ (request()->is('projects') || request()->is('projects/*')) ? ' active' : '' }}"--}}
-{{--                       href="projects">--}}
-{{--                        <i class="nav-main-link-icon si si-briefcase"></i>--}}
-{{--                        <span class="nav-main-link-name">Projects</span>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
+                {{--                <li class="nav-main-item">--}}
+                {{--                    <a class="nav-main-link{{ (request()->is('skills') || request()->is('skills/*')) ? ' active' : '' }}"--}}
+                {{--                       href="skills">--}}
+                {{--                        <i class="nav-main-link-icon si si-game-controller"></i>--}}
+                {{--                        <span class="nav-main-link-name">Skills</span>--}}
+                {{--                    </a>--}}
+                {{--                </li>--}}
+                {{--                <li class="nav-main-item">--}}
+                {{--                    <a class="nav-main-link{{ (request()->is('projects') || request()->is('projects/*')) ? ' active' : '' }}"--}}
+                {{--                       href="projects">--}}
+                {{--                        <i class="nav-main-link-icon si si-briefcase"></i>--}}
+                {{--                        <span class="nav-main-link-name">Projects</span>--}}
+                {{--                    </a>--}}
+                {{--                </li>--}}
             @endcan
-            <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('agences') ? ' active' : '' }}" href="agences">
-                    <i class="nav-main-link-icon si si-cursor"></i>
+
+            <li class="nav-main-item{{ request()->is('agences/*') ? ' open' : '' }}">
+                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                    <i class="nav-main-link-icon fas fa-building"></i>
                     <span class="nav-main-link-name">Agences</span>
                 </a>
+                <ul class="nav-main-submenu">
+                    <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->is('users') ? ' active' : '' }}" href="javascript:void(0)">
+                            <div class="form-group">
+                                <select class="form-control" id="agence-code" name="agence_code" style="width: 100%;">
+                                    <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                                </select>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
             </li>
+
             <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('stats') ? ' active' : '' }}" href="stats">
                     <i class="nav-main-link-icon si si-cursor"></i>
