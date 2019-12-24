@@ -8,7 +8,6 @@ $(function () {
             $.ajax({
                 method: 'DELETE',
                 url: window.location.origin + '/roles/' + role_id,
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function (response) {
                     feedBack(response.message, 'success');
                     setTimeout(() => {
@@ -35,7 +34,6 @@ $(function () {
                 method: 'POST',
                 url: window.location.origin + '/assignPermissionRole',
                 data: {status, role_id, permission_id, method: 'patch'},
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function (response) {
                     feedBack(response.message, 'success');
                 },

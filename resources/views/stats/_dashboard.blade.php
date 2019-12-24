@@ -34,7 +34,6 @@
             $.ajax({
                 url: 'getDates',
                 method: 'GET',
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function (response) {
                     let data = response.dates;
                     $('.tree-view').each(function (index, item) {

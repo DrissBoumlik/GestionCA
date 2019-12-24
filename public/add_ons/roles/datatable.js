@@ -35,7 +35,6 @@ $(function () {
             $.ajax({
                 method: 'DELETE',
                 url: window.location.origin + '/roles/' + role_id,
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function (response) {
                     feedBack(response.message, 'success');
                     removeElement(element);

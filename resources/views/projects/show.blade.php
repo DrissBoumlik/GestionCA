@@ -44,7 +44,6 @@
                     method: 'PUT',
                     url: baseUrl + '/projects/{{ $project->id }}',
                     data: {techs, name: $('#name').val()},
-                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     success: function (response) {
                         feedBack(response.message, 'success');
 
@@ -75,7 +74,6 @@
                     $.ajax({
                         method: 'DELETE',
                         url: baseUrl + '/projects/' + project_id,
-                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                         success: function (response) {
                             feedBack(response.message, 'success');
                             setTimeout(() => {

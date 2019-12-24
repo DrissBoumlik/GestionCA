@@ -7,7 +7,6 @@ $(function () {
             $.ajax({
                 method: 'DELETE',
                 url: window.location.origin + '/users/' + user_id,
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function (response) {
                     feedBack(response.message, 'success');
                     setTimeout(() => {

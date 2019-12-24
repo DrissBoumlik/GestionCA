@@ -55,17 +55,18 @@ class StatsController extends Controller
 
     public function getRegionsColumn(Request $request, $callResult)
     {
-        $dates = $request->get('dates');
+        $dates = $request->get('data');
         $data = $this->statsRepository->GetDataRegions($callResult, $dates);
 //        $_data = new \stdClass();
 //        $_data->data = $data['regions'];
 //        $_data->column = $callResult;
+//        dd(count($data['data']));
         return ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getRegions(Request $request, $callResult)
     {
-        $dates = $request->get('dates');
+        $dates = $request->get('data');
         $data = $this->statsRepository->GetDataRegions($callResult, $dates);
         return DataTables::of($data['data'])->toJson();
     }

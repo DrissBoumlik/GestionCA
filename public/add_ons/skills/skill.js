@@ -52,7 +52,6 @@ $(function () {
             method: 'PUT',
             url: baseUrl + '/updateSkills',
             data: {skills, topSkills},
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function (response) {
                 feedBack(response.message, 'success');
 

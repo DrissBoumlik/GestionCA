@@ -54,7 +54,14 @@ class StatsRepository
 
         $columns = $regions->groupBy('Nom_Region', $callResult)->get();
 
-        $regions = $regions->whereNotNull($callResult);
+        // DEMO PLACEHOLDER (1)
+
+        #region DEMO (1) ==============
+//        $regions = $regions->whereNotNull($callResult);
+        #endregion DEMO
+
+
+
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
@@ -136,7 +143,13 @@ class StatsRepository
 
         $columns = $regions->groupBy($column, 'Gpmt_Appel_Pre')->get();
 
-        $regions = $regions->whereNotNull([$column, 'Gpmt_Appel_Pre']);
+        // DEMO PLACEHOLDER (1)
+
+        #region DEMO (1) ==============
+//        $regions = $regions->whereNotNull([$column, 'Gpmt_Appel_Pre']);
+        #endregion DEMO
+
+
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
@@ -214,7 +227,12 @@ class StatsRepository
 
         $columns = $regions->groupBy('Nom_Region', $intervCol)->get();
 
-        $regions = $regions->whereNotNull($intervCol);
+        // DEMO PLACEHOLDER (1)
+
+        #region DEMO (1) ==============
+//        $regions = $regions->whereNotNull($intervCol);
+        #endregion DEMO
+
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
@@ -281,14 +299,19 @@ class StatsRepository
         return $data;
     }
 
-
     public function getDataClientsByCallState($callResult, $dates = null)
     {
         $codes = \DB::table('stats')
             ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(*) as total'));
         $columns = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
-        $codes = $codes->whereNotNull('Code_Intervention')
-            ->where('Gpmt_Appel_Pre', $callResult);
+        // DEMO PLACEHOLDER (1)
+
+        #region DEMO (1) ==============
+//        $codes = $codes->whereNotNull('Code_Intervention')
+//            ->where('Gpmt_Appel_Pre', $callResult);
+        $codes = $codes->where('Gpmt_Appel_Pre', $callResult);
+        #endregion DEMO
+
 //            ->groupBy('Code_Intervention', 'Nom_Region')
 //            ->get();
         if ($dates) {

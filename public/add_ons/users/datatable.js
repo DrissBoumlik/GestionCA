@@ -81,7 +81,6 @@ $(function () {
             method: method,
             url: baseUrl + route,
             data: data,
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function (response) {
                 feedBack(response.message, 'success');
                 if (method === 'DELETE') {

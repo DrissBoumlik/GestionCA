@@ -52,7 +52,6 @@ $(function () {
             method: createMode ? 'POST' : 'PUT',
             url: baseUrl + '/skills/' + (createMode ? '' : skillInput.attr('data-id')),
             data: {name: skillInput.val()},
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function (response) {
                 skillsTable.ajax.url('/getSkills?dt').load();
                 feedBack(response.message, 'success');
@@ -74,7 +73,6 @@ $(function () {
             $.ajax({
                 method: 'DELETE',
                 url: baseUrl + '/skills/' + skill_id,
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function (response) {
                     feedBack(response.message, 'success');
                     $('#skills-data #skill-' + skill_id).addClass('danger');

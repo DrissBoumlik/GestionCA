@@ -123,7 +123,6 @@ $(function () {
             method: createMode ? 'POST' : 'PUT',
             url: baseUrl + '/projects/' + (createMode ? '' : projectInput.attr('data-id')),
             data: {name: projectInput.val(), techs, collaborators, json: true},
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function (response) {
                 projectsTable.ajax.url('/getProjects?dt').load();
                 feedBack(response.message, 'success');
@@ -144,7 +143,6 @@ $(function () {
             $.ajax({
                 method: 'DELETE',
                 url: baseUrl + '/projects/' + project_id,
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function (response) {
                     feedBack(response.message, 'success');
                     $('#projects-data #project-' + project_id).addClass('danger');

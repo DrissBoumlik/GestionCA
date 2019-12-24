@@ -19235,6 +19235,15 @@ module.exports = function(module) {
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+(function ($) {
+  // Default Ajax Configuration
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+})(jQuery);
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":

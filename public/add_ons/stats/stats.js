@@ -4,7 +4,6 @@ $(function () {
     $.ajax({
         url: 'dates',
         method: 'GET',
-        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function (response) {
             let data = response.dates;
             $('.tree-view').each(function (index, item) {
@@ -35,7 +34,8 @@ $(function () {
     let statsRegionsChart = {element_chart: undefined, element_id: 'statsRegionsChart', data: undefined};
     getColumns(statsRegions, statsRegionsChart);
     $('#refreshRegions').on('click', function () {
-        statsRegions.element_dt = InitDataTable(statsRegions, {dates});
+        getColumns(statsRegions, statsRegionsChart, true, dates);
+        // statsRegions.element_dt = InitDataTable(statsRegions, dates);
     });
 
     /// ====================== CALLS STATS AGENCIES / WEEKS ==========================
@@ -44,7 +44,8 @@ $(function () {
     let callsStatesAgenciesChart = {element_chart: undefined, element_id: 'callsStatesAgenciesChart', data: undefined};
     getColumns(callsStatesAgencies, callsStatesAgenciesChart);
     $('#refreshCallStatesAgencies').on('click', function () {
-        callsStatesAgencies.element_dt = InitDataTable(callsStatesAgencies, {dates});
+        getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, dates);
+        // callsStatesAgencies.element_dt = InitDataTable(callsStatesAgencies, dates);
     });
 
 
@@ -52,7 +53,8 @@ $(function () {
     let callsStatesWeeksChart = {element_chart: undefined, element_id: 'callsStatesWeeksChart', data: undefined};
     getColumns(callsStatesWeeks, callsStatesWeeksChart);
     $('#refreshCallStatesWeeks').on('click', function () {
-        callsStatesWeeks.element_dt = InitDataTable(callsStatesWeeks, {dates});
+        getColumns(callsStatesWeeks, callsStatesWeeksChart,true, dates);
+        // callsStatesWeeks.element_dt = InitDataTable(callsStatesWeeks, dates);
     });
 
 
@@ -62,14 +64,16 @@ $(function () {
     let statsCallsPosChart = {element_chart: undefined, element_id: 'statsCallsPosChart', data: undefined};
     getColumns(statscallsPos, statsCallsPosChart);
     $('#refreshCallResultPos').on('click', function () {
-        statscallsPos.element_dt = InitDataTable(statscallsPos, {dates});
+        getColumns(statscallsPos, statsCallsPosChart,true, dates);
+        // statscallsPos.element_dt = InitDataTable(statscallsPos, dates);
     });
 
     let statscallsNeg = {element_dt: undefined, element: $('#statsCallsNeg'), columns: undefined, routeCol: 'clientsByCallState/columns/Injoignable', routeData: 'clientsByCallState/Injoignable'};
     let statscallsNegChart = {element_chart: undefined, element_id: 'statscallsNegChart', data: undefined};
     getColumns(statscallsNeg, statscallsNegChart);
     $('#refreshCallResultNeg').on('click', function () {
-        statscallsNeg.element_dt = InitDataTable(statscallsNeg, {dates});
+        getColumns(statscallsNeg, statscallsNegChart,true, dates);
+        // statscallsNeg.element_dt = InitDataTable(statscallsNeg, dates);
     });
 
     /// ====================== FOLDERS CODE / TYPE ==========================
@@ -78,35 +82,31 @@ $(function () {
     let statsFoldersByTypeChart = {element_chart: undefined, element_id: 'statsFoldersByTypeChart', data: undefined};
     getColumns(statsFoldersByType, statsFoldersByTypeChart);
     $('#refreshFoldersByType').on('click', function () {
-        statsFoldersByType.element_dt = InitDataTable(statsFoldersByType, {dates});
+        getColumns(statsFoldersByType, statsFoldersByTypeChart, true, dates);
+        // statsFoldersByType.element_dt = InitDataTable(statsFoldersByType, dates);
     });
 
     let statsFoldersByCode = {element_dt: undefined, element: $('#statsFoldersByCode'), columns: undefined, routeCol: 'nonValidatedFolders/columns/Code_Intervention', routeData: 'nonValidatedFolders/Code_Intervention'};
     let statsFoldersByCodeChart = {element_chart: undefined, element_id: 'statsFoldersByCodeChart', data: undefined};
     getColumns(statsFoldersByCode, statsFoldersByCodeChart);
     $('#refreshFoldersByCode').on('click', function () {
-        statsFoldersByCode.element_dt = InitDataTable(statsFoldersByCode, {dates});
+        getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, dates);
+        // statsFoldersByCode.element_dt = InitDataTable(statsFoldersByCode, dates);
     });
 
-    // getColumns('nonValidatedFoldersColumn', 'nonValidatedFolders', stats, stats_dt);
-
-
     /// ====================== FUNCTIONS ==========================
-    function dynamicColors() {
-        var r = Math.floor(Math.random() * 255);
-        var g = Math.floor(Math.random() * 255);
-        var b = Math.floor(Math.random() * 255);
-        return "rgb(" + r + "," + g + "," + b + ")";
-    };
 
-    function getColumns(object, objectChart = null) {
+    function getColumns(object, objectChart = null, callInitDT = true, data = null) {
         $.ajax({
             url: object.routeCol,
             method: 'GET',
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            data: {data},
             success: function (response) {
                 object.columns = response.columns;
-                object.element_dt = InitDataTable(object);
+                console.log(response.data);
+                if (callInitDT) {
+                    object.element_dt = InitDataTable(object, data);
+                }
                 if (objectChart !== null && objectChart !== undefined) {
                     let labels = response.columns.map((column) => {
                         return column.name;
@@ -115,18 +115,18 @@ $(function () {
                     labels.pop();
                     labels.shift();
                     let datasets = response.data.map((item) => {
-                        console.log(item.values);
                         let regions = Object.values(item.values).map((value) => {
-                            // console.log(value);
                             return parseFloat(!Number(value) ? value.replace('%', '') : value);
                         });
                         let _dataItem = {label: item[column], backgroundColor: dynamicColors(), data: regions};
                         return _dataItem;
                     });
-                    console.log("====================================================================================");
                     var ctx = document.getElementById(objectChart.element_id).getContext('2d');
                     let barChartData = {labels, datasets};
-                    let chart = new Chart(ctx, {
+                    if (objectChart.element_chart !== null && objectChart.element_chart !== undefined) {
+                        objectChart.element_chart.destroy();
+                    }
+                    objectChart.element_chart = new Chart(ctx, {
                         type: 'bar',
                         data: barChartData,
                         options: {
@@ -169,11 +169,18 @@ $(function () {
             searching: false,
             ajax: {
                 url: object.routeData,
-                data: data,
+                data: {data},
             },
             columns: object.columns
         });
     }
+
+    function dynamicColors() {
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+        return "rgb(" + r + "," + g + "," + b + ")";
+    };
 
     function feedBack(message, status) {
         swal(
