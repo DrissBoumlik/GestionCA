@@ -19242,6 +19242,36 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
   });
+  $(document).find('#agence-code').select2({
+    placeholder: 'Selectione une Agence',
+    ajax: {
+      url: "agences/list",
+      dataType: 'json',
+      data: function data(params) {
+        // Query parameters will be ?search=[term]&type=public
+        return {
+          name: params.term
+        };
+      },
+      processResults: function processResults(data) {
+        // Transforms the top-level key of the response object from 'items' to 'results'
+        data = data.map(function (d) {
+          return {
+            text: d.name,
+            id: d.code
+          };
+        });
+        return {
+          results: data
+        };
+      }
+    }
+  }); //Events
+
+  $(document).on('select2:close', '#agence-code', function (e) {
+    agence_code = $(e.currentTarget).val();
+    window.location.href = "agences?agence_code=".concat(agence_code);
+  });
 })(jQuery);
 
 /***/ }),
@@ -19351,13 +19381,13 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\Work\Projects\Circet\circet-stats-monitor\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet-stats-monitor\resources\sass\main.scss */"./resources/sass/main.scss");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet-stats-monitor\resources\sass\oneui\themes\amethyst.scss */"./resources/sass/oneui/themes/amethyst.scss");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet-stats-monitor\resources\sass\oneui\themes\city.scss */"./resources/sass/oneui/themes/city.scss");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet-stats-monitor\resources\sass\oneui\themes\flat.scss */"./resources/sass/oneui/themes/flat.scss");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet-stats-monitor\resources\sass\oneui\themes\modern.scss */"./resources/sass/oneui/themes/modern.scss");
-module.exports = __webpack_require__(/*! D:\Work\Projects\Circet\circet-stats-monitor\resources\sass\oneui\themes\smooth.scss */"./resources/sass/oneui/themes/smooth.scss");
+__webpack_require__(/*! D:\Work\Projects\Circet\circet_svn\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! D:\Work\Projects\Circet\circet_svn\resources\sass\main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! D:\Work\Projects\Circet\circet_svn\resources\sass\oneui\themes\amethyst.scss */"./resources/sass/oneui/themes/amethyst.scss");
+__webpack_require__(/*! D:\Work\Projects\Circet\circet_svn\resources\sass\oneui\themes\city.scss */"./resources/sass/oneui/themes/city.scss");
+__webpack_require__(/*! D:\Work\Projects\Circet\circet_svn\resources\sass\oneui\themes\flat.scss */"./resources/sass/oneui/themes/flat.scss");
+__webpack_require__(/*! D:\Work\Projects\Circet\circet_svn\resources\sass\oneui\themes\modern.scss */"./resources/sass/oneui/themes/modern.scss");
+module.exports = __webpack_require__(/*! D:\Work\Projects\Circet\circet_svn\resources\sass\oneui\themes\smooth.scss */"./resources/sass/oneui/themes/smooth.scss");
 
 
 /***/ })
