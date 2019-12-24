@@ -7,6 +7,13 @@ if (!function_exists('getPicture')) {
     }
 }
 
+if (!function_exists('agencesList')) {
+    function agencesList () {
+        $agenceRepository = new \App\Http\Controllers\AgenceRepository();
+        return $agenceRepository->getAgenciesAll();
+    }
+}
+
 if (!function_exists('fullName')) {
     function fullName($user, $char_slicer)
     {

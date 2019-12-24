@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Stats;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -12,7 +11,6 @@ class AgenceController extends Controller
     protected $agenceRepository;
     public function __construct(AgenceRepository $agenceRepository)
     {
-//        $this->middleware('auth');
         $this->agenceRepository = $agenceRepository;
     }
 
@@ -24,7 +22,6 @@ class AgenceController extends Controller
     {
         $agenceCode = $request->agence_code;
         $dataRegionsCallResult = $this->agenceRepository->GetDataRegions('Resultat_Appel', null, $agenceCode);
-
         $dataRegionsCallStateByRegions = $this->agenceRepository->GetDataRegionsCallState('Nom_Region', null, $agenceCode);
         $dataRegionsCallStateByWeek = $this->agenceRepository->GetDataRegionsCallState('Date_Heure_Note_Semaine', null, $agenceCode);
 //        dd($dataRegionsCallStateByRegions, $dataRegionsCallStateByWeek);
@@ -65,6 +62,7 @@ class AgenceController extends Controller
     {
         $dates = $request->get('dates');
         $agenceCode = $request->get('agence_code');
+        logger($agenceCode);
         $data = $this->agenceRepository->GetDataRegions($callResult, $dates, $agenceCode);
 //        $_data = new \stdClass();
 //        $_data->data = $data['regions'];

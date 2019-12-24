@@ -26,10 +26,20 @@ class AgenceRepository
         });
         return $stats;
     }
+    public function getAgenciesAll () {
+        $stats = Stats::select(['Nom_Region'])->distinct('Nom_Region')->limit(10)->get()->map(function ($s) {
+            $sn = explode(' - ', $s->Nom_Region);
+            return [
+                'name' => trim($s->Nom_Region),
+                'code' => trim($sn[1])
+            ];
+        });
+        return $stats->toArray();
+    }
 
     public function getDateNotes($agenceCode)
     {
-        $dates = Stats::where('Nom_Region', 'like', "%$agenceCode%")->get()
+        $dates = Stats::where('Nom_Region', 'like', "%$agenceCode")->get()
             ->groupBy(['Date_Heure_Note_Annee', 'Date_Heure_Note_Semaine', 'Date_Note']);
         $dates = $dates->map(function ($year, $index) {
             $_year = new \stdClass();
@@ -60,8 +70,8 @@ class AgenceRepository
     public function GetDataRegions($callResult, $dates = null, $agenceCode)
     {
         $regions = \DB::table('stats')
-            ->select('Nom_Region', $callResult, \DB::raw('count(*) as total'))
-            ->where('Nom_Region', 'like', "%$agenceCode%")
+            ->select('Nom_Region', $callResult, \DB::raw("count($callResult) as total"))
+            ->where('Nom_Region', 'like', "%$agenceCode")
             ->whereNotNull($callResult);
         if ($dates) {
             $dates = array_values($dates);
@@ -134,8 +144,8 @@ class AgenceRepository
     public function GetDataRegionsCallState($column, $dates = null, $agenceCode)
     {
         $regions = \DB::table('stats')
-            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'))
-            ->where('Nom_Region', 'like', "%$agenceCode%")
+            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(Gpmt_Appel_Pre) as total'))
+            ->where('Nom_Region', 'like', "%$agenceCode")
             ->whereNotNull($column);
         if ($dates) {
             $dates = array_values($dates);
@@ -208,8 +218,8 @@ class AgenceRepository
     public function getDataNonValidatedFolders($intervCol, $dates = null, $agenceCode)
     {
         $regions = \DB::table('stats')
-            ->select('Nom_Region', $intervCol, \DB::raw('count(*) as total'))
-            ->where('Nom_Region', 'like', "%$agenceCode%")
+            ->select('Nom_Region', $intervCol, \DB::raw('count(Nom_Region) as total'))
+            ->where('Nom_Region', 'like', "%$agenceCode")
             ->whereNotNull($intervCol);
         if ($dates) {
             $dates = array_values($dates);
@@ -280,9 +290,9 @@ class AgenceRepository
     public function getDataClientsByCallState($callResult, $dates = null, $agenceCode)
     {
         $codes = \DB::table('stats')
-            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(*) as total'))
+            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(Code_Intervention) as total'))
             ->whereNotNull('Code_Intervention')
-            ->where('Nom_Region', 'like', "%$agenceCode%")
+            ->where('Nom_Region', 'like', "%$agenceCode")
             ->where('Gpmt_Appel_Pre', $callResult);
 //            ->groupBy('Code_Intervention', 'Nom_Region')
 //            ->get();
@@ -310,9 +320,9 @@ class AgenceRepository
         $total = new \stdClass();
         $codes = $codes->map(function ($region) use (&$codes_names, &$total, $keys_codes) {
             $row = new \stdClass(); //[];
-            $row->codes = [];
+            $row->values = [];
             $col_arr = $keys_codes->all();
-            $item = $region->map(function ($call, $index) use (&$row, &$codes_names, &$total, &$col_arr) {
+            $item = $region->map(function ($call, $index) use (&$row, &$codes_names, &$col_arr) {
                 $_index = $index + 1;
                 $codes_names[$_index] = new \stdClass();
                 $codes_names[$_index]->data = $call->Code_Intervention;
@@ -325,10 +335,10 @@ class AgenceRepository
 
                 $col_arr = array_diff($col_arr, [$code_intervention]);
 
-                $row->codes['code_' . $index] = $call->$code_intervention . '%';
+                $row->values['code_' . $index] = $call->$code_intervention . '%';
                 $row->$code_intervention = $call->$code_intervention . '%';
 //                $row->$code_intervention = $call->$code_intervention;
-                $row->total = round(array_sum($row->codes) / count($row->codes), 2) . '%';
+                $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
 //                dump($code_intervention ? $total->{$code_intervention}[0] : 1);
 //                if ($code_intervention)
 //                    $total->$code_intervention =
@@ -340,9 +350,9 @@ class AgenceRepository
             });
 //            dump($col_arr);
             $_item = $item->last();
-            $index = count($_item->codes);
+            $index = count($_item->values);
             foreach ($col_arr as $col) {
-                $_item->codes['code_' . $index++] = '0%';
+                $_item->values['code_' . $index++] = '0%';
                 $_item->$col = '0%';
             }
             return $_item;
