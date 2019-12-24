@@ -26257,7 +26257,7 @@ function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\Driss Boumlik\Documents\GitHub\circet-stats-monitor\resources\js\oneui\app.js */"./resources/js/oneui/app.js");
+module.exports = __webpack_require__(/*! D:\Work\Projects\Circet\circet-stats-monitor\resources\js\oneui\app.js */"./resources/js/oneui/app.js");
 
 
 /***/ })

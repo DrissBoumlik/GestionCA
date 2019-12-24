@@ -314,9 +314,9 @@ class StatsRepository
         $codes = $codes->groupBy(['Nom_Region']);
 //         TODO : SORT/SYNC COLUMNS & VALUES
         $codes_names = [];
-        $codes_names[0] = new \stdClass();
-        $codes_names[0]->data = 'Nom_Region';
-        $codes_names[0]->name = 'Nom_Region';
+//        $codes_names[0] = new \stdClass();
+//        $codes_names[0]->data = 'Nom_Region';
+//        $codes_names[0]->name = 'Nom_Region';
         $keys->map(function ($key, $index) use (&$codes_names) {
             $codes_names[$index + 1] = new \stdClass();
             $codes_names[$index + 1]->data = $key;
@@ -327,19 +327,19 @@ class StatsRepository
 //            return $_value;
         });
 //        $codes_names = $codes_names->all();
-//        dump($codes_names);
-//        usort($codes_names, function ($item1, $item2) {
-//            return ($item1->data == $item2->data) ? 0 :
-//                 ($item1->data < $item2->data) ? -1 : 1;
-//        });
-//        dd($codes_names);
+        usort($codes_names, function ($item1, $item2) {
+            return ($item1->data == $item2->data) ? 0 :
+                 ($item1->data < $item2->data) ? -1 : 1;
+        });
 
-//        $codes_names[0] = new \stdClass();
-//        $codes_names[0]->data = 'Nom_Region';
-//        $codes_names[0]->name = 'Nom_Region';
-        $codes_names[] = new \stdClass();
-        $codes_names[count($codes_names) - 1]->data = 'total';
-        $codes_names[count($codes_names) - 1]->name = 'total';
+        $first = new \stdClass();
+        $first->name = 'Nom_Region';
+        $first->data = 'Nom_Region';
+        $last = new \stdClass();
+        $last->data = 'total';
+        $last->name = 'total';
+        array_unshift($codes_names, $first);
+        array_push($codes_names, $last);
 
         $total = new \stdClass();
         $codes = $codes->map(function ($region) use (&$codes_names, &$total, $keys) {
@@ -373,7 +373,9 @@ class StatsRepository
                 $_item->values[$col] = '0%';
                 $_item->$col = '0%';
             }
+//            dump($_item->values);
             ksort($_item->values);
+//            dd($_item->values);
             return $_item;
         });
 
