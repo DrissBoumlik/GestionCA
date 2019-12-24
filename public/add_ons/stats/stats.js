@@ -94,6 +94,16 @@ $(function () {
         // statsFoldersByCode.element_dt = InitDataTable(statsFoldersByCode, dates);
     });
 
+    /// ====================== CALL PERIMETERS ==========================
+
+    let statsPerimeters = {element_dt: undefined, element: $('#statsPerimeters'), columns: undefined, routeCol: 'clientsByPerimeter/columns', routeData: 'clientsByPerimeter'};
+    let statsPerimetersChart = {element_chart: undefined, element_id: 'statsPerimetersChart', data: undefined};
+    getColumns(statsPerimeters, statsPerimetersChart);
+    $('#refreshPerimeters').on('click', function () {
+        getColumns(statsPerimeters, statsPerimetersChart,true, dates);
+        // statscallsPos.element_dt = InitDataTable(statscallsPos, dates);
+    });
+
     /// ====================== FUNCTIONS ==========================
 
     function getColumns(object, objectChart = null, callInitDT = true, data = null) {
@@ -103,7 +113,6 @@ $(function () {
             data: {data},
             success: function (response) {
                 object.columns = response.columns;
-                console.log(response.data);
                 if (callInitDT) {
                     object.element_dt = InitDataTable(object, data);
                 }

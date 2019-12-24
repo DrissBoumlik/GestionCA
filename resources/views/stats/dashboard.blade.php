@@ -358,6 +358,46 @@
                 <!-- /.col -->
             </div>
             <!-- /.row -->
+
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Production Globale CAM</h3>
+                            <hr>
+                            <div class="refresh-form">
+                                <div id="tree-view-1" class="tree-view d-inline-block"></div>
+                                <button type="button" id="refreshPerimeters" class="btn btn-primary float-right">
+                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="statsPerimeters"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
+                                <thead>
+                                <tr>
+                                    <th>Région</th>
+                                    @for($i = 1; $i < count($perimeters); $i++)
+                                        <th>{{ $perimeters[$i]->name }}</th>
+                                    @endfor
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="statsPerimetersChart" class=""></canvas>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
         </div>
         <!-- END Stats -->
     </div>

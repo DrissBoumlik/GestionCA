@@ -30,6 +30,8 @@ class StatsController extends Controller
         $dataTypeInterv = $this->statsRepository->getDataNonValidatedFolders('Code_Type_Intervention');
         $dataCodeInterv = $this->statsRepository->getDataNonValidatedFolders('Code_Intervention');
 
+        $dataPerimeter = $this->statsRepository->getDataClientsByPerimeter();
+
 
         return view('stats.dashboard')->with([
             'calls_results' => $dataRegionsCallResult['columns'],
@@ -42,6 +44,8 @@ class StatsController extends Controller
 
             'calls_pos' => $dataCallsPos['columns'],
             'calls_neg' => $dataCallsNeg['columns'],
+
+            'perimeters' => $dataPerimeter['columns'],
         ]);
     }
 
@@ -75,7 +79,7 @@ class StatsController extends Controller
 
     #endregion
 
-    #region Call Stats
+    #region Call Stats ======================================================
 
     public function getRegionsCallStateColumn(Request $request, $column)
     {
@@ -127,6 +131,27 @@ class StatsController extends Controller
         return DataTables::of($data['data'])->toJson();
     }
 
+    #endregion
+
+
+    #region ClientsByPerimeter =====================================================
+
+    public function getClientsByPerimeterColumn(Request $request)
+    {
+        $dates = $request->get('dates');
+        $data = $this->statsRepository->getDataClientsByPerimeter($dates);
+        return ['columns' => $data['columns'], 'data' => $data['data']];
+    }
+
+    public function getClientsByPerimeter(Request $request)
+    {
+        $dates = $request->get('dates');
+        $data = $this->statsRepository->getDataClientsByPerimeter($dates);
+        return DataTables::of($data['data'])->toJson();
+    }
+
+    #endregion
+
     public function index()
     {
         return view('stats.import');
@@ -136,8 +161,6 @@ class StatsController extends Controller
     {
         return response()->json($this->statsRepository->importStats($request));
     }
-
-    #endregion
 
     #region OldCode
     //    private $statsRepository;
