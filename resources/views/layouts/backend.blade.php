@@ -39,7 +39,7 @@
             @include('layouts.layouts-files.right-sidebar')
             <!-- END Side Overlay -->
 
-            @include('layouts.layouts-files.left-sidebar')
+{{--            @include('layouts.layouts-files.left-sidebar')--}}
             <!-- END Sidebar -->
 
             <!-- Header -->

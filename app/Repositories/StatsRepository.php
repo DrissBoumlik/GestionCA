@@ -291,10 +291,9 @@ class StatsRepository
                 $row->values[$column_name] = $call->$column_name;
                 $row->$column_name = $call->$column_name;
                 $row->column = $call->Gpmt_Appel_Pre;
-                $row->total = isset($row->total) ? $row->total + $call->total : 0;
+                $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
 //                $row->_total = $call->total;
 //                $row->total = $total; //round(array_sum($row->regions) / count($row->regions), 2) . '%';
-//                dd($row);
                 return $row;
             });
             $_item = $item->last();
@@ -401,7 +400,7 @@ class StatsRepository
         });
 
 
-        $total->Nom_Region = 'Total Général';
+        $total->$intervCol = 'Total Général';
         $total->total = round(array_sum($total->values) / count($total->values), 2) . '%';
 
         $regions->push($total);
@@ -597,6 +596,8 @@ class StatsRepository
 
 
         $total = new \stdClass();
+        $total->values = [];
+
         $results = $results->map(function ($region) use (&$column_names, &$total, $keys) {
             $row = new \stdClass(); //[];
             $row->values = [];
@@ -605,35 +606,36 @@ class StatsRepository
 
 //                $codes_names[] = $call->Code_Intervention;
                 $row->Nom_Region = $call->Nom_Region;
-                $groupment = $call->Groupement;
+                $column_name = $call->Groupement;
 
-
-                $col_arr = array_diff($col_arr, [$groupment]);
+                $col_arr = array_diff($col_arr, [$column_name]);
 //                dd($call->Code_Intervention);
-                $row->values['value_' . $index] = $call->$groupment . '%';
-                $row->$groupment = $call->$groupment . '%';
+                $row->values[$column_name] = $call->$column_name;
+                $row->$column_name = $call->$column_name;
 //                $row->$code_intervention = $call->$code_intervention;
-                $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
-//                dump($code_intervention ? $total->{$code_intervention}[0] : 1);
-//                if ($code_intervention)
-//                    $total->$code_intervention =
-//                        $total->$index == 0 ?
-//                        $total->$index + $call->$code_intervention : 0;
-//                    $total[$index] += $call->$code_intervention;
+                $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
+//                round(array_sum($row->values) / count($row->values), 2) . '%';
                 return $row;
             });
             $_item = $item->last();
             $index = count($_item->values);
             foreach ($col_arr as $col) {
-                $_item->values['value_' . $index] = '0%';
-                $_item->$col = '0%';
+                $_item->values[$col] = 0; //'0%';
+                $_item->$col = 0; //'0%';
             }
-//            dump($_item->values);
+            collect($_item->values)->map(function ($value, $index) use (&$total) {
+                $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
+                $total->$index = $total->values[$index];
+            });
             ksort($_item->values);
 //            dd($_item->values);
             return $_item;
         });
 
+        $total->Nom_Region = 'Total Général';
+        $total->total = round(array_sum($total->values) / count($total->values), 2);;
+
+        $results->push($total);
         $results = $results->values();
 
         $data = ['columns' => $column_names, 'data' => $results];

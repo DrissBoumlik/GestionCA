@@ -21,21 +21,21 @@
 
             <!-- Apps Modal -->
             <!-- Opens the Apps modal found at the bottom of the page, after footer’s markup -->
-            <button type="button" class="btn btn-sm btn-dual mr-2" data-toggle="modal" data-target="#one-modal-apps">
+            <button type="button" class="btn btn-sm btn-dual mr-2 d-none" data-toggle="modal" data-target="#one-modal-apps">
                 <i class="si si-grid"></i>
             </button>
             <!-- END Apps Modal -->
 
             <!-- Open Search Section (visible on smaller screens) -->
             <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-            <button type="button" class="btn btn-sm btn-dual d-sm-none" data-toggle="layout"
+            <button type="button" class="btn btn-sm btn-dual d-sm-none d-none" data-toggle="layout"
                     data-action="header_search_on">
                 <i class="si si-magnifier"></i>
             </button>
             <!-- END Open Search Section -->
 
             <!-- Search Form (visible on larger screens) -->
-            <form class="d-none d-sm-inline-block" action="/dashboard" method="POST">
+            <form class="d-none d-sm-inline-block d-none" action="/dashboard" method="POST">
                 @csrf
                 <div class="input-group input-group-sm">
                     <input type="text" class="form-control form-control-alt" placeholder="Search.."
@@ -112,103 +112,6 @@
                 </div>
             </div>
             <!-- END User Dropdown -->
-
-            <!-- Notifications Dropdown -->
-            <div class="dropdown d-inline-block ml-2">
-                <button type="button" class="btn btn-sm btn-dual" id="page-header-notifications-dropdown"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="si si-bell"></i>
-                    <span class="badge badge-primary badge-pill">6</span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0 border-0 font-size-sm"
-                     aria-labelledby="page-header-notifications-dropdown">
-                    <div class="p-2 bg-primary text-center">
-                        <h5 class="dropdown-header text-uppercase text-white">Notifications</h5>
-                    </div>
-                    <ul class="nav-items mb-0">
-                        <li>
-                            <a class="text-dark media py-2" href="javascript:void(0)">
-                                <div class="mr-2 ml-3">
-                                    <i class="fa fa-fw fa-check-circle text-success"></i>
-                                </div>
-                                <div class="media-body pr-2">
-                                    <div class="font-w600">You have a new follower</div>
-                                    <small class="text-muted">15 min ago</small>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="text-dark media py-2" href="javascript:void(0)">
-                                <div class="mr-2 ml-3">
-                                    <i class="fa fa-fw fa-plus-circle text-info"></i>
-                                </div>
-                                <div class="media-body pr-2">
-                                    <div class="font-w600">1 new sale, keep it up</div>
-                                    <small class="text-muted">22 min ago</small>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="text-dark media py-2" href="javascript:void(0)">
-                                <div class="mr-2 ml-3">
-                                    <i class="fa fa-fw fa-times-circle text-danger"></i>
-                                </div>
-                                <div class="media-body pr-2">
-                                    <div class="font-w600">Update failed, restart server</div>
-                                    <small class="text-muted">26 min ago</small>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="text-dark media py-2" href="javascript:void(0)">
-                                <div class="mr-2 ml-3">
-                                    <i class="fa fa-fw fa-plus-circle text-info"></i>
-                                </div>
-                                <div class="media-body pr-2">
-                                    <div class="font-w600">2 new sales, keep it up</div>
-                                    <small class="text-muted">33 min ago</small>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="text-dark media py-2" href="javascript:void(0)">
-                                <div class="mr-2 ml-3">
-                                    <i class="fa fa-fw fa-user-plus text-success"></i>
-                                </div>
-                                <div class="media-body pr-2">
-                                    <div class="font-w600">You have a new subscriber</div>
-                                    <small class="text-muted">41 min ago</small>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="text-dark media py-2" href="javascript:void(0)">
-                                <div class="mr-2 ml-3">
-                                    <i class="fa fa-fw fa-check-circle text-success"></i>
-                                </div>
-                                <div class="media-body pr-2">
-                                    <div class="font-w600">You have a new follower</div>
-                                    <small class="text-muted">42 min ago</small>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="p-2 border-top">
-                        <a class="btn btn-sm btn-light btn-block text-center" href="javascript:void(0)">
-                            <i class="fa fa-fw fa-arrow-down mr-1"></i> Load More..
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- END Notifications Dropdown -->
-
-            <!-- Toggle Side Overlay -->
-            <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-            <button type="button" class="btn btn-sm btn-dual ml-2" data-toggle="layout"
-                    data-action="side_overlay_toggle">
-                <i class="fa fa-fw fa-list-ul fa-flip-horizontal"></i>
-            </button>
-            <!-- END Toggle Side Overlay -->
         </div>
         <!-- END Right Section -->
     </div>

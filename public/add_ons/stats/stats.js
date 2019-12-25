@@ -175,7 +175,7 @@ $(function () {
             info: false,
             processing: true,
             serverSide: true,
-            searching: true,
+            searching: false,
             ajax: {
                 url: object.routeData,
                 data: {data},
