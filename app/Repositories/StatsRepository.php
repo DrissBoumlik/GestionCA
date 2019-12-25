@@ -139,6 +139,9 @@ class StatsRepository
 
     public function GetDataRegions($callResult, $dates = null)
     {
+//        TODO: Get Route URI -> replace params with actual value (as ID) - search in filter table if filter exists
+//        TODO => if not check request if it exists save the new filter or just get full data and delete old filter
+//        dd(\Illuminate\Support\Facades\Route::current()->uri);
         $regions = \DB::table('stats')
             ->select('Nom_Region', $callResult, \DB::raw('count(*) as total'))
             ->where($callResult, 'not like', '=%');
