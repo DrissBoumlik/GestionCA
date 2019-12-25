@@ -367,7 +367,7 @@
                             <h3 class="card-title d-inline-block">Production Globale CAM</h3>
                             <hr>
                             <div class="refresh-form">
-                                <div id="tree-view-1" class="tree-view d-inline-block"></div>
+                                <div id="tree-view-7" class="tree-view d-inline-block"></div>
                                 <button type="button" id="refreshPerimeters" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Refresh</span>
                                 </button>

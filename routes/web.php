@@ -115,18 +115,17 @@ Route::post('/stats/import-stats', 'StatsController@importStats')->name('stats.i
 
 //Route::get('/demo', 'DemoController@index');
 
-Route::get('/regions/{callResult}', 'StatsController@getRegions'); // column = Resultat_Appel
+Route::get('/regions/{callResult}', 'StatsController@getRegions'); // column = Resultat_Appel                                       // PERCENT
 Route::get('/regions/columns/{callResult}', 'StatsController@getRegionsColumn');
 
-Route::get('/regionsCallState/{column}', 'StatsController@getRegionsCallState'); // column = Nom_Region / Date_Heure_Note_Semaine
+Route::get('/regionsCallState/{column}', 'StatsController@getRegionsCallState'); // column = Nom_Region / Date_Heure_Note_Semaine   // SUM
 Route::get('/regionsCallState/columns/{column}', 'StatsController@getRegionsCallStateColumn');
 
-Route::get('/nonValidatedFolders/{column}', 'StatsController@getNonValidatedFolders'); // column = Code_Intervention / Code_Type_Intervention
-Route::get('/nonValidatedFolders/columns/{column}', 'StatsController@getNonValidatedFoldersColumn');
-
-Route::get('/clientsByCallState/{callResult}', 'StatsController@getClientsByCallState'); // value = Injoignable / Joignable
+Route::get('/clientsByCallState/{callResult}', 'StatsController@getClientsByCallState'); // value = Injoignable / Joignable         // PERCENT
 Route::get('/clientsByCallState/columns/{callResult}', 'StatsController@getClientsByCallStateColumn');
 
+Route::get('/nonValidatedFolders/{column}', 'StatsController@getNonValidatedFolders'); // column = Code_Intervention / Code_Type_Intervention   // PERCENT
+Route::get('/nonValidatedFolders/columns/{column}', 'StatsController@getNonValidatedFoldersColumn');
 
-Route::get('/clientsByPerimeter', 'StatsController@getClientsByPerimeter');
+Route::get('/clientsByPerimeter', 'StatsController@getClientsByPerimeter');                                                          // SUM
 Route::get('/clientsByPerimeter/columns', 'StatsController@getClientsByPerimeterColumn');

@@ -551,13 +551,13 @@ class StatsRepository
         $totalCount = Stats::all()->count();
         $results = $results->map(function ($resultItem) use ($totalCount) {
             $Code = $resultItem->Groupement;
-            $resultItem->$Code = round($resultItem->total * 100 / $totalCount, 2);;
+            $resultItem->$Code = $resultItem->total; //round($resultItem->total * 100 / $totalCount, 2);;
             return $resultItem;
         });
         $columns = $columns->filter(function ($code) use ($totalCount) {
 //            if ($code->Code_Intervention) {
             $Code = $code->Groupement;
-            $code->$Code = round($code->total * 100 / $totalCount, 2);;
+            $code->$Code = $code->total; //round($code->total * 100 / $totalCount, 2);;
             return $code;
 //            }
 //            return;
@@ -633,7 +633,7 @@ class StatsRepository
         });
 
         $total->Nom_Region = 'Total Général';
-        $total->total = round(array_sum($total->values) / count($total->values), 2);;
+        $total->total = round(array_sum($total->values), 2);
 
         $results->push($total);
         $results = $results->values();

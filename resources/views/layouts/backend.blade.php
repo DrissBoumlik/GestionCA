@@ -36,10 +36,10 @@
 
         <div id="page-container" class="sidebar-o enable-page-overlay sidebar-dark side-scroll page-header-fixed">
             <!-- Side Overlay-->
-            @include('layouts.layouts-files.right-sidebar')
+{{--            @include('layouts.layouts-files.right-sidebar')--}}
             <!-- END Side Overlay -->
 
-{{--            @include('layouts.layouts-files.left-sidebar')--}}
+            @include('layouts.layouts-files.left-sidebar')
             <!-- END Sidebar -->
 
             <!-- Header -->
