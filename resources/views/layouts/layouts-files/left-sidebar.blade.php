@@ -145,10 +145,26 @@
                 <ul class="nav-main-submenu">
                     @foreach(agencesList() as $agence)
                     <li class="nav-main-item">
-                        <a class="nav-main-link{{ request()->is('agences') ? ' active' : '' }}" href="{{ route('agence.index', ['agence_code' => $agence['code']]) }}">
+                        <a class="nav-main-link {{ request()->has('agence_code') && request()->input('agence_code') === $agence['code'] ? ' active' : '' }}" href="{{ route('agence.index', ['agence_code' => $agence['code']]) }}">
                             <span class="nav-main-link-name"> <i class="fas fa-list"></i> {{ $agence['name'] }}</span>
                         </a>
                     </li>
+                    @endforeach
+                </ul>
+            </li>
+            <li class="nav-main-item{{ request()->is('agents') ? ' open' : '' }}">
+                <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
+                    <i class="nav-main-link-icon fas fa-users"></i>
+                    <span class="nav-main-link-name">Agents</span>
+                </a>
+                <ul class="nav-main-submenu">
+                    @foreach(agentsList() as $agent)
+                        <li class="nav-main-item">
+                            <a class="nav-main-link {{ request()->has('agent_name') && request()->input('agent_name') === $agent['name'] ? ' active' : '' }}" href="{{ route('agent.index', ['agent_name' => $agent['name']]) }}">
+                                <span class="nav-main-link-name"> <i class="fas fa-user"></i>
+                        {{ strtoupper($agent['name']) }}</span>
+                            </a>
+                        </li>
                     @endforeach
                 </ul>
             </li>

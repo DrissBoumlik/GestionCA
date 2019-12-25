@@ -13,6 +13,12 @@ if (!function_exists('agencesList')) {
         return $agenceRepository->getAgenciesAll();
     }
 }
+if (!function_exists('agentsList')) {
+    function agentsList () {
+        $agentRepository = new \App\Http\Controllers\AgentRepository();
+        return $agentRepository->getAgentsAll();
+    }
+}
 
 if (!function_exists('fullName')) {
     function fullName($user, $char_slicer)

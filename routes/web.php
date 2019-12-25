@@ -88,6 +88,19 @@ Route::get('/agences/clientsByCallState/columns/{callResult}', 'AgenceController
 Route::get('/agences/list', 'AgenceController@getAgencies')->name('agence.list');
 Route::get('/agences', 'AgenceController@index')->name('agence.index');
 
+Route::get('/agents/getDates', 'AgentController@getDates');
+Route::get('/agents/regions/{callResult}', 'AgentController@getRegions');
+Route::get('/agents/regions/columns/{callResult}', 'AgentController@getRegionsColumn');
+Route::get('/agents/regionsCallState/{column}', 'AgentController@getRegionsCallState'); // Nom_Region / Date_Heure_Note_Semaine
+Route::get('/agents/regionsCallState/columns/{column}', 'AgentController@getRegionsCallStateColumn');
+
+Route::get('/agents/nonValidatedFolders/{column}', 'AgentController@getNonValidatedFolders'); // Code_Intervention / Code_Type_Intervention
+Route::get('/agents/nonValidatedFolders/columns/{column}', 'AgentController@getNonValidatedFoldersColumn');
+
+Route::get('/agents/clientsByCallState/{callResult}', 'AgentController@getClientsByCallState'); // Injoignable / Joignable
+Route::get('/agents/clientsByCallState/columns/{callResult}', 'AgentController@getClientsByCallStateColumn');
+Route::get('/agents/list', 'AgentController@getAgencies')->name('agent.list');
+Route::get('/agents', 'AgentController@index')->name('agent.index');
 //Route::get('/getRegions', 'StatsController@getRegions');
 
 

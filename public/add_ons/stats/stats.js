@@ -125,7 +125,7 @@ $(function () {
                     labels.shift();
                     let datasets = response.data.map((item) => {
                         let regions = Object.values(item.values).map((value) => {
-                            return parseFloat(!Number(value) ? value.replace('%', '') : value);
+                            return parseFloat(isNaN(value) ? value.replace('%', '') : value);
                         });
                         let _dataItem = {label: item[column], backgroundColor: dynamicColors(), data: regions};
                         return _dataItem;
@@ -175,7 +175,7 @@ $(function () {
             info: false,
             processing: true,
             serverSide: true,
-            searching: false,
+            searching: true,
             ajax: {
                 url: object.routeData,
                 data: {data},

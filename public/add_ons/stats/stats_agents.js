@@ -1,20 +1,20 @@
 $(function () {
     let dates = undefined;
-    let agence_code = '';
+    let agent_name = '';
     const params = window.location.href.split('?')[1];
     const paramsList = params.split('&');
     for (let param of paramsList) {
         const p = param.split('=');
-        if (p[0] === 'agence_code') {
-            agence_code = p[1];
+        if (p[0] === 'agent_name') {
+            agent_name = p[1];
         }
     }
 
 
     $.ajax({
-        url: 'agences/getDates',
+        url: 'agents/getDates',
         data: {
-            agence_code: agence_code
+            agent_name: agent_name
         },
         method: 'GET',
         success: function (response) {
@@ -39,79 +39,79 @@ $(function () {
 
     /// ====================== REGIONS ==========================
 
-    let statsRegions = {element_dt: undefined, element: $('#statsRegions'), columns: undefined, routeCol: 'agences/regions/columns/Resultat_Appel', routeData: 'agences/regions/Resultat_Appel'};
+    let statsRegions = {element_dt: undefined, element: $('#statsRegions'), columns: undefined, routeCol: 'agents/regions/columns/Resultat_Appel', routeData: 'agents/regions/Resultat_Appel'};
     let statsRegionsChart = {element_chart: undefined, element_id: 'statsRegionsChart', data: undefined};
     getColumns(statsRegions, statsRegionsChart);
     $('#refreshRegions').on('click', function () {
         statsRegions.element_dt = InitDataTable(statsRegions, {
             dates,
-            agence_code: agence_code
+            agent_name: agent_name
         });
     });
 
     /// ====================== CALLS STATS AGENCIES / WEEKS ==========================
 
-    let callsStatesAgencies = {element_dt: undefined, element: $('#callsStatesAgencies'), columns: undefined, routeCol: 'agences/regionsCallState/columns/Nom_Region', routeData: 'agences/regionsCallState/Nom_Region'};
+    let callsStatesAgencies = {element_dt: undefined, element: $('#callsStatesAgencies'), columns: undefined, routeCol: 'agents/regionsCallState/columns/Nom_Region', routeData: 'agents/regionsCallState/Nom_Region'};
     let callsStatesAgenciesChart = {element_chart: undefined, element_id: 'callsStatesAgenciesChart', data: undefined};
     getColumns(callsStatesAgencies, callsStatesAgenciesChart);
     $('#refreshCallStatesAgencies').on('click', function () {
         callsStatesAgencies.element_dt = InitDataTable(callsStatesAgencies, {
             dates,
-            agence_code: agence_code
+            agent_name: agent_name
         });
     });
 
 
-    let callsStatesWeeks = {element_dt: undefined, element: $('#callsStatesWeeks'), columns: undefined, routeCol: 'agences/regionsCallState/columns/Date_Heure_Note_Semaine', routeData: 'agences/regionsCallState/Date_Heure_Note_Semaine'};
+    let callsStatesWeeks = {element_dt: undefined, element: $('#callsStatesWeeks'), columns: undefined, routeCol: 'agents/regionsCallState/columns/Date_Heure_Note_Semaine', routeData: 'agents/regionsCallState/Date_Heure_Note_Semaine'};
     let callsStatesWeeksChart = {element_chart: undefined, element_id: 'callsStatesWeeksChart', data: undefined};
     getColumns(callsStatesWeeks, callsStatesWeeksChart);
     $('#refreshCallStatesWeeks').on('click', function () {
         callsStatesWeeks.element_dt = InitDataTable(callsStatesWeeks, {
             dates,
-            agence_code: agence_code
+            agent_name: agent_name
         });
     });
 
 
     /// ====================== CALL STATS Joignables / Injoignable ==========================
 
-    let statscallsPos = {element_dt: undefined, element: $('#statsCallsPos'), columns: undefined, routeCol: 'agences/clientsByCallState/columns/Joignable', routeData: 'agences/clientsByCallState/Joignable'};
+    let statscallsPos = {element_dt: undefined, element: $('#statsCallsPos'), columns: undefined, routeCol: 'agents/clientsByCallState/columns/Joignable', routeData: 'agents/clientsByCallState/Joignable'};
     let statsCallsPosChart = {element_chart: undefined, element_id: 'statsCallsPosChart', data: undefined};
     getColumns(statscallsPos, statsCallsPosChart);
     $('#refreshCallResultPos').on('click', function () {
         statscallsPos.element_dt = InitDataTable(statscallsPos, {
             dates,
-            agence_code: agence_code
+            agent_name: agent_name
         });
     });
 
-    let statscallsNeg = {element_dt: undefined, element: $('#statsCallsNeg'), columns: undefined, routeCol: 'agences/clientsByCallState/columns/Injoignable', routeData: 'agences/clientsByCallState/Injoignable'};
+    let statscallsNeg = {element_dt: undefined, element: $('#statsCallsNeg'), columns: undefined, routeCol: 'agents/clientsByCallState/columns/Injoignable', routeData: 'agents/clientsByCallState/Injoignable'};
     let statscallsNegChart = {element_chart: undefined, element_id: 'statscallsNegChart', data: undefined};
     getColumns(statscallsNeg, statscallsNegChart);
     $('#refreshCallResultNeg').on('click', function () {
         statscallsNeg.element_dt = InitDataTable(statscallsNeg, {
             dates,
-            agence_code: agence_code
+            agent_name: agent_name
         });
     });
 
     /// ====================== FOLDERS CODE / TYPE ==========================
 
-    let statsFoldersByType = {element_dt: undefined, element: $('#statsTypes'), columns: undefined, routeCol: 'agences/nonValidatedFolders/columns/Code_Type_Intervention', routeData: 'agences/nonValidatedFolders/Code_Type_Intervention'};
+    let statsFoldersByType = {element_dt: undefined, element: $('#statsTypes'), columns: undefined, routeCol: 'agents/nonValidatedFolders/columns/Code_Type_Intervention', routeData: 'agents/nonValidatedFolders/Code_Type_Intervention'};
     getColumns(statsFoldersByType);
     $('#refreshFoldersByType').on('click', function () {
         statsFoldersByType.element_dt = InitDataTable(statsFoldersByType, {
             dates,
-            agence_code: agence_code
+            agent_name: agent_name
         });
     });
 
-    let statsFoldersByCode = {element_dt: undefined, element: $('#statsCodes'), columns: undefined, routeCol: 'agences/nonValidatedFolders/columns/Code_Intervention', routeData: 'agences/nonValidatedFolders/Code_Intervention'};
+    let statsFoldersByCode = {element_dt: undefined, element: $('#statsCodes'), columns: undefined, routeCol: 'agents/nonValidatedFolders/columns/Code_Intervention', routeData: 'agents/nonValidatedFolders/Code_Intervention'};
     getColumns(statsFoldersByCode);
     $('#refreshFoldersByCode').on('click', function () {
         statsFoldersByCode.element_dt = InitDataTable(statsFoldersByCode, {
             dates,
-            agence_code: agence_code
+            agent_name: agent_name
         });
     });
 
@@ -130,12 +130,12 @@ $(function () {
         $.ajax({
             url: object.routeCol,
             data: {
-                agence_code: agence_code
+                agent_name: agent_name
             },
             method: 'GET',
             success: function (response) {
                 object.columns = response.columns;
-                object.element_dt = InitDataTable(object, { agence_code: agence_code});
+                object.element_dt = InitDataTable(object, { agent_name: agent_name});
                 if (objectChart !== null && objectChart !== undefined) {
                     let labels = response.columns.map((column) => {
                         return column.name;
@@ -184,7 +184,7 @@ $(function () {
     }
 
     function InitDataTable(object, data = null) {
-
+        console.log(data);
         if ($.fn.DataTable.isDataTable(object.element_dt)) {
             object.element_dt.destroy();
         }

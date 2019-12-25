@@ -9,29 +9,27 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use function Matrix\trace;
 
-class AgenceRepository
+class AgentRepository
 {
-    public function getAgencies (Request $request) {
-        $stats = Stats::select(['Nom_Region']);
+    public function getAgents (Request $request) {
+        $stats = Stats::select(['Utilisateur']);
         if ($request->has('name')) {
             $term = trim(strtolower($request->get('name')));
-            $stats = $stats->whereRaw('LOWER(Nom_Region) LIKE ?', ["%$term%"]);
+            $stats = $stats->whereRaw('LOWER(Utilisateur) LIKE ?', ["%$term%"]);
         }
-        $stats = $stats->distinct('Nom_Region')->limit(10)->get()->map(function ($s) {
-            $sn = explode(' - ', $s->Nom_Region);
+        $stats = $stats->distinct('Utilisateur')->limit(10)->get()->map(function ($s) {
             return [
-                'name' => trim($s->Nom_Region),
-                'code' => trim($sn[1])
+                'name' => trim($s->Utilisateur),
+                'code' => trim($s->Utilisateur)
             ];
         });
         return $stats;
     }
-    public function getAgenciesAll () {
-        $stats = Stats::select(['Nom_Region'])->distinct('Nom_Region')->limit(10)->get()->map(function ($s) {
-            $sn = explode(' - ', $s->Nom_Region);
+    public function getAgentsAll () {
+        $stats = Stats::select(['Utilisateur'])->distinct('Utilisateur')->limit(10)->get()->map(function ($s) {
             return [
-                'name' => trim($s->Nom_Region),
-                'code' => trim($sn[1])
+                'name' => trim($s->Utilisateur),
+                'code' => trim($s->Utilisateur)
             ];
         });
         return $stats->toArray();
@@ -39,7 +37,7 @@ class AgenceRepository
 
     public function getDateNotes($agenceCode)
     {
-        $dates = Stats::where('Nom_Region', 'like', "%$agenceCode")->get()
+        $dates = Stats::where('Utilisateur', $agenceCode)->get()
             ->groupBy(['Date_Heure_Note_Annee', 'Date_Heure_Note_Mois', 'Date_Heure_Note_Semaine', 'Date_Note']);
         $dates = $dates->map(function ($year, $index) {
             $_year = new \stdClass();
@@ -75,12 +73,13 @@ class AgenceRepository
         return $dates->values();
     }
 
-    public function GetDataRegions($callResult, $dates = null, $agenceCode)
+
+    public function GetDataRegions($callResult, $dates = null, $agentName)
     {
         $regions = \DB::table('stats')
-            ->select('Nom_Region', $callResult, \DB::raw("count($callResult) as total"))
-            ->where('Nom_Region', 'like', "%$agenceCode")
+            ->select('Nom_Region', $callResult, \DB::raw("count(*) as total"))
             ->where($callResult, 'not like', '=%')
+            ->where('Utilisateur', $agentName)
             ->whereNotNull($callResult);
         if ($dates) {
             $dates = array_values($dates);
@@ -150,11 +149,11 @@ class AgenceRepository
         return ['columns' => $regions_names, 'data' => $regions];
     }
 
-    public function GetDataRegionsCallState($column, $dates = null, $agenceCode)
+    public function GetDataRegionsCallState($column, $dates = null, $agentName)
     {
         $regions = \DB::table('stats')
             ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(Gpmt_Appel_Pre) as total'))
-            ->where('Nom_Region', 'like', "%$agenceCode")
+            ->where('Utilisateur', $agentName)
             ->whereNotNull($column);
         if ($dates) {
             $dates = array_values($dates);
@@ -224,11 +223,11 @@ class AgenceRepository
         return ['columns' => $columns, 'data' => $regions];
     }
 
-    public function getDataNonValidatedFolders($intervCol, $dates = null, $agenceCode)
+    public function getDataNonValidatedFolders($intervCol, $dates = null, $agentName)
     {
         $regions = \DB::table('stats')
-            ->select('Nom_Region', $intervCol, \DB::raw('count(Nom_Region) as total'))
-            ->where('Nom_Region', 'like', "%$agenceCode")
+            ->select('Nom_Region', $intervCol, \DB::raw('count(*) as total'))
+            ->where('Utilisateur', $agentName)
             ->whereNotNull($intervCol);
         if ($dates) {
             $dates = array_values($dates);
@@ -296,12 +295,12 @@ class AgenceRepository
         return $data;
     }
 
-    public function getDataClientsByCallState($callResult, $dates = null, $agenceCode)
+    public function getDataClientsByCallState($callResult, $dates = null, $agentName)
     {
         $codes = \DB::table('stats')
-            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(Code_Intervention) as total'))
+            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(*) as total'))
             ->whereNotNull('Code_Intervention')
-            ->where('Nom_Region', 'like', "%$agenceCode")
+            ->where('Utilisateur', $agentName)
             ->where('Gpmt_Appel_Pre', $callResult);
 //            ->groupBy('Code_Intervention', 'Nom_Region')
 //            ->get();

@@ -8,6 +8,7 @@
     <!-- Page JS Plugins CSS -->
     <link rel="stylesheet" href="{{ asset('js/plugins/datatables/dataTables.bootstrap4.css') }}">
     <link rel="stylesheet" href="{{ asset('js/plugins/datatables/buttons-bs4/buttons.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
 @endsection
 
 @section('js_after')
@@ -19,6 +20,7 @@
     <script src="{{ asset('js/plugins/datatables/buttons/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('js/plugins/datatables/buttons/buttons.flash.min.js') }}"></script>
     <script src="{{ asset('js/plugins/datatables/buttons/buttons.colVis.min.js') }}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
 
     <!-- Page JS Code -->
     <script src="{{ asset('js/pages/import-stats.js') }}"></script>
