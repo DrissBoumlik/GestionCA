@@ -65,7 +65,7 @@ class StatsController extends Controller
 //        $_data->data = $data['regions'];
 //        $_data->column = $callResult;
 //        dd(count($data['data']));
-        return ['columns' => $data['columns'], 'data' => $data['data']];
+        return $data; //['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getRegions(Request $request, $callResult)
@@ -85,7 +85,7 @@ class StatsController extends Controller
     {
         $dates = $request->get('dates');
         $data = $this->statsRepository->GetDataRegionsCallState($column, $dates);
-        return ['columns' => $data['columns'], 'data' => $data['data']];
+        return $data; // ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getRegionsCallState(Request $request, $column)
@@ -103,7 +103,7 @@ class StatsController extends Controller
     {
         $dates = $request->get('dates');
         $data = $this->statsRepository->getDataNonValidatedFolders($column, $dates);
-        return ['columns' => $data['columns'], 'data' => $data['data']];
+        return $data; // ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getNonValidatedFolders(Request $request, $column)
@@ -121,7 +121,7 @@ class StatsController extends Controller
     {
         $dates = $request->get('dates');
         $data = $this->statsRepository->getDataClientsByCallState($callResult, $dates);
-        return ['columns' => $data['columns'], 'data' => $data['data']];
+        return $data; // ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getClientsByCallState(Request $request, $callResult)
@@ -140,7 +140,7 @@ class StatsController extends Controller
     {
         $dates = $request->get('dates');
         $data = $this->statsRepository->getDataClientsByPerimeter($dates);
-        return ['columns' => $data['columns'], 'data' => $data['data']];
+        return $data; // ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getClientsByPerimeter(Request $request)
