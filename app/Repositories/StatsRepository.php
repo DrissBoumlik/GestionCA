@@ -161,7 +161,11 @@ class StatsRepository
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
 
         $regions = $regions->groupBy('Nom_Region', $callResult)->get();
-
+        if (!count($regions)) {
+            $data = ['columns' => [], 'data' => []];
+            return $data;
+        }
+        else {
 
         $totalCount = Stats::all()->count();
         $regions = $regions->map(function ($region) use ($totalCount) {
@@ -227,6 +231,7 @@ class StatsRepository
 
         return ['columns' => $regions_names, 'data' => $regions];
     }
+    }
 
     public function GetDataRegionsCallState($column, $dates = null)
     {
@@ -248,7 +253,12 @@ class StatsRepository
         }
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
         $regions = $regions->groupBy($column, 'Gpmt_Appel_Pre')->get();
-        $totalCount = Stats::all()->count();
+        if (!count($regions)) {
+            $data = ['columns' => [], 'data' => []];
+            return $data;
+        }
+        else {
+            $totalCount = Stats::all()->count();
         $regions = $regions->map(function ($region) use ($column) {
             $Region = $region->$column;
             $region->$Region = $region->total; //round($region->total * 100 / $totalCount, 2) . '%';
@@ -319,6 +329,7 @@ class StatsRepository
 
         return ['columns' => $columns, 'data' => $regions];
     }
+    }
 
     public function getDataNonValidatedFolders($intervCol, $dates = null)
     {
@@ -338,79 +349,89 @@ class StatsRepository
             $regions = $regions->whereIn('Date_Note', $dates);
         }
         $regions = $regions->groupBy('Nom_Region', $intervCol)->get();
-
-        $totalCount = Stats::all()->count();
-        $regions = $regions->map(function ($region) use ($totalCount) {
-            $Region = $region->Nom_Region;
-            $region->$Region = round($region->total * 100 / $totalCount, 2);;
-            return $region;
-        });
-        $columns = $columns->map(function ($region) use ($totalCount) {
-            $Region = $region->Nom_Region;
-            $region->$Region = round($region->total * 100 / $totalCount, 2);;
-            return $region;
-        });
-        $keys = $columns->groupBy(['Nom_Region'])->keys();
-        $regions = $regions->groupBy([$intervCol]);
-
-
-        $regions_names = [];
-        $regions_names[0] = new \stdClass();
-        $regions_names[0]->data = $intervCol;
-        $regions_names[0]->name = $intervCol;
-        $keys->map(function ($key, $index) use (&$regions_names) {
-            $regions_names[$index + 1] = new \stdClass();
-            $regions_names[$index + 1]->data = $key;
-            $regions_names[$index + 1]->name = $key;
-        });
-        $regions_names[] = new \stdClass();
-        $regions_names[count($regions_names) - 1]->data = 'total';
-        $regions_names[count($regions_names) - 1]->name = 'total';
-
-
-        $total = new \stdClass();
-        $total->values = [];
-        $regions = $regions->map(function ($region) use (&$regions_names, $keys, $intervCol, &$total) {
-            $row = new \stdClass();
-            $row->values = [];
-            $col_arr = $keys->all();
-            $item = $region->map(function ($call, $index) use (&$row, &$regions_names, &$col_arr, $intervCol) {
-
-                $row->$intervCol = $call->$intervCol;
-
-                $nom_region = $call->Nom_Region;
-
-                $col_arr = array_diff($col_arr, [$nom_region]);
-
-                $row->values[$nom_region] = $call->$nom_region . '%';
-                $row->$nom_region = $call->$nom_region . '%';
-                $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
-                return $row;
+        if (!count($regions)) {
+            $data = ['columns' => [], 'data' => []];
+            return $data;
+        }
+        else {
+            $totalCount = Stats::all()->count();
+            $regions = $regions->map(function ($region) use ($totalCount) {
+                $Region = $region->Nom_Region;
+                $region->$Region = round($region->total * 100 / $totalCount, 2);;
+                return $region;
             });
-            $_item = $item->last();
-            $index = count($_item->values);
-            foreach ($col_arr as $col) {
-                $_item->values[$col] = '0%';
-                $_item->$col = '0%';
-            }
-            collect($_item->values)->map(function ($value, $index) use (&$total) {
-                $value = str_replace('%', '', $value);
-                $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
+            $columns = $columns->map(function ($region) use ($totalCount) {
+                $Region = $region->Nom_Region;
+                $region->$Region = round($region->total * 100 / $totalCount, 2);;
+                return $region;
+            });
+            $keys = $columns->groupBy(['Nom_Region'])->keys();
+            $regions = $regions->groupBy([$intervCol]);
+
+
+            $regions_names = [];
+            $regions_names[0] = new \stdClass();
+            $regions_names[0]->data = $intervCol;
+            $regions_names[0]->name = $intervCol;
+            $keys->map(function ($key, $index) use (&$regions_names) {
+                $regions_names[$index + 1] = new \stdClass();
+                $regions_names[$index + 1]->data = $key;
+                $regions_names[$index + 1]->name = $key;
+            });
+            $regions_names[] = new \stdClass();
+            $regions_names[count($regions_names) - 1]->data = 'total';
+            $regions_names[count($regions_names) - 1]->name = 'total';
+
+
+            $total = new \stdClass();
+            $total->values = [];
+            $regions = $regions->map(function ($region) use (&$regions_names, $keys, $intervCol, &$total) {
+                $row = new \stdClass();
+                $row->values = [];
+                $col_arr = $keys->all();
+                $item = $region->map(function ($call, $index) use (&$row, &$regions_names, &$col_arr, $intervCol) {
+
+                    $row->$intervCol = $call->$intervCol;
+
+                    $nom_region = $call->Nom_Region;
+
+                    $col_arr = array_diff($col_arr, [$nom_region]);
+
+                    $row->values[$nom_region] = $call->$nom_region . '%';
+                    $row->$nom_region = $call->$nom_region . '%';
+                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
+                    return $row;
+                });
+                $_item = $item->last();
+                $index = count($_item->values);
+                foreach ($col_arr as $col) {
+                    $_item->values[$col] = '0%';
+                    $_item->$col = '0%';
+                }
+                collect($_item->values)->map(function ($value, $index) use (&$total) {
+                    $value = str_replace('%', '', $value);
+                    $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
+                    $total->$index = $total->values[$index];
+                });
+                return $_item;
+//            return $item->last();
+            });
+
+            $dataCount = $regions->count();
+            collect($total->values)->map(function ($value, $index) use (&$total, $dataCount) {
+                $total->values[$index] = round($total->values[$index] / $dataCount, 2);
                 $total->$index = $total->values[$index] . '%';
             });
-            return $_item;
-//            return $item->last();
-        });
 
+            $total->$intervCol = 'Total Général';
+            $total->total = round(array_sum($total->values) / count($total->values), 2) . '%';
 
-        $total->$intervCol = 'Total Général';
-        $total->total = round(array_sum($total->values) / count($total->values), 2) . '%';
+            $regions->push($total);
 
-        $regions->push($total);
-
-        $regions = $regions->values();
-        $data = ['columns' => $regions_names, 'data' => $regions];
-        return $data;
+            $regions = $regions->values();
+            $data = ['columns' => $regions_names, 'data' => $regions];
+            return $data;
+        }
     }
 
     public function getDataClientsByCallState($callResult, $dates = null)
@@ -433,102 +454,115 @@ class StatsRepository
             $codes = $codes->whereIn('Date_Note', $dates);
         }
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
-        $totalCount = Stats::all()->count();
-        $codes = $codes->map(function ($code) use ($totalCount) {
-            $Code = $code->Code_Intervention;
-            $code->$Code = round($code->total * 100 / $totalCount, 2);
-            return $code;
-        });
-        $columns = $columns->filter(function ($code) use ($totalCount) {
+
+        if (!count($codes)) {
+            $data = ['columns' => [], 'data' => []];
+            return $data;
+        } else {
+
+            $totalCount = Stats::all()->count();
+            $codes = $codes->map(function ($code) use ($totalCount) {
+                $Code = $code->Code_Intervention;
+                $code->$Code = round($code->total * 100 / $totalCount, 2);
+                return $code;
+            });
+            $columns = $columns->filter(function ($code) use ($totalCount) {
 //            if ($code->Code_Intervention) {
-            $Code = $code->Code_Intervention;
-            $code->$Code = round($code->total * 100 / $totalCount, 2);
-            return $code;
+                $Code = $code->Code_Intervention;
+                $code->$Code = round($code->total * 100 / $totalCount, 2);
+                return $code;
 //            }
 //            return;
-        });
-        $keys = $columns->groupBy(['Code_Intervention'])->keys();
-        $codes = $codes->groupBy(['Nom_Region']);
-        $codes_names = [];
+            });
+            $keys = $columns->groupBy(['Code_Intervention'])->keys();
+            $codes = $codes->groupBy(['Nom_Region']);
+            $codes_names = [];
 //        $codes_names[0] = new \stdClass();
 //        $codes_names[0]->data = 'Nom_Region';
 //        $codes_names[0]->name = 'Nom_Region';
-        $keys->map(function ($key, $index) use (&$codes_names) {
-            $codes_names[$index + 1] = new \stdClass();
-            $codes_names[$index + 1]->data = $key;
-            $codes_names[$index + 1]->name = $key;
+            $keys->map(function ($key, $index) use (&$codes_names) {
+                $codes_names[$index + 1] = new \stdClass();
+                $codes_names[$index + 1]->data = $key;
+                $codes_names[$index + 1]->name = $key;
 //            $_value = new \stdClass();
 //            $_value->data = $key;
 //            $_value->name = $key;
 //            return $_value;
-        });
+            });
 //        $codes_names = $codes_names->all();
-        usort($codes_names, function ($item1, $item2) {
-            return ($item1->data == $item2->data) ? 0 :
-                ($item1->data < $item2->data) ? -1 : 1;
-        });
+            usort($codes_names, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
 
-        $first = new \stdClass();
-        $first->name = 'Nom_Region';
-        $first->data = 'Nom_Region';
-        $last = new \stdClass();
-        $last->data = 'total';
-        $last->name = 'total';
-        array_unshift($codes_names, $first);
-        array_push($codes_names, $last);
+            $first = new \stdClass();
+            $first->name = 'Nom_Region';
+            $first->data = 'Nom_Region';
+            $last = new \stdClass();
+            $last->data = 'total';
+            $last->name = 'total';
+            array_unshift($codes_names, $first);
+            array_push($codes_names, $last);
 
-        $total = new \stdClass();
-        $total->values = [];
-        $codes = $codes->map(function ($region) use (&$codes_names, &$total, $keys) {
-            $row = new \stdClass(); //[];
-            $row->values = [];
-            $col_arr = $keys->all();
-            $item = $region->map(function ($call, $index) use (&$row, &$codes_names, &$col_arr) {
+            $total = new \stdClass();
+            $total->values = [];
+            $codes = $codes->map(function ($region) use (&$codes_names, &$total, $keys) {
+                $row = new \stdClass(); //[];
+                $row->values = [];
+                $col_arr = $keys->all();
+                $item = $region->map(function ($call, $index) use (&$row, &$codes_names, &$col_arr) {
 
 //                $codes_names[] = $call->Code_Intervention;
-                $row->Nom_Region = $call->Nom_Region;
-                $code_intervention = $call->Code_Intervention;
+                    $row->Nom_Region = $call->Nom_Region;
+                    $code_intervention = $call->Code_Intervention;
 
 
-                $col_arr = array_diff($col_arr, [$code_intervention]);
+                    $col_arr = array_diff($col_arr, [$code_intervention]);
 //                dd($call->Code_Intervention);
-                $row->values[$code_intervention] = $call->$code_intervention . '%';
-                $row->$code_intervention = $call->$code_intervention . '%';
+                    $row->values[$code_intervention] = $call->$code_intervention . '%';
+                    $row->$code_intervention = $call->$code_intervention . '%';
 //                $row->$code_intervention = $call->$code_intervention;
-                $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
+                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
 //                dump($code_intervention ? $total->{$code_intervention}[0] : 1);
 //                if ($code_intervention)
 //                    $total->$code_intervention =
 //                        $total->$index == 0 ?
 //                        $total->$index + $call->$code_intervention : 0;
 //                    $total[$index] += $call->$code_intervention;
-                return $row;
-            });
-            $_item = $item->last();
-            $index = count($_item->values);
-            foreach ($col_arr as $col) {
-                $_item->values[$col] = '0%';
-                $_item->$col = '0%';
-            }
+                    return $row;
+                });
+                $_item = $item->last();
+                $index = count($_item->values);
+                foreach ($col_arr as $col) {
+                    $_item->values[$col] = '0%';
+                    $_item->$col = '0%';
+                }
 
 //            dump($_item->values);
-            ksort($_item->values);
+                ksort($_item->values);
 
-            collect($_item->values)->map(function ($value, $index) use (&$total) {
-                $value = str_replace('%', '', $value);
-                $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
+                collect($_item->values)->map(function ($value, $index) use (&$total) {
+                    $value = str_replace('%', '', $value);
+                    $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
+                    $total->$index = $total->values[$index];
+                });
+                return $_item;
+            });
+
+            $dataCount = $codes->count();
+            collect($total->values)->map(function ($value, $index) use (&$total, $dataCount) {
+                $total->values[$index] = round($total->values[$index] / $dataCount, 2);
                 $total->$index = $total->values[$index] . '%';
             });
-            return $_item;
-        });
 
-        $total->Nom_Region = 'Total Général';
-        $total->total = round(array_sum($total->values) / count($total->values), 2) . '%';
+            $total->Nom_Region = 'Total Général';
+            $total->total = round(array_sum($total->values) / count($total->values), 2) . '%';
 
-        $codes->push($total);
-        $codes = $codes->values();
-        $data = ['columns' => $codes_names, 'data' => $codes];
-        return $data;
+            $codes->push($total);
+            $codes = $codes->values();
+            $data = ['columns' => $codes_names, 'data' => $codes];
+            return $data;
+        }
     }
 
     public function getDataClientsByPerimeter($dates = null)
@@ -551,98 +585,104 @@ class StatsRepository
             $results = $results->whereIn('Date_Note', $dates);
         }
         $results = $results->groupBy('Groupement', 'Nom_Region')->get();
-        $totalCount = Stats::all()->count();
-        $results = $results->map(function ($resultItem) use ($totalCount) {
-            $Code = $resultItem->Groupement;
-            $resultItem->$Code = $resultItem->total; //round($resultItem->total * 100 / $totalCount, 2);;
-            return $resultItem;
-        });
-        $columns = $columns->filter(function ($code) use ($totalCount) {
+
+        if (!count($results)) {
+            $data = ['columns' => [], 'data' => []];
+            return $data;
+        } else {
+
+            $totalCount = Stats::all()->count();
+            $results = $results->map(function ($resultItem) use ($totalCount) {
+                $Code = $resultItem->Groupement;
+                $resultItem->$Code = $resultItem->total; //round($resultItem->total * 100 / $totalCount, 2);;
+                return $resultItem;
+            });
+            $columns = $columns->filter(function ($code) use ($totalCount) {
 //            if ($code->Code_Intervention) {
-            $Code = $code->Groupement;
-            $code->$Code = $code->total; //round($code->total * 100 / $totalCount, 2);;
-            return $code;
+                $Code = $code->Groupement;
+                $code->$Code = $code->total; //round($code->total * 100 / $totalCount, 2);;
+                return $code;
 //            }
 //            return;
-        });
+            });
 
-        $keys = $columns->groupBy(['Groupement'])->keys();
-        $results = $results->groupBy(['Nom_Region']);
-//         TODO : SORT/SYNC COLUMNS & VALUES
-        $column_names = [];
+            $keys = $columns->groupBy(['Groupement'])->keys();
+            $results = $results->groupBy(['Nom_Region']);
+            $column_names = [];
 //        $codes_names[0] = new \stdClass();
 //        $codes_names[0]->data = 'Nom_Region';
 //        $codes_names[0]->name = 'Nom_Region';
-        $keys->map(function ($key, $index) use (&$column_names) {
-            $column_names[$index + 1] = new \stdClass();
-            $column_names[$index + 1]->data = $key;
-            $column_names[$index + 1]->name = $key;
+            $keys->map(function ($key, $index) use (&$column_names) {
+                $column_names[$index + 1] = new \stdClass();
+                $column_names[$index + 1]->data = $key;
+                $column_names[$index + 1]->name = $key;
 //            $_value = new \stdClass();
 //            $_value->data = $key;
 //            $_value->name = $key;
 //            return $_value;
-        });
+            });
 //        $codes_names = $codes_names->all();
-        usort($column_names, function ($item1, $item2) {
-            return ($item1->data == $item2->data) ? 0 :
-                ($item1->data < $item2->data) ? -1 : 1;
-        });
+            usort($column_names, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
 
-        $first = new \stdClass();
-        $first->name = 'Nom_Region';
-        $first->data = 'Nom_Region';
-        $last = new \stdClass();
-        $last->data = 'total';
-        $last->name = 'total';
-        array_unshift($column_names, $first);
-        array_push($column_names, $last);
+            $first = new \stdClass();
+            $first->name = 'Nom_Region';
+            $first->data = 'Nom_Region';
+            $last = new \stdClass();
+            $last->data = 'total';
+            $last->name = 'total';
+            array_unshift($column_names, $first);
+            array_push($column_names, $last);
 
 
-        $total = new \stdClass();
-        $total->values = [];
+            $total = new \stdClass();
+            $total->values = [];
 
-        $results = $results->map(function ($region) use (&$column_names, &$total, $keys) {
-            $row = new \stdClass(); //[];
-            $row->values = [];
-            $col_arr = $keys->all();
-            $item = $region->map(function ($call, $index) use (&$row, &$codes_names, &$total, &$col_arr) {
+            $results = $results->map(function ($region) use (&$column_names, &$total, $keys) {
+                $row = new \stdClass(); //[];
+                $row->values = [];
+                $col_arr = $keys->all();
+                $item = $region->map(function ($call, $index) use (&$row, &$codes_names, &$total, &$col_arr) {
 
 //                $codes_names[] = $call->Code_Intervention;
-                $row->Nom_Region = $call->Nom_Region;
-                $column_name = $call->Groupement;
+                    $row->Nom_Region = $call->Nom_Region;
+                    $column_name = $call->Groupement;
 
-                $col_arr = array_diff($col_arr, [$column_name]);
+                    $col_arr = array_diff($col_arr, [$column_name]);
 //                dd($call->Code_Intervention);
-                $row->values[$column_name] = $call->$column_name;
-                $row->$column_name = $call->$column_name;
+                    $row->values[$column_name] = $call->$column_name;
+                    $row->$column_name = $call->$column_name;
 //                $row->$code_intervention = $call->$code_intervention;
-                $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
+                    $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
 //                round(array_sum($row->values) / count($row->values), 2) . '%';
-                return $row;
-            });
-            $_item = $item->last();
-            $index = count($_item->values);
-            foreach ($col_arr as $col) {
-                $_item->values[$col] = 0; //'0%';
-                $_item->$col = 0; //'0%';
-            }
-            collect($_item->values)->map(function ($value, $index) use (&$total) {
-                $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
-                $total->$index = $total->values[$index];
-            });
-            ksort($_item->values);
+                    return $row;
+                });
+                $_item = $item->last();
+                $index = count($_item->values);
+                foreach ($col_arr as $col) {
+                    $_item->values[$col] = 0; //'0%';
+                    $_item->$col = 0; //'0%';
+                }
+                collect($_item->values)->map(function ($value, $index) use (&$total) {
+                    $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
+                    $total->$index = $total->values[$index];
+                });
+                ksort($_item->values);
 //            dd($_item->values);
-            return $_item;
-        });
+                return $_item;
+            });
 
-        $total->Nom_Region = 'Total Général';
-        $total->total = round(array_sum($total->values), 2);
+            $total->Nom_Region = 'Total Général';
+            $total->total = round(array_sum($total->values), 2);
 
-        $results->push($total);
-        $results = $results->values();
+            $results->push($total);
+            $results = $results->values();
 
-        $data = ['columns' => $column_names, 'data' => $results];
-        return $data;
+            $data = ['columns' => $column_names, 'data' => $results];
+            return $data;
+        }
     }
 
     public function importStats($request)

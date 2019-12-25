@@ -17,7 +17,7 @@
     <script src="{{ asset('js/plugins/datatables/buttons/buttons.colVis.min.js') }}"></script>
 
     <!-- Page JS Code -->
-    <script src="{{ asset('js/pages/task.js') }}"></script>
+    <script src="{{ asset('add_ons/tasks/task.js') }}"></script>
 @endsection
 
 @section('content')

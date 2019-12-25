@@ -23,7 +23,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
 
     <!-- Page JS Code -->
-    <script src="{{ asset('js/pages/import-stats.js') }}"></script>
+    <script src="{{ asset('add_ons/stats/import-stats.js') }}"></script>
 @endsection
 
 @section('content')
