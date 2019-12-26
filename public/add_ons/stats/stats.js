@@ -30,7 +30,7 @@ $(function () {
 
     /// ====================== REGIONS / FOLDERS  ==========================
 
-    let statsRegions = {element_dt: undefined, element: $('#statsRegions'), columns: undefined, routeCol: 'regions/columns/Resultat_Appel', routeData: 'regions/Resultat_Appel'};
+    let statsRegions = {element_dt: undefined, element: $('#statsRegions'), columns: undefined, routeCol: 'regions/columns/Groupement', routeData: 'regions/Groupement'};
     let statsRegionsChart = {element_chart: undefined, element_id: 'statsRegionsChart', data: undefined, chartTitle: 'Résultats Appels (Clients Joints)'};
     getColumns(statsRegions, statsRegionsChart, true, true);
     $('#refreshRegions').on('click', function () {

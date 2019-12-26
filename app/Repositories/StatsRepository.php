@@ -133,7 +133,7 @@ class StatsRepository
 
         $rows = $rows->values();
 
-        return ['columns' => $_columns, 'data' => $rows];
+        return ['route' => $route, 'columns' => $_columns, 'data' => $rows];
     }
 
     #endregion
@@ -154,7 +154,7 @@ class StatsRepository
         $route = $this->getRoute(Route::current());
 
         $regions = \DB::table('stats')
-            ->select('Nom_Region', $callResult, \DB::raw('count(*) as total'))
+            ->select('Nom_Region', $callResult, \DB::raw('count(Nom_Region) as total'))
             ->where($callResult, 'not like', '=%');
         $columns = $regions->groupBy('Nom_Region', $callResult)->get();
 
@@ -176,13 +176,31 @@ class StatsRepository
             $data = ['columns' => [], 'data' => []];
             return $data;
         } else {
-
             $totalCount = Stats::count();
-            $regions = $regions->map(function ($region) use ($totalCount) {
-                $Region = $region->Nom_Region;
-                $region->$Region = round($region->total * 100 / $totalCount, 2);
-                return $region;
+
+            $temp = $regions->groupBy(['Nom_Region']);
+//            dd($temp);
+            $temp = $temp->map(function ($calls, $index) {
+                $totalZone = $calls->reduce(function ($carry, $call) {
+                    return $carry + $call->total;
+                }, 0);
+                return $calls->map(function ($call, $index2) use ($index, $totalZone) {
+                    $call->$index = round($call->total * 100 / $totalZone, 2);
+                    return $call;
+                });
             });
+
+
+            $regions = $temp->flatten();
+//            dd($temp);
+
+//            $regions = $regions->map(function ($region) use ($totalCount) {
+//                dump($region);
+//                $Region = $region->Nom_Region;
+//                $region->$Region = round($region->total * 100 / $totalCount, 2);
+//                dd($region);
+//                return $region;
+//            });
             $columns = $columns->map(function ($region) use ($totalCount) {
                 $Region = $region->Nom_Region;
                 $region->$Region = round($region->total * 100 / $totalCount, 2);
@@ -203,9 +221,9 @@ class StatsRepository
                 $regions_names[$index + 1]->data = $key;
                 $regions_names[$index + 1]->name = $key;
             });
-            $regions_names[] = new \stdClass();
-            $regions_names[count($regions_names) - 1]->data = 'total';
-            $regions_names[count($regions_names) - 1]->name = 'total';
+//            $regions_names[] = new \stdClass();
+//            $regions_names[count($regions_names) - 1]->data = 'total';
+//            $regions_names[count($regions_names) - 1]->name = 'total';
 
             $regions = $regions->map(function ($region) use (&$regions_names, $keys, $callResult) {
                 $row = new \stdClass();
@@ -220,10 +238,10 @@ class StatsRepository
 
                     $col_arr = array_diff($col_arr, [$nom_region]);
 
-                    $row->values[$nom_region] = $call->$nom_region . '%';
+                    $row->values[$nom_region] = $call->$nom_region;
                     $row->$nom_region = $call->$nom_region . '%';
-                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
-                    $row->_total = $call->total;
+//                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
+//                    $row->_total = $call->total;
                     $row->column = $callResult;
                     return $row;
                 });
@@ -239,12 +257,13 @@ class StatsRepository
 
             $regions = $regions->values();
 
-            return ['columns' => $regions_names, 'data' => $regions];
+            return ['route' => $route, 'columns' => $regions_names, 'data' => $regions];
         }
     }
 
     public function GetDataFolders($callResult, $dates = null)
     {
+        $route = $this->getRoute(Route::current());
         $regions = \DB::table('stats')
             ->select('Nom_Region', $callResult, \DB::raw('count(*) as total'))
             ->where($callResult, 'not like', '=%');
@@ -344,17 +363,17 @@ class StatsRepository
 
             $regions = $regions->values();
 
-            return ['columns' => $regions_names, 'data' => $regions];
+            return ['route' => $route, 'columns' => $regions_names, 'data' => $regions];
         }
     }
 
     public function GetDataRegionsCallState($column, $dates = null)
     {
-        $route = Route::current()->uri;
+        $route = $this->getRoute(Route::current());
         $regions = \DB::table('stats')
             ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'));
 
-            $columns = $regions->groupBy($column, 'Gpmt_Appel_Pre')->get();
+        $columns = $regions->groupBy($column, 'Gpmt_Appel_Pre')->get();
 
         // DEMO PLACEHOLDER (1)
 
@@ -448,7 +467,7 @@ class StatsRepository
 
     public function getDataNonValidatedFolders($intervCol, $dates = null)
     {
-        $route = Route::current()->uri;
+        $route = $this->getRoute(Route::current());
         $regions = \DB::table('stats')
             ->select('Nom_Region', $intervCol, \DB::raw('count(*) as total'));
 
@@ -512,15 +531,15 @@ class StatsRepository
 
                     $col_arr = array_diff($col_arr, [$nom_region]);
 
-                    $row->values[$nom_region] = $call->$nom_region . '%';
+                    $row->values[$nom_region] = $call->$nom_region;
                     $row->$nom_region = $call->$nom_region . '%';
-                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
+                    $row->total = round(array_sum($row->values), 2); //round(array_sum($row->values) / count($row->values), 2) . '%';
                     return $row;
                 });
                 $_item = $item->last();
                 $index = count($_item->values);
                 foreach ($col_arr as $col) {
-                    $_item->values[$col] = '0%';
+                    $_item->values[$col] = 0; //'0%';
                     $_item->$col = '0%';
                 }
                 collect($_item->values)->map(function ($value, $index) use (&$total) {
@@ -534,12 +553,12 @@ class StatsRepository
 
             $dataCount = $regions->count();
             collect($total->values)->map(function ($value, $index) use (&$total, $dataCount) {
-                $total->values[$index] = round($total->values[$index] / $dataCount, 2);
+                $total->values[$index] = round($total->values[$index], 2); // round($total->values[$index] / $dataCount, 2);
                 $total->$index = $total->values[$index] . '%';
             });
 
             $total->$intervCol = 'Total Général';
-            $total->total = round(array_sum($total->values) / count($total->values), 2) . '%';
+            $total->total = round(array_sum($total->values)); //round(array_sum($total->values) / count($total->values), 2) . '%';
 
             $regions->push($total);
 
@@ -551,7 +570,7 @@ class StatsRepository
 
     public function getDataClientsByCallState($callResult, $dates = null)
     {
-        $route = Route::current()->uri;
+        $route = $this->getRoute(Route::current());
         $codes = \DB::table('stats')
             ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(*) as total'));
         $columns = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
@@ -635,10 +654,10 @@ class StatsRepository
 
                     $col_arr = array_diff($col_arr, [$code_intervention]);
 //                dd($call->Code_Intervention);
-                    $row->values[$code_intervention] = $call->$code_intervention . '%';
+                    $row->values[$code_intervention] = $call->$code_intervention;
                     $row->$code_intervention = $call->$code_intervention . '%';
 //                $row->$code_intervention = $call->$code_intervention;
-                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
+                    $row->total = round(array_sum($row->values), 2); // round(array_sum($row->values) / count($row->values), 2) . '%';
 //                dump($code_intervention ? $total->{$code_intervention}[0] : 1);
 //                if ($code_intervention)
 //                    $total->$code_intervention =
@@ -650,7 +669,7 @@ class StatsRepository
                 $_item = $item->last();
                 $index = count($_item->values);
                 foreach ($col_arr as $col) {
-                    $_item->values[$col] = '0%';
+                    $_item->values[$col] = 0;
                     $_item->$col = '0%';
                 }
 
@@ -667,12 +686,12 @@ class StatsRepository
 
             $dataCount = $codes->count();
             collect($total->values)->map(function ($value, $index) use (&$total, $dataCount) {
-                $total->values[$index] = round($total->values[$index] / $dataCount, 2);
+                $total->values[$index] = round($total->values[$index], 2); // round($total->values[$index] / $dataCount, 2);
                 $total->$index = $total->values[$index] . '%';
             });
 
             $total->Nom_Region = 'Total Général';
-            $total->total = round(array_sum($total->values) / count($total->values), 2) . '%';
+            $total->total = round(array_sum($total->values), 2); //round(array_sum($total->values) / count($total->values), 2) . '%';
 
             $codes->push($total);
             $codes = $codes->values();
@@ -683,7 +702,7 @@ class StatsRepository
 
     public function getDataClientsByPerimeter($dates = null)
     {
-        $route = Route::current()->uri;
+        $route = $this->getRoute(Route::current());
         $results = \DB::table('stats')
             ->select('Groupement', 'Nom_Region', \DB::raw('count(*) as total'));
         $columns = $results->groupBy('Groupement', 'Nom_Region')->get();
