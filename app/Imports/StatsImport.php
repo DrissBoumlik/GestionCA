@@ -16,6 +16,7 @@ class StatsImport implements ToModel, WithHeadingRow
     public function __construct($months)
     {
         $this->months = explode(',', $months);
+        \DB::table('stats')->whereIn('date_heure_note_mois', $this->months)->delete();
     }
 
     /**
