@@ -12,7 +12,7 @@ $(function () {
 
 
     $.ajax({
-        url: 'agents/getDates',
+        url: 'agents/dates',
         data: {
             agent_name: agent_name
         },
@@ -29,7 +29,6 @@ $(function () {
                         dates = this.values;
                     }
                 });
-                // $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
             });
         },
         error: function (jqXHR, textStatus, errorThrown) {

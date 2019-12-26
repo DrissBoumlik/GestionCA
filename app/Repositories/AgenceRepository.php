@@ -37,6 +37,16 @@ class AgenceRepository
         return $stats->toArray();
     }
 
+    public function filterList ($column, $request) {
+        $agenceCode = $request->get('agence_code');
+        $stats = Stats::select([$column])
+            ->distinct($column)
+            ->where($column, 'not like', '=%')
+            ->where('Nom_Region', 'like', "%$agenceCode")
+            ->whereNotNull($column)->get();
+        return $stats->map(function ($s) use ($column) { return $s[$column]; });
+    }
+
     public function getDateNotes($agenceCode)
     {
         $dates = Stats::where('Nom_Region', 'like', "%$agenceCode")->get()
@@ -75,13 +85,22 @@ class AgenceRepository
         return $dates->values();
     }
 
-    public function GetDataRegions($callResult, $dates = null, $agenceCode)
+    public function GetDataRegions($callResult, $request)
     {
+        $resultatAppel = $request->get('resultatAppel');
+        $dates = $request->get('dates');
+        $agenceCode = $request->get('agence_code');
         $regions = \DB::table('stats')
             ->select('Nom_Region', $callResult, \DB::raw("count($callResult) as total"))
-            ->where('Nom_Region', 'like', "%$agenceCode")
             ->where($callResult, 'not like', '=%')
             ->whereNotNull($callResult);
+        if ($agenceCode) {
+            $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
+        }
+        if ($resultatAppel) {
+            $resultatAppel = array_values($resultatAppel);
+            $regions = $regions->whereIn('Resultat_Appel', $resultatAppel);
+        }
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
@@ -89,7 +108,6 @@ class AgenceRepository
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
 
         $regions = $regions->groupBy('Nom_Region', $callResult)->get();
-
 
         $totalCount = Stats::count();
         $regions = $regions->map(function ($region) use ($totalCount) {
@@ -143,19 +161,28 @@ class AgenceRepository
         $regions_names[count($regions_names) - 1]->data = 'total';
         $regions_names[count($regions_names) - 1]->name = 'total';
 
-
         $regions_names = collect($regions_names)->unique()->filter()->values();
         $regions = $regions->values();
 
         return ['columns' => $regions_names, 'data' => $regions];
     }
 
-    public function GetDataRegionsCallState($column, $dates = null, $agenceCode)
+    public function GetDataRegionsCallState($column, $request)
     {
+        $gpmtAppelPre = $request->get('gpmtAppelPre');
+        $dates = $request->get('dates');
+        $agenceCode = $request->get('agence_code');
         $regions = \DB::table('stats')
             ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(Gpmt_Appel_Pre) as total'))
-            ->where('Nom_Region', 'like', "%$agenceCode")
+            ->whereNotNull('Gpmt_Appel_Pre')
             ->whereNotNull($column);
+        if ($agenceCode) {
+            $regions->where('Nom_Region', 'like', "%$agenceCode");
+        }
+        if ($gpmtAppelPre) {
+            $gpmtAppelPre = array_values($gpmtAppelPre);
+            $regions = $regions->whereIn('Gpmt_Appel_Pre', $gpmtAppelPre);
+        }
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
@@ -224,12 +251,26 @@ class AgenceRepository
         return ['columns' => $columns, 'data' => $regions];
     }
 
-    public function getDataNonValidatedFolders($intervCol, $dates = null, $agenceCode)
+    public function getDataNonValidatedFolders($intervCol, $request)
     {
+        $dates = $request->get('dates');
+        $agenceCode = $request->get('agence_code');
+        $codeTypeIntervention = $request->get('codeTypeIntervention');
+        $codeIntervention = $request->get('codeIntervention');
         $regions = \DB::table('stats')
             ->select('Nom_Region', $intervCol, \DB::raw('count(Nom_Region) as total'))
-            ->where('Nom_Region', 'like', "%$agenceCode")
             ->whereNotNull($intervCol);
+        if ($agenceCode) {
+            $regions->where('Nom_Region', 'like', "%$agenceCode");
+        }
+        if ($codeTypeIntervention) {
+            $codeTypeIntervention = array_values($codeTypeIntervention);
+            $regions = $regions->whereIn('Code_Type_Intervention', $codeTypeIntervention);
+        }
+        if ($codeIntervention) {
+            $codeIntervention = array_values($codeIntervention);
+            $regions = $regions->whereIn('Code_Intervention', $codeIntervention);
+        }
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);

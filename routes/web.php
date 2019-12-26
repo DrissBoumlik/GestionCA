@@ -74,7 +74,8 @@ Route::get('/dashboard', 'StatsController@dashboard');
 
 //Route::get('/getDates', 'StatsController@getDates');
 Route::get('/dates', 'StatsController@getDates');
-Route::get('/agences/getDates', 'AgenceController@getDates');
+Route::get('/agences/dates', 'AgenceController@getDates');
+Route::get('/agences/filter/{column}', 'AgenceController@filterList');
 Route::get('/agences/regions/{callResult}', 'AgenceController@getRegions');
 Route::get('/agences/regions/columns/{callResult}', 'AgenceController@getRegionsColumn');
 Route::get('/agences/regionsCallState/{column}', 'AgenceController@getRegionsCallState'); // Nom_Region / Date_Heure_Note_Semaine
@@ -88,7 +89,7 @@ Route::get('/agences/clientsByCallState/columns/{callResult}', 'AgenceController
 Route::get('/agences/list', 'AgenceController@getAgencies')->name('agence.list');
 Route::get('/agences', 'AgenceController@index')->name('agence.index');
 
-Route::get('/agents/getDates', 'AgentController@getDates');
+Route::get('/agents/dates', 'AgentController@getDates');
 Route::get('/agents/regions/{callResult}', 'AgentController@getRegions');
 Route::get('/agents/regions/columns/{callResult}', 'AgentController@getRegionsColumn');
 Route::get('/agents/regionsCallState/{column}', 'AgentController@getRegionsCallState'); // Nom_Region / Date_Heure_Note_Semaine

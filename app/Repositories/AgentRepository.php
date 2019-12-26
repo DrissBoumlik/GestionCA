@@ -154,6 +154,7 @@ class AgentRepository
         $regions = \DB::table('stats')
             ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(Gpmt_Appel_Pre) as total'))
             ->where('Utilisateur', $agentName)
+            ->whereNotNull('Gpmt_Appel_Pre')
             ->whereNotNull($column);
         if ($dates) {
             $dates = array_values($dates);

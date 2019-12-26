@@ -354,7 +354,7 @@ class StatsRepository
         $regions = \DB::table('stats')
             ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'));
 
-        $columns = $regions->groupBy($column, 'Gpmt_Appel_Pre')->get();
+            $columns = $regions->groupBy($column, 'Gpmt_Appel_Pre')->get();
 
         // DEMO PLACEHOLDER (1)
 

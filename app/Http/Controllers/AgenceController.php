@@ -21,15 +21,15 @@ class AgenceController extends Controller
     public function index(Request $request)
     {
         $agenceCode = $request->agence_code;
-        $dataRegionsCallResult = $this->agenceRepository->GetDataRegions('Resultat_Appel', null, $agenceCode);
-        $dataRegionsCallStateByRegions = $this->agenceRepository->GetDataRegionsCallState('Nom_Region', null, $agenceCode);
-        $dataRegionsCallStateByWeek = $this->agenceRepository->GetDataRegionsCallState('Date_Heure_Note_Semaine', null, $agenceCode);
+        $dataRegionsCallResult = $this->agenceRepository->GetDataRegions('Resultat_Appel', $request);
+        $dataRegionsCallStateByRegions = $this->agenceRepository->GetDataRegionsCallState('Nom_Region', $request);
+        $dataRegionsCallStateByWeek = $this->agenceRepository->GetDataRegionsCallState('Date_Heure_Note_Semaine', $request);
 //        dd($dataRegionsCallStateByRegions, $dataRegionsCallStateByWeek);
         $dataCallsPos = $this->agenceRepository->getDataClientsByCallState('Joignable', null, $agenceCode);
         $dataCallsNeg = $this->agenceRepository->getDataClientsByCallState('Injoignable', null, $agenceCode);
 
-        $dataTypeInterv = $this->agenceRepository->getDataNonValidatedFolders('Code_Type_Intervention', null, $agenceCode);
-        $dataCodeInterv = $this->agenceRepository->getDataNonValidatedFolders('Code_Intervention', null, $agenceCode);
+        $dataTypeInterv = $this->agenceRepository->getDataNonValidatedFolders('Code_Type_Intervention', $request);
+        $dataCodeInterv = $this->agenceRepository->getDataNonValidatedFolders('Code_Intervention', $request);
 
 
         return view('stats.agencies')->with([
@@ -60,21 +60,20 @@ class AgenceController extends Controller
 
     public function getRegionsColumn(Request $request, $callResult)
     {
-        $dates = $request->get('dates');
-        $agenceCode = $request->get('agence_code');
-        logger($agenceCode);
-        $data = $this->agenceRepository->GetDataRegions($callResult, $dates, $agenceCode);
-//        $_data = new \stdClass();
-//        $_data->data = $data['regions'];
-//        $_data->column = $callResult;
+        $data = $this->agenceRepository->GetDataRegions($callResult, $request);
         return ['columns' => $data['columns'], 'data' => $data['data']];
+    }
+
+    public function filterList ($column, Request $request) {
+        $stats = $this->agenceRepository->filterList($column, $request);
+        return [
+            'data' => $stats
+        ];
     }
 
     public function getRegions(Request $request, $callResult)
     {
-        $dates = $request->get('dates');
-        $agenceCode = $request->get('agence_code');
-        $data = $this->agenceRepository->GetDataRegions($callResult, $dates, $agenceCode);
+        $data = $this->agenceRepository->GetDataRegions($callResult, $request);
         return DataTables::of($data['data'])->toJson();
     }
     #endregion
@@ -83,17 +82,13 @@ class AgenceController extends Controller
 
     public function getRegionsCallStateColumn(Request $request, $column)
     {
-        $dates = $request->get('dates');
-        $agenceCode = $request->get('agence_code');
-        $data = $this->agenceRepository->GetDataRegionsCallState($column, $dates, $agenceCode);
+        $data = $this->agenceRepository->GetDataRegionsCallState($column, $request);
         return ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getRegionsCallState(Request $request, $column)
     {
-        $dates = $request->get('dates');
-        $agenceCode = $request->get('agence_code');
-        $data = $this->agenceRepository->GetDataRegionsCallState($column, $dates, $agenceCode);
+        $data = $this->agenceRepository->GetDataRegionsCallState($column, $request);
         return DataTables::of($data['data'])->toJson();
     }
 
@@ -103,17 +98,13 @@ class AgenceController extends Controller
 
     public function getNonValidatedFoldersColumn(Request $request, $column)
     {
-        $dates = $request->get('dates');
-        $agenceCode = $request->get('agence_code');
-        $data = $this->agenceRepository->getDataNonValidatedFolders($column, $dates, $agenceCode);
+        $data = $this->agenceRepository->getDataNonValidatedFolders($column, $request);
         return ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getNonValidatedFolders(Request $request, $column)
     {
-        $dates = $request->get('dates');
-        $agenceCode = $request->get('agence_code');
-        $data = $this->agenceRepository->getDataNonValidatedFolders($column, $dates, $agenceCode);
+        $data = $this->agenceRepository->getDataNonValidatedFolders($column, $request);
         return DataTables::of($data['data'])->toJson();
     }
 
