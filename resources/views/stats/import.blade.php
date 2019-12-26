@@ -22,6 +22,7 @@
     <script src="{{ asset('js/plugins/datatables/buttons/buttons.colVis.min.js') }}"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
 
+    <script src="{{ asset("/add_ons/tree-view/tree.js") }}"></script>
     <!-- Page JS Code -->
     <script src="{{ asset('add_ons/stats/import-stats.js') }}"></script>
 @endsection
@@ -50,6 +51,11 @@
     <!-- Page Content -->
     <div class="content">
         <div class="row mb-4">
+            <div class="col-12" id="months">
+                <div id="tree-view-months" class="tree-view d-inline-block"></div>
+            </div>
+        </div>
+        <div class="row mb-4">
             <div class="col-12">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-import">
                     <i class="fa fa-fw fa-upload mr-1"></i> Importer
@@ -58,6 +64,15 @@
         </div>
     </div>
     <!-- END Page Content -->
+
+    <!-- Model Loader -->
+    <div class="modal" id="modal-loader" tabindex="-1" role="dialog" aria-labelledby="modal-loader" aria-hidden="true">
+        <div class="spinner-wrapper">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
 
     <div class="modal" id="modal-import" tabindex="-1" role="dialog" aria-labelledby="modal-import" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -73,7 +88,7 @@
                     </div>
                     <div class="block-content font-size-sm">
                         <form id="form-import">
-                            <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+                            @csrf
                             <div class="form-group">
                                 <label class="d-none">Bootstrap’s Custom File Input</label>
                                 <div class="custom-file">

@@ -1,4 +1,81 @@
-$(document).ready(function() {
+$(document).ready(function () {
+    let _months = [
+        {
+            id: 1,
+            text: 'Janvier',
+        },
+        {
+            id: 2,
+            text: 'Février',
+        },
+        {
+            id: 3,
+            text: 'Mars',
+        },
+        {
+            id: 4,
+            text: 'Avril',
+        },
+        {
+            id: 5,
+            text: 'Mai',
+        },
+        {
+            id: 6,
+            text: 'juin',
+        },
+        {
+            id: 7,
+            text: 'Juillet',
+        },
+        {
+            id: 8,
+            text: 'Août',
+        },
+        {
+            id: 9,
+            text: 'Septembre',
+        },
+        {
+            id: 10,
+            text: 'Octobre',
+        },
+        {
+            id: 11,
+            text: 'Novembre',
+        },
+        {
+            id: 12,
+            text: 'Décembre',
+        },
+    ];
+    // let monthElt = $('#months');
+    // months.forEach((item, index) => {
+    //     console.log(item);
+    //     let element = ' <div class="custom-control custom-switch mb-1" style="display: inline-block;">' +
+    //         '<input type="checkbox" class="custom-control-input d-none" id="month-' + index + '" name="months[]">' +
+    //         '<label class="custom-control-label" for="month-' + index + '">' + item + '</label>' +
+    //         '</div>'
+    //     monthElt.append(element);
+    // });
+
+    let months = undefined;
+    new Tree('#tree-view-months', {
+        data: [{id: '-1', text: 'Choisisser un/des Mois', children: _months}],
+        closeDepth: 2,
+        loaded: function () {
+            // this.values = ['0-0-0', '0-1-1', '0-0-2'];
+            // console.log(this.selectedNodes);
+            // console.log(this.values);
+            // this.disables = ['0-0-0', '0-0-1', '0-0-2']
+        },
+        onChange: function () {
+            months = this.values;
+            console.log(months);
+        }
+    });
+    $('.treejs-switcher').click();
+
     // var tableTasks = $('#table-tasks').DataTable({
     //     processing: true,
     //     serverSide: true,
@@ -45,16 +122,20 @@ $(document).ready(function() {
     // });
 
     $(document).on('click', '#btn-import', function (event) {
+        $('#modal-import').modal('hide');
+        $('#modal-loader').modal('show');
+        let formData=new FormData($('#form-import')[0]);
+        formData.append('months', months);
         event.preventDefault();
         $.ajax({
             method: 'post',
             url: 'stats/import-stats',
-            data: new FormData($('#form-import')[0]),
+            data: formData,
             dateType: 'json',
             processData: false,
             contentType: false,
             success: function (data) {
-                $('#modal-import').modal('hide');
+                $('#modal-loader').modal('hide');
                 type = data.success ? 'success' : 'error';
                 swal(
                     data.message,

@@ -33,9 +33,9 @@ class HomeController extends Controller
 
     public function dashboard()
     {
-        $usersCount = User::all()->count();
-        $projectsCount = Project::all()->count();
-        $skillsCount = Skill::all()->count();
+        $usersCount = User::count();
+        $projectsCount = Project::count();
+        $skillsCount = Skill::count();
         return view('dashboard')->with([
             'usersCount' => $usersCount,
             'projectsCount' => $projectsCount,

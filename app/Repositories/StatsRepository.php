@@ -73,7 +73,7 @@ class StatsRepository
         $rows = $rows->groupBy($column, $row)->get();
 
 
-        $totalCount = Stats::all()->count();
+        $totalCount = Stats::count();
         $rows = $rows->map(function ($_row) use ($totalCount, $column) {
             $dataCol = $_row->$column;
             $_row->$dataCol = round($_row->total * 100 / $totalCount, 2);
@@ -152,7 +152,6 @@ class StatsRepository
 //        TODO: Get Route URI -> replace params with actual value (as ID) - search in filter table if filter exists
 //        TODO => if not check request if it exists save the new filter or just get full data and delete old filter
         $route = $this->getRoute(Route::current());
-        dd($route);
 
         $route = Route::current()->uri;
         $regions = \DB::table('stats')
@@ -177,9 +176,10 @@ class StatsRepository
         if (!count($regions)) {
             $data = ['columns' => [], 'data' => []];
             return $data;
-        } else {
+        }
+        else {
 
-            $totalCount = Stats::all()->count();
+            $totalCount = Stats::count();
             $regions = $regions->map(function ($region) use ($totalCount) {
                 $Region = $region->Nom_Region;
                 $region->$Region = round($region->total * 100 / $totalCount, 2);
@@ -270,7 +270,7 @@ class StatsRepository
             $data = ['columns' => [], 'data' => []];
             return $data;
         } else {
-            $totalCount = Stats::all()->count();
+            $totalCount = Stats::count();
             $regions = $regions->map(function ($region) use ($column) {
                 $Region = $region->$column;
                 $region->$Region = $region->total; //round($region->total * 100 / $totalCount, 2) . '%';
@@ -366,7 +366,7 @@ class StatsRepository
             $data = ['columns' => [], 'data' => []];
             return $data;
         } else {
-            $totalCount = Stats::all()->count();
+            $totalCount = Stats::count();
             $regions = $regions->map(function ($region) use ($totalCount) {
                 $Region = $region->Nom_Region;
                 $region->$Region = round($region->total * 100 / $totalCount, 2);;
@@ -473,7 +473,7 @@ class StatsRepository
             return $data;
         } else {
 
-            $totalCount = Stats::all()->count();
+            $totalCount = Stats::count();
             $codes = $codes->map(function ($code) use ($totalCount) {
                 $Code = $code->Code_Intervention;
                 $code->$Code = round($code->total * 100 / $totalCount, 2);
@@ -605,7 +605,7 @@ class StatsRepository
             return $data;
         } else {
 
-            $totalCount = Stats::all()->count();
+            $totalCount = Stats::count();
             $results = $results->map(function ($resultItem) use ($totalCount) {
                 $Code = $resultItem->Groupement;
                 $resultItem->$Code = $resultItem->total; //round($resultItem->total * 100 / $totalCount, 2);;
@@ -702,7 +702,7 @@ class StatsRepository
     public function importStats($request)
     {
         try {
-            Excel::import(new StatsImport, $request->file('file'));
+            Excel::import(new StatsImport($request->months), $request->file('file'));
             return [
                 'success' => true,
                 'message' => 'Le fichier a été importé avec succès'

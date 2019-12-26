@@ -61,7 +61,7 @@ class Stats extends Model
 
         $regions = $regions->groupBy('Nom_Region', 'Resultat_Appel')->get();
 
-        $totalCount = Stats::all()->count();
+        $totalCount = Stats::count();
         $regions = $regions->map(function ($region) use ($totalCount) {
             $Region = $region->Nom_Region;
             $region->$Region = round($region->total * 100 / $totalCount, 2);;
@@ -102,7 +102,7 @@ class Stats extends Model
         }
         $regions = $regions->groupBy('Nom_Region', $intervCol)->get();
 
-        $totalCount = Stats::all()->count();
+        $totalCount = Stats::count();
         $regions = $regions->map(function ($region) use ($totalCount) {
             $Region = $region->Nom_Region;
             $region->$Region = round($region->total * 100 / $totalCount, 2);;
@@ -150,7 +150,7 @@ class Stats extends Model
             $codes = $codes->whereIn('Date_Note', $dates);
         }
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
-        $totalCount = Stats::all()->count();
+        $totalCount = Stats::count();
         $codes = $codes->map(function ($code) use ($totalCount) {
             $Code = $code->Code_Intervention;
             $code->$Code = round($code->total * 100 / $totalCount, 2);;
