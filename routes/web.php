@@ -118,6 +118,9 @@ Route::post('/stats/import-stats', 'StatsController@importStats')->name('stats.i
 Route::get('/regions/{callResult}', 'StatsController@getRegions'); // column = Resultat_Appel                                       // PERCENT
 Route::get('/regions/columns/{callResult}', 'StatsController@getRegionsColumn');
 
+Route::get('/folders/{callResult}', 'StatsController@getFolders'); // column = Resultat_Appel                                       // SUM
+Route::get('/folders/columns/{callResult}', 'StatsController@getFoldersColumn');
+
 Route::get('/regionsCallState/{column}', 'StatsController@getRegionsCallState'); // column = Nom_Region / Date_Heure_Note_Semaine   // SUM
 Route::get('/regionsCallState/columns/{column}', 'StatsController@getRegionsCallStateColumn');
 

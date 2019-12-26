@@ -153,7 +153,6 @@ class StatsRepository
 //        TODO => if not check request if it exists save the new filter or just get full data and delete old filter
         $route = $this->getRoute(Route::current());
 
-        $route = Route::current()->uri;
         $regions = \DB::table('stats')
             ->select('Nom_Region', $callResult, \DB::raw('count(*) as total'))
             ->where($callResult, 'not like', '=%');
@@ -176,8 +175,7 @@ class StatsRepository
         if (!count($regions)) {
             $data = ['columns' => [], 'data' => []];
             return $data;
-        }
-        else {
+        } else {
 
             $totalCount = Stats::count();
             $regions = $regions->map(function ($region) use ($totalCount) {
@@ -222,7 +220,7 @@ class StatsRepository
 
                     $col_arr = array_diff($col_arr, [$nom_region]);
 
-                    $row->values['value_' . $index] = $call->$nom_region . '%';
+                    $row->values[$nom_region] = $call->$nom_region . '%';
                     $row->$nom_region = $call->$nom_region . '%';
                     $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
                     $row->_total = $call->total;
@@ -233,7 +231,7 @@ class StatsRepository
                 $_item = $item->last();
                 $index = count($_item->values);
                 foreach ($col_arr as $col) {
-                    $_item->values['value_' . $index++] = '0%';
+                    $_item->values[$col] = '0%';
                     $_item->$col = '0%';
                 }
                 return $_item;
@@ -241,7 +239,112 @@ class StatsRepository
 
             $regions = $regions->values();
 
-            return ['route' => $route, 'columns' => $regions_names, 'data' => $regions];
+            return ['columns' => $regions_names, 'data' => $regions];
+        }
+    }
+
+    public function GetDataFolders($callResult, $dates = null)
+    {
+        $regions = \DB::table('stats')
+            ->select('Nom_Region', $callResult, \DB::raw('count(*) as total'))
+            ->where($callResult, 'not like', '=%');
+        $columns = $regions->groupBy('Nom_Region', $callResult)->get();
+
+        // DEMO PLACEHOLDER (1)
+
+        #region DEMO (1) ==============
+//        $regions = $regions->whereNotNull($callResult);
+        #endregion DEMO
+
+
+        if ($dates) {
+            $dates = array_values($dates);
+            $regions = $regions->whereIn('Date_Note', $dates);
+        }
+//        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
+
+        $regions = $regions->groupBy('Nom_Region', $callResult)->get();
+        if (!count($regions)) {
+            $data = ['columns' => [], 'data' => []];
+            return $data;
+        } else {
+
+            $totalCount = Stats::count();
+            $regions = $regions->map(function ($region) use ($totalCount) {
+                $Region = $region->Nom_Region;
+                $region->$Region = $region->total; //round($region->total * 100 / $totalCount, 2);
+                return $region;
+            });
+            $columns = $columns->map(function ($region) use ($totalCount) {
+                $Region = $region->Nom_Region;
+                $region->$Region = $region->total; //round($region->total * 100 / $totalCount, 2);
+                return $region;
+            });
+
+            $keys = $columns->groupBy(['Nom_Region'])->keys();
+
+            $regions = $regions->groupBy([$callResult]);
+//        $regions = $regions->groupBy(['Nom_Region']);
+
+            $regions_names = [];
+            $regions_names[0] = new \stdClass();
+            $regions_names[0]->data = $callResult;
+            $regions_names[0]->name = $callResult;
+            $keys->map(function ($key, $index) use (&$regions_names) {
+                $regions_names[$index + 1] = new \stdClass();
+                $regions_names[$index + 1]->data = $key;
+                $regions_names[$index + 1]->name = $key;
+            });
+            $regions_names[] = new \stdClass();
+            $regions_names[count($regions_names) - 1]->data = 'total';
+            $regions_names[count($regions_names) - 1]->name = 'total';
+
+            $total = new \stdClass();
+            $total->values = [];
+            $regions = $regions->map(function ($region) use (&$regions_names, $keys, $callResult, &$total) {
+                $row = new \stdClass();
+                $row->values = [];
+
+                $col_arr = $keys->all();
+
+                $item = $region->map(function ($call, $index) use (&$row, &$regions_names, &$col_arr, $callResult) {
+
+                    $row->$callResult = $call->$callResult;
+                    $nom_region = $call->Nom_Region;
+
+                    $col_arr = array_diff($col_arr, [$nom_region]);
+
+                    $row->values[$nom_region] = $call->$nom_region;
+                    $row->$nom_region = $call->$nom_region;
+                    $row->total = $call->$nom_region; //round(array_sum($row->values) / count($row->values), 2) . '%';
+                    $row->_total = $call->total;
+                    $row->column = $callResult;
+                    return $row;
+                });
+
+                $_item = $item->last();
+                $index = count($_item->values);
+                foreach ($col_arr as $col) {
+                    $_item->values[$col] = 0; //'0%';
+                    $_item->$col = 0; //'0%';
+                }
+
+
+                collect($_item->values)->map(function ($value, $index) use (&$total) {
+                    $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
+                    $total->$index = $total->values[$index];
+                });
+
+                return $_item;
+            });
+            $total->Resultat_Appel = 'Total Général';
+            $total->total = round(array_sum($total->values), 2);;
+
+            $regions->push($total);
+
+            $regions = $regions->values();
+
+            return ['columns' => $regions_names, 'data' => $regions];
         }
     }
 

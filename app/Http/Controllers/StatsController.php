@@ -20,6 +20,7 @@ class StatsController extends Controller
     public function dashboard()
     {
         $dataRegionsCallResult = $this->statsRepository->GetDataRegions('Resultat_Appel');
+        $dataFoldersCallResult = $this->statsRepository->GetDataFolders('Resultat_Appel');
 
         $dataRegionsCallStateByRegions = $this->statsRepository->GetDataRegionsCallState('Nom_Region');
         $dataRegionsCallStateByWeek = $this->statsRepository->GetDataRegionsCallState('Date_Heure_Note_Semaine');
@@ -35,6 +36,7 @@ class StatsController extends Controller
 
         return view('stats.dashboard')->with([
             'calls_results' => $dataRegionsCallResult['columns'],
+            'calls_folders' => $dataFoldersCallResult['columns'],
 
             'calls_states_regions' => $dataRegionsCallStateByRegions['columns'],
             'calls_states_weeks' => $dataRegionsCallStateByWeek['columns'],
@@ -55,7 +57,7 @@ class StatsController extends Controller
         return ['dates' => $dates];
     }
 
-    #region Regions =====================================================
+    #region Regions / Folders =====================================================
 
     public function getRegionsColumn(Request $request, $callResult)
     {
@@ -75,7 +77,23 @@ class StatsController extends Controller
         return DataTables::of($data['data'])->toJson();
     }
 
+    public function getFoldersColumn(Request $request, $callResult)
+    {
+        $dates = $request->get('data');
+        $data = $this->statsRepository->GetDataFolders($callResult, $dates);
+//        $_data = new \stdClass();
+//        $_data->data = $data['regions'];
+//        $_data->column = $callResult;
+//        dd(count($data['data']));
+        return $data; //['columns' => $data['columns'], 'data' => $data['data']];
+    }
 
+    public function getFolders(Request $request, $callResult)
+    {
+        $dates = $request->get('data');
+        $data = $this->statsRepository->GetDataFolders($callResult, $dates);
+        return DataTables::of($data['data'])->toJson();
+    }
 
     #endregion
 

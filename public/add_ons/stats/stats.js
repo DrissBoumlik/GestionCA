@@ -28,7 +28,7 @@ $(function () {
         }
     });
 
-    /// ====================== REGIONS ==========================
+    /// ====================== REGIONS / FOLDERS  ==========================
 
     let statsRegions = {element_dt: undefined, element: $('#statsRegions'), columns: undefined, routeCol: 'regions/columns/Resultat_Appel', routeData: 'regions/Resultat_Appel'};
     let statsRegionsChart = {element_chart: undefined, element_id: 'statsRegionsChart', data: undefined, chartTitle: 'Résultats Appels (Clients Joints)'};
@@ -36,6 +36,14 @@ $(function () {
     $('#refreshRegions').on('click', function () {
         getColumns(statsRegions, statsRegionsChart, true, true, dates);
     });
+
+    let statsFolders = {element_dt: undefined, element: $('#statsFolders'), columns: undefined, routeCol: 'folders/columns/Resultat_Appel', routeData: 'folders/Resultat_Appel'};
+    let statsFoldersChart = {element_chart: undefined, element_id: 'statsFoldersChart', data: undefined, chartTitle: 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement'};
+    getColumns(statsFolders, statsFoldersChart, true, true);
+    $('#refreshFolders').on('click', function () {
+        getColumns(statsFolders, statsFoldersChart, true, true, dates);
+    });
+
 
     /// ====================== CALLS STATS AGENCIES / WEEKS ==========================
 
