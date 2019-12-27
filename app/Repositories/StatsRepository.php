@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Repositories;
 
 
 use App\Imports\StatsImport;
@@ -48,96 +48,6 @@ class StatsRepository
         return $dates->values();
     }
 
-    #region IMPROVEMENT IN PROGRESS
-
-    // TODO: MAKE IT REUSABLE
-    public function getData($row, $column, $dates = null)
-    {
-        $rows = \DB::table('stats')
-            ->select($column, $row, \DB::raw('count(*) as total'));
-        $columns = $rows->groupBy($column, $row)->get();
-
-        // DEMO PLACEHOLDER (1)
-
-        #region DEMO (1) ==============
-//        $regions = $regions->whereNotNull($callResult);
-        #endregion DEMO
-
-
-        if ($dates) {
-            $dates = array_values($dates);
-            $rows = $rows->whereIn('Date_Note', $dates);
-        }
-//        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
-
-        $rows = $rows->groupBy($column, $row)->get();
-
-
-        $totalCount = Stats::count();
-        $rows = $rows->map(function ($_row) use ($totalCount, $column) {
-            $dataCol = $_row->$column;
-            $_row->$dataCol = round($_row->total * 100 / $totalCount, 2);
-            return $_row;
-        });
-        $columns = $columns->map(function ($_column) use ($totalCount, $row) {
-            $dataRow = $_column->$row;
-            $_column->$dataRow = round($_column->total * 100 / $totalCount, 2);
-            return $_column;
-        });
-        $keys = $columns->groupBy([$column])->keys();
-
-        $rows = $rows->groupBy([$row]);
-//        $regions = $regions->groupBy(['Nom_Region']);
-
-        $_columns = [];
-        $_columns[0] = new \stdClass();
-        $_columns[0]->data = $row;
-        $_columns[0]->name = $row;
-        $keys->map(function ($key, $index) use (&$_columns) {
-            $_columns[$index + 1] = new \stdClass();
-            $_columns[$index + 1]->data = $key;
-            $_columns[$index + 1]->name = $key;
-        });
-        $_columns[] = new \stdClass();
-        $_columns[count($_columns) - 1]->data = 'total';
-        $_columns[count($_columns) - 1]->name = 'total';
-
-
-        $rows = $rows->map(function ($rowItem) use (&$_columns, $keys, $row, $column) {
-            $_row = new \stdClass();
-            $_row->values = [];
-
-            $col_arr = $keys->all();
-            $item = $rowItem->map(function ($rowData, $index) use (&$_row, &$regions_names, &$col_arr, $row, $column) {
-                $_row->$row = $rowData->$row;
-                $dataCol = $rowData->$column;
-
-                $col_arr = array_diff($col_arr, [$dataCol]);
-
-                $_row->values['value_' . $index] = $rowData->$dataCol . '%';
-                $_row->$dataCol = $rowData->$dataCol . '%';
-                $_row->total = round(array_sum($_row->values) / count($_row->values), 2) . '%';
-                $_row->_total = $rowData->total;
-                $_row->column = $row;
-                return $_row;
-            });
-
-            $_item = $item->last();
-            $index = count($_item->values);
-            foreach ($col_arr as $col) {
-                $_item->values['value_' . $index++] = '0%';
-                $_item->$col = '0%';
-            }
-            return $_item;
-        });
-
-        $rows = $rows->values();
-
-        return ['route' => $route, 'columns' => $_columns, 'data' => $rows];
-    }
-
-    #endregion
-
     private function getRoute($route)
     {
         $routeURI = $route->uri;
@@ -164,11 +74,13 @@ class StatsRepository
 //        $regions = $regions->whereNotNull($callResult);
         #endregion DEMO
 
+        // BUILDING THE USER FILTER
 
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
         }
+
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
 
         $regions = $regions->groupBy('Nom_Region', $callResult)->get();
@@ -213,14 +125,19 @@ class StatsRepository
 //        $regions = $regions->groupBy(['Nom_Region']);
 
             $regions_names = [];
-            $regions_names[0] = new \stdClass();
-            $regions_names[0]->data = $callResult;
-            $regions_names[0]->name = $callResult;
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
                 $regions_names[$index + 1]->data = $key;
                 $regions_names[$index + 1]->name = $key;
             });
+            usort($regions_names, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
+            $first = new \stdClass();
+            $first->name = $callResult;
+            $first->data = $callResult;
+            array_unshift($regions_names, $first);
 //            $regions_names[] = new \stdClass();
 //            $regions_names[count($regions_names) - 1]->data = 'total';
 //            $regions_names[count($regions_names) - 1]->name = 'total';
@@ -249,9 +166,14 @@ class StatsRepository
                 $_item = $item->last();
                 $index = count($_item->values);
                 foreach ($col_arr as $col) {
-                    $_item->values[$col] = '0%';
+                    $_item->values[$col] = 0; // '0%';
                     $_item->$col = '0%';
                 }
+
+                ksort($_item->values);
+
+                $_item->values = collect($_item->values)->values();
+
                 return $_item;
             });
 
@@ -306,17 +228,31 @@ class StatsRepository
 //        $regions = $regions->groupBy(['Nom_Region']);
 
             $regions_names = [];
-            $regions_names[0] = new \stdClass();
-            $regions_names[0]->data = $callResult;
-            $regions_names[0]->name = $callResult;
+//            $regions_names[0] = new \stdClass();
+//            $regions_names[0]->data = $callResult;
+//            $regions_names[0]->name = $callResult;
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
                 $regions_names[$index + 1]->data = $key;
                 $regions_names[$index + 1]->name = $key;
             });
-            $regions_names[] = new \stdClass();
-            $regions_names[count($regions_names) - 1]->data = 'total';
-            $regions_names[count($regions_names) - 1]->name = 'total';
+
+            usort($regions_names, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
+            $first = new \stdClass();
+            $first->name = $callResult;
+            $first->data = $callResult;
+            array_unshift($regions_names, $first);
+            $last = new \stdClass();
+            $last->data = 'total';
+            $last->name = 'total';
+            array_push($regions_names, $last);
+
+//            $regions_names[] = new \stdClass();
+//            $regions_names[count($regions_names) - 1]->data = 'total';
+//            $regions_names[count($regions_names) - 1]->name = 'total';
 
             $total = new \stdClass();
             $total->values = [];
@@ -354,10 +290,16 @@ class StatsRepository
                     $total->$index = $total->values[$index];
                 });
 
+                ksort($_item->values);
+
+                $_item->values = collect($_item->values)->values();
+
                 return $_item;
             });
-            $total->Resultat_Appel = 'Total Général';
-            $total->total = round(array_sum($total->values), 2);;
+
+            $total->$callResult = 'Total Général';
+            $total->total = round(array_sum($total->values), 2);
+            $total->values = collect($total->values)->values();
 
             $regions->push($total);
 
@@ -409,17 +351,31 @@ class StatsRepository
 //        $regions = $regions->groupBy(['Nom_Region']);
 
             $columns = [];
-            $columns[0] = new \stdClass();
-            $columns[0]->data = 'Gpmt_Appel_Pre';
-            $columns[0]->name = 'Gpmt_Appel_Pre';
+//            $columns[0] = new \stdClass();
+//            $columns[0]->data = 'Gpmt_Appel_Pre';
+//            $columns[0]->name = 'Gpmt_Appel_Pre';
             $keys->map(function ($key, $index) use (&$columns) {
                 $columns[$index + 1] = new \stdClass();
                 $columns[$index + 1]->data = $key;
                 $columns[$index + 1]->name = $key;
             });
-            $columns[] = new \stdClass();
-            $columns[count($columns) - 1]->data = 'total';
-            $columns[count($columns) - 1]->name = 'total';
+//            $columns = $columns->all();
+            usort($columns, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
+            $first = new \stdClass();
+            $first->name = 'Gpmt_Appel_Pre';
+            $first->data = 'Gpmt_Appel_Pre';
+            $last = new \stdClass();
+            $last->data = 'total';
+            $last->name = 'total';
+            array_unshift($columns, $first);
+            array_push($columns, $last);
+
+//            $columns[] = new \stdClass();
+//            $columns[count($columns) - 1]->data = 'total';
+//            $columns[count($columns) - 1]->name = 'total';
 
 
             $total = new \stdClass();
@@ -449,14 +405,19 @@ class StatsRepository
                     $_item->values[$col] = 0; //'0%';
                     $_item->$col = 0; //'0%';
                 }
+                ksort($_item->values);
                 collect($_item->values)->map(function ($value, $index) use (&$total) {
                     $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
                     $total->$index = $total->values[$index];
                 });
+
+
+                $_item->values = collect($_item->values)->values();
                 return $_item;
             });
             $total->Gpmt_Appel_Pre = 'Total Général';
             $total->total = round(array_sum($total->values), 2);
+            $total->values = collect($total->values)->values();
             $regions->push($total);
 
             $regions = $regions->values();
@@ -483,6 +444,7 @@ class StatsRepository
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
         }
+
         $regions = $regions->groupBy('Nom_Region', $intervCol)->get();
         if (!count($regions)) {
             $data = ['columns' => [], 'data' => []];
@@ -504,17 +466,29 @@ class StatsRepository
 
 
             $regions_names = [];
-            $regions_names[0] = new \stdClass();
-            $regions_names[0]->data = $intervCol;
-            $regions_names[0]->name = $intervCol;
+//            $regions_names[0] = new \stdClass();
+//            $regions_names[0]->data = $intervCol;
+//            $regions_names[0]->name = $intervCol;
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
                 $regions_names[$index + 1]->data = $key;
                 $regions_names[$index + 1]->name = $key;
             });
-            $regions_names[] = new \stdClass();
-            $regions_names[count($regions_names) - 1]->data = 'total';
-            $regions_names[count($regions_names) - 1]->name = 'total';
+            usort($regions_names, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
+            $first = new \stdClass();
+            $first->name = $intervCol;
+            $first->data = $intervCol;
+            $last = new \stdClass();
+            $last->data = 'total';
+            $last->name = 'total';
+            array_unshift($regions_names, $first);
+            array_push($regions_names, $last);
+//            $regions_names[] = new \stdClass();
+//            $regions_names[count($regions_names) - 1]->data = 'total';
+//            $regions_names[count($regions_names) - 1]->name = 'total';
 
 
             $total = new \stdClass();
@@ -542,6 +516,8 @@ class StatsRepository
                     $_item->values[$col] = 0; //'0%';
                     $_item->$col = '0%';
                 }
+
+                ksort($_item->values);
                 collect($_item->values)->map(function ($value, $index) use (&$total) {
                     $value = str_replace('%', '', $value);
                     $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
@@ -588,6 +564,7 @@ class StatsRepository
             $dates = array_values($dates);
             $codes = $codes->whereIn('Date_Note', $dates);
         }
+
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
 
         if (!count($codes)) {
@@ -720,6 +697,7 @@ class StatsRepository
             $dates = array_values($dates);
             $results = $results->whereIn('Date_Note', $dates);
         }
+
         $results = $results->groupBy('Groupement', 'Nom_Region')->get();
 
         if (!count($results)) {

@@ -17,6 +17,9 @@ $(function () {
                         // this.disables = ['0-0-0', '0-0-1', '0-0-2']
                     },
                     onChange: function () {
+                        console.log(this);
+                        console.log($(this));
+                        console.log($(this)[0].container);
                         dates = this.values;
                     }
                 });
@@ -37,7 +40,7 @@ $(function () {
         getColumns(statsRegions, statsRegionsChart, true, true, dates);
     });
 
-    let statsFolders = {element_dt: undefined, element: $('#statsFolders'), columns: undefined, routeCol: 'folders/columns/Resultat_Appel', routeData: 'folders/Resultat_Appel'};
+    let statsFolders = {element_dt: undefined, element: $('#statsFolders'), columns: undefined, routeCol: 'folders/columns/Groupement', routeData: 'folders/Groupement'};
     let statsFoldersChart = {element_chart: undefined, element_id: 'statsFoldersChart', data: undefined, chartTitle: 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement'};
     getColumns(statsFolders, statsFoldersChart, true, true);
     $('#refreshFolders').on('click', function () {
@@ -126,20 +129,35 @@ $(function () {
         });
     }
 
-    function InitChart(objectChart, columns, data) {
+    function InitChart(objectChart, columns, data, removeTotel = true) {
+        console.log(columns);
+        console.log(data);
         let labels = columns.map((column) => {
             return column.name;
         });
         let column = labels[0];
         labels.pop();
         labels.shift();
+
+        if(removeTotel) {
+            data.pop();
+        }
+        // debugger
         let datasets = data.map((item) => {
+            // debugger
             let regions = Object.values(item.values).map((value) => {
+                // debugger
                 return parseFloat(isNaN(value) ? value.replace('%', '') : value);
             });
+            console.log(regions);
             let _dataItem = {label: item[column], backgroundColor: dynamicColors(), data: regions};
             return _dataItem;
         });
+
+        console.log(labels);
+        console.log(datasets);
+        console.log('==============================');
+
         var ctx = document.getElementById(objectChart.element_id).getContext('2d');
         let barChartData = {labels, datasets};
         if (objectChart.element_chart !== null && objectChart.element_chart !== undefined) {
