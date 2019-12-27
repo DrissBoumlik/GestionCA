@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Imports\StatsImport;
 use App\Models\Stats;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 use function Matrix\trace;
 
@@ -34,6 +35,16 @@ class AgentRepository
         });
         return $stats->toArray();
     }
+    public function filterList ($column, $request) {
+        $agentName = $request->get('agent_name');
+        $stats = Stats::select([$column])
+            ->distinct($column)
+            ->where($column, 'not like', '=%')
+            ->where('Utilisateur', $agentName)
+            ->whereNotNull($column)->get();
+        return $stats->map(function ($s) use ($column) { return $s[$column]; });
+    }
+
 
     public function getDateNotes($agenceCode)
     {
@@ -74,13 +85,22 @@ class AgentRepository
     }
 
 
-    public function GetDataRegions($callResult, $dates = null, $agentName)
+    public function GetDataRegions($callResult, $request)
     {
+        $dates = $request->get('dates');
+        $agentName = $request->get('agent_name');
+        $resultatAppel = $request->get('resultatAppel');
         $regions = \DB::table('stats')
             ->select('Nom_Region', $callResult, \DB::raw("count(*) as total"))
             ->where($callResult, 'not like', '=%')
-            ->where('Utilisateur', $agentName)
             ->whereNotNull($callResult);
+        if ($agentName) {
+            $regions = $regions->where('Utilisateur', $agentName);
+        }
+        if ($resultatAppel) {
+            $resultatAppel = array_values($resultatAppel);
+            $regions = $regions->whereIn('Resultat_Appel', $resultatAppel);
+        }
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
@@ -149,13 +169,22 @@ class AgentRepository
         return ['columns' => $regions_names, 'data' => $regions];
     }
 
-    public function GetDataRegionsCallState($column, $dates = null, $agentName)
+    public function GetDataRegionsCallState($column, $request)
     {
+        $gpmtAppelPre = $request->get('gpmtAppelPre');
+        $dates = $request->get('dates');
+        $agentName = $request->get('agent_name');
         $regions = \DB::table('stats')
             ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(Gpmt_Appel_Pre) as total'))
-            ->where('Utilisateur', $agentName)
             ->whereNotNull('Gpmt_Appel_Pre')
             ->whereNotNull($column);
+        if ($agentName) {
+            $regions = $regions->where('Utilisateur', $agentName);
+        }
+        if ($gpmtAppelPre) {
+            $gpmtAppelPre = array_values($gpmtAppelPre);
+            $regions = $regions->whereIn('Gpmt_Appel_Pre', $gpmtAppelPre);
+        }
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
@@ -224,87 +253,130 @@ class AgentRepository
         return ['columns' => $columns, 'data' => $regions];
     }
 
-    public function getDataNonValidatedFolders($intervCol, $dates = null, $agentName)
+    public function getDataNonValidatedFolders($intervCol, $request)
     {
+        $route = Route::current()->uri;
+        $dates = $request->get('dates');
+        $agentName = $request->get('agent_name');
+        $codeTypeIntervention = $request->get('codeTypeIntervention');
+        $codeIntervention = $request->get('codeIntervention');
         $regions = \DB::table('stats')
-            ->select('Nom_Region', $intervCol, \DB::raw('count(*) as total'))
-            ->where('Utilisateur', $agentName)
+            ->select('Nom_Region', $intervCol, \DB::raw("count($intervCol) as total"))
             ->whereNotNull($intervCol);
+        if ($agentName) {
+            $regions = $regions->where('Utilisateur', $agentName);
+        }
+        if ($codeTypeIntervention) {
+            $codeTypeIntervention = array_values($codeTypeIntervention);
+            $regions = $regions->whereIn('Code_Type_Intervention', $codeTypeIntervention);
+        }
+        if ($codeIntervention) {
+            $codeIntervention = array_values($codeIntervention);
+            $regions = $regions->whereIn('Code_Intervention', $codeIntervention);
+        }
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
         }
+
+        $columns = $regions->groupBy('Nom_Region', $intervCol)->get();
         $regions = $regions->groupBy('Nom_Region', $intervCol)->get();
-
-        $totalCount = Stats::count();
-        $regions = $regions->map(function ($region) use ($totalCount) {
-            $Region = $region->Nom_Region;
-            $region->$Region = round($region->total * 100 / $totalCount, 2);;
-            return $region;
-        });
-        $keys_regions = $regions->groupBy(['Nom_Region'])->keys();
-        $regions = $regions->groupBy([$intervCol]);
-
-        $regions_names = [];
-        $regions_names[0] = new \stdClass();
-        $regions_names[0]->data = $intervCol;
-        $regions_names[0]->name = $intervCol;
-
-        $regions = $regions->map(function ($region) use (&$regions_names, $keys_regions, $intervCol) {
-            $row = new \stdClass();
-            $row->values = [];
-            $col_arr = $keys_regions->all();
-            $item = $region->map(function ($call, $index) use (&$row, &$regions_names, &$col_arr, $intervCol) {
-                $_index = $index + 1;
-                $regions_names[$_index] = new \stdClass();
-                $regions_names[$_index]->data = $call->Nom_Region;
-                $regions_names[$_index]->name = $call->Nom_Region;
-
-//                if (property_exists($call, 'Code_Type_Intervention')) {
-//                    $row->Code_Type_Intervention = $call->Code_Type_Intervention;
-//                } elseif (property_exists($call, 'Code_Intervention')) {
-//                    $row->Code_Intervention = $call->Code_Intervention;
-//                }
-
-                $row->$intervCol = $call->$intervCol;
-
-                $nom_region = $call->Nom_Region;
-
-                $col_arr = array_diff($col_arr, [$nom_region]);
-
-                $row->values['zone_' . $index] = $call->$nom_region . '%';
-                $row->$nom_region = $call->$nom_region . '%';
-                $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
-                return $row;
+        if (!count($regions)) {
+            $data = ['columns' => [], 'data' => []];
+            return $data;
+        } else {
+            $totalCount = Stats::count();
+            $regions = $regions->map(function ($region) use ($totalCount) {
+                $Region = $region->Nom_Region;
+                $region->$Region = round($region->total * 100 / $totalCount, 2);;
+                return $region;
             });
-            $_item = $item->last();
-            $index = count($_item->values);
-            foreach ($col_arr as $col) {
-                $_item->values['zone_' . $index++] = '0%';
-                $_item->$col = '0%';
-            }
-            return $_item;
-//            return $item->last();
-        });
-        $regions_names[] = new \stdClass();
-        $regions_names[count($regions_names) - 1]->data = 'total';
-        $regions_names[count($regions_names) - 1]->name = 'total';
+            $columns = $columns->map(function ($region) use ($totalCount) {
+                $Region = $region->Nom_Region;
+                $region->$Region = round($region->total * 100 / $totalCount, 2);;
+                return $region;
+            });
+            $keys = $columns->groupBy(['Nom_Region'])->keys();
+            $regions = $regions->groupBy([$intervCol]);
 
-        $regions_names = collect($regions_names)->unique()->values();
-        $regions = $regions->values();
-        $data = ['columns' => $regions_names, 'data' => $regions];
-        return $data;
+
+            $regions_names = [];
+            $regions_names[0] = new \stdClass();
+            $regions_names[0]->data = $intervCol;
+            $regions_names[0]->name = $intervCol;
+            $keys->map(function ($key, $index) use (&$regions_names) {
+                $regions_names[$index + 1] = new \stdClass();
+                $regions_names[$index + 1]->data = $key;
+                $regions_names[$index + 1]->name = $key;
+            });
+            $regions_names[] = new \stdClass();
+            $regions_names[count($regions_names) - 1]->data = 'total';
+            $regions_names[count($regions_names) - 1]->name = 'total';
+
+
+            $total = new \stdClass();
+            $total->values = [];
+            $regions = $regions->map(function ($region) use (&$regions_names, $keys, $intervCol, &$total) {
+                $row = new \stdClass();
+                $row->values = [];
+                $col_arr = $keys->all();
+                $item = $region->map(function ($call, $index) use (&$row, &$regions_names, &$col_arr, $intervCol) {
+
+                    $row->$intervCol = $call->$intervCol;
+
+                    $nom_region = $call->Nom_Region;
+
+                    $col_arr = array_diff($col_arr, [$nom_region]);
+
+                    $row->values[$nom_region] = $call->$nom_region . '%';
+                    $row->$nom_region = $call->$nom_region . '%';
+                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
+                    return $row;
+                });
+                $_item = $item->last();
+                $index = count($_item->values);
+                foreach ($col_arr as $col) {
+                    $_item->values[$col] = '0%';
+                    $_item->$col = '0%';
+                }
+                collect($_item->values)->map(function ($value, $index) use (&$total) {
+                    $value = str_replace('%', '', $value);
+                    $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
+                    $total->$index = $total->values[$index];
+                });
+                return $_item;
+//            return $item->last();
+            });
+
+            $dataCount = $regions->count();
+            collect($total->values)->map(function ($value, $index) use (&$total, $dataCount) {
+                $total->values[$index] = round($total->values[$index] / $dataCount, 2);
+                $total->$index = $total->values[$index] . '%';
+            });
+
+            $total->$intervCol = 'Total Général';
+            $total->total = round(array_sum($total->values) / count($total->values), 2) . '%';
+
+            $regions->push($total);
+
+            $regions = $regions->values();
+            $data = ['route' => $route, 'columns' => $regions_names, 'data' => $regions];
+            return $data;
+        }
     }
 
-    public function getDataClientsByCallState($callResult, $dates = null, $agentName)
+    public function getDataClientsByCallState($callResult, $request)
     {
+        $dates = $request->get('dates');
+        $agentName = $request->get('agent_name');
         $codes = \DB::table('stats')
             ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(*) as total'))
             ->whereNotNull('Code_Intervention')
-            ->where('Utilisateur', $agentName)
             ->where('Gpmt_Appel_Pre', $callResult);
-//            ->groupBy('Code_Intervention', 'Nom_Region')
-//            ->get();
+
+        if ($agentName) {
+            $codes = $codes->where('Utilisateur', $agentName);
+        }
         if ($dates) {
             $dates = array_values($dates);
             $codes = $codes->whereIn('Date_Note', $dates);

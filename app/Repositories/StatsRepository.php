@@ -84,6 +84,7 @@ class StatsRepository
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
 
         $regions = $regions->groupBy('Nom_Region', $callResult)->get();
+
         if (!count($regions)) {
             $data = ['columns' => [], 'data' => []];
             return $data;

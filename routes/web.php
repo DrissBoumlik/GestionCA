@@ -44,24 +44,24 @@ Route::get('/getPermissions', 'PermissionController@getPermissions');
 Route::get('/getPermissionRoles/{permission}', 'PermissionController@getRoles');
 
 // Skills Routes
-//Route::get('/skills', 'SkillController@index');
-//Route::post('/skills', 'SkillController@store');
-//Route::delete('/skills/{skill}', 'SkillController@destroy');
-//Route::put('/skills/{skill}', 'SkillController@update');
+Route::get('/skills', 'SkillController@index');
+Route::post('/skills', 'SkillController@store');
+Route::delete('/skills/{skill}', 'SkillController@destroy');
+Route::put('/skills/{skill}', 'SkillController@update');
 
-//Route::resource('/skills', 'SkillController');
-//Route::get('/getSkills', 'SkillController@getSkills');
-//Route::get('/getUserSkills', 'SkillController@getUserSkills');
-//Route::get('/editSkills', 'SkillController@editSkills');
-//Route::put('/updateSkills', 'SkillController@updateSkills');
-//Route::post('/chooseSkill', 'SkillController@chooseSkill');
-//Route::put('/chooseTopSkill', 'SkillController@chooseTopSkill');
+Route::resource('/skills', 'SkillController');
+Route::get('/getSkills', 'SkillController@getSkills');
+Route::get('/getUserSkills', 'SkillController@getUserSkills');
+Route::get('/editSkills', 'SkillController@editSkills');
+Route::put('/updateSkills', 'SkillController@updateSkills');
+Route::post('/chooseSkill', 'SkillController@chooseSkill');
+Route::put('/chooseTopSkill', 'SkillController@chooseTopSkill');
 
 // Projects Routes
-//Route::resource('/projects', 'ProjectController');
-//Route::get('/getProjects', 'ProjectController@getProjects');
-//Route::get('/getTechs/{project?}', 'ProjectController@getTechs');
-//Route::get('/getCollaborators/{project?}', 'ProjectController@getCollaborators');
+Route::resource('/projects', 'ProjectController');
+Route::get('/getProjects', 'ProjectController@getProjects');
+Route::get('/getTechs/{project?}', 'ProjectController@getTechs');
+Route::get('/getCollaborators/{project?}', 'ProjectController@getCollaborators');
 
 Route::get('/unauthorized', 'ToolController@unauthorized');
 
@@ -90,6 +90,7 @@ Route::get('/agences/list', 'AgenceController@getAgencies')->name('agence.list')
 Route::get('/agences', 'AgenceController@index')->name('agence.index');
 
 Route::get('/agents/dates', 'AgentController@getDates');
+Route::get('/agents/filter/{column}', 'AgentController@filterList');
 Route::get('/agents/regions/{callResult}', 'AgentController@getRegions');
 Route::get('/agents/regions/columns/{callResult}', 'AgentController@getRegionsColumn');
 Route::get('/agents/regionsCallState/{column}', 'AgentController@getRegionsCallState'); // Nom_Region / Date_Heure_Note_Semaine

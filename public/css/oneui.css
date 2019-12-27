@@ -25483,6 +25483,10 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
   background-color: #DDEBF7;
 }
 
+.sidebar-mini .logo {
+  visibility: hidden;
+}
+
 .logo {
   width: 100%;
 }

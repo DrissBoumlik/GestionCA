@@ -21,15 +21,15 @@ class AgentController extends Controller
     public function index(Request $request)
     {
         $AgentName = $request->agent_name;
-        $dataRegionsCallResult = $this->agentRepository->GetDataRegions('Resultat_Appel', null, $AgentName);
-        $dataRegionsCallStateByRegions = $this->agentRepository->GetDataRegionsCallState('Nom_Region', null, $AgentName);
-        $dataRegionsCallStateByWeek = $this->agentRepository->GetDataRegionsCallState('Date_Heure_Note_Semaine', null, $AgentName);
+        $dataRegionsCallResult = $this->agentRepository->GetDataRegions('Resultat_Appel', $request);
+        $dataRegionsCallStateByRegions = $this->agentRepository->GetDataRegionsCallState('Nom_Region', $request);
+        $dataRegionsCallStateByWeek = $this->agentRepository->GetDataRegionsCallState('Date_Heure_Note_Semaine', $request);
 //        dd($dataRegionsCallStateByRegions, $dataRegionsCallStateByWeek);
-        $dataCallsPos = $this->agentRepository->getDataClientsByCallState('Joignable', null, $AgentName);
-        $dataCallsNeg = $this->agentRepository->getDataClientsByCallState('Injoignable', null, $AgentName);
+        $dataCallsPos = $this->agentRepository->getDataClientsByCallState('Joignable', $request);
+        $dataCallsNeg = $this->agentRepository->getDataClientsByCallState('Injoignable', $request);
 
-        $dataTypeInterv = $this->agentRepository->getDataNonValidatedFolders('Code_Type_Intervention', null, $AgentName);
-        $dataCodeInterv = $this->agentRepository->getDataNonValidatedFolders('Code_Intervention', null, $AgentName);
+        $dataTypeInterv = $this->agentRepository->getDataNonValidatedFolders('Code_Type_Intervention', $request);
+        $dataCodeInterv = $this->agentRepository->getDataNonValidatedFolders('Code_Intervention', $request);
 
 
         return view('stats.agents')->with([
@@ -60,21 +60,23 @@ class AgentController extends Controller
 
     public function getRegionsColumn(Request $request, $callResult)
     {
-        $dates = $request->get('dates');
-        $AgentName = $request->get('agent_name');
-        logger($AgentName);
-        $data = $this->agentRepository->GetDataRegions($callResult, $dates, $AgentName);
+        $data = $this->agentRepository->GetDataRegions($callResult, $request);
 //        $_data = new \stdClass();
 //        $_data->data = $data['regions'];
 //        $_data->column = $callResult;
         return ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
+    public function filterList ($column, Request $request) {
+        $stats = $this->agentRepository->filterList($column, $request);
+        return [
+            'data' => $stats
+        ];
+    }
+
     public function getRegions(Request $request, $callResult)
     {
-        $dates = $request->get('dates');
-        $AgentName = $request->get('agent_name');
-        $data = $this->agentRepository->GetDataRegions($callResult, $dates, $AgentName);
+        $data = $this->agentRepository->GetDataRegions($callResult, $request);
         return DataTables::of($data['data'])->toJson();
     }
     #endregion
@@ -83,17 +85,13 @@ class AgentController extends Controller
 
     public function getRegionsCallStateColumn(Request $request, $column)
     {
-        $dates = $request->get('dates');
-        $AgentName = $request->get('agent_name');
-        $data = $this->agentRepository->GetDataRegionsCallState($column, $dates, $AgentName);
+        $data = $this->agentRepository->GetDataRegionsCallState($column, $request);
         return ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getRegionsCallState(Request $request, $column)
     {
-        $dates = $request->get('dates');
-        $AgentName = $request->get('agent_name');
-        $data = $this->agentRepository->GetDataRegionsCallState($column, $dates, $AgentName);
+        $data = $this->agentRepository->GetDataRegionsCallState($column, $request);
         return DataTables::of($data['data'])->toJson();
     }
 
@@ -103,17 +101,13 @@ class AgentController extends Controller
 
     public function getNonValidatedFoldersColumn(Request $request, $column)
     {
-        $dates = $request->get('dates');
-        $AgentName = $request->get('agent_name');
-        $data = $this->agentRepository->getDataNonValidatedFolders($column, $dates, $AgentName);
+        $data = $this->agentRepository->getDataNonValidatedFolders($column, $request);
         return ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getNonValidatedFolders(Request $request, $column)
     {
-        $dates = $request->get('dates');
-        $AgentName = $request->get('agent_name');
-        $data = $this->agentRepository->getDataNonValidatedFolders($column, $dates, $AgentName);
+        $data = $this->agentRepository->getDataNonValidatedFolders($column, $request);
         return DataTables::of($data['data'])->toJson();
     }
 
@@ -123,17 +117,13 @@ class AgentController extends Controller
 
     public function getClientsByCallStateColumn(Request $request, $callResult)
     {
-        $dates = $request->get('dates');
-        $AgentName = $request->get('agent_name');
-        $data = $this->agentRepository->getDataClientsByCallState($callResult, $dates, $AgentName);
+        $data = $this->agentRepository->getDataClientsByCallState($callResult, $request);
         return ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getClientsByCallState(Request $request, $callResult)
     {
-        $dates = $request->get('dates');
-        $AgentName = $request->get('agent_name');
-        $data = $this->agentRepository->getDataClientsByCallState($callResult, $dates, $AgentName);
+        $data = $this->agentRepository->getDataClientsByCallState($callResult, $request);
         return DataTables::of($data['data'])->toJson();
     }
 
