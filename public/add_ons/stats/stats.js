@@ -46,9 +46,9 @@ $(function () {
         data: undefined,
         chartTitle: 'Résultats Appels (Clients Joints)'
     };
-    getColumns(statsRegions, statsRegionsChart, true, true);
+    getColumns(statsRegions, statsRegionsChart, true, true, null, false);
     $('#refreshRegions').on('click', function () {
-        getColumns(statsRegions, statsRegionsChart, true, true, dates);
+        getColumns(statsRegions, statsRegionsChart, true, true, dates, false);
     });
 
     let statsFolders = {
@@ -208,7 +208,7 @@ $(function () {
 
     /// ====================== FUNCTIONS ==========================
 
-    function getColumns(object, objectChart = null, callInitDT = true, pagination = false, data = null) {
+    function getColumns(object, objectChart = null, callInitDT = true, pagination = false, data = null, removeTotal = true) {
         $.ajax({
             url: object.routeCol,
             method: 'GET',
@@ -219,7 +219,7 @@ $(function () {
                     object.element_dt = InitDataTable(object, pagination, data);
                 }
                 if (objectChart !== null && objectChart !== undefined) {
-                    InitChart(objectChart, response.columns, response.data);
+                    InitChart(objectChart, response.columns, response.data, removeTotal);
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -228,10 +228,10 @@ $(function () {
         });
     }
 
-    function InitChart(objectChart, columns, data, removeTotel = true) {
-        console.log(objectChart.chartTitle);
-        console.log(columns);
-        console.log(data);
+    function InitChart(objectChart, columns, data, removeTotal = true) {
+        // console.log(objectChart.chartTitle);
+        // console.log(columns);
+        // console.log(data);
         let labels = Object.values({...columns});
         labels = labels.map((column) => {
             return column.name;
@@ -239,22 +239,23 @@ $(function () {
         let column = labels.shift();
         labels.pop();
         let datasets = Object.values({...data});
-        if (removeTotel) {
+        if (removeTotal) {
             datasets.pop();
         }
         // debugger
-        datasets = data.map((item) => {
+        let uniqueColors = [];
+        datasets = datasets.map((item) => {
             // debugger
             let regions = Object.values(item.values).map((value) => {
                 // debugger
                 return parseFloat(isNaN(value) ? value.replace('%', '') : value);
             });
-            let _dataItem = {label: item[column], backgroundColor: dynamicColors(), data: regions};
+            let _dataItem = {label: item[column], backgroundColor: dynamicColors(uniqueColors), data: regions};
             return _dataItem;
         });
-
-        console.log(labels);
-        console.log(datasets);
+        console.log(uniqueColors);
+        // console.log(labels);
+        // console.log(datasets);
         console.log('==============================');
 
         var ctx = document.getElementById(objectChart.element_id).getContext('2d');
@@ -306,11 +307,20 @@ $(function () {
         });
     }
 
-    function dynamicColors() {
-        var r = Math.floor(Math.random() * 255);
-        var g = Math.floor(Math.random() * 255);
-        var b = Math.floor(Math.random() * 255);
-        return "rgb(" + r + "," + g + "," + b + ")";
+    function dynamicColors(uniqueColors) {
+        let color = {
+            r: Math.floor(Math.random() * 255),
+            g: Math.floor(Math.random() * 255),
+            b: Math.floor(Math.random() * 255)
+        };
+        let exists = false;
+        do {
+            exists = uniqueColors.some(function (uniqueColor) {
+                return uniqueColor.r === color.r && uniqueColor.g === color.g && uniqueColor.b === color.b;
+            });
+        } while (exists);
+        uniqueColors.push(color);
+        return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
     };
 
     function feedBack(message, status) {
