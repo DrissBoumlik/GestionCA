@@ -59,7 +59,7 @@ $(document).ready(function () {
     //     monthElt.append(element);
     // });
 
-    let months = undefined;
+    let months = null;
     new Tree('#tree-view-months', {
         data: [{id: '-1', text: 'Choisisser un/des Mois', children: _months}],
         closeDepth: 2,
@@ -124,8 +124,10 @@ $(document).ready(function () {
     $(document).on('click', '#btn-import', function (event) {
         $('#modal-import').modal('hide');
         $('#modal-loader').modal('show');
-        let formData=new FormData($('#form-import')[0]);
-        formData.append('months', months);
+        let formData = new FormData($('#form-import')[0]);
+        if (months !== null && months !== undefined) {
+            formData.append('months', months);
+        }
         event.preventDefault();
         $.ajax({
             method: 'post',

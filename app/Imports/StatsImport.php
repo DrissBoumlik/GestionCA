@@ -15,8 +15,10 @@ class StatsImport implements ToModel, WithHeadingRow
 
     public function __construct($months)
     {
-        $this->months = explode(',', $months);
-        \DB::table('stats')->whereIn('date_heure_note_mois', $this->months)->delete();
+        if ($months) {
+            $this->months = explode(',', $months);
+            \DB::table('stats')->whereIn('date_heure_note_mois', $this->months)->delete();
+        }
     }
 
     /**
@@ -26,7 +28,7 @@ class StatsImport implements ToModel, WithHeadingRow
      */
     public function model($row)
     {
-        if (in_array($row['dimension_notesdate_heure_note_mois'], $this->months)) {
+        if (!$this->months || in_array($row['dimension_notesdate_heure_note_mois'], $this->months)) {
             return new Stats([
                 'Type_Note' => $row['dimension_notestype_note'],
                 'Utilisateur' => $row['dimension_notesutilisateur'],

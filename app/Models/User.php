@@ -76,4 +76,14 @@ class User extends Authenticatable
             $query->where(['user_id' => $this->id, 'isTopSkill' => true]);
         })->get();
     }
+
+    public function filters()
+    {
+        return $this->hasMany(Filter::class);
+    }
+
+    public function filter($route)
+    {
+
+    }
 }

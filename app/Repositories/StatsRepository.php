@@ -4,7 +4,9 @@ namespace App\Repositories;
 
 
 use App\Imports\StatsImport;
+use App\Models\Filter;
 use App\Models\Stats;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
@@ -59,9 +61,6 @@ class StatsRepository
 
     public function GetDataRegions($callResult, $dates = null)
     {
-//        TODO: Get Route URI -> replace params with actual value (as ID) - search in filter table if filter exists
-//        TODO => if not check request if it exists save the new filter or just get full data and delete old filter
-        $route = $this->getRoute(Route::current());
 
         $regions = \DB::table('stats')
             ->select('Nom_Region', $callResult, \DB::raw('count(Nom_Region) as total'))
@@ -76,11 +75,21 @@ class StatsRepository
 
         // BUILDING THE USER FILTER
 
+//        TODO: Get Route URI -> replace params with actual value (as ID) - search in filter table if filter exists
+//        TODO => if not check request if it exists save the new filter or just get full data and delete old filter
+        $route = $this->getRoute(Route::current());
+//        $user = auth()->user() ?? User::find(1);
+//        $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
         if ($dates) {
             $dates = array_values($dates);
+//            $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
+//            $filter->date_filter = $dates;
+//            $filter->update();
             $regions = $regions->whereIn('Date_Note', $dates);
         }
-
+//        else {
+//            $regions = $regions->whereIn('Date_Note', $filter);
+//        }
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
 
         $regions = $regions->groupBy('Nom_Region', $callResult)->get();
@@ -188,7 +197,7 @@ class StatsRepository
     {
         $route = $this->getRoute(Route::current());
         $regions = \DB::table('stats')
-            ->select('Nom_Region', $callResult, \DB::raw('count(*) as total'))
+            ->select('Nom_Region', $callResult, \DB::raw('count(Nom_Region) as total'))
             ->where($callResult, 'not like', '=%');
         $columns = $regions->groupBy('Nom_Region', $callResult)->get();
 
