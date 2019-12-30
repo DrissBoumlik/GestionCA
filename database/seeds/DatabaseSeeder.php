@@ -25,6 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CodesTableSeeder::class);
         $this->call(CodeInterventionsTableSeeder::class);
 
-        $this->call(FiltersTableSeeder::class);
+//        $this->call(FiltersTableSeeder::class);
     }
 }

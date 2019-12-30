@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Stats;
 use App\Repositories\StatsRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 
 class StatsController extends Controller
@@ -18,24 +16,38 @@ class StatsController extends Controller
         $this->statsRepository = $statsRepository;
     }
 
-    public function dashboard()
+    public function getAgencies (Request $request) {
+        return $this->statsRepository->getAgencies($request);
+    }
+
+    public function getAgents (Request $request) {
+        return $this->statsRepository->getAgents($request);
+    }
+
+    public function filterList ($column, Request $request) {
+        $stats = $this->statsRepository->filterList($column, $request);
+        return [
+            'data' => $stats
+        ];
+    }
+
+    public function dashboard(Request $request)
     {
-        $dataRegionsCallResult = $this->statsRepository->GetDataRegions('Resultat_Appel');
-        $dataFoldersCallResult = $this->statsRepository->GetDataFolders('Resultat_Appel');
+        $dataRegionsCallResult = $this->statsRepository->GetDataRegions('Resultat_Appel', $request);
+        $dataFoldersCallResult = $this->statsRepository->GetDataFolders('Resultat_Appel', $request);
 
-        $dataRegionsCallStateByRegions = $this->statsRepository->GetDataRegionsCallState('Nom_Region');
-        $dataRegionsCallStateByWeek = $this->statsRepository->GetDataRegionsCallState('Date_Heure_Note_Semaine');
+        $dataRegionsCallStateByRegions = $this->statsRepository->GetDataRegionsCallState('Nom_Region', $request);
+        $dataRegionsCallStateByWeek = $this->statsRepository->GetDataRegionsCallState('Date_Heure_Note_Semaine', $request);
 //        dd($dataRegionsCallStateByRegions, $dataRegionsCallStateByWeek);
-        $dataCallsPos = $this->statsRepository->getDataClientsByCallState('Joignable');
-        $dataCallsNeg = $this->statsRepository->getDataClientsByCallState('Injoignable');
+        $dataCallsPos = $this->statsRepository->getDataClientsByCallState('Joignable', $request);
+        $dataCallsNeg = $this->statsRepository->getDataClientsByCallState('Injoignable', $request);
 
-        $dataTypeInterv = $this->statsRepository->getDataNonValidatedFolders('Code_Type_Intervention');
-        $dataCodeInterv = $this->statsRepository->getDataNonValidatedFolders('Code_Intervention');
+        $dataTypeInterv = $this->statsRepository->getDataNonValidatedFolders('Code_Type_Intervention', $request);
+        $dataCodeInterv = $this->statsRepository->getDataNonValidatedFolders('Code_Intervention', $request);
 
-        $dataPerimeter = $this->statsRepository->getDataClientsByPerimeter();
+        $dataPerimeter = $this->statsRepository->getDataClientsByPerimeter($request);
 
-
-        return view('stats.dashboard')->with([
+        $columns = [
             'calls_results' => $dataRegionsCallResult['columns'],
             'calls_folders' => $dataFoldersCallResult['columns'],
 
@@ -49,12 +61,14 @@ class StatsController extends Controller
             'calls_neg' => $dataCallsNeg['columns'],
 
             'perimeters' => $dataPerimeter['columns'],
-        ]);
+        ];
+//        return $columns;
+        return view('stats.dashboard')->with($columns);
     }
 
     public function getDates(Request $request)
     {
-        $dates = $this->statsRepository->getDateNotes();
+        $dates = $this->statsRepository->getDateNotes($request);
         return ['dates' => $dates];
     }
 
@@ -62,8 +76,8 @@ class StatsController extends Controller
 
     public function getRegionsColumn(Request $request, $callResult)
     {
-        $dates = $request->get('data');
-        $data = $this->statsRepository->GetDataRegions($callResult, $dates);
+//        $dates = $request->get('data');
+        $data = $this->statsRepository->GetDataRegions($callResult, $request);
 //        $_data = new \stdClass();
 //        $_data->data = $data['regions'];
 //        $_data->column = $callResult;
@@ -73,15 +87,15 @@ class StatsController extends Controller
 
     public function getRegions(Request $request, $callResult)
     {
-        $dates = $request->get('data');
-        $data = $this->statsRepository->GetDataRegions($callResult, $dates);
+        // $dates = $request->get('data');
+//        dd($request);
+        $data = $this->statsRepository->GetDataRegions($callResult, $request, false);
         return DataTables::of($data['data'])->toJson();
     }
 
     public function getFoldersColumn(Request $request, $callResult)
     {
-        $dates = $request->get('data');
-        $data = $this->statsRepository->GetDataFolders($callResult, $dates);
+        $data = $this->statsRepository->GetDataFolders($callResult, $request);
 //        $_data = new \stdClass();
 //        $_data->data = $data['regions'];
 //        $_data->column = $callResult;
@@ -91,8 +105,7 @@ class StatsController extends Controller
 
     public function getFolders(Request $request, $callResult)
     {
-        $dates = $request->get('data');
-        $data = $this->statsRepository->GetDataFolders($callResult, $dates);
+        $data = $this->statsRepository->GetDataFolders($callResult, $request);
         return DataTables::of($data['data'])->toJson();
     }
 
@@ -102,15 +115,13 @@ class StatsController extends Controller
 
     public function getRegionsCallStateColumn(Request $request, $column)
     {
-        $dates = $request->get('data');
-        $data = $this->statsRepository->GetDataRegionsCallState($column, $dates);
+        $data = $this->statsRepository->GetDataRegionsCallState($column, $request);
         return $data; // ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getRegionsCallState(Request $request, $column)
     {
-        $dates = $request->get('data');
-        $data = $this->statsRepository->GetDataRegionsCallState($column, $dates);
+        $data = $this->statsRepository->GetDataRegionsCallState($column, $request);
         return DataTables::of($data['data'])->toJson();
     }
 
@@ -120,15 +131,13 @@ class StatsController extends Controller
 
     public function getNonValidatedFoldersColumn(Request $request, $column)
     {
-        $dates = $request->get('data');
-        $data = $this->statsRepository->getDataNonValidatedFolders($column, $dates);
+        $data = $this->statsRepository->getDataNonValidatedFolders($column, $request);
         return $data; // ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getNonValidatedFolders(Request $request, $column)
     {
-        $dates = $request->get('data');
-        $data = $this->statsRepository->getDataNonValidatedFolders($column, $dates);
+        $data = $this->statsRepository->getDataNonValidatedFolders($column, $request);
         return DataTables::of($data['data'])->toJson();
     }
 
@@ -138,15 +147,13 @@ class StatsController extends Controller
 
     public function getClientsByCallStateColumn(Request $request, $callResult)
     {
-        $dates = $request->get('data');
-        $data = $this->statsRepository->getDataClientsByCallState($callResult, $dates);
+        $data = $this->statsRepository->getDataClientsByCallState($callResult, $request);
         return $data; // ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getClientsByCallState(Request $request, $callResult)
     {
-        $dates = $request->get('data');
-        $data = $this->statsRepository->getDataClientsByCallState($callResult, $dates);
+        $data = $this->statsRepository->getDataClientsByCallState($callResult, $request);
         return DataTables::of($data['data'])->toJson();
     }
 
@@ -157,15 +164,13 @@ class StatsController extends Controller
 
     public function getClientsByPerimeterColumn(Request $request)
     {
-        $dates = $request->get('data');
-        $data = $this->statsRepository->getDataClientsByPerimeter($dates);
+        $data = $this->statsRepository->getDataClientsByPerimeter($request);
         return $data; // ['columns' => $data['columns'], 'data' => $data['data']];
     }
 
     public function getClientsByPerimeter(Request $request)
     {
-        $dates = $request->get('data');
-        $data = $this->statsRepository->getDataClientsByPerimeter($dates);
+        $data = $this->statsRepository->getDataClientsByPerimeter($request);
         return DataTables::of($data['data'])->toJson();
     }
 

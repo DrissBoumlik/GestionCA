@@ -9,10 +9,12 @@
     <link rel="stylesheet" href={{ asset("/add_ons/datatables-bs4/css/dataTables.bootstrap4.css") }}>
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+    <link rel="stylesheet" href="{{ asset('js/plugins/sweetalert2/sweetalert2.min.css') }}">
 
 
     {{--        <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4.3.2/css/metro-all.min.css">--}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css">
+    <link rel="stylesheet" href="{{ asset("js/plugins/chart.js/Chart.min.css") }}">
 @endsection
 
 @section('js_after')
@@ -20,11 +22,13 @@
     <script src={{ asset("/add_ons/datatables/jquery.dataTables.js") }}></script>
     <script src={{ asset("/add_ons/datatables-bs4/js/dataTables.bootstrap4.js") }}></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+    <script src="{{ asset("js/plugins/sweetalert2/sweetalert2.all.min.js") }}"></script>
 
     <!-- TREE VIEW -->
     {{--        <script src="https://cdn.metroui.org.ua/v4.3.2/js/metro.min.js"></script>--}}
     <script src="{{ asset("/add_ons/tree-view/tree.js") }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script src="{{ asset("js/plugins/chart.js/Chart.min.js") }}"></script>
     <script src="{{ asset("/add_ons/stats/stats.js") }}"></script>
     <script>
         $(function () {

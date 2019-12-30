@@ -1,5 +1,76 @@
 $(function () {
-    var dates = undefined;
+    let dates = undefined;
+    let resultatAppel = undefined;
+    let groupement = undefined;
+    let gpmtAppelPre = undefined;
+    let codeTypeIntervention = undefined;
+    let codeIntervention = undefined;
+    const paramFiltreList = [
+        {
+            url: 'Groupement', id: '#stats-groupement-filter',
+            text: 'Groupement', values: (v) => {
+                gpmtAppelPre = undefined;
+                codeTypeIntervention = undefined;
+                codeIntervention = undefined;
+                resultatAppel = undefined;
+                groupement = v;
+            }, class: '.tree-groupement-view'
+        },
+        {
+            url: 'Resultat_Appel', id: '#stats-regions-filter',
+            text: 'Resultat Appel', values: (v) => {
+                gpmtAppelPre = undefined;
+                codeTypeIntervention = undefined;
+                codeIntervention = undefined;
+                resultatAppel = v;
+                groupement = undefined;
+            }, class: '.tree-region-view'
+        },
+        {
+            url: 'Gpmt_Appel_Pre', id: '#stats-call-regions-filter', class: '.tree-call-region-view',
+            text: 'Résultats Appels Préalables par agence', values: (v) => {
+                groupement = undefined;
+                resultatAppel = undefined;
+                codeTypeIntervention = undefined;
+                codeIntervention = undefined;
+                gpmtAppelPre = v;
+            }
+        },
+        {
+            url: 'Gpmt_Appel_Pre', id: '#stats-weeks-regions-filter', class: '.tree-weeks-region-view',
+            text: 'Résultats Appels Préalables par semaine', values: (v) => {
+                groupement = undefined;
+                resultatAppel = undefined;
+                codeTypeIntervention = undefined;
+                codeIntervention = undefined;
+                gpmtAppelPre = v;
+            }
+        },
+        {
+            url: 'Code_Type_Intervention',
+            id: '#code-type-intervention-filter',
+            class: '.tree-code-type-intervention-view',
+            text: 'Type Intervention',
+            values: (v) => {
+                groupement = undefined;
+                resultatAppel = undefined;
+                codeTypeIntervention = v;
+                codeIntervention = undefined;
+                gpmtAppelPre = undefined;
+            }
+        },
+        {
+            url: 'Code_Intervention', id: '#code-intervention-filter', class: '.tree-code-intervention-view',
+            text: 'Intervention', values: (v) => {
+                groupement = undefined;
+                resultatAppel = undefined;
+                codeTypeIntervention = undefined;
+                codeIntervention = v;
+                gpmtAppelPre = undefined;
+            }
+        },
+    ];
+
 
     $.ajax({
         url: 'dates',
@@ -27,12 +98,52 @@ $(function () {
             });
         },
         error: function (jqXHR, textStatus, errorThrown) {
-
         }
     });
-
-    /// ====================== REGIONS / FOLDERS  ==========================
-
+    for (let p of paramFiltreList) {
+        $.ajax({
+            url: `stats/filter/${p.url}`,
+            // data: {
+            //     agence_code: agence_code
+            //     agence_code: agence_code
+            // },
+            method: 'GET',
+            success: function (response) {
+                const data = response.data.map(function (d) {
+                    return {
+                        id: d,
+                        text: d
+                    };
+                });
+                $(p.class).each(function (index, item) {
+                    new Tree(p.id, {
+                        data: [{id: '-1', text: p.text, children: data}],
+                        closeDepth: 1,
+                        loaded: function () {
+                        },
+                        onChange: function () {
+                            p.values(this.values);
+                        }
+                    });
+                    // $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+    }
+    /// ====================== REGIONS ==========================
+    const filterData = (refreshMode = false) => {
+        return {
+            dates,
+            resultatAppel,
+            gpmtAppelPre,
+            codeTypeIntervention,
+            codeIntervention,
+            groupement,
+            refreshMode: refreshMode
+        };
+    };
     let statsRegions = {
         element_dt: undefined,
         element: $('#statsRegions'),
@@ -48,7 +159,8 @@ $(function () {
     };
     getColumns(statsRegions, statsRegionsChart, true, true, null, false);
     $('#refreshRegions').on('click', function () {
-        getColumns(statsRegions, statsRegionsChart, true, true, dates, false);
+        let data = {dates, refreshMode: true};
+        getColumns(statsRegions, statsRegionsChart, true, true, filterData(true), false, true);
     });
 
     let statsFolders = {
@@ -66,7 +178,7 @@ $(function () {
     };
     getColumns(statsFolders, statsFoldersChart, true, true);
     $('#refreshFolders').on('click', function () {
-        getColumns(statsFolders, statsFoldersChart, true, true, dates);
+        getColumns(statsFolders, statsFoldersChart, true, true, filterData());
     });
 
 
@@ -87,7 +199,7 @@ $(function () {
     };
     getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false);
     $('#refreshCallStatesAgencies').on('click', function () {
-        getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false, dates);
+        getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false, filterData());
     });
 
 
@@ -106,7 +218,7 @@ $(function () {
     };
     getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false);
     $('#refreshCallStatesWeeks').on('click', function () {
-        getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false, dates);
+        getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false, filterData());
     });
 
 
@@ -127,7 +239,7 @@ $(function () {
     };
     getColumns(statscallsPos, statsCallsPosChart, true, false);
     $('#refreshCallResultPos').on('click', function () {
-        getColumns(statscallsPos, statsCallsPosChart, true, false, dates);
+        getColumns(statscallsPos, statsCallsPosChart, true, false, filterData());
     });
 
     let statscallsNeg = {
@@ -143,10 +255,11 @@ $(function () {
         data: undefined,
         chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Injoignables)'
     };
-    getColumns(statscallsNeg, statscallsNegChart, true, false);
     $('#refreshCallResultNeg').on('click', function () {
-        getColumns(statscallsNeg, statscallsNegChart, true, false, dates);
+        let data = {dates, refreshMode: true};
+        getColumns(statscallsNeg, statscallsNegChart, true, false, filterData(true));
     });
+    getColumns(statscallsNeg, statscallsNegChart, true, false);
 
     /// ====================== FOLDERS CODE / TYPE ==========================
 
@@ -165,7 +278,7 @@ $(function () {
     };
     getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false);
     $('#refreshFoldersByType').on('click', function () {
-        getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false, dates);
+        getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false, filterData());
     });
 
     let statsFoldersByCode = {
@@ -183,7 +296,7 @@ $(function () {
     };
     getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false);
     $('#refreshFoldersByCode').on('click', function () {
-        getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false, dates);
+        getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false, filterData());
     });
 
     /// ====================== CALL PERIMETERS ==========================
@@ -203,19 +316,22 @@ $(function () {
     };
     getColumns(statsPerimeters, statsPerimetersChart, true, false);
     $('#refreshPerimeters').on('click', function () {
-        getColumns(statsPerimeters, statsPerimetersChart, true, false, dates);
+        getColumns(statsPerimeters, statsPerimetersChart, true, false, filterData());
     });
 
     /// ====================== FUNCTIONS ==========================
 
-    function getColumns(object, objectChart = null, callInitDT = true, pagination = false, data = null, removeTotal = true) {
+    function getColumns(object, objectChart = null, callInitDT = true, pagination = false, data = null, removeTotal = true, refreshMode = false) {
         $.ajax({
             url: object.routeCol,
             method: 'GET',
-            data: {data},
+            data: data,
             success: function (response) {
                 object.columns = response.columns;
                 if (callInitDT) {
+                    if (refreshMode) {
+                        data = {dates: data, refreshMode: true};
+                    }
                     object.element_dt = InitDataTable(object, pagination, data);
                 }
                 if (objectChart !== null && objectChart !== undefined) {
@@ -253,10 +369,6 @@ $(function () {
             let _dataItem = {label: item[column], backgroundColor: dynamicColors(uniqueColors), data: regions};
             return _dataItem;
         });
-        console.log(uniqueColors);
-        // console.log(labels);
-        // console.log(datasets);
-        console.log('==============================');
 
         var ctx = document.getElementById(objectChart.element_id).getContext('2d');
         let barChartData = {labels, datasets};
@@ -289,10 +401,11 @@ $(function () {
     }
 
     function InitDataTable(object, pagination = false, data = null) {
+
         if ($.fn.DataTable.isDataTable(object.element_dt)) {
             object.element_dt.destroy();
         }
-        return object.element.DataTable({
+        const table = object.element.DataTable({
             responsive: true,
             info: false,
             processing: true,
@@ -301,10 +414,11 @@ $(function () {
             bPaginate: pagination,
             ajax: {
                 url: object.routeData,
-                data: {data},
+                data: data,
             },
             columns: object.columns
         });
+        return table;
     }
 
     function dynamicColors(uniqueColors) {

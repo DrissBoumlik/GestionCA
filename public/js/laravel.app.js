@@ -19235,12 +19235,85 @@ module.exports = function(module) {
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+var agence_code = '';
+var agent_name = '';
+var params = window.location.href.split('?')[1];
+
+if (params) {
+  var paramsList = params.split('&');
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = paramsList[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var param = _step.value;
+      var p = param.split('=');
+
+      if (p[0] === 'agence_code') {
+        agence_code = p[1];
+      }
+
+      if (p[0] === 'agent_name') {
+        agent_name = p[1];
+      }
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+        _iterator["return"]();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+}
+
 (function ($) {
   // Default Ajax Configuration
   $.ajaxSetup({
     headers: {
       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
+  });
+  var select = $(document).find('#agent-code');
+  select.select2({
+    placeholder: 'Selectione un Agent',
+    ajax: {
+      url: "agents/list",
+      dataType: 'json',
+      data: function data(params) {
+        // Query parameters will be ?search=[term]&type=public
+        return {
+          name: params.term
+        };
+      },
+      processResults: function processResults(data) {
+        // Transforms the top-level key of the response object from 'items' to 'results'
+        data = data.map(function (d) {
+          return {
+            text: d.name.toUpperCase(),
+            id: d.code
+          };
+        });
+        return {
+          results: data
+        };
+      }
+    }
+  });
+  var newOption = new Option(agent_name.toUpperCase(), agent_name, true, true);
+  console.log(newOption);
+  select.append(newOption).trigger('change'); //Events
+
+  $(document).on('change', '#agent-code', function (e) {
+    agence_code = $(e.currentTarget).val();
+    window.location.href = "agents?agent_name=".concat(agence_code);
   });
 })(jQuery);
 

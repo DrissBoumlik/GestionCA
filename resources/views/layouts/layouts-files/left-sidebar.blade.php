@@ -158,14 +158,15 @@
                     <span class="nav-main-link-name">Agents</span>
                 </a>
                 <ul class="nav-main-submenu">
-                    @foreach(agentsList() as $agent)
                         <li class="nav-main-item">
-                            <a class="nav-main-link {{ request()->has('agent_name') && request()->input('agent_name') === $agent['name'] ? ' active' : '' }}" href="{{ route('agent.index', ['agent_name' => $agent['name']]) }}">
-                                <span class="nav-main-link-name"> <i class="fas fa-user"></i>
-                        {{ strtoupper($agent['name']) }}</span>
+                            <a class="nav-main-link{{ request()->is('users') ? ' active' : '' }}" href="javascript:void(0)">
+                                <div class="form-group" style="width: 150px">
+                                    <select class="form-control" id="agent-code" name="agent_code" style="width: 100%;">
+                                        <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                                    </select>
+                                </div>
                             </a>
                         </li>
-                    @endforeach
                 </ul>
             </li>
 
