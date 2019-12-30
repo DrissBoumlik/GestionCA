@@ -8,13 +8,15 @@ if (!function_exists('getPicture')) {
 }
 
 if (!function_exists('agencesList')) {
-    function agencesList () {
+    function agencesList()
+    {
         $agenceRepository = new \App\Http\Controllers\AgenceRepository();
         return $agenceRepository->getAgenciesAll();
     }
 }
 if (!function_exists('agentsList')) {
-    function agentsList () {
+    function agentsList()
+    {
         $agentRepository = new \App\Http\Controllers\AgentRepository();
         return $agentRepository->getAgentsAll();
     }
@@ -225,5 +227,13 @@ if (!function_exists('pictures')) {
             'https://images2.imgbox.com/9c/5e/F8JZCJLn_o.png',
             'https://images2.imgbox.com/6c/89/E2lerhza_o.png',
             'https://images2.imgbox.com/6e/f6/af3HRf8l_o.png',];
+    }
+}
+
+if (!function_exists('clean')) {
+    function clean($string)
+    {
+        $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+        return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
     }
 }

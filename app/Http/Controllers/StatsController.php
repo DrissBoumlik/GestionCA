@@ -33,8 +33,8 @@ class StatsController extends Controller
 
     public function dashboard(Request $request)
     {
-        $dataRegionsCallResult = $this->statsRepository->GetDataRegions('Resultat_Appel', $request);
-        $dataFoldersCallResult = $this->statsRepository->GetDataFolders('Resultat_Appel', $request);
+        $dataRegionsCallResult = $this->statsRepository->GetDataRegions('Groupement', $request);
+        $dataFoldersCallResult = $this->statsRepository->GetDataFolders('Groupement', $request);
 
         $dataRegionsCallStateByRegions = $this->statsRepository->GetDataRegionsCallState('Nom_Region', $request);
         $dataRegionsCallStateByWeek = $this->statsRepository->GetDataRegionsCallState('Date_Heure_Note_Semaine', $request);

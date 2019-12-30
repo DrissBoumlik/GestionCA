@@ -13,7 +13,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class StatsRepository
 {
-    public function getAgencies (Request $request) {
+    public function getAgencies(Request $request)
+    {
         $stats = Stats::select(['Nom_Region']);
         if ($request->has('name')) {
             $term = trim(strtolower($request->get('name')));
@@ -28,7 +29,9 @@ class StatsRepository
         });
         return $stats;
     }
-    public function getAgenciesAll () {
+
+    public function getAgenciesAll()
+    {
         $stats = Stats::select(['Nom_Region'])->distinct('Nom_Region')->limit(10)->get()->map(function ($s) {
             $sn = explode(' - ', $s->Nom_Region);
             return [
@@ -38,7 +41,9 @@ class StatsRepository
         });
         return $stats->toArray();
     }
-    public function getAgents (Request $request) {
+
+    public function getAgents(Request $request)
+    {
         $stats = Stats::select(['Utilisateur']);
         if ($request->has('name')) {
             $term = trim(strtolower($request->get('name')));
@@ -52,7 +57,9 @@ class StatsRepository
         });
         return $stats;
     }
-    public function getAgentsAll () {
+
+    public function getAgentsAll()
+    {
         $stats = Stats::select(['Utilisateur'])->distinct('Utilisateur')->limit(10)->get()->map(function ($s) {
             return [
                 'name' => trim($s->Utilisateur),
@@ -62,7 +69,8 @@ class StatsRepository
         return $stats->toArray();
     }
 
-    public function filterList ($column, $request) {
+    public function filterList($column, $request)
+    {
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
         $stats = Stats::select([$column])
@@ -75,7 +83,9 @@ class StatsRepository
         if ($agenceCode) {
             $stats = $stats->where('Nom_Region', 'like', "%$agenceCode");
         }
-        return $stats->map(function ($s) use ($column) { return $s[$column]; });
+        return $stats->map(function ($s) use ($column) {
+            return $s[$column];
+        });
     }
 
     public function getDateNotes(Request $request)

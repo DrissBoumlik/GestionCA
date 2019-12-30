@@ -36,6 +36,7 @@ class Stats extends Model
         'Date_Heure_Note_Semaine',
         'Date_Note',
         'Groupement',
+        'key_Groupement',
         'Gpmt_Appel_Pre',
         'Code_Intervention',
         'EXPORT_ALL_Nom_SITE',

@@ -102,8 +102,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Résultats Appels Préalables "Client Joignables"</th>
-                                    @for($i = 1; $i < count($calls_results); $i++)
+                                    @for($i = 0; $i < count($calls_results); $i++)
                                         <th>{{ $calls_results[$i]->name }}</th>
                                     @endfor
                                 </tr>

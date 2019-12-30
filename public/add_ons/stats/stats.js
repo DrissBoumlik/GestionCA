@@ -132,7 +132,7 @@ $(function () {
             }
         });
     }
-    /// ====================== REGIONS ==========================
+
     const filterData = (refreshMode = false) => {
         return {
             dates,
@@ -144,10 +144,13 @@ $(function () {
             refreshMode: refreshMode
         };
     };
+
+    /// ====================== REGIONS ==========================
     let statsRegions = {
         element_dt: undefined,
         element: $('#statsRegions'),
         columns: undefined,
+        data: undefined,
         routeCol: 'regions/columns/Groupement',
         routeData: 'regions/Groupement'
     };
@@ -167,6 +170,7 @@ $(function () {
         element_dt: undefined,
         element: $('#statsFolders'),
         columns: undefined,
+        data: undefined,
         routeCol: 'folders/columns/Groupement',
         routeData: 'folders/Groupement'
     };
@@ -188,6 +192,7 @@ $(function () {
         element_dt: undefined,
         element: $('#callsStatesAgencies'),
         columns: undefined,
+        data: undefined,
         routeCol: 'regionsCallState/columns/Nom_Region',
         routeData: 'regionsCallState/Nom_Region'
     };
@@ -207,6 +212,7 @@ $(function () {
         element_dt: undefined,
         element: $('#callsStatesWeeks'),
         columns: undefined,
+        data: undefined,
         routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine',
         routeData: 'regionsCallState/Date_Heure_Note_Semaine'
     };
@@ -228,6 +234,7 @@ $(function () {
         element_dt: undefined,
         element: $('#statsCallsPos'),
         columns: undefined,
+        data: undefined,
         routeCol: 'clientsByCallState/columns/Joignable',
         routeData: 'clientsByCallState/Joignable'
     };
@@ -246,6 +253,7 @@ $(function () {
         element_dt: undefined,
         element: $('#statsCallsNeg'),
         columns: undefined,
+        data: undefined,
         routeCol: 'clientsByCallState/columns/Injoignable',
         routeData: 'clientsByCallState/Injoignable'
     };
@@ -267,6 +275,7 @@ $(function () {
         element_dt: undefined,
         element: $('#statsFoldersByType'),
         columns: undefined,
+        data: undefined,
         routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention',
         routeData: 'nonValidatedFolders/Code_Type_Intervention'
     };
@@ -285,6 +294,7 @@ $(function () {
         element_dt: undefined,
         element: $('#statsFoldersByCode'),
         columns: undefined,
+        data: undefined,
         routeCol: 'nonValidatedFolders/columns/Code_Intervention',
         routeData: 'nonValidatedFolders/Code_Intervention'
     };
@@ -305,6 +315,7 @@ $(function () {
         element_dt: undefined,
         element: $('#statsPerimeters'),
         columns: undefined,
+        data: undefined,
         routeCol: 'clientsByPerimeter/columns',
         routeData: 'clientsByPerimeter'
     };

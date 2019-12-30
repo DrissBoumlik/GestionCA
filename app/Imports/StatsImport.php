@@ -54,6 +54,8 @@ class StatsImport implements ToModel, WithHeadingRow
                 'Date_Heure_Note_Semaine' => $row['dimension_notesdate_heure_note_semaine'],
                 'Date_Note' => $row['dimension_notesdate_note'],
                 'Groupement' => $row['dimension_notesgroupement'],
+                'key_Groupement' => clean($row['dimension_notesgroupement']),
+
                 'Gpmt_Appel_Pre' => $row['dimension_notesgpmt_appel_pre'],
                 'Code_Intervention' => $row['dimension_notescode_intervention'],
                 'EXPORT_ALL_Nom_SITE' => $row['dimension_notesexport_all_nom_site'],

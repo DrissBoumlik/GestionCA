@@ -39,6 +39,8 @@ class CreateStatsTable extends Migration
             $table->string('Date_Heure_Note_Semaine')->nullable();
             $table->date('Date_Note')->nullable();
             $table->string('Groupement')->nullable();
+            $table->string('key_Groupement')->nullable();
+
             $table->string('Gpmt_Appel_Pre')->nullable();
             $table->string('Code_Intervention')->nullable();
             $table->string('EXPORT_ALL_Nom_SITE')->nullable();
