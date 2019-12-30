@@ -379,6 +379,11 @@ class StatsRepository
                     $_item->values[$col] = 0;
                     $_item->$col = '0%';
                 }
+
+                ksort($_item->values);
+
+                $_item->values = collect($_item->values)->values();
+
                 return $_item;
             });
 
