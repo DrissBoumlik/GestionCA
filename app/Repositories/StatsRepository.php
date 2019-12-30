@@ -249,9 +249,9 @@ class StatsRepository
         $route = $this->getRoute(Route::current());
 
         $regions = \DB::table('stats')
-            ->select('Nom_Region', $callResult, \DB::raw('count(Nom_Region) as total'))
+            ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(Nom_Region) as total'))
             ->where($callResult, 'not like', '=%');
-        $columns = $regions->groupBy('Nom_Region', $callResult)->get();
+        $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
         // DEMO PLACEHOLDER (1)
 
         #region DEMO (1) ==============
@@ -300,10 +300,10 @@ class StatsRepository
                 $regions = $regions->whereIn('Date_Note', $filter);
             }
         }
-        $columns = $regions->groupBy('Nom_Region', $callResult)->get();
+        $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
 
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
-        $regions = $regions->groupBy('Nom_Region', $callResult)->get();
+        $regions = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
         if (!count($regions)) {
             $data = ['columns' => [], 'data' => []];
             return $data;
@@ -355,9 +355,13 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->name = $callResult;
+            $first->name = 'Résultats Appels Préalables (Clients Joignable)';
             $first->data = $callResult;
             array_unshift($regions_names, $first);
+            $detailCol = new \stdClass();
+            $detailCol->name = 'Key_Groupement';
+            $detailCol->data = 'Key_Groupement';
+            array_unshift($regions_names, $detailCol);
 //            $regions_names[] = new \stdClass();
 //            $regions_names[count($regions_names) - 1]->data = 'total';
 //            $regions_names[count($regions_names) - 1]->name = 'total';
@@ -369,7 +373,7 @@ class StatsRepository
                 $col_arr = $keys->all();
 
                 $item = $region->map(function ($call, $index) use (&$row, &$regions_names, &$col_arr, $callResult) {
-
+                    $row->Key_Groupement = $call->Key_Groupement;
                     $row->$callResult = $call->$callResult;
                     $nom_region = $call->Nom_Region;
 
