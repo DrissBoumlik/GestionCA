@@ -173,196 +173,224 @@ $(function () {
         routeCol: 'regions/columns/Groupement',
         routeData: 'regions/Groupement'
     };
+    let statsRegionsDetails = {
+        element: undefined,
+        columns: undefined,
+        routeData: 'regions/Groupement' // $('#stateregdet-url').attr('url')
+    };
     let statsRegionsChart = {
         element_chart: undefined,
         element_id: 'statsRegionsChart',
         data: undefined,
         chartTitle: 'Résultats Appels (Clients Joints)'
     };
-    getColumns(statsRegions, statsRegionsChart, true, true, null, false);
+
+    getColumns(statsRegions, statsRegionsChart, true, true, null, false, true, true);
     $('#refreshRegions').on('click', function () {
         let data = {dates, refreshMode: true};
-        getColumns(statsRegions, statsRegionsChart, true, true, filterData(true), false, true);
+        debugger
+        getColumns(statsRegions, statsRegionsChart, true, true, filterData(true), false, true, true);
     });
 
-    let statsFolders = {
-        element_dt: undefined,
-        element: $('#statsFolders'),
-        columns: undefined,
-        data: undefined,
-        routeCol: 'folders/columns/Groupement',
-        routeData: 'folders/Groupement'
-    };
-    let statsFoldersChart = {
-        element_chart: undefined,
-        element_id: 'statsFoldersChart',
-        data: undefined,
-        chartTitle: 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement'
-    };
-    getColumns(statsFolders, statsFoldersChart, true, true);
-    $('#refreshFolders').on('click', function () {
-        getColumns(statsFolders, statsFoldersChart, true, true, filterData());
-    });
-
-
-    /// ====================== CALLS STATS AGENCIES / WEEKS ==========================
-
-    let callsStatesAgencies = {
-        element_dt: undefined,
-        element: $('#callsStatesAgencies'),
-        columns: undefined,
-        data: undefined,
-        routeCol: 'regionsCallState/columns/Nom_Region',
-        routeData: 'regionsCallState/Nom_Region'
-    };
-    let callsStatesAgenciesChart = {
-        element_chart: undefined,
-        element_id: 'callsStatesAgenciesChart',
-        data: undefined,
-        chartTitle: 'Résultats Appels Préalables par agence'
-    };
-    getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false);
-    $('#refreshCallStatesAgencies').on('click', function () {
-        getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false, filterData());
-    });
-
-
-    let callsStatesWeeks = {
-        element_dt: undefined,
-        element: $('#callsStatesWeeks'),
-        columns: undefined,
-        data: undefined,
-        routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine',
-        routeData: 'regionsCallState/Date_Heure_Note_Semaine'
-    };
-    let callsStatesWeeksChart = {
-        element_chart: undefined,
-        element_id: 'callsStatesWeeksChart',
-        data: undefined,
-        chartTitle: 'Résultats Appels Préalables par semaine'
-    };
-    getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false);
-    $('#refreshCallStatesWeeks').on('click', function () {
-        getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false, filterData());
-    });
-
-
-    /// ====================== CALL STATS Joignables / Injoignable ==========================
-
-    let statscallsPos = {
-        element_dt: undefined,
-        element: $('#statsCallsPos'),
-        columns: undefined,
-        data: undefined,
-        routeCol: 'clientsByCallState/columns/Joignable',
-        routeData: 'clientsByCallState/Joignable'
-    };
-    let statsCallsPosChart = {
-        element_chart: undefined,
-        element_id: 'statsCallsPosChart',
-        data: undefined,
-        chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Joignables)'
-    };
-    getColumns(statscallsPos, statsCallsPosChart, true, false);
-    $('#refreshCallResultPos').on('click', function () {
-        getColumns(statscallsPos, statsCallsPosChart, true, false, filterData());
-    });
-
-    let statscallsNeg = {
-        element_dt: undefined,
-        element: $('#statsCallsNeg'),
-        columns: undefined,
-        data: undefined,
-        routeCol: 'clientsByCallState/columns/Injoignable',
-        routeData: 'clientsByCallState/Injoignable'
-    };
-    let statscallsNegChart = {
-        element_chart: undefined,
-        element_id: 'statscallsNegChart',
-        data: undefined,
-        chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Injoignables)'
-    };
-    $('#refreshCallResultNeg').on('click', function () {
-        let data = {dates, refreshMode: true};
-        getColumns(statscallsNeg, statscallsNegChart, true, false, filterData(true));
-    });
-    getColumns(statscallsNeg, statscallsNegChart, true, false);
-
-    /// ====================== FOLDERS CODE / TYPE ==========================
-
-    let statsFoldersByType = {
-        element_dt: undefined,
-        element: $('#statsFoldersByType'),
-        columns: undefined,
-        data: undefined,
-        routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention',
-        routeData: 'nonValidatedFolders/Code_Type_Intervention'
-    };
-    let statsFoldersByTypeChart = {
-        element_chart: undefined,
-        element_id: 'statsFoldersByTypeChart',
-        data: undefined,
-        chartTitle: 'Répartition des dossiers non validés par Code Type intervention'
-    };
-    getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false);
-    $('#refreshFoldersByType').on('click', function () {
-        getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false, filterData());
-    });
-
-    let statsFoldersByCode = {
-        element_dt: undefined,
-        element: $('#statsFoldersByCode'),
-        columns: undefined,
-        data: undefined,
-        routeCol: 'nonValidatedFolders/columns/Code_Intervention',
-        routeData: 'nonValidatedFolders/Code_Intervention'
-    };
-    let statsFoldersByCodeChart = {
-        element_chart: undefined,
-        element_id: 'statsFoldersByCodeChart',
-        data: undefined,
-        chartTitle: 'Répartition des dossiers non validés par code intervention'
-    };
-    getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false);
-    $('#refreshFoldersByCode').on('click', function () {
-        getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false, filterData());
-    });
-
-    /// ====================== CALL PERIMETERS ==========================
-
-    let statsPerimeters = {
-        element_dt: undefined,
-        element: $('#statsPerimeters'),
-        columns: undefined,
-        data: undefined,
-        routeCol: 'clientsByPerimeter/columns',
-        routeData: 'clientsByPerimeter'
-    };
-    let statsPerimetersChart = {
-        element_chart: undefined,
-        element_id: 'statsPerimetersChart',
-        data: undefined,
-        chartTitle: 'Production Globale CAM'
-    };
-    getColumns(statsPerimeters, statsPerimetersChart, true, false);
-    $('#refreshPerimeters').on('click', function () {
-        getColumns(statsPerimeters, statsPerimetersChart, true, false, filterData());
-    });
+    // let statsFolders = {
+    //     element_dt: undefined,
+    //     element: $('#statsFolders'),
+    //     columns: undefined,
+    //     data: undefined,
+    //     routeCol: 'folders/columns/Groupement',
+    //     routeData: 'folders/Groupement'
+    // };
+    // let statsFoldersChart = {
+    //     element_chart: undefined,
+    //     element_id: 'statsFoldersChart',
+    //     data: undefined,
+    //     chartTitle: 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement'
+    // };
+    // getColumns(statsFolders, statsFoldersChart, true, true);
+    // $('#refreshFolders').on('click', function () {
+    //     getColumns(statsFolders, statsFoldersChart, true, true, filterData());
+    // });
+    //
+    //
+    // /// ====================== CALLS STATS AGENCIES / WEEKS ==========================
+    //
+    // let callsStatesAgencies = {
+    //     element_dt: undefined,
+    //     element: $('#callsStatesAgencies'),
+    //     columns: undefined,
+    //     data: undefined,
+    //     routeCol: 'regionsCallState/columns/Nom_Region',
+    //     routeData: 'regionsCallState/Nom_Region'
+    // };
+    // let callsStatesAgenciesChart = {
+    //     element_chart: undefined,
+    //     element_id: 'callsStatesAgenciesChart',
+    //     data: undefined,
+    //     chartTitle: 'Résultats Appels Préalables par agence'
+    // };
+    // getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false);
+    // $('#refreshCallStatesAgencies').on('click', function () {
+    //     getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false, filterData());
+    // });
+    //
+    //
+    // let callsStatesWeeks = {
+    //     element_dt: undefined,
+    //     element: $('#callsStatesWeeks'),
+    //     columns: undefined,
+    //     data: undefined,
+    //     routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine',
+    //     routeData: 'regionsCallState/Date_Heure_Note_Semaine'
+    // };
+    // let callsStatesWeeksChart = {
+    //     element_chart: undefined,
+    //     element_id: 'callsStatesWeeksChart',
+    //     data: undefined,
+    //     chartTitle: 'Résultats Appels Préalables par semaine'
+    // };
+    // getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false);
+    // $('#refreshCallStatesWeeks').on('click', function () {
+    //     getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false, filterData());
+    // });
+    //
+    //
+    // /// ====================== CALL STATS Joignables / Injoignable ==========================
+    //
+    // let statscallsPos = {
+    //     element_dt: undefined,
+    //     element: $('#statsCallsPos'),
+    //     columns: undefined,
+    //     data: undefined,
+    //     routeCol: 'clientsByCallState/columns/Joignable',
+    //     routeData: 'clientsByCallState/Joignable'
+    // };
+    // let statsCallsPosChart = {
+    //     element_chart: undefined,
+    //     element_id: 'statsCallsPosChart',
+    //     data: undefined,
+    //     chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Joignables)'
+    // };
+    // getColumns(statscallsPos, statsCallsPosChart, true, false);
+    // $('#refreshCallResultPos').on('click', function () {
+    //     getColumns(statscallsPos, statsCallsPosChart, true, false, filterData());
+    // });
+    //
+    // let statscallsNeg = {
+    //     element_dt: undefined,
+    //     element: $('#statsCallsNeg'),
+    //     columns: undefined,
+    //     data: undefined,
+    //     routeCol: 'clientsByCallState/columns/Injoignable',
+    //     routeData: 'clientsByCallState/Injoignable'
+    // };
+    // let statscallsNegChart = {
+    //     element_chart: undefined,
+    //     element_id: 'statscallsNegChart',
+    //     data: undefined,
+    //     chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Injoignables)'
+    // };
+    // $('#refreshCallResultNeg').on('click', function () {
+    //     let data = {dates, refreshMode: true};
+    //     getColumns(statscallsNeg, statscallsNegChart, true, false, filterData(true));
+    // });
+    // getColumns(statscallsNeg, statscallsNegChart, true, false);
+    //
+    // /// ====================== FOLDERS CODE / TYPE ==========================
+    //
+    // let statsFoldersByType = {
+    //     element_dt: undefined,
+    //     element: $('#statsFoldersByType'),
+    //     columns: undefined,
+    //     data: undefined,
+    //     routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention',
+    //     routeData: 'nonValidatedFolders/Code_Type_Intervention'
+    // };
+    // let statsFoldersByTypeChart = {
+    //     element_chart: undefined,
+    //     element_id: 'statsFoldersByTypeChart',
+    //     data: undefined,
+    //     chartTitle: 'Répartition des dossiers non validés par Code Type intervention'
+    // };
+    // getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false);
+    // $('#refreshFoldersByType').on('click', function () {
+    //     getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false, filterData());
+    // });
+    //
+    // let statsFoldersByCode = {
+    //     element_dt: undefined,
+    //     element: $('#statsFoldersByCode'),
+    //     columns: undefined,
+    //     data: undefined,
+    //     routeCol: 'nonValidatedFolders/columns/Code_Intervention',
+    //     routeData: 'nonValidatedFolders/Code_Intervention'
+    // };
+    // let statsFoldersByCodeChart = {
+    //     element_chart: undefined,
+    //     element_id: 'statsFoldersByCodeChart',
+    //     data: undefined,
+    //     chartTitle: 'Répartition des dossiers non validés par code intervention'
+    // };
+    // getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false);
+    // $('#refreshFoldersByCode').on('click', function () {
+    //     getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false, filterData());
+    // });
+    //
+    // /// ====================== CALL PERIMETERS ==========================
+    //
+    // let statsPerimeters = {
+    //     element_dt: undefined,
+    //     element: $('#statsPerimeters'),
+    //     columns: undefined,
+    //     data: undefined,
+    //     routeCol: 'clientsByPerimeter/columns',
+    //     routeData: 'clientsByPerimeter'
+    // };
+    // let statsPerimetersChart = {
+    //     element_chart: undefined,
+    //     element_id: 'statsPerimetersChart',
+    //     data: undefined,
+    //     chartTitle: 'Production Globale CAM'
+    // };
+    // getColumns(statsPerimeters, statsPerimetersChart, true, false);
+    // $('#refreshPerimeters').on('click', function () {
+    //     getColumns(statsPerimeters, statsPerimetersChart, true, false, filterData());
+    // });
 
     /// ====================== FUNCTIONS ==========================
 
-    function getColumns(object, objectChart = null, callInitDT = true, pagination = false, data = null, removeTotal = true, refreshMode = false) {
+    function getColumns(object, objectChart = null, callInitDT = true, pagination = false, data = null, removeTotal = true, refreshMode = false, details = false) {
         $.ajax({
             url: object.routeCol,
             method: 'GET',
             data: data,
             success: function (response) {
                 object.columns = response.columns;
+                if (details) {
+                    $(object.element).find('thead tr').prepend('<th></th>');
+                }
                 if (callInitDT) {
                     if (refreshMode) {
                         data = {dates: data, refreshMode: true};
                     }
-                    object.element_dt = InitDataTable(object, pagination, data);
+                    object.element_dt = InitDataTable(object, pagination, data, details);
+
+                    object.element.on('click', 'td.details-control', function () {
+                        var tr = $(this).closest('tr');
+                        var row = object.element_dt.row(tr);
+                        if (row.child.isShown()) {
+                            // This row is already open - close it
+                            destroyChild(row);
+                            tr.removeClass('shown');
+                        } else {
+                            // Open this row
+                            data = {key_groupement: tr.find('td:nth-child(2)').text()};
+                            statsRegionsDetails.element = 'details-' + $('tr').index(tr);
+                            statsRegionsDetails.routeData = $('#stateregdet-url').attr('url');
+
+                            createChild(row, statsRegionsDetails, data); // class is for background colour
+                            tr.addClass('shown');
+                        }
+                    });
                 }
                 if (objectChart !== null && objectChart !== undefined) {
                     InitChart(objectChart, response.columns, response.data, removeTotal);
@@ -430,10 +458,26 @@ $(function () {
         });
     }
 
-    function InitDataTable(object, pagination = false, data = null) {
-
+    function InitDataTable(object, pagination = false, data = null, details = false) {
         if ($.fn.DataTable.isDataTable(object.element_dt)) {
             object.element_dt.destroy();
+        }
+        if (details) {
+            statsRegionsDetails.columns = [...object.columns];
+            statsRegionsDetails.columns = statsRegionsDetails.columns.map(function (item, index) {
+                if (index === 0) {
+                    return {...item, data: 'Resultat_Appel', name: 'Resultat_Appel', title: 'Resultat Appel'};
+                }
+                return {...item, title: item.name};
+            });
+
+            object.columns.unshift({
+                className: 'details-control',
+                orderable: false,
+                data: null,
+                defaultContent: '',
+                width: '10%'
+            });
         }
         const table = object.element.DataTable({
             responsive: true,
@@ -473,5 +517,23 @@ $(function () {
             message,
             status
         )
+    }
+
+    function createChild(row, object, data = null) {
+        // This is the table we'll convert into a DataTable
+        object.element = $('<table id="' + object.element + '" class="table-details table table-bordered table-valign-middle capitalize"/>');
+        // Display it the child row
+        row.child(object.element).show();
+
+        InitDataTable(object, false, data);
+    }
+
+    function destroyChild(row) {
+        var table = $("table", row.child());
+        table.detach();
+        table.DataTable().destroy();
+
+        // And then hide the row
+        row.child.hide();
     }
 });

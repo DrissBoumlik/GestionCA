@@ -97,19 +97,22 @@ class StatsRepository
         //$codeIntervention = $request->get('codeIntervention');
         $gpmtAppelPre = $request->get('gpmtAppelPre');
         $groupmentColumns = Stats::select('Groupement')->distinct('Groupement')->get();
-        if ($groupement) {
-            foreach ($groupement as $gr) {
+        if ($nomRegion) {
+            foreach ($nomRegion as $gr) {
                 foreach ($groupmentColumns as $col) {
                     if (!in_array($col->Groupement, $regions->filter(function ($r) use ($gr) {
                         return $r->Nom_Region === $gr;
                     })->map(function ($r) {
                         return $r->Groupement;
                     })->toArray())) {
-                        $rObj = new \stdClass();
-                        $rObj->Groupement = $col->Groupement;
-                        $rObj->Nom_Region = $gr;
-                        $rObj->total = 0;
-                        $columns[] = $rObj;
+                        if($col->Groupement) {
+                            $rObj = new \stdClass();
+                            $rObj->Groupement = $col->Groupement;
+                            $rObj->Key_Groupement = $col->Key_Groupement;
+                            $rObj->Nom_Region = $gr;
+                            $rObj->total = 0;
+                            $columns[] = $rObj;
+                        }
                     }
                 }
             }
@@ -335,7 +338,8 @@ class StatsRepository
 
         $regions = \DB::table('stats')
             ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(Nom_Region) as total'))
-            ->where($callResult, 'not like', '=%');
+            ->where($callResult, 'not like', '=%')
+            ->where('Groupement', 'not like', 'Non Renseigné');
 //        $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
 
         // DEMO PLACEHOLDER (1)
@@ -362,11 +366,9 @@ class StatsRepository
 //        TODO => if not check request if it exists save the new filter or just get full data and delete old filter
         $route = str_replace('/columns', '', $this->getRoute(Route::current()));
         $user = auth()->user() ?? User::find(1);
-//        dd($dates);
-        $dates = null;
+
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
         if ($request && count($request->all())) {
-            $dates = $request->get('dates');
             if ($dates) {
                 $dates = array_values($dates);
                 if ($request->exists('refreshMode')) {
@@ -377,18 +379,23 @@ class StatsRepository
                 $regions = $regions->whereIn('Date_Note', $dates);
             } elseif ($request->exists('refreshMode')) {
                 $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                $filter->forceDelete();
+                if ($filter) {
+                    $filter->forceDelete();
+                }
             }
         } else {
             $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
             if ($filter) {
-                $regions = $regions->whereIn('Date_Note', $filter);
+                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
             }
         }
         $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
 
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
         $regions = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
+
+        // $regions = $columns = $this->addRegionWithZero($request, $regions, $columns);
+        // logger($regions);
         if (!count($regions)) {
             $data = ['columns' => [], 'data' => []];
             return $data;
@@ -402,7 +409,7 @@ class StatsRepository
                     return $carry + $call->total;
                 }, 0);
                 return $calls->map(function ($call) use ($index, $totalZone) {
-                    $call->$index = round($call->total * 100 / $totalZone, 2);
+                    $call->$index = $totalZone == 0 ? 0.00 : round($call->total * 100 / $totalZone, 2);
                     return $call;
                 });
             });
@@ -493,7 +500,7 @@ class StatsRepository
     }
 
 
-    public function GetDataRegionsByGrpCall(Request $request = null, $key_groupement)
+    public function GetDataRegionsByGrpCall(Request $request = null)
     {
         $resultatAppel = $request->get('resultatAppel');
         $groupement = $request->get('groupement');
@@ -505,15 +512,15 @@ class StatsRepository
 //        TODO => if not check request if it exists save the new filter or just get full data and delete old filter
         $route = $this->getRoute(Route::current());
 
+        $key_groupement = $request->get('key_groupement');
         $regions = \DB::table('stats')
             ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(Resultat_Appel) as total'))
-            ->where('Groupement', 'not like', '=%');
+            ->where('Resultat_Appel', 'not like', '=%');
 
         $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
-
+        $key_groupement = clean($key_groupement);
         $regions = $regions->where('key_groupement', 'like', $key_groupement);
 //        $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
-
         // DEMO PLACEHOLDER (1)
         #region DEMO (1) ==============
 //        $regions = $regions->whereNotNull($callResult);
@@ -652,12 +659,11 @@ class StatsRepository
 
                 ksort($_item->values);
 
-//                dd($_item);
-
                 $_item->values = collect($_item->values)->values();
                 return $_item;
             });
             $regions = $regions->values();
+
             return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
         }
     }
@@ -673,7 +679,8 @@ class StatsRepository
         $route = $this->getRoute(Route::current());
         $regions = \DB::table('stats')
             ->select('Nom_Region', $callResult, \DB::raw('count(Nom_Region) as total'))
-            ->where($callResult, 'not like', '=%');
+            ->where($callResult, 'not like', '=%')
+            ->where('Groupement', 'not like', 'Non Renseigné');
         if ($agentName) {
             $regions = $regions->where('Utilisateur', $agentName);
         }
@@ -1269,20 +1276,6 @@ class StatsRepository
             $results = $results->whereIn('Date_Note', $dates);
         }
         $columns = $results->groupBy('Groupement', 'Nom_Region')->get();
-        // DEMO PLACEHOLDER (1)
-
-        #region DEMO (1) ==============
-//        $codes = $codes->whereNotNull('Code_Intervention')
-//            ->where('Gpmt_Appel_Pre', $callResult);
-//        $codes = $codes->where('Gpmt_Appel_Pre', $callResult);
-        #endregion DEMO
-
-//            ->groupBy('Code_Intervention', 'Nom_Region')
-//            ->get();
-        if ($dates) {
-            $dates = array_values($dates);
-            $results = $results->whereIn('Date_Note', $dates);
-        }
 
         $results = $results->groupBy('Groupement', 'Nom_Region')->get();
         $results = $columns = $this->addRegionWithZero($request, $results, $columns);
@@ -1374,7 +1367,6 @@ class StatsRepository
 //            dd($_item->values);
                 return $_item;
             });
-
             $total->Nom_Region = 'Total Général';
             $total->total = round(array_sum($total->values), 2);
 

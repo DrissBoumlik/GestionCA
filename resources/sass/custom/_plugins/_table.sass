@@ -1,16 +1,32 @@
-.table.table-valign-middle tbody>tr>td,
-.table.table-valign-middle tbody>tr>th,
-.table.table-valign-middle thead>tr>td,
-.table.table-valign-middle thead>tr>th
+.table.table-valign-middle tbody > tr > td,
+.table.table-valign-middle tbody > tr > th,
+.table.table-valign-middle thead > tr > td,
+.table.table-valign-middle thead > tr > th
     vertical-align: middle
 
-.table.capitalize thead>tr>th
+.table.capitalize thead > tr > th
     text-transform: capitalize
 
 td.details-control
-    background: url('/media/icons/details_open.png') no-repeat center center
-.details td.details-control
-    background: url('/media/icons/details_close.png') no-repeat center center
+    background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center
+
+.details td.details-control, .shown .details-control
+    background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center
 
 .table-striped tbody tr:nth-of-type(odd)
     background-color: #DDEBF7
+
+.table-striped tbody tr
+    background-color: #FFF!important
+    &.odd
+        background-color: #DDEBF7!important
+    &.even
+        background-color: #FFF!important
+
+.table-details
+    border: 1px solid #000
+    tbody tr.odd
+        background-color: #a6c9e7 !important
+
+tr + tr .table-details
+    background-color: transparent !important

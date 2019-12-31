@@ -447,4 +447,6 @@
         </div>
         <!-- END Stats -->
     </div>
+    <input type="hidden" id="stateregdet-url" url="{{ route('stateregdet') }}"/>
+
 @endsection
