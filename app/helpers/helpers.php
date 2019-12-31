@@ -10,14 +10,14 @@ if (!function_exists('getPicture')) {
 if (!function_exists('agencesList')) {
     function agencesList()
     {
-        $agenceRepository = new \App\Http\Controllers\AgenceRepository();
+        $agenceRepository = new \App\Repositories\StatsRepository();
         return $agenceRepository->getAgenciesAll();
     }
 }
 if (!function_exists('agentsList')) {
     function agentsList()
     {
-        $agentRepository = new \App\Http\Controllers\AgentRepository();
+        $agentRepository = new \App\Repositories\StatsRepository();
         return $agentRepository->getAgentsAll();
     }
 }

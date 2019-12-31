@@ -5,10 +5,12 @@ $(function () {
     let gpmtAppelPre = undefined;
     let codeTypeIntervention = undefined;
     let codeIntervention = undefined;
+    let nomRegion = undefined;
     const paramFiltreList = [
         {
             url: 'Groupement', id: '#stats-groupement-filter',
             text: 'Groupement', values: (v) => {
+                nomRegion = undefined;
                 gpmtAppelPre = undefined;
                 codeTypeIntervention = undefined;
                 codeIntervention = undefined;
@@ -17,18 +19,20 @@ $(function () {
             }, class: '.tree-groupement-view'
         },
         {
-            url: 'Resultat_Appel', id: '#stats-regions-filter',
-            text: 'Resultat Appel', values: (v) => {
+            url: 'Groupement', id: '#stats-regions-filter',
+            text: 'Groupement', values: (v) => {
+                nomRegion = undefined;
                 gpmtAppelPre = undefined;
                 codeTypeIntervention = undefined;
                 codeIntervention = undefined;
-                resultatAppel = v;
-                groupement = undefined;
+                resultatAppel = undefined;
+                groupement = v;
             }, class: '.tree-region-view'
         },
         {
             url: 'Gpmt_Appel_Pre', id: '#stats-call-regions-filter', class: '.tree-call-region-view',
             text: 'Résultats Appels Préalables par agence', values: (v) => {
+                nomRegion = undefined;
                 groupement = undefined;
                 resultatAppel = undefined;
                 codeTypeIntervention = undefined;
@@ -39,6 +43,7 @@ $(function () {
         {
             url: 'Gpmt_Appel_Pre', id: '#stats-weeks-regions-filter', class: '.tree-weeks-region-view',
             text: 'Résultats Appels Préalables par semaine', values: (v) => {
+                nomRegion = undefined;
                 groupement = undefined;
                 resultatAppel = undefined;
                 codeTypeIntervention = undefined;
@@ -52,6 +57,7 @@ $(function () {
             class: '.tree-code-type-intervention-view',
             text: 'Type Intervention',
             values: (v) => {
+                nomRegion = undefined;
                 groupement = undefined;
                 resultatAppel = undefined;
                 codeTypeIntervention = v;
@@ -62,11 +68,23 @@ $(function () {
         {
             url: 'Code_Intervention', id: '#code-intervention-filter', class: '.tree-code-intervention-view',
             text: 'Intervention', values: (v) => {
+                nomRegion = undefined;
                 groupement = undefined;
                 resultatAppel = undefined;
                 codeTypeIntervention = undefined;
                 codeIntervention = v;
                 gpmtAppelPre = undefined;
+            }
+        },
+        {
+            url: 'Nom_Region', id: '#nom-region-filter', class: '.tree-nom-region-view',
+            text: 'Region', values: (v) => {
+                groupement = undefined;
+                resultatAppel = undefined;
+                codeTypeIntervention = undefined;
+                codeIntervention = undefined;
+                gpmtAppelPre = undefined;
+                nomRegion = v;
             }
         },
     ];
@@ -141,6 +159,7 @@ $(function () {
             codeTypeIntervention,
             codeIntervention,
             groupement,
+            nomRegion,
             refreshMode: refreshMode
         };
     };

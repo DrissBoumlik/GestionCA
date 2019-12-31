@@ -46,6 +46,30 @@ class AgentRepository
     }
 
 
+
+    public function addRegionWithZero ($groupement, $regions, $columns) {
+        $regionsColumns = Stats::select('Nom_Region')->distinct('Nom_Region')->get();
+        if ($groupement) {
+            foreach ($groupement as $gr) {
+                foreach ($regionsColumns as $col) {
+                    if (!in_array($col->Nom_Region, $regions->filter(function ($r) use ($gr) {
+                        return $r->Groupement === $gr;
+                    })->map(function ($r) {
+                        return $r->Nom_Region;
+                    })->toArray())) {
+                        $rObj = new \stdClass();
+                        $rObj->Nom_Region = $col->Nom_Region;
+                        $rObj->Groupement = $gr;
+                        $rObj->total = 0;
+                        $columns[] = $rObj;
+                    }
+                }
+            }
+        }
+        return $columns;
+    }
+
+
     public function getDateNotes($agenceCode)
     {
         $dates = Stats::where('Utilisateur', $agenceCode)->get()

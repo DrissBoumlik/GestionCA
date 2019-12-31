@@ -19308,7 +19308,6 @@ if (params) {
     }
   });
   var newOption = new Option(agent_name.toUpperCase(), agent_name, true, true);
-  console.log(newOption);
   select.append(newOption).trigger('change'); //Events
 
   $(document).on('change', '#agent-code', function (e) {
