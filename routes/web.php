@@ -121,6 +121,8 @@ Route::post('/stats/import-stats', 'StatsController@importStats')->name('stats.i
 
 //Route::get('/demo', 'DemoController@index');
 
+Route::get('/regions/groupement/{key_groupement}', 'StatsController@getRegionsByGrpCall'); // column = key_groupement value
+//                                       // PERCENT
 Route::get('/regions/{callResult}', 'StatsController@getRegions'); // column = Resultat_Appel                                       // PERCENT
 Route::get('/regions/columns/{callResult}', 'StatsController@getRegionsColumn');
 

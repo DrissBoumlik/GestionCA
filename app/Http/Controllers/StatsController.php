@@ -89,7 +89,15 @@ class StatsController extends Controller
     {
         // $dates = $request->get('data');
 //        dd($request);
-        $data = $this->statsRepository->GetDataRegions($callResult, $request, false);
+        $data = $this->statsRepository->GetDataRegions($callResult, $request);
+        return DataTables::of($data['data'])->toJson();
+    }
+
+    public function getRegionsByGrpCall(Request $request, $key_groupement)
+    {
+        // $dates = $request->get('data');
+//        dd($request);
+        $data = $this->statsRepository->GetDataRegionsByGrpCall($request, $key_groupement);
         return DataTables::of($data['data'])->toJson();
     }
 
