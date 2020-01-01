@@ -429,22 +429,22 @@ $(function () {
         });
 
         var ctx = document.getElementById(objectChart.element_id).getContext('2d');
-        let barChartData = {labels, datasets};
+        let ChartData = {labels, datasets};
         if (objectChart.element_chart !== null && objectChart.element_chart !== undefined) {
             objectChart.element_chart.destroy();
         }
         objectChart.element_chart = new Chart(ctx, {
             type: 'bar',
-            data: barChartData,
+            data: ChartData,
             options: {
                 title: {
                     display: true,
                     text: objectChart.chartTitle
                 },
-                tooltips: {
-                    mode: 'index',
-                    intersect: true
-                },
+                // tooltips: {
+                //     mode: 'index',
+                //     intersect: true
+                // },
                 responsive: true,
                 scales: {
                     xAxes: [{
