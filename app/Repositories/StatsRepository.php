@@ -1080,6 +1080,7 @@ class StatsRepository
                     $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
                     $total->$index = $total->values[$index];
                 });
+                $_item->values = collect($_item->values)->values();
                 return $_item;
 //            return $item->last();
             });
@@ -1229,6 +1230,7 @@ class StatsRepository
                     $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
                     $total->$index = $total->values[$index];
                 });
+                $_item->values = collect($_item->values)->values();
                 return $_item;
             });
 
@@ -1364,6 +1366,7 @@ class StatsRepository
                     $total->$index = $total->values[$index];
                 });
                 ksort($_item->values);
+                $_item->values = collect($_item->values)->values();
 //            dd($_item->values);
                 return $_item;
             });
