@@ -424,6 +424,7 @@ $(function () {
                 return parseFloat(isNaN(value) ? value.replace('%', '') : value);
             });
             let _dataItem = {label: item[column], backgroundColor: dynamicColors(uniqueColors), data: regions};
+            // let _dataItem = {label: item[column], backgroundColor: dynamicColors(uniqueColors), data: regions, fill: false, borderColor: dynamicColors(uniqueColors)};
             return _dataItem;
         });
 
