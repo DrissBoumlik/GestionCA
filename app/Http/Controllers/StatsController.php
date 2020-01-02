@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\StatsRepository;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Yajra\DataTables\Facades\DataTables;
 
 class StatsController extends Controller
@@ -33,6 +34,8 @@ class StatsController extends Controller
 
     public function dashboard(Request $request)
     {
+        $agenceCode = $request->agence_code;
+        $AgentName = $request->agent_name;
         $dataRegionsCallResult = $this->statsRepository->GetDataRegions('Groupement', $request);
         $dataFoldersCallResult = $this->statsRepository->GetDataFolders('Groupement', $request);
 
@@ -61,6 +64,8 @@ class StatsController extends Controller
             'calls_neg' => $dataCallsNeg['columns'],
 
             'perimeters' => $dataPerimeter['columns'],
+            'agence' => $agenceCode,
+            'agent' => $AgentName
         ];
 //        return $columns;
         return view('stats.dashboard')->with($columns);

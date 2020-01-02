@@ -6,6 +6,31 @@ $(function () {
     let codeTypeIntervention = undefined;
     let codeIntervention = undefined;
     let nomRegion = undefined;
+    let agent_name = '';
+    let agence_code = '';
+
+    const params = window.location.href.split('?')[1];
+    if (params) {
+        const paramsList = params.split('&');
+        for (let param of paramsList) {
+            const p = param.split('=');
+            if (p[0] === 'agence_code') {
+                agence_code = p[1];
+            }
+            if (p[0] === 'agent_name') {
+                agent_name = p[1];
+            }
+        }
+    }
+
+    const getData = {};
+    if (agence_code) {
+        getData['agence_code'] = agence_code;
+    }
+    if (agent_name) {
+        getData['agent_name'] = agent_name;
+    }
+
     const paramFiltreList = [
         {
             url: 'Groupement', id: '#stats-groupement-filter',
@@ -90,6 +115,7 @@ $(function () {
     ];
 
 
+
     $.ajax({
         url: 'dates',
         method: 'GET',
@@ -122,10 +148,7 @@ $(function () {
     for (let p of paramFiltreList) {
         $.ajax({
             url: `stats/filter/${p.url}`,
-            // data: {
-            //     agence_code: agence_code
-            //     agence_code: agence_code
-            // },
+            data: getData,
             method: 'GET',
             success: function (response) {
                 const data = response.data.map(function (d) {
@@ -153,6 +176,7 @@ $(function () {
     }
 
     const filterData = (refreshMode = false) => {
+        console.log(agence_code, agent_name);
         return {
             dates,
             resultatAppel,
@@ -161,6 +185,8 @@ $(function () {
             codeIntervention,
             groupement,
             nomRegion,
+            agent_name,
+            agence_code,
             refreshMode: refreshMode
         };
     };
@@ -186,10 +212,10 @@ $(function () {
         chartTitle: 'Résultats Appels (Clients Joints)'
     };
 
-    getColumns(statsRegions, statsRegionsChart, true, true, null, false, true, true);
+    getColumns(statsRegions, statsRegionsChart, true, true, null, false, false, true, false);
     $('#refreshRegions').on('click', function () {
         let data = {dates, refreshMode: true};
-        getColumns(statsRegions, statsRegionsChart, true, true, filterData(true), false, true, true);
+        getColumns(statsRegions, statsRegionsChart, true, true, filterData(true), false, true, true, false);
     });
 
     let statsFolders = {
@@ -206,7 +232,7 @@ $(function () {
         data: undefined,
         chartTitle: 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement'
     };
-    getColumns(statsFolders, statsFoldersChart, true, true);
+    getColumns(statsFolders, statsFoldersChart, true, true, filterData());
     $('#refreshFolders').on('click', function () {
         getColumns(statsFolders, statsFoldersChart, true, true, filterData());
     });
@@ -228,7 +254,7 @@ $(function () {
         data: undefined,
         chartTitle: 'Résultats Appels Préalables par agence'
     };
-    getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false);
+    getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false, filterData());
     $('#refreshCallStatesAgencies').on('click', function () {
         getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false, filterData());
     });
@@ -248,7 +274,7 @@ $(function () {
         data: undefined,
         chartTitle: 'Résultats Appels Préalables par semaine'
     };
-    getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false);
+    getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false, filterData());
     $('#refreshCallStatesWeeks').on('click', function () {
         getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false, filterData());
     });
@@ -270,7 +296,7 @@ $(function () {
         data: undefined,
         chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Joignables)'
     };
-    getColumns(statscallsPos, statsCallsPosChart, true, false);
+    getColumns(statscallsPos, statsCallsPosChart, true, false, filterData());
     $('#refreshCallResultPos').on('click', function () {
         getColumns(statscallsPos, statsCallsPosChart, true, false, filterData());
     });
@@ -293,7 +319,7 @@ $(function () {
         let data = {dates, refreshMode: true};
         getColumns(statscallsNeg, statscallsNegChart, true, false, filterData(true));
     });
-    getColumns(statscallsNeg, statscallsNegChart, true, false);
+    getColumns(statscallsNeg, statscallsNegChart, true, false, filterData());
 
     /// ====================== FOLDERS CODE / TYPE ==========================
 
@@ -311,7 +337,7 @@ $(function () {
         data: undefined,
         chartTitle: 'Répartition des dossiers non validés par Code Type intervention'
     };
-    getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false);
+    getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false, filterData());
     $('#refreshFoldersByType').on('click', function () {
         getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false, filterData());
     });
@@ -330,7 +356,7 @@ $(function () {
         data: undefined,
         chartTitle: 'Répartition des dossiers non validés par code intervention'
     };
-    getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false);
+    getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false, filterData());
     $('#refreshFoldersByCode').on('click', function () {
         getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false, filterData());
     });
@@ -351,20 +377,19 @@ $(function () {
         data: undefined,
         chartTitle: 'Production Globale CAM'
     };
-    getColumns(statsPerimeters, statsPerimetersChart, true, false);
+    getColumns(statsPerimeters, statsPerimetersChart, true, false, filterData());
     $('#refreshPerimeters').on('click', function () {
         getColumns(statsPerimeters, statsPerimetersChart, true, false, filterData());
     });
 
     /// ====================== FUNCTIONS ==========================
 
-    function getColumns(object, objectChart = null, callInitDT = true, pagination = false, data = null, removeTotal = true, refreshMode = false, details = false) {
+    function getColumns(object, objectChart = null, callInitDT = true, pagination = false, data = null, removeTotal = true, refreshMode = false, details = false, removeTotalColumn = true) {
         $.ajax({
             url: object.routeCol,
             method: 'GET',
             data: data,
             success: function (response) {
-                // debugger
                 object.columns = [...response.columns];
                 object.data = [...response.data];
                 if (details) {
@@ -395,7 +420,7 @@ $(function () {
                     });
                 }
                 if (objectChart !== null && objectChart !== undefined) {
-                    InitChart(objectChart, response.columns, response.data, removeTotal);
+                    InitChart(objectChart, response.columns, response.data, removeTotal, removeTotalColumn);
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -404,7 +429,7 @@ $(function () {
         });
     }
 
-    function InitChart(objectChart, columns, data, removeTotal = true) {
+    function InitChart(objectChart, columns, data, removeTotal = true, removeTotalColumn = false) {
         // console.log(objectChart.chartTitle);
         // console.log(columns);
         // console.log(data);
@@ -413,7 +438,9 @@ $(function () {
             return column.data;
         });
         let column = labels.shift();
-        labels.pop();
+        if (removeTotalColumn) {
+            labels.pop();
+        }
         let datasets = [...data];
         if (removeTotal) {
             datasets.pop();
@@ -441,10 +468,10 @@ $(function () {
                     display: true,
                     text: objectChart.chartTitle
                 },
-                // tooltips: {
-                //     mode: 'index',
-                //     intersect: true
-                // },
+                tooltips: {
+                    mode: 'index',
+                    intersect: true
+                },
                 responsive: true,
                 scales: {
                     xAxes: [{

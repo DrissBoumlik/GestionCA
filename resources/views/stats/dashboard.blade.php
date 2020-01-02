@@ -29,6 +29,9 @@
     <script src="{{ asset("/add_ons/tree-view/tree.js") }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <script src="{{ asset("js/plugins/chart.js/Chart.min.js") }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+
     <script src="{{ asset("/add_ons/stats/stats.js") }}"></script>
     <script>
         $(function () {
@@ -59,7 +62,13 @@
                 <div
                     class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center mt-5 mb-2 text-center text-sm-left">
                     <div class="flex-sm-fill">
-                        <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard</h1>
+                        @if ($agence !== '')
+                            <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard Agence {{$agence}}</h1>
+                        @elseif($agent !== '')
+                            <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard Agent {{strtoupper($agent)}}</h1>
+                        @else
+                            <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard</h1>
+                        @endif
                         <h2 class="h4 font-w400 text-white-75 mb-0 invisible" data-toggle="appear" data-timeout="250">
                             Welcome Administrator</h2>
                     </div>

@@ -25679,18 +25679,17 @@ td.details-control {
 .table-striped tbody tr {
   background-color: #FFF !important;
 }
+
 .table-striped tbody tr.odd {
   background-color: #DDEBF7 !important;
 }
+
 .table-striped tbody tr.even {
   background-color: #FFF !important;
 }
 
-.table-details {
-  border: 1px solid #000;
-}
-.table-details tbody tr.odd {
-  background-color: #a6c9e7 !important;
+.table-details tr:nth-of-type(even) {
+  background-color: #DDEBF7 !important;
 }
 
 tr + tr .table-details {
