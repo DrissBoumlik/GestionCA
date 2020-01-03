@@ -264,7 +264,7 @@ $(function () {
             groupement,
             nomRegion,
             agent_name,
-            agence_code,
+            agence_code
         };
     };
 
@@ -289,7 +289,7 @@ $(function () {
         chartTitle: 'Résultats Appels (Clients Joints)'
     };
 
-    getColumns(statsRegions, statsRegionsChart, true, true, null, false, false, true, false);
+    getColumns(statsRegions, statsRegionsChart, true, true, filterData(), false, false, true, false);
     $('#refreshRegions').on('click', function () {
         let data = {dates, refreshMode: true};
         getColumns(statsRegions, statsRegionsChart, true, true, filterData(), false, true, true, false);
@@ -489,7 +489,7 @@ $(function () {
                             // Open this row
                             data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
                             statsRegionsDetails.element = 'details-' + $('tr').index(tr);
-                            statsRegionsDetails.routeData = $('#stateregdet-url').attr('url');
+                            // statsRegionsDetails.routeData = $('#stateregdet-url').attr('url');
 
                             createChild(row, statsRegionsDetails, data); // class is for background colour
                             tr.addClass('shown');

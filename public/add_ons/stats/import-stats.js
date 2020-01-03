@@ -133,7 +133,6 @@ $(document).ready(function () {
         return {...year, children: months};
     });
 
-    console.log(_tree);
     // let monthElt = $('#months');
     // months.forEach((item, index) => {
     //     console.log(item);
