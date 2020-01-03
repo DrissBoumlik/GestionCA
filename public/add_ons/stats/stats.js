@@ -194,7 +194,8 @@ $(function () {
         success: function (response) {
             let data = response.dates;
             $('.tree-view').each(function (index, item) {
-                new Tree('#' + $(this).attr('id'), {
+                let treeId = '#' + $(this).attr('id');
+                new Tree(treeId, {
                     data: [{id: '-1', text: 'Dates', children: data}],
                     closeDepth: 2,
                     loaded: function () {
@@ -210,7 +211,7 @@ $(function () {
                         dates = this.values;
                     }
                 });
-                $('.treejs-switcher').click();
+                $(treeId + ' .treejs-switcher').click();
                 // $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
             });
         },

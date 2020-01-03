@@ -116,7 +116,7 @@ Route::get('/agents/list', 'StatsController@getAgents')->name('agent.list');
 //Route::get('/tasks/get-tasks', 'TaskController@getTasks')->name('tasks.get-tasks');
 //Route::post('/tasks/import-tasks', 'TaskController@importTasks')->name('tasks.import-tasks');
 
-Route::get('/stats', 'StatsController@import')->name('stats.index');
+Route::get('/stats', 'StatsController@index')->name('stats.index');
 Route::post('/stats/import-stats', 'StatsController@importStats')->name('stats.import-stats');
 
 //Route::get('/demo', 'DemoController@index');
@@ -139,6 +139,3 @@ Route::get('/nonValidatedFolders/columns/{column}', 'StatsController@getNonValid
 
 Route::get('/clientsByPerimeter', 'StatsController@getClientsByPerimeter');                                                          // SUM
 Route::get('/clientsByPerimeter/columns', 'StatsController@getClientsByPerimeterColumn');
-
-
-Route::get('/demo', 'StatsController@demo');
