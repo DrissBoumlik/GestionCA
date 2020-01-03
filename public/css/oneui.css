@@ -25688,6 +25688,12 @@ td.details-control {
   background-color: #FFF !important;
 }
 
+.table-details {
+  border: 1.3px solid #b7b7b7;
+}
+.table-details tbody tr.odd {
+  background-color: #b3d4f0 !important;
+}
 .table-details tr:nth-of-type(even) {
   background-color: #DDEBF7 !important;
 }

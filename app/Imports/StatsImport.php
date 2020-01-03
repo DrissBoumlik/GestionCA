@@ -11,13 +11,13 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class StatsImport implements ToModel, WithHeadingRow
 {
-    private $months;
+    private $days = [];
 
-    public function __construct($months)
+    public function __construct($days)
     {
-        if ($months) {
-            $this->months = explode(',', $months);
-            \DB::table('stats')->whereIn('date_heure_note_mois', $this->months)->delete();
+        if ($days) {
+            $this->days = explode(',', $days);
+            \DB::table('stats')->whereIn('date_note', $this->days)->delete();
         }
     }
 
@@ -28,7 +28,8 @@ class StatsImport implements ToModel, WithHeadingRow
      */
     public function model($row)
     {
-        if (!$this->months || in_array($row['dimension_notesdate_heure_note_mois'], $this->months)) {
+        $formatted_date = $this->transformDate($row['dimension_notesdate_note']);
+        if (!$this->days || in_array($formatted_date, $this->days)) {
             return new Stats([
                 'Type_Note' => $row['dimension_notestype_note'],
                 'Utilisateur' => $row['dimension_notesutilisateur'],
@@ -52,7 +53,7 @@ class StatsImport implements ToModel, WithHeadingRow
                 'Date_Heure_Note_Annee' => $row['dimension_notesdate_heure_note_annee'],
                 'Date_Heure_Note_Mois' => $row['dimension_notesdate_heure_note_mois'],
                 'Date_Heure_Note_Semaine' => $row['dimension_notesdate_heure_note_semaine'],
-                'Date_Note' => $row['dimension_notesdate_note'],
+                'Date_Note' => $formatted_date, // $row['dimension_notesdate_note'],
                 'Groupement' => $row['dimension_notesgroupement'],
                 'key_Groupement' => clean($row['dimension_notesgroupement']),
 
@@ -76,12 +77,12 @@ class StatsImport implements ToModel, WithHeadingRow
      *
      * @return string|null
      */
-    public function transformDate($value, $format = 'Y-m-d H:i:s')
+    public function transformDate($value, $format = 'Y-m-d')
     {
         try {
             return Carbon::instance(Date::excelToDateTimeObject($value))->format($format);
         } catch (Exception $e) {
-            return Carbon::createFromFormat($format, $value);
+            return Carbon::createFromFormat($format, $value)->toDateString();
         }
     }
 

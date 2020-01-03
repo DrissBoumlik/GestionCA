@@ -6,6 +6,8 @@ $(function () {
     let codeTypeIntervention = undefined;
     let codeIntervention = undefined;
     let nomRegion = undefined;
+    let codeRdvInterventionConfirm = undefined;
+    let codeRdvIntervention = undefined;
     let agent_name = '';
     let agence_code = '';
 
@@ -33,84 +35,154 @@ $(function () {
 
     const paramFiltreList = [
         {
-            url: 'Groupement', id: '#stats-groupement-filter',
-            text: 'Groupement', values: (v) => {
-                nomRegion = undefined;
-                gpmtAppelPre = undefined;
-                codeTypeIntervention = undefined;
-                codeIntervention = undefined;
-                resultatAppel = undefined;
-                groupement = v;
-            }, class: '.tree-groupement-view'
+            url: 'Groupement',
+            elements: [
+                {
+                    id: '#stats-groupement-filter',
+                    text: 'Groupement', values: (v) => {
+                        nomRegion = undefined;
+                        gpmtAppelPre = undefined;
+                        codeTypeIntervention = undefined;
+                        codeIntervention = undefined;
+                        resultatAppel = undefined;
+                        codeRdvInterventionConfirm = undefined;
+                        codeRdvIntervention = undefined;
+                        groupement = v;
+                    }, class: '.tree-groupement-view'
+                },
+                {
+                    id: '#stats-regions-filter',
+                    text: 'Groupement', values: (v) => {
+                        nomRegion = undefined;
+                        gpmtAppelPre = undefined;
+                        codeTypeIntervention = undefined;
+                        codeIntervention = undefined;
+                        resultatAppel = undefined;
+                        codeRdvInterventionConfirm = undefined;
+                        codeRdvIntervention = undefined;
+                        groupement = v;
+                    }, class: '.tree-region-view'
+                }
+            ]
         },
         {
-            url: 'Groupement', id: '#stats-regions-filter',
-            text: 'Groupement', values: (v) => {
-                nomRegion = undefined;
-                gpmtAppelPre = undefined;
-                codeTypeIntervention = undefined;
-                codeIntervention = undefined;
-                resultatAppel = undefined;
-                groupement = v;
-            }, class: '.tree-region-view'
-        },
-        {
-            url: 'Gpmt_Appel_Pre', id: '#stats-call-regions-filter', class: '.tree-call-region-view',
-            text: 'Résultats Appels Préalables par agence', values: (v) => {
-                nomRegion = undefined;
-                groupement = undefined;
-                resultatAppel = undefined;
-                codeTypeIntervention = undefined;
-                codeIntervention = undefined;
-                gpmtAppelPre = v;
-            }
-        },
-        {
-            url: 'Gpmt_Appel_Pre', id: '#stats-weeks-regions-filter', class: '.tree-weeks-region-view',
-            text: 'Résultats Appels Préalables par semaine', values: (v) => {
-                nomRegion = undefined;
-                groupement = undefined;
-                resultatAppel = undefined;
-                codeTypeIntervention = undefined;
-                codeIntervention = undefined;
-                gpmtAppelPre = v;
-            }
+            url: 'Gpmt_Appel_Pre',
+            elements: [
+                {
+                    id: '#stats-call-regions-filter', class: '.tree-call-region-view',
+                    text: 'Résultats Appels Préalables par agence', values: (v) => {
+                        nomRegion = undefined;
+                        groupement = undefined;
+                        resultatAppel = undefined;
+                        codeTypeIntervention = undefined;
+                        codeIntervention = undefined;
+                        codeRdvInterventionConfirm = undefined;
+                        codeRdvIntervention = undefined;
+                        gpmtAppelPre = v;
+                    }
+                },
+                {
+                    id: '#stats-weeks-regions-filter', class: '.tree-weeks-region-view',
+                    text: 'Résultats Appels Préalables par semaine', values: (v) => {
+                        nomRegion = undefined;
+                        groupement = undefined;
+                        resultatAppel = undefined;
+                        codeTypeIntervention = undefined;
+                        codeIntervention = undefined;
+                        codeRdvInterventionConfirm = undefined;
+                        codeRdvIntervention = undefined;
+                        gpmtAppelPre = v;
+                    }
+                }
+            ]
         },
         {
             url: 'Code_Type_Intervention',
-            id: '#code-type-intervention-filter',
-            class: '.tree-code-type-intervention-view',
-            text: 'Type Intervention',
-            values: (v) => {
-                nomRegion = undefined;
-                groupement = undefined;
-                resultatAppel = undefined;
-                codeTypeIntervention = v;
-                codeIntervention = undefined;
-                gpmtAppelPre = undefined;
-            }
+            elements: [
+                {
+                    id: '#code-type-intervention-filter',
+                    class: '.tree-code-type-intervention-view',
+                    text: 'Type Intervention',
+                    values: (v) => {
+                        nomRegion = undefined;
+                        groupement = undefined;
+                        resultatAppel = undefined;
+                        codeTypeIntervention = v;
+                        codeIntervention = undefined;
+                        gpmtAppelPre = undefined;
+                        codeRdvInterventionConfirm = undefined;
+                        codeRdvIntervention = undefined;
+                    }
+                }
+            ],
         },
         {
-            url: 'Code_Intervention', id: '#code-intervention-filter', class: '.tree-code-intervention-view',
-            text: 'Intervention', values: (v) => {
-                nomRegion = undefined;
-                groupement = undefined;
-                resultatAppel = undefined;
-                codeTypeIntervention = undefined;
-                codeIntervention = v;
-                gpmtAppelPre = undefined;
-            }
+            url: 'Code_Intervention',
+            elements: [
+                {
+                    id: '#code-intervention-filter', class: '.tree-code-intervention-view',
+                    text: 'Intervention', values: (v) => {
+                        nomRegion = undefined;
+                        groupement = undefined;
+                        resultatAppel = undefined;
+                        codeTypeIntervention = undefined;
+                        codeIntervention = v;
+                        gpmtAppelPre = undefined;
+                        codeRdvInterventionConfirm = undefined;
+                        codeRdvIntervention = undefined;
+                    }
+                }
+            ]
         },
         {
-            url: 'Nom_Region', id: '#nom-region-filter', class: '.tree-nom-region-view',
-            text: 'Region', values: (v) => {
-                groupement = undefined;
-                resultatAppel = undefined;
-                codeTypeIntervention = undefined;
-                codeIntervention = undefined;
-                gpmtAppelPre = undefined;
-                nomRegion = v;
-            }
+            url: 'Nom_Region',
+            elements: [
+                {
+                    id: '#nom-region-filter', class: '.tree-nom-region-view',
+                    text: 'Region',
+                    values: (v) => {
+                        groupement = undefined;
+                        resultatAppel = undefined;
+                        codeTypeIntervention = undefined;
+                        codeIntervention = undefined;
+                        gpmtAppelPre = undefined;
+                        codeRdvInterventionConfirm = undefined;
+                        codeRdvIntervention = undefined;
+                        nomRegion = v;
+                    }
+                },
+
+                {
+                    id: '#code-rdv-intervention-confirm-filter', class: '.tree-code-rdv-intervention-confirm-view',
+                    text: 'Region',
+                    values: (v) => {
+                        groupement = undefined;
+                        resultatAppel = undefined;
+                        codeTypeIntervention = undefined;
+                        codeIntervention = undefined;
+                        gpmtAppelPre = undefined;
+                        nomRegion = undefined;
+                        codeRdvInterventionConfirm = v;
+                        codeRdvIntervention = undefined;
+
+                    }
+                },
+
+                {
+                    id: '#code-rdv-intervention-filter', class: '.tree-code-rdv-intervention-view',
+                    text: 'Region',
+                    values: (v) => {
+                        groupement = undefined;
+                        resultatAppel = undefined;
+                        codeTypeIntervention = undefined;
+                        codeIntervention = undefined;
+                        gpmtAppelPre = undefined;
+                        nomRegion = undefined;
+                        codeRdvInterventionConfirm = undefined;
+                        codeRdvIntervention = v;
+                    }
+                }
+            ],
         },
     ];
 
@@ -138,6 +210,7 @@ $(function () {
                         dates = this.values;
                     }
                 });
+                $('.treejs-switcher').click();
                 // $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
             });
         },
@@ -157,18 +230,20 @@ $(function () {
                         text: d
                     };
                 });
-                $(p.class).each(function (index, item) {
-                    new Tree(p.id, {
-                        data: [{id: '-1', text: p.text, children: data}],
-                        closeDepth: 1,
-                        loaded: function () {
-                        },
-                        onChange: function () {
-                            p.values(this.values);
-                        }
+                for (let element of p.elements) {
+                    $(element.class).each(function (index, item) {
+                        new Tree(element.id, {
+                            data: [{id: '-1', text: element.text, children: data}],
+                            closeDepth: 1,
+                            loaded: function () {
+                            },
+                            onChange: function () {
+                                element.values(this.values);
+                            }
+                        });
+                        // $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
                     });
-                    // $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
-                });
+                }
             },
             error: function (jqXHR, textStatus, errorThrown) {
             }
@@ -176,13 +251,15 @@ $(function () {
     }
 
     const filterData = (refreshMode = false) => {
-        console.log(agence_code, agent_name);
+        // console.log(agence_code, agent_name);
         return {
             dates,
             resultatAppel,
             gpmtAppelPre,
             codeTypeIntervention,
             codeIntervention,
+            codeRdvIntervention,
+            codeRdvInterventionConfirm,
             groupement,
             nomRegion,
             agent_name,
@@ -480,6 +557,24 @@ $(function () {
                     yAxes: [{
                         stacked: false
                     }]
+                },
+                plugins: {
+                    // Change options for ALL labels of THIS CHART
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'end',
+                        font: {
+                            weight: 'bold',
+                            // size: 14
+                        },
+                        rotation: -45,
+                        display: function(context) {
+                            // if(context.dataset.data.length > 10) {
+                            //     return false;
+                            // }
+                            return context.dataset.data[context.dataIndex] !== 0;
+                        }
+                    }
                 }
             }
         });
@@ -487,6 +582,7 @@ $(function () {
 
     function InitDataTable(object, pagination = false, data = null, details = false) {
         if ($.fn.DataTable.isDataTable(object.element_dt)) {
+            object.element.off('click', 'td.details-control');
             object.element_dt.destroy();
         }
         if (details) {
