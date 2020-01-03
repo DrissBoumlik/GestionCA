@@ -25665,6 +25665,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 }
 
 td.details-control {
+  cursor: pointer;
   background: url("https://datatables.net/examples/resources/details_open.png") no-repeat center center;
 }
 

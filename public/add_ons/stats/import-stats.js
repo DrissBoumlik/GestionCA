@@ -162,7 +162,6 @@ $(document).ready(function () {
     $('.treejs-switcher').click();
 
     $(document).on('click', '#showModalImport', function (event) {
-        console.log(days);
         if (days === null || days === undefined || !days.length) {
             // alert('Vous dever choisir au moin une date');
             $('#modal-import').modal('hide');
