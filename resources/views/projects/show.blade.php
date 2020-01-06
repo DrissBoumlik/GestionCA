@@ -39,7 +39,7 @@
                         techs.push($(skill).val())
                     }
                 });
-                var baseUrl = window.location.origin;
+                var baseUrl = APP_URL;
                 $.ajax({
                     method: 'PUT',
                     url: baseUrl + '/projects/{{ $project->id }}',
@@ -70,7 +70,7 @@
                 if (confirmed) {
                     project_id = $(this).attr('data-project');
                     element = this;
-                    var baseUrl = window.location.origin;
+                    var baseUrl = APP_URL;
                     $.ajax({
                         method: 'DELETE',
                         url: baseUrl + '/projects/' + project_id,

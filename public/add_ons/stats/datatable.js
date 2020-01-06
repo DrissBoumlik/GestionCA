@@ -35,7 +35,7 @@ $(function () {
     // });
     //
     // function sendRequest(_this, method, route, data = null, toggleCheck = false, reload = false) {
-    //     var baseUrl = window.location.origin;
+    //     var baseUrl = APP_URL;
     //     $.ajax({
     //         method: method,
     //         url: baseUrl + route,

@@ -19,12 +19,12 @@
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <div class="flex-sm-fill">
                     <h1 class="h3 my-2 d-inline-block">Users</h1>
-                        <a href="/users/create" class="link btn btn-primary mgl-10 round" title="Add User"><i class="fas fa-plus"></i></a>
+                        <a href="{{ route('users.create') }}" class="link btn btn-primary mgl-10 round" title="Add User"><i class="fas fa-plus"></i></a>
                 </div>
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="/">Home</a>
+                            <a class="link-fx" href="{{ route('dashboard') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">Users</li>
                     </ol>
@@ -43,7 +43,7 @@
                     <div class="card-header d-none">
                         <h3 class="card-title float-left">Users</h3>
 {{--                        <button class="btn btn-primary mgl-10 round" title="Add User">--}}
-                            <a href="/users/create" class="link btn btn-primary mgl-10 round" title="Add User"><i class="fas fa-plus"></i></a>
+                            <a href="{{ route('users.create') }}" class="link btn btn-primary mgl-10 round" title="Add User"><i class="fas fa-plus"></i></a>
 {{--                        </button>--}}
                     </div>
                     <!-- /.card-header -->

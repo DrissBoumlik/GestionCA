@@ -60,7 +60,7 @@
                     <img class="rounded" src="//images2.imgbox.com/7f/13/gFRcrjpl_o.png"
                          alt="Header Avatar"
                          style="width: 18px;">
-                    <span class="d-none d-sm-inline-block ml-1">Driss</span>
+                    <span class="d-none d-sm-inline-block ml-1">{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</span>
                     <i class="fa fa-fw fa-angle-down d-none d-sm-inline-block"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right p-0 border-0 font-size-sm"

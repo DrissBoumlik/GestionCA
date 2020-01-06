@@ -94,33 +94,33 @@
     <div class="content-side content-side-full">
         <ul class="nav-main">
             <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="dashboard">
+                <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                     <i class="nav-main-link-icon si si-cursor"></i>
                     <span class="nav-main-link-name">Dashboard</span>
                 </a>
             </li>
-            @can('view', Auth::user())
+            @if(Auth::user()->role->id === 1)
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ (request()->is('users') || request()->is('users/*')) ? ' active' : '' }}"
-                       href="users">
+                       href="{{ route('users.index') }}">
                         <i class="nav-main-link-icon si si-users"></i>
                         <span class="nav-main-link-name">Users</span>
                     </a>
                 </li>
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ (request()->is('roles') || request()->is('roles/*')) ? ' active' : '' }}"
-                       href="roles">
+                       href="{{ route('roles.index') }}">
                         <i class="nav-main-link-icon si si-shield"></i>
                         <span class="nav-main-link-name">Roles</span>
                     </a>
                 </li>
-                <li class="nav-main-item">
-                    <a class="nav-main-link{{ (request()->is('permissions') || request()->is('permissions/*')) ? ' active' : '' }}"
-                       href="permissions">
-                        <i class="nav-main-link-icon si si-key"></i>
-                        <span class="nav-main-link-name">Permissions</span>
-                    </a>
-                </li>
+{{--                <li class="nav-main-item">--}}
+{{--                    <a class="nav-main-link{{ (request()->is('permissions') || request()->is('permissions/*')) ? ' active' : '' }}"--}}
+{{--                       href="permissions">--}}
+{{--                        <i class="nav-main-link-icon si si-key"></i>--}}
+{{--                        <span class="nav-main-link-name">Permissions</span>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
                 {{--                <li class="nav-main-item">--}}
                 {{--                    <a class="nav-main-link{{ (request()->is('skills') || request()->is('skills/*')) ? ' active' : '' }}"--}}
                 {{--                       href="skills">--}}
@@ -135,7 +135,6 @@
                 {{--                        <span class="nav-main-link-name">Projects</span>--}}
                 {{--                    </a>--}}
                 {{--                </li>--}}
-            @endcan
 
             <li class="nav-main-item{{ request()->is('agences') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
@@ -171,48 +170,12 @@
             </li>
 
             <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('stats') ? ' active' : '' }}" href="stats">
+                <a class="nav-main-link{{ request()->is('stats') ? ' active' : '' }}" href="{{ route('stats.index') }}">
                     <i class="nav-main-link-icon si si-cursor"></i>
                     <span class="nav-main-link-name">Import</span>
                 </a>
             </li>
-            <ul class="d-none">
-                <li class="nav-main-heading">Various</li>
-                <li class="nav-main-item{{ request()->is('examples/*') ? ' open' : '' }}">
-                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
-                       aria-expanded="true" href="#">
-                        <i class="nav-main-link-icon si si-bulb"></i>
-                        <span class="nav-main-link-name">Examples</span>
-                    </a>
-                    <ul class="nav-main-submenu">
-                        <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('examples/plugin-helper') ? ' active' : '' }}"
-                               href="examples/plugin-helper">
-                                <span class="nav-main-link-name">Plugin with JS Helper</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('examples/plugin-init') ? ' active' : '' }}"
-                               href="examples/plugin-init">
-                                <span class="nav-main-link-name">Plugin with JS Init</span>
-                            </a>
-                        </li>
-                        <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('examples/blank') ? ' active' : '' }}"
-                               href="examples/blank">
-                                <span class="nav-main-link-name">Blank</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-main-heading">More</li>
-                <li class="nav-main-item open">
-                    <a class="nav-main-link" href="/">
-                        <i class="nav-main-link-icon si si-globe"></i>
-                        <span class="nav-main-link-name">Landing</span>
-                    </a>
-                </li>
-            </ul>
+            @endif
         </ul>
     </div>
     <!-- END Side Navigation -->

@@ -82,8 +82,6 @@
         <!-- OneUI Core JS -->
         <script src="{{ asset('js/oneui.app.js') }}"></script>
 
-        <!-- Laravel Scaffolding JS -->
-        <script src="{{ asset('js/laravel.app.js') }}"></script>
 
         @yield('js_after')
     </body>

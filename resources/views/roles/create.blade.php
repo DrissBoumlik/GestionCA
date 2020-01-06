@@ -18,10 +18,10 @@
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="/">Home</a>
+                            <a class="link-fx" href="{{ route('dashboard') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="/roles">Roles</a>
+                            <a class="link-fx" href="{{ route('roles.index') }}">Roles</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">Create</li>
                     </ol>
@@ -33,7 +33,7 @@
 @endsection
 @section('content')
     <div class="profile">
-        <form method="POST" action="/roles" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('roles.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="container">
                 <div class="row">

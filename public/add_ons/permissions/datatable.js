@@ -34,7 +34,7 @@ $(function () {
             element = this;
             $.ajax({
                 method: 'DELETE',
-                url: window.location.origin + '/permissions/' + permission_id,
+                url: APP_URL + '/permissions/' + permission_id,
                 success: function (response) {
                     feedBack(response.message, 'success');
                     removeElement(element);

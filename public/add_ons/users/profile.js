@@ -6,11 +6,11 @@ $(function () {
             var user_id = $(this).attr('data-user');
             $.ajax({
                 method: 'DELETE',
-                url: window.location.origin + '/users/' + user_id,
+                url: APP_URL + '/users/' + user_id,
                 success: function (response) {
                     feedBack(response.message, 'success');
                     setTimeout(() => {
-                        window.location = '/users';
+                        window.location = APP_URL + '/users';
                     }, 500);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -19,6 +19,16 @@ $(function () {
                     }
                 }
             });
+        }
+    });
+
+
+    $(document).on('change', '#role', (e) => {
+        role = $(e.currentTarget).val();
+        if (role == 2) {
+            $('#agence_name').show();
+        } else {
+            $('#agence_name').hide();
         }
     });
 

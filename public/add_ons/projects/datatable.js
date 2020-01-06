@@ -110,7 +110,7 @@ $(function () {
         });
         return data;
     }
-    const baseUrl = window.location.origin;
+    const baseUrl = APP_URL;
     $('.update-project').on('click', function () {
         $('#projectForm').modal('hide');
         const projectInput = $('#project');

@@ -226,7 +226,6 @@ class StatsController extends Controller
 //                's.Date_Heure_Note as last_date'
 //            ])
 //            ->orderBy('last_date', 'desc');
-
         $data = Stats::orderBy('Date_Heure_Note','desc')->get()->unique('Id_Externe');
 
         dd($data->pluck('Id_Externe', 'Date_Heure_Note'));
