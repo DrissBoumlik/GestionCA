@@ -47,7 +47,7 @@ $(function () {
                 topSkills.push($(skill).val())
             }
         });
-        var baseUrl = window.location.origin;
+        var baseUrl = APP_URL;
         $.ajax({
             method: 'PUT',
             url: baseUrl + '/updateSkills',

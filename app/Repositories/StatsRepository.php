@@ -32,7 +32,7 @@ class StatsRepository
 
     public function getAgenciesAll()
     {
-        $stats = Stats::select(['Nom_Region'])->distinct('Nom_Region')->limit(10)->get()->map(function ($s) {
+        $stats = Stats::select(['Nom_Region'])->distinct('Nom_Region')->orderBy('Nom_Region')->get()->map(function ($s) {
             $sn = explode(' - ', $s->Nom_Region);
             return [
                 'name' => trim($s->Nom_Region),
@@ -77,10 +77,11 @@ class StatsRepository
         $stats = Stats::select([$column])
             ->distinct($column)
             ->where($column, 'not like', '=%')
-            ->whereNotNull($column);
-        if ($column === 'Groupement') {
-            $stats = $stats->where('Groupement', 'not like', 'Non Renseigné');
-        }
+            ->whereNotNull($column)
+            ->where('Groupement', 'not like', 'Non Renseigné');
+//        if ($column === 'Groupement') {
+//            $stats = $stats->where('Groupement', 'not like', 'Non Renseigné');
+//        }
         if ($agentName) {
             $stats = $stats->where('Utilisateur', $agentName);
         }
@@ -122,7 +123,7 @@ class StatsRepository
                         })->map(function ($r) {
                             return $r->Groupement;
                         })->toArray())) {
-                            if($col->Groupement) {
+                            if ($col->Groupement) {
                                 $rObj = new \stdClass();
                                 $rObj->Groupement = $col->Groupement;
                                 $rObj->Key_Groupement = $col->Key_Groupement;
@@ -326,6 +327,10 @@ class StatsRepository
             ->where($callResult, 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné');
 
+        // GETTING COLUMNS BEFORE MAKING THE WHERE CONDITIONS ON THE FOLLOWING LINES
+        $keys = ($regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get())->groupBy(['Nom_Region'])->keys();
+//        dd($keys);
+//        dd($regions);
         // DEMO PLACEHOLDER (1)
         #region DEMO (1) ==============
 //        $regions = $regions->whereNotNull($callResult);
@@ -346,8 +351,6 @@ class StatsRepository
             $groupement = array_values($groupement);
             $regions = $regions->whereIn('Groupement', $groupement);
         }
-//        TODO: Get Route URI -> replace params with actual value (as ID) - search in filter table if filter exists
-//        TODO => if not check request if it exists save the new filter or just get full data and delete old filter
 //        $route = $this->getRoute(Route::current());
         $user = auth()->user() ?? User::find(1);
 
@@ -355,25 +358,18 @@ class StatsRepository
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
-        if (!strpos($_route, 'columns')) {
-            if ($request && count($request->all())) {
+        if ($request && count($request->all())) {
+            if ($request->exists('refreshMode')) {
                 if ($dates) {
                     $dates = array_values($dates);
-                    if ($request->exists('refreshMode')) {
-                        $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
-                        $filter->date_filter = $dates;
-                        $filter->save();
-                    }
+                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
+                    $filter->date_filter = $dates;
+                    $filter->save();
                     $regions = $regions->whereIn('Date_Note', $dates);
-                } elseif ($request->exists('refreshMode')) {
-                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                    if ($filter) {
-                        $filter->forceDelete();
-                    }
                 } else {
                     $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
                     if ($filter) {
-                        $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+                        $filter->forceDelete();
                     }
                 }
             } else {
@@ -381,6 +377,11 @@ class StatsRepository
                 if ($filter) {
                     $regions = $regions->whereIn('Date_Note', $filter->date_filter);
                 }
+            }
+        } else {
+            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+            if ($filter) {
+                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
             }
         }
 
@@ -394,8 +395,8 @@ class StatsRepository
             return $data;
         } else {
             $totalCount = Stats::count();
-
             $temp = $regions->groupBy(['Nom_Region']);
+
 //            dd($temp);
             $temp = $temp->map(function ($calls, $index) {
                 $totalZone = $calls->reduce(function ($carry, $call) {
@@ -406,7 +407,6 @@ class StatsRepository
                     return $call;
                 });
             });
-
 
             $regions = $temp->flatten();
 //            dd($temp);
@@ -423,12 +423,11 @@ class StatsRepository
 //                $region->$Region = round($region->total * 100 / $totalCount, 2);
 //                return $region;
 //            });
-
-            $keys = $columns->groupBy(['Nom_Region'])->keys();
+//            $keys = $columns->groupBy(['Nom_Region'])->keys();
+//            dd($keys);
 
             $regions = $regions->groupBy([$callResult]);
 //        $regions = $regions->groupBy(['Nom_Region']);
-
             $regions_names = [];
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
@@ -469,10 +468,12 @@ class StatsRepository
 //                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
 //                    $row->_total = $call->total;
                     $row->column = $callResult;
+//                    dump($row);
                     return $row;
                 });
 
                 $_item = $item->last();
+//                dd($_item);
                 $index = count($_item->values);
                 foreach ($col_arr as $col) {
                     $_item->values[$col] = 0;
@@ -501,15 +502,13 @@ class StatsRepository
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
 
-//        TODO: Get Route URI -> replace params with actual value (as ID) - search in filter table if filter exists
-//        TODO => if not check request if it exists save the new filter or just get full data and delete old filter
-        $route = $this->getRoute(Route::current());
-
         $key_groupement = $request->get('key_groupement');
         $regions = \DB::table('stats')
             ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(Resultat_Appel) as total'))
             ->where('Resultat_Appel', 'not like', '=%');
 
+
+        $keys = ($regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get())->groupBy(['Nom_Region'])->keys();
         $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
         $key_groupement = clean($key_groupement);
         $regions = $regions->where('key_groupement', 'like', $key_groupement);
@@ -533,33 +532,38 @@ class StatsRepository
             $groupement = array_values($groupement);
             $regions = $regions->whereIn('Groupement', $groupement);
         }
-//        TODO: Get Route URI -> replace params with actual value (as ID) - search in filter table if filter exists
-//        TODO => if not check request if it exists save the new filter or just get full data and delete old filter
-        $route = str_replace('/columns', '', $this->getRoute(Route::current()));
         $user = auth()->user() ?? User::find(1);
-//        dd($dates);
-        $dates = null;
+        $_route = $this->getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+
         if ($request && count($request->all())) {
-            $dates = $request->get('dates');
-            if ($dates) {
-                $dates = array_values($dates);
-                if ($request->exists('refreshMode')) {
+            if ($request->exists('refreshMode')) {
+                if ($dates) {
+                    $dates = array_values($dates);
                     $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
                     $filter->date_filter = $dates;
                     $filter->save();
+                    $regions = $regions->whereIn('Date_Note', $dates);
+                } else {
+                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                    if ($filter) {
+                        $filter->forceDelete();
+                    }
                 }
-                $regions = $regions->whereIn('Date_Note', $dates);
-            } elseif ($request->exists('refreshMode')) {
+            } else {
                 $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                $filter->forceDelete();
+                if ($filter) {
+                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+                }
             }
         } else {
             $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
             if ($filter) {
-                $regions = $regions->whereIn('Date_Note', $filter);
+                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
             }
         }
+
 //        $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
 
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
@@ -597,7 +601,7 @@ class StatsRepository
                 return $region;
             });
 
-            $keys = $columns->groupBy(['Nom_Region'])->keys();
+//            $keys = $columns->groupBy(['Nom_Region'])->keys();
 
 //            $regions = $regions->groupBy(['Groupement']);
             $regions_names = [];
@@ -674,6 +678,10 @@ class StatsRepository
             ->select('Nom_Region', $callResult, \DB::raw('count(Nom_Region) as total'))
             ->where($callResult, 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné');
+
+        $keys = ($regions->groupBy('Nom_Region', $callResult)->get())->groupBy(['Nom_Region'])->keys();
+
+
         if ($agentName) {
             $regions = $regions->where('Utilisateur', $agentName);
         }
@@ -704,6 +712,40 @@ class StatsRepository
             $groupement = array_values($groupement);
             $regions = $regions->whereIn('Groupement', $groupement);
         }
+
+        $user = auth()->user() ?? User::find(1);
+        $_route = $this->getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+
+        if ($request && count($request->all())) {
+            if ($request->exists('refreshMode')) {
+                if ($dates) {
+                    $dates = array_values($dates);
+                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
+                    $filter->date_filter = $dates;
+                    $filter->save();
+                    $regions = $regions->whereIn('Date_Note', $dates);
+                } else {
+                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                    if ($filter) {
+                        $filter->forceDelete();
+                    }
+                }
+            } else {
+                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                if ($filter) {
+                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+                }
+            }
+        } else {
+            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+            if ($filter) {
+                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+            }
+        }
+
+
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
         $columns = $regions->groupBy('Nom_Region', $callResult)->get();
 
@@ -713,7 +755,6 @@ class StatsRepository
             $data = ['columns' => [], 'data' => []];
             return $data;
         } else {
-
             $totalCount = Stats::count();
             $regions = $regions->map(function ($region) use ($totalCount) {
                 $Region = $region->Nom_Region;
@@ -726,7 +767,7 @@ class StatsRepository
                 return $region;
             });
 
-            $keys = $columns->groupBy(['Nom_Region'])->keys();
+//            $keys = $columns->groupBy(['Nom_Region'])->keys();
 
             $regions = $regions->groupBy([$callResult]);
 //        $regions = $regions->groupBy(['Nom_Region']);
@@ -809,7 +850,7 @@ class StatsRepository
 
             $regions = $regions->values();
 
-            return ['route' => $route, 'columns' => $regions_names, 'data' => $regions];
+            return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
         }
     }
 
@@ -821,7 +862,13 @@ class StatsRepository
         $agentName = $request->get('agent_name');
         $route = $this->getRoute(Route::current());
         $regions = \DB::table('stats')
-            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'));
+            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'))
+            ->where('Groupement', 'not like', 'Non Renseigné');
+
+
+        $keys = ($regions->groupBy($column, 'Gpmt_Appel_Pre')->get())->groupBy([$column])->keys();
+
+
         if ($agentName) {
             $regions = $regions->where('Utilisateur', $agentName);
         }
@@ -836,6 +883,40 @@ class StatsRepository
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
         }
+
+        $user = auth()->user() ?? User::find(1);
+        $_route = $this->getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+
+        if ($request && count($request->all())) {
+            if ($request->exists('refreshMode')) {
+                if ($dates) {
+                    $dates = array_values($dates);
+                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
+                    $filter->date_filter = $dates;
+                    $filter->save();
+                    $regions = $regions->whereIn('Date_Note', $dates);
+                } else {
+                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                    if ($filter) {
+                        $filter->forceDelete();
+                    }
+                }
+            } else {
+                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                if ($filter) {
+                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+                }
+            }
+        } else {
+            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+            if ($filter) {
+                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+            }
+        }
+
+
         $columns = $regions->groupBy($column, 'Gpmt_Appel_Pre')->get();
 
         // DEMO PLACEHOLDER (1)
@@ -863,7 +944,7 @@ class StatsRepository
                 return $region;
             });
 
-            $keys = $columns->groupBy([$column])->keys();
+//            $keys = $columns->groupBy([$column])->keys();
             $regions = $regions->groupBy(['Gpmt_Appel_Pre']);
 //        $regions = $regions->groupBy(['Nom_Region']);
 
@@ -939,7 +1020,7 @@ class StatsRepository
 
             $regions = $regions->values();
 
-            return ['route' => $route, 'columns' => $columns, 'data' => $regions];
+            return ['filter' => $filter, 'columns' => $columns, 'data' => $regions];
         }
     }
 
@@ -955,6 +1036,11 @@ class StatsRepository
 
         $regions = \DB::table('stats')
             ->select('Nom_Region', $intervCol, \DB::raw('count(*) as total'));
+
+
+        $keys = ($regions->groupBy('Nom_Region', $intervCol)->get())->groupBy(['Nom_Region'])->keys();
+
+
         if ($agentName) {
             $regions = $regions->where('Utilisateur', $agentName);
         }
@@ -973,6 +1059,39 @@ class StatsRepository
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
         }
+
+        $user = auth()->user() ?? User::find(1);
+        $_route = $this->getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+
+        if ($request && count($request->all())) {
+            if ($request->exists('refreshMode')) {
+                if ($dates) {
+                    $dates = array_values($dates);
+                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
+                    $filter->date_filter = $dates;
+                    $filter->save();
+                    $regions = $regions->whereIn('Date_Note', $dates);
+                } else {
+                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                    if ($filter) {
+                        $filter->forceDelete();
+                    }
+                }
+            } else {
+                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                if ($filter) {
+                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+                }
+            }
+        } else {
+            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+            if ($filter) {
+                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+            }
+        }
+
         $columns = $regions->groupBy('Nom_Region', $intervCol)->get();
 //        $regions = $regions->groupBy('Nom_Region', $intervCol)->get();
 
@@ -990,18 +1109,35 @@ class StatsRepository
             return $data;
         } else {
             $totalCount = Stats::count();
-            $regions = $regions->map(function ($region) use ($totalCount) {
-                $Region = $region->Nom_Region;
-                $region->$Region = round($region->total * 100 / $totalCount, 2);;
-                return $region;
+            $temp = $regions->groupBy(['Nom_Region']);
+
+//            dd($temp);
+            $temp = $temp->map(function ($calls, $index) {
+                $totalZone = $calls->reduce(function ($carry, $call) {
+                    return $carry + $call->total;
+                }, 0);
+                return $calls->map(function ($call) use ($index, $totalZone) {
+                    $call->$index = $totalZone == 0 ? 0.00 : round($call->total * 100 / $totalZone, 2);
+                    return $call;
+                });
             });
-            $columns = $columns->map(function ($region) use ($totalCount) {
-                $Region = $region->Nom_Region;
-                $region->$Region = round($region->total * 100 / $totalCount, 2);;
-                return $region;
-            });
-            $keys = $columns->groupBy(['Nom_Region'])->keys();
-            $regions = $regions->groupBy([$intervCol]);
+//            dd($temp);
+
+            $regions = $temp->flatten();
+
+//            $regions = $regions->map(function ($region) use ($totalCount) {
+//                $Region = $region->Nom_Region;
+//                $region->$Region = round($region->total * 100 / $totalCount, 2);;
+//                return $region;
+//            });
+//            $columns = $columns->map(function ($region) use ($totalCount) {
+//                $Region = $region->Nom_Region;
+//                $region->$Region = round($region->total * 100 / $totalCount, 2);;
+//                return $region;
+//            });
+//            $keys = $columns->groupBy(['Nom_Region'])->keys();
+            $regions = $regions->groupBy($intervCol);
+//            $regions = $regions->groupBy('Nom_Region');
 
 
             $regions_names = [];
@@ -1020,11 +1156,11 @@ class StatsRepository
             $first = new \stdClass();
             $first->name = $intervCol;
             $first->data = $intervCol;
-            $last = new \stdClass();
-            $last->data = 'total';
-            $last->name = 'total';
             array_unshift($regions_names, $first);
-            array_push($regions_names, $last);
+//            $last = new \stdClass();
+//            $last->data = 'total';
+//            $last->name = 'total';
+//            array_push($regions_names, $last);
 //            $regions_names[] = new \stdClass();
 //            $regions_names[count($regions_names) - 1]->data = 'total';
 //            $regions_names[count($regions_names) - 1]->name = 'total';
@@ -1046,7 +1182,7 @@ class StatsRepository
 
                     $row->values[$nom_region] = $call->$nom_region;
                     $row->$nom_region = $call->$nom_region . '%';
-                    $row->total = round(array_sum($row->values), 2); //round(array_sum($row->values) / count($row->values), 2) . '%';
+//                    $row->total = round(array_sum($row->values), 2); //round(array_sum($row->values) / count($row->values), 2) . '%';
                     return $row;
                 });
                 $_item = $item->last();
@@ -1069,7 +1205,7 @@ class StatsRepository
 
             $dataCount = $regions->count();
             collect($total->values)->map(function ($value, $index) use (&$total, $dataCount) {
-                $total->values[$index] = round($total->values[$index], 2); // round($total->values[$index] / $dataCount, 2);
+                $total->values[$index] = ceil(round($total->values[$index], 2)); // round($total->values[$index] / $dataCount, 2);
                 $total->$index = $total->values[$index] . '%';
             });
 
@@ -1079,7 +1215,7 @@ class StatsRepository
             $regions->push($total);
 
             $regions = $regions->values();
-            $data = ['route' => $route, 'columns' => $regions_names, 'data' => $regions];
+            $data = ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
             return $data;
         }
     }
@@ -1094,7 +1230,10 @@ class StatsRepository
         $codeRdvIntervention = $request->get('codeRdvIntervention');
 
         $codes = \DB::table('stats')
-            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(*) as total'));
+            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(Nom_Region) as total'));
+
+//        $keys = $columns->groupBy(['Code_Intervention'])->keys();
+        $keys = ($codes->groupBy('Code_Intervention', 'Nom_Region')->get())->groupBy(['Code_Intervention'])->keys();
         if ($agentName) {
             $codes = $codes->where('Utilisateur', $agentName);
         }
@@ -1113,42 +1252,80 @@ class StatsRepository
             $codeRdvInterventionConfirm = array_values($codeRdvInterventionConfirm);
             $codes = $codes->whereIn('Nom_Region', $codeRdvInterventionConfirm);
         }
-        $columns = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
-        // DEMO PLACEHOLDER (1)
+        $user = auth()->user() ?? User::find(1);
+        $_route = $this->getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
-        #region DEMO (1) ==============
-//        $codes = $codes->whereNotNull('Code_Intervention')
-//            ->where('Gpmt_Appel_Pre', $callResult);
+        if ($request && count($request->all())) {
+            if ($request->exists('refreshMode')) {
+                if ($dates) {
+                    $dates = array_values($dates);
+                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
+                    $filter->date_filter = $dates;
+                    $filter->save();
+                    $codes = $codes->whereIn('Date_Note', $dates);
+                } else {
+                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                    if ($filter) {
+                        $filter->forceDelete();
+                    }
+                }
+            } else {
+                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                if ($filter) {
+                    $codes = $codes->whereIn('Date_Note', $filter->date_filter);
+                }
+            }
+        } else {
+            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+            if ($filter) {
+                $codes = $codes->whereIn('Date_Note', $filter->date_filter);
+            }
+        }
+
         $codes = $codes->where('Gpmt_Appel_Pre', $callResult);
-        #endregion DEMO
-
-//            ->groupBy('Code_Intervention', 'Nom_Region')
-//            ->get();
+        $columns = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
 
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
-
-        $codes = $columns = $this->addRegionWithZero($request, $codes, $columns);
-
+        $codes = $columns = $this->addRegionWithZero($request, $codes, $columns, null, 'Gpmt_Appel_Pre', $callResult);
         if (!count($codes)) {
             $data = ['columns' => [], 'data' => []];
             return $data;
         } else {
 
-            $totalCount = Stats::count();
-            $codes = $codes->map(function ($code) use ($totalCount) {
-                $Code = $code->Code_Intervention;
-                $code->$Code = round($code->total * 100 / $totalCount, 2);
-                return $code;
+            $temp = $codes->groupBy(['Nom_Region']);
+
+//            dd($temp);
+            $temp = $temp->map(function ($calls, $index) {
+                $totalZone = $calls->reduce(function ($carry, $call) {
+                    return $carry + $call->total;
+                }, 0);
+                return $calls->map(function ($call, $index2) use ($index, $totalZone) {
+                    $code_intervention = $call->Code_Intervention;
+                    $call->$code_intervention = $totalZone == 0 ? 0.00 : round($call->total * 100 / $totalZone, 2);
+                    return $call;
+                });
             });
-            $columns = $columns->map(function ($code) use ($totalCount) {
-//            if ($code->Code_Intervention) {
-                $Code = $code->Code_Intervention;
-                $code->$Code = round($code->total * 100 / $totalCount, 2);
-                return $code;
-//            }
-//            return;
-            });
-            $keys = $columns->groupBy(['Code_Intervention'])->keys();
+//            dd($temp);
+            $codes = $temp->flatten();
+//            dd(count($codes));
+//            $totalCount = Stats::count();
+//            $codes = $codes->map(function ($code) use ($totalCount) {
+//                $Code = $code->Code_Intervention;
+//                $code->$Code = round($code->total * 100 / $totalCount, 2);
+//                return $code;
+//            });
+//            dd($codes);
+//            $columns = $columns->map(function ($code) use ($totalCount) {
+////            if ($code->Code_Intervention) {
+//                $Code = $code->Code_Intervention;
+//                $code->$Code = round($code->total * 100 / $totalCount, 2);
+//                return $code;
+////            }
+////            return;
+//            });
+//            $keys = $columns->groupBy(['Code_Intervention'])->keys(); ==== DRISS
             $codes = $codes->groupBy(['Nom_Region']);
             $codes_names = [];
 //        $codes_names[0] = new \stdClass();
@@ -1192,11 +1369,12 @@ class StatsRepository
 
 
                     $col_arr = array_diff($col_arr, [$code_intervention]);
-//                dd($call->Code_Intervention);
-                    $row->values[$code_intervention] = $call->$code_intervention;
+//                    dd($call);
+//                    dd($code_intervention, $call->Code_Intervention);
+                    $row->values[$code_intervention ?? ''] = $call->$code_intervention;
                     $row->$code_intervention = $call->$code_intervention . '%';
 //                $row->$code_intervention = $call->$code_intervention;
-                    $row->total = round(array_sum($row->values), 2); // round(array_sum($row->values) / count($row->values), 2) . '%';
+                    $row->total = ceil(round(array_sum($row->values), 2)) . '%'; // round(array_sum($row->values) / count($row->values), 2) . '%';
 //                dump($code_intervention ? $total->{$code_intervention}[0] : 1);
 //                if ($code_intervention)
 //                    $total->$code_intervention =
@@ -1211,13 +1389,12 @@ class StatsRepository
                     $_item->values[$col] = 0;
                     $_item->$col = '0%';
                 }
-
 //            dump($_item->values);
                 ksort($_item->values);
 
                 collect($_item->values)->map(function ($value, $index) use (&$total) {
                     $value = str_replace('%', '', $value);
-                    $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
+                    $total->values[$index] = (round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2));
                     $total->$index = $total->values[$index];
                 });
                 $_item->values = collect($_item->values)->values();
@@ -1226,16 +1403,16 @@ class StatsRepository
 
             $dataCount = $codes->count();
             collect($total->values)->map(function ($value, $index) use (&$total, $dataCount) {
-                $total->values[$index] = round($total->values[$index], 2); // round($total->values[$index] / $dataCount, 2);
+                $total->values[$index] = ceil(round($total->values[$index], 2)); // round($total->values[$index] / $dataCount, 2);
                 $total->$index = $total->values[$index] . '%';
             });
 
             $total->Nom_Region = 'Total Général';
-            $total->total = round(array_sum($total->values), 2); //round(array_sum($total->values) / count($total->values), 2) . '%';
+            $total->total = ceil(round(array_sum($total->values), 2)); //round(array_sum($total->values) / count($total->values), 2) . '%';
 
-            $codes->push($total);
+//            $codes->push($total);
             $codes = $codes->values();
-            $data = ['route' => $route, 'columns' => $codes_names, 'data' => $codes];
+            $data = ['filter' => $filter, 'columns' => $codes_names, 'data' => $codes];
             return $data;
         }
     }
@@ -1251,7 +1428,13 @@ class StatsRepository
         $agentName = $request->get('agent_name');
         $results = \DB::table('stats')
             ->select('Groupement', 'Nom_Region', \DB::raw('count(*) as total'))
-            ->whereNotNull('Groupement');
+            ->whereNotNull('Groupement')
+            ->where('Groupement', 'not like', 'Non Renseigné');
+
+
+
+        $keys = ($results->groupBy('Groupement', 'Nom_Region')->get())->groupBy(['Groupement'])->keys();
+
 
         if ($agentName) {
             $results = $results->where('Utilisateur', $agentName);
@@ -1267,6 +1450,38 @@ class StatsRepository
             $dates = array_values($dates);
             $results = $results->whereIn('Date_Note', $dates);
         }
+        $user = auth()->user() ?? User::find(1);
+        $_route = $this->getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+
+        if ($request && count($request->all())) {
+            if ($request->exists('refreshMode')) {
+                if ($dates) {
+                    $dates = array_values($dates);
+                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
+                    $filter->date_filter = $dates;
+                    $filter->save();
+                    $regions = $results->whereIn('Date_Note', $dates);
+                } else {
+                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                    if ($filter) {
+                        $filter->forceDelete();
+                    }
+                }
+            } else {
+                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                if ($filter) {
+                    $regions = $results->whereIn('Date_Note', $filter->date_filter);
+                }
+            }
+        } else {
+            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+            if ($filter) {
+                $regions = $results->whereIn('Date_Note', $filter->date_filter);
+            }
+        }
+
         $columns = $results->groupBy('Groupement', 'Nom_Region')->get();
 
         $results = $results->groupBy('Groupement', 'Nom_Region')->get();
@@ -1292,7 +1507,7 @@ class StatsRepository
 //            return;
             });
 
-            $keys = $columns->groupBy(['Groupement'])->keys();
+//            $keys = $columns->groupBy(['Groupement'])->keys();
             $results = $results->groupBy(['Nom_Region']);
             $column_names = [];
 //        $codes_names[0] = new \stdClass();
@@ -1366,7 +1581,7 @@ class StatsRepository
             $results->push($total);
             $results = $results->values();
 
-            $data = ['route' => $route, 'columns' => $column_names, 'data' => $results];
+            $data = ['filter' => $filter, 'columns' => $column_names, 'data' => $results];
             return $data;
         }
     }

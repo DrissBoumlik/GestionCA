@@ -16,12 +16,12 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     public function getUsers(Request $request, YDT $dataTables)
     {
-        $users = User::with('role');
+        $users = User::with('role')->orderBy('users.id', 'desc');
         return DataTables::of($users)
             ->setRowId(function ($user) {
                 return 'user-' . $user->id;
@@ -65,7 +65,8 @@ class UserController extends Controller
             'email' => ['required', 'email', 'max:255', 'unique:users'],
             'gender' => ['nullable', 'in:male,female'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'exists:roles,id']
+            'role' => ['required', 'exists:roles,id'],
+            'agence_name' => ['required_if:role,==,2', 'max:20']
         ]);
         $user = User::create([
             'firstname' => $request->firstname,
@@ -76,6 +77,7 @@ class UserController extends Controller
             'status' => $request->status ? true : false,
             'password' => Hash::make($request->password),
             'role_id' => $request->role,
+            'agence_name' => $request->agence_name,
         ]);
 
         return redirect('/users');
@@ -150,7 +152,8 @@ class UserController extends Controller
             'picture' => 'image64:jpeg,jpg,png',
             'gender' => ['nullable', 'in:male,female'],
             'password' => ['nullable', 'string', 'min:8'],
-            'role' => ['nullable', 'exists:roles,id']
+            'role' => ['nullable', 'exists:roles,id'],
+            'agence_name' => ['present', 'max:20']
         ]);
         // Update
 //        $picture = $request->file('picture');
@@ -177,7 +180,8 @@ class UserController extends Controller
         $user->status = $request->status ? true : false;
         $user->password = $request->password ? Hash::make($request->password) : $user->password;
         $user->role_id = $request->role ?? $user->role_id;
-        $user->update();
+        $user->agence_name = $request->agence_name ?? $user->agence_name;
+        $user->save();
 
         return back()->with('message', 'Successfully updated');
     }

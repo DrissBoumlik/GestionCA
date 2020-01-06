@@ -44,7 +44,7 @@
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="/">Home</a>
+                            <a class="link-fx" href="{{ route('dashboard') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">Profile</li>
                     </ol>
@@ -56,7 +56,7 @@
 @endsection
 @section('content')
     <div class="user-profile profile">
-        <form method="POST" action="/users/{{ $user->id }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('users.update', $user->id) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
             <div class="container">
@@ -136,6 +136,26 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-4">
+                                            <label for="gender">Gender</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <select name="gender" id="gender"
+                                                    class="form-control capitalize form-field @error('gender') is-invalid @enderror">
+                                                <option class="capitalize"
+                                                        value="male" {{ $user->gender == 'male' ? 'selected' : '' }}>
+                                                    Male
+                                                </option>
+                                                <option class="capitalize"
+                                                        value="female" {{ $user->gender == 'female' ? 'selected' : '' }}>
+                                                    Female
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-4">
                                             <label for="role">Role</label>
                                         </div>
                                         <div class="col-8">
@@ -151,22 +171,21 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="agence_name" @if ($user->role->id !== 2) style="display: none" @endif>
                                     <div class="row">
                                         <div class="col-4">
-                                            <label for="gender">Gender</label>
+                                            <label for="role">Agence</label>
                                         </div>
                                         <div class="col-8">
-                                            <select name="gender" id="gender"
-                                                    class="form-control capitalize form-field @error('gender') is-invalid @enderror">
-                                                <option class="capitalize"
-                                                        value="male" {{ $user->gender == 'male' ? 'selected' : '' }}>
-                                                    Male
-                                                </option>
-                                                <option class="capitalize"
-                                                        value="female" {{ $user->gender == 'female' ? 'selected' : '' }}>
-                                                    Female
-                                                </option>
+                                            <select name="agence_name" id="agence_name"
+                                                    class="form-control capitalize form-field @error('agence_name') is-invalid @enderror">
+                                                <option value=""></option>
+                                                @foreach(agencesList() as $agence)
+                                                    <option class="capitalize"
+                                                            value="{{ $agence['name'] }}" {{ $user->agence_name == $agence['name'] ? 'selected' : '' }}>
+                                                        {{ $agence['name'] }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -227,7 +246,7 @@
                                                                     <label for="password">Password</label>
                                                                 </div>
                                                                 <div class="col-8">
-                                                                    <input type="text" class="form-control form-field"
+                                                                    <input type="password" class="form-control form-field"
                                                                            name="password"
                                                                            id="password" placeholder="Password">
                                                                 </div>

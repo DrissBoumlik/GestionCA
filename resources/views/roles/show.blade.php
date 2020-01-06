@@ -34,37 +34,37 @@
             );
             @endif
 
-            $("#permissions-data").DataTable({
-                responsive: true,
-                info: false,
-                processing: true,
-                serverSide: true,
-                searching: false,
-                ajax: 'getRolePermissions/{{ $role->id }}',
-                columns: [
-                    {
-                        data: 'id', name: 'id',
-                        render: function (data, type, full, meta) {
-                            return "<a href='/permissions/" + data + "' class='align-center blue d-block'><i class='far fa-eye big-icon-fz'></i></a>";
-                        }
-                    },
-                    {data: 'name', name: 'name', class: 'capitalize'},
-                    {data: 'method', name: 'method', class: 'capitalize'},
-                    {data: 'controller', name: 'controller', class: 'capitalize'},
-                    {
-                        data: 'assigned', name: 'assigned',
-                        render: function (data, type, full, meta) {
-                            return "<label for='status-" + full.id + "' class='m-0'>" +
-                                "<input class='data-status d-none change-status' data-role='" + {{ $role->id }} +"' data-status='" + full.id + "'" +
-                                " id='status-" + full.id + "' type='checkbox'" +
-                                (data ? 'checked' : '') +
-                                " name='status'>" +
-                                "<span class='status pointer'></span>" +
-                                "</label>";
-                        }
-                    }
-                ]
-            });
+            {{--$("#permissions-data").DataTable({--}}
+            {{--    responsive: true,--}}
+            {{--    info: false,--}}
+            {{--    processing: true,--}}
+            {{--    serverSide: true,--}}
+            {{--    searching: false,--}}
+            {{--    ajax: 'getRolePermissions/{{ $role->id }}',--}}
+            {{--    columns: [--}}
+            {{--        {--}}
+            {{--            data: 'id', name: 'id',--}}
+            {{--            render: function (data, type, full, meta) {--}}
+            {{--                return "<a href='/permissions/" + data + "' class='align-center blue d-block'><i class='far fa-eye big-icon-fz'></i></a>";--}}
+            {{--            }--}}
+            {{--        },--}}
+            {{--        {data: 'name', name: 'name', class: 'capitalize'},--}}
+            {{--        {data: 'method', name: 'method', class: 'capitalize'},--}}
+            {{--        {data: 'controller', name: 'controller', class: 'capitalize'},--}}
+            {{--        {--}}
+            {{--            data: 'assigned', name: 'assigned',--}}
+            {{--            render: function (data, type, full, meta) {--}}
+            {{--                return "<label for='status-" + full.id + "' class='m-0'>" +--}}
+            {{--                    "<input class='data-status d-none change-status' data-role='" + {{ $role->id }} +"' data-status='" + full.id + "'" +--}}
+            {{--                    " id='status-" + full.id + "' type='checkbox'" +--}}
+            {{--                    (data ? 'checked' : '') +--}}
+            {{--                    " name='status'>" +--}}
+            {{--                    "<span class='status pointer'></span>" +--}}
+            {{--                    "</label>";--}}
+            {{--            }--}}
+            {{--        }--}}
+            {{--    ]--}}
+            {{--});--}}
         });
     </script>
 @endsection
@@ -79,7 +79,7 @@
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="/">Home</a>
+                            <a class="link-fx" href="{{ route('dashboard') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item" aria-current="page">Role</li>
                     </ol>
@@ -91,7 +91,7 @@
 @endsection
 @section('content')
     <div class="profile">
-        <form method="POST" action="/roles/{{ $role->id }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('roles.update', $role->id) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
             <div class="container">
@@ -164,36 +164,36 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-5">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title float-left">Assign Permissions</h3>
+{{--                <div class="row mt-5">--}}
+{{--                    <div class="col-12">--}}
+{{--                        <div class="card">--}}
+{{--                            <div class="card-header">--}}
+{{--                                <h3 class="card-title float-left">Assign Permissions</h3>--}}
 {{--                                <button type="button" class="btn btn-primary mgl-10 round" title="Add Permission">--}}
-                                    <a href="/permissions/create" class="link btn btn-primary mgl-10 round d-none" title="Add Permission"><i class="fas fa-plus"></i></a>
+{{--                                    <a href="/permissions/create" class="link btn btn-primary mgl-10 round d-none" title="Add Permission"><i class="fas fa-plus"></i></a>--}}
 {{--                                </button>--}}
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body table-responsive">
-                                <table id="permissions-data"
-                                       class="table table-bordered table-striped table-valign-middle capitalize">
-                                    <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Name</th>
-                                        <th>Method</th>
-                                        <th>Controller</th>
-                                        <th>Assined</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-                        <!-- /.card -->
-                    </div>
-                    <!-- /.col -->
-                </div>
+{{--                            </div>--}}
+{{--                            <!-- /.card-header -->--}}
+{{--                            <div class="card-body table-responsive">--}}
+{{--                                <table id="permissions-data"--}}
+{{--                                       class="table table-bordered table-striped table-valign-middle capitalize">--}}
+{{--                                    <thead>--}}
+{{--                                    <tr>--}}
+{{--                                        <th></th>--}}
+{{--                                        <th>Name</th>--}}
+{{--                                        <th>Method</th>--}}
+{{--                                        <th>Controller</th>--}}
+{{--                                        <th>Assined</th>--}}
+{{--                                    </tr>--}}
+{{--                                    </thead>--}}
+{{--                                </table>--}}
+{{--                            </div>--}}
+{{--                            <!-- /.card-body -->--}}
+{{--                        </div>--}}
+{{--                        <!-- /.card -->--}}
+{{--                    </div>--}}
+{{--                    <!-- /.col -->--}}
+{{--                </div>--}}
                 <!-- /.row -->
             </div>
         </form>

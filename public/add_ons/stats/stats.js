@@ -11,6 +11,11 @@ $(function () {
     let agent_name = '';
     let agence_code = '';
 
+
+    const agence_name = $('#agence_name');
+    if (agence_name) {
+        agence_code = agence_name.val();
+    }
     const params = window.location.href.split('?')[1];
     if (params) {
         const paramsList = params.split('&');
@@ -197,7 +202,7 @@ $(function () {
                 let treeId = '#' + $(this).attr('id');
                 new Tree(treeId, {
                     data: [{id: '-1', text: 'Dates', children: data}],
-                    closeDepth: 2,
+                    closeDepth: 1,
                     loaded: function () {
                         // this.values = ['0-0-0', '0-1-1', '0-0-2'];
                         // console.log(this.selectedNodes);
@@ -211,9 +216,11 @@ $(function () {
                         dates = this.values;
                     }
                 });
-                $(treeId + ' .treejs-switcher').click();
+                // $(treeId + ' .treejs-switcher').click();
                 // $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
             });
+
+            // $('.tree-view .treejs-switcher').click();
         },
         error: function (jqXHR, textStatus, errorThrown) {
         }
@@ -280,7 +287,7 @@ $(function () {
     let statsRegionsDetails = {
         element: undefined,
         columns: undefined,
-        routeData: 'regions/Groupement' // $('#stateregdet-url').attr('url')
+        routeData: 'regions/details/groupement' // $('#stateregdet-url').attr('url')
     };
     let statsRegionsChart = {
         element_chart: undefined,
@@ -462,6 +469,9 @@ $(function () {
     /// ====================== FUNCTIONS ==========================
 
     function getColumns(object, objectChart = null, callInitDT = true, pagination = false, data = null, removeTotal = true, refreshMode = false, details = false, removeTotalColumn = true) {
+        if (refreshMode) {
+            data = {...data, refreshMode: true}; //{dates: data, refreshMode: true};
+        }
         $.ajax({
             url: object.routeCol,
             method: 'GET',
@@ -473,9 +483,9 @@ $(function () {
                     $(object.element).find('thead tr').prepend('<th></th>');
                 }
                 if (callInitDT) {
-                    if (refreshMode) {
-                        data = {...data, refreshMode: true}; //{dates: data, refreshMode: true};
-                    }
+                    // if (refreshMode) {
+                    //     data = {...data, refreshMode: true}; //{dates: data, refreshMode: true};
+                    // }
                     object.element_dt = InitDataTable(object, pagination, data, details);
 
                     object.element.on('click', 'td.details-control', function () {

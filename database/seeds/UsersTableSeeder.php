@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
@@ -11,7 +12,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::create([
+        User::create([
             'firstname' => 'Driss',
             'lastname' => 'Boumlik',
             'email' => 'a@a.a',
@@ -23,6 +24,18 @@ class UsersTableSeeder extends Seeder
             'remember_token' => Str::random(10),
             'role_id' => 1
         ]);
-        factory(App\Models\User::class, 100)->create();
+        User::create([
+            'firstname' => 'dosez6',
+            'lastname' => 'Agent',
+            'email' => 'dosez6',
+            'status' => true,
+            'picture' => 'https://images2.imgbox.com/9c/5e/F8JZCJLn_o.png',
+            'gender' => 'male',
+            'email_verified_at' => now(),
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+            'remember_token' => Str::random(10),
+            'role_id' => 2,
+            'agence_name' => '6 - DOSEZ6'
+        ]);
     }
 }

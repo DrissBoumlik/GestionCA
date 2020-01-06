@@ -61,6 +61,9 @@
         </div>
         <!-- END Page Container -->
 
+        <script !src="">
+            APP_URL = '{{ env('APP_URL') }}';
+        </script>
         <!-- OneUI Core JS -->
         <script src="{{ asset('js/oneui.app.js') }}"></script>
         <!-- Select2 -->

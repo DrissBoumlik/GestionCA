@@ -10,13 +10,12 @@ $(function () {
             {
                 data: 'id', name: 'id',
                 render: function (data, type, full, meta) {
-                    return "<a href='/roles/" + data + "' class='align-center blue d-block'><i class='far fa-eye big-icon-fz'></i></a>";
+                    return `<a href="${APP_URL}/roles/${data}" class="align-center blue d-block"><i class="far fa-eye big-icon-fz"></i></a>`;
                 }
             },
             {data: 'name', name: 'name', class: 'capitalize'},
             {data: 'description', name: 'description', class: 'capitalize'},
             {data: 'users_count', name: 'users_count', class: 'capitalize'},
-            {data: 'permissions_count', name: 'permissions_count', class: 'capitalize'},
             {
                 data: 'id', name: 'id',
                 render: function (data, type, full, meta) {
@@ -34,7 +33,7 @@ $(function () {
             element = this;
             $.ajax({
                 method: 'DELETE',
-                url: window.location.origin + '/roles/' + role_id,
+                url: APP_URL + '/roles/' + role_id,
                 success: function (response) {
                     feedBack(response.message, 'success');
                     removeElement(element);

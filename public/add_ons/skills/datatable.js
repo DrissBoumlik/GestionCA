@@ -46,7 +46,7 @@ $(function () {
 
     $('.update-skill').on('click', function () {
         $('#skillForm').modal('hide');
-        var baseUrl = window.location.origin;
+        var baseUrl = APP_URL;
         var skillInput = $('#skill');
         $.ajax({
             method: createMode ? 'POST' : 'PUT',
@@ -69,7 +69,7 @@ $(function () {
         if (confirmed) {
             skill_id = $(this).attr('data-skill');
             element = this;
-            var baseUrl = window.location.origin;
+            var baseUrl = APP_URL;
             $.ajax({
                 method: 'DELETE',
                 url: baseUrl + '/skills/' + skill_id,

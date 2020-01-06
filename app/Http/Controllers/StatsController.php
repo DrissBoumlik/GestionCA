@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Stats;
 use App\Repositories\StatsRepository;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Database\Query\JoinClause;
 
 class StatsController extends Controller
 {
@@ -17,15 +19,18 @@ class StatsController extends Controller
         $this->statsRepository = $statsRepository;
     }
 
-    public function getAgencies (Request $request) {
+    public function getAgencies(Request $request)
+    {
         return $this->statsRepository->getAgencies($request);
     }
 
-    public function getAgents (Request $request) {
+    public function getAgents(Request $request)
+    {
         return $this->statsRepository->getAgents($request);
     }
 
-    public function filterList ($column, Request $request) {
+    public function filterList($column, Request $request)
+    {
         $stats = $this->statsRepository->filterList($column, $request);
         return [
             'data' => $stats
@@ -189,7 +194,7 @@ class StatsController extends Controller
 
     #endregion
 
-    public function index()
+    public function import()
     {
         return view('stats.import');
     }
@@ -197,6 +202,33 @@ class StatsController extends Controller
     public function importStats(Request $request)
     {
         return response()->json($this->statsRepository->importStats($request));
+    }
+
+    public function demo(Request $request)
+    {
+//        $data = \DB::table('stats', 's')
+//            ->joinSub(
+//                \DB::table('stats')
+//                    ->groupBy('id_externe')
+//                    ->select([
+//                        'id_externe',
+//                        \DB::raw('MAX(Date_Heure_Note) as max_date')
+//                    ]),
+//                'unique_ids',
+//                function (JoinClause $join) {
+//                    $join->on('s.id_externe', '=', 'unique_ids.id_externe')
+//                        ->on('s.Date_Heure_Note', '=', 'unique_ids.max_date');
+//                }
+//            )
+//            ->select([
+//                's.id',
+//                's.id_externe',
+//                's.Date_Heure_Note as last_date'
+//            ])
+//            ->orderBy('last_date', 'desc');
+        $data = Stats::orderBy('Date_Heure_Note','desc')->get()->unique('Id_Externe');
+
+        dd($data->pluck('Id_Externe', 'Date_Heure_Note'));
     }
 
 }

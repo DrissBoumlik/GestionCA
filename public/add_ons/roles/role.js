@@ -7,7 +7,7 @@ $(function () {
             element = this;
             $.ajax({
                 method: 'DELETE',
-                url: window.location.origin + '/roles/' + role_id,
+                url: APP_URL + '/roles/' + role_id,
                 success: function (response) {
                     feedBack(response.message, 'success');
                     setTimeout(() => {
@@ -32,7 +32,7 @@ $(function () {
             status = $(this).prop('checked');
             $.ajax({
                 method: 'POST',
-                url: window.location.origin + '/assignPermissionRole',
+                url: APP_URL + '/assignPermissionRole',
                 data: {status, role_id, permission_id, method: 'patch'},
                 success: function (response) {
                     feedBack(response.message, 'success');

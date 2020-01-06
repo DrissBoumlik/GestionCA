@@ -55,6 +55,9 @@
 
 @section('content-header')
     <!-- Hero -->
+    @if (request()->has('agence_code'))
+    <input type="hidden" name="agence_name" id="agence_name" value="{{$agence}}">
+    @endif
     <div class="bg-image overflow-hidden"
          style="background-image: url('{{ asset('/media/backgrounds/photo3@2x.jpg') }}');">
         <div class="bg-primary-dark-op">
@@ -62,15 +65,15 @@
                 <div
                     class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center mt-5 mb-2 text-center text-sm-left">
                     <div class="flex-sm-fill">
-                        @if ($agence !== '')
+                        @if (request()->has('agence_code'))
                             <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard Agence {{$agence}}</h1>
-                        @elseif($agent !== '')
+                        @elseif(request()->has('agent_name'))
                             <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard Agent {{strtoupper($agent)}}</h1>
                         @else
                             <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard</h1>
                         @endif
                         <h2 class="h4 font-w400 text-white-75 mb-0 invisible" data-toggle="appear" data-timeout="250">
-                            Welcome Administrator</h2>
+                            Welcome {{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</h2>
                     </div>
                     <div class="flex-sm-00-auto mt-3 mt-sm-0 ml-sm-3">
                         <span class="d-inline-block invisible" data-toggle="appear" data-timeout="350">
@@ -232,7 +235,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Résultats Appels Préalables par agence</th>
+                                    <th>Résultats Appels Préalables</th>
                                     @for($i = 1; $i < count($calls_states_weeks); $i++)
                                         <th>{{ $calls_states_weeks[$i]->name }}</th>
                                     @endfor
@@ -458,6 +461,4 @@
         </div>
         <!-- END Stats -->
     </div>
-    <input type="hidden" id="stateregdet-url" url="{{ route('stateregdet') }}"/>
-
 @endsection

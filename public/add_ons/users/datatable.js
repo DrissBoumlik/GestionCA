@@ -19,7 +19,7 @@ $(function () {
             {
                 data: 'id', name: 'id',
                 render: function (data, type, full, meta) {
-                    return "<a href='/users/" + data + "' class='align-center blue d-block'><i class='far fa-eye big-icon-fz'></i></a>";
+                    return "<a href='" + APP_URL + "/users/" + data + "' class='align-center blue d-block'><i class='far fa-eye big-icon-fz'></i></a>";
                 }
             },
             {
@@ -59,7 +59,7 @@ $(function () {
         if (confirmed) {
             user_id = $(this).attr('data-user');
             element = this;
-            sendRequest($(this), 'DELETE', '/users/' + user_id);
+            sendRequest($(this), 'DELETE', APP_URL + '/users/' + user_id);
         }
     });
 
@@ -69,14 +69,14 @@ $(function () {
         var confirmed = confirm('Are you sure ?');
         if (confirmed) {
             user_id = $(_this).attr('data-status');
-            sendRequest($(this), 'PUT', '/changeStatus/' + user_id, {status, method: 'patch'}, true);
+            sendRequest($(this), 'PUT', `${APP_URL}/changeStatus/${user_id}`, {status, method: 'patch'}, true);
         } else {
             $(_this).prop('checked', !status);
         }
     });
 
     function sendRequest(_this, method, route, data = null, toggleCheck = false, reload = false) {
-        var baseUrl = window.location.origin;
+        var baseUrl = APP_URL;
         $.ajax({
             method: method,
             url: baseUrl + route,
