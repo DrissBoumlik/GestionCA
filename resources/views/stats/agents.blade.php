@@ -88,7 +88,7 @@
                                 <div id="tree-view-0" class="tree-view d-inline-block"></div>
                                 <div id="stats-regions-filter" class="tree-region-view d-inline-block"></div>
                                 <button type="button" id="refreshRegions" class="btn btn-primary float-right">
-                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </div>
                         </div>

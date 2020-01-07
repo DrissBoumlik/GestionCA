@@ -2,7 +2,7 @@
     <!-- Side Header -->
     <div class="content-header bg-white-5">
         <!-- Logo -->
-        <a class="font-w600 text-dual" href="/">
+        <a class="font-w600 text-dual" href="{{ URL::to('/') }}">
             <img src="{{ asset('media/circetwhite.png') }}" alt="" class="logo">
         </a>
         <!-- END Logo -->
@@ -96,7 +96,13 @@
             <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('dashboard') }}">
                     <i class="nav-main-link-icon si si-cursor"></i>
-                    <span class="nav-main-link-name">Dashboard</span>
+                    <span class="nav-main-link-name">Tableau de bord</span>
+                </a>
+            </li>
+            <li class="nav-main-item">
+                <a class="nav-main-link{{ request()->is('dashboard') ? ' active' : '' }}" href="{{ route('stats.index') }}">
+                    <i class="nav-main-link-icon si si-cursor"></i>
+                    <span class="nav-main-link-name">All stats</span>
                 </a>
             </li>
             @if(Auth::user()->role->id === 1)
@@ -104,38 +110,16 @@
                     <a class="nav-main-link{{ (request()->is('users') || request()->is('users/*')) ? ' active' : '' }}"
                        href="{{ route('users.index') }}">
                         <i class="nav-main-link-icon si si-users"></i>
-                        <span class="nav-main-link-name">Users</span>
+                        <span class="nav-main-link-name">Utilisateurs</span>
                     </a>
                 </li>
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ (request()->is('roles') || request()->is('roles/*')) ? ' active' : '' }}"
                        href="{{ route('roles.index') }}">
                         <i class="nav-main-link-icon si si-shield"></i>
-                        <span class="nav-main-link-name">Roles</span>
+                        <span class="nav-main-link-name">Rôles</span>
                     </a>
                 </li>
-{{--                <li class="nav-main-item">--}}
-{{--                    <a class="nav-main-link{{ (request()->is('permissions') || request()->is('permissions/*')) ? ' active' : '' }}"--}}
-{{--                       href="permissions">--}}
-{{--                        <i class="nav-main-link-icon si si-key"></i>--}}
-{{--                        <span class="nav-main-link-name">Permissions</span>--}}
-{{--                    </a>--}}
-{{--                </li>--}}
-                {{--                <li class="nav-main-item">--}}
-                {{--                    <a class="nav-main-link{{ (request()->is('skills') || request()->is('skills/*')) ? ' active' : '' }}"--}}
-                {{--                       href="skills">--}}
-                {{--                        <i class="nav-main-link-icon si si-game-controller"></i>--}}
-                {{--                        <span class="nav-main-link-name">Skills</span>--}}
-                {{--                    </a>--}}
-                {{--                </li>--}}
-                {{--                <li class="nav-main-item">--}}
-                {{--                    <a class="nav-main-link{{ (request()->is('projects') || request()->is('projects/*')) ? ' active' : '' }}"--}}
-                {{--                       href="projects">--}}
-                {{--                        <i class="nav-main-link-icon si si-briefcase"></i>--}}
-                {{--                        <span class="nav-main-link-name">Projects</span>--}}
-                {{--                    </a>--}}
-                {{--                </li>--}}
-
             <li class="nav-main-item{{ request()->is('agences') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                     <i class="nav-main-link-icon fas fa-building"></i>
@@ -172,7 +156,7 @@
             <li class="nav-main-item">
                 <a class="nav-main-link{{ request()->is('stats') ? ' active' : '' }}" href="{{ route('stats.index') }}">
                     <i class="nav-main-link-icon si si-cursor"></i>
-                    <span class="nav-main-link-name">Import</span>
+                    <span class="nav-main-link-name">Importation</span>
                 </a>
             </li>
             @endif

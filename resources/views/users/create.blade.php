@@ -15,17 +15,17 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <div class="flex-sm-fill">
-                    <h1 class="h3 my-2 d-inline-block">Users</h1>
+                    <h1 class="h3 my-2 d-inline-block">Utilisateurs</h1>
                 </div>
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="{{ route('dashboard') }}">Home</a>
+                            <a class="link-fx" href="{{ route('dashboard') }}">Tableau de board</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="{{ route('users.create') }}">Users</a>
+                            <a class="link-fx" href="{{ route('users.create') }}">Utilisateur</a>
                         </li>
-                        <li class="breadcrumb-item" aria-current="page">Create</li>
+                        <li class="breadcrumb-item" aria-current="page">Créer</li>
                     </ol>
                 </nav>
             </div>
@@ -42,14 +42,14 @@
                     <div class="col-md-8 offset-md-2">
                         <div class="update-profile">
                             <div class="header">
-                                <h2 class="capitalize">Create Profile</h2>
+                                <h2 class="capitalize">Créer un Profil</h2>
                             </div>
                             <hr>
                             <div class="profile-data">
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-4">
-                                            <label for="firstname">First name</label>
+                                            <label for="firstname">Prénom</label>
                                         </div>
                                         <div class="col-8">
                                             <input type="text" class="form-control form-field" id="firstname"
@@ -61,7 +61,7 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-4">
-                                            <label for="lastname">Last name</label>
+                                            <label for="lastname">Nom</label>
                                         </div>
                                         <div class="col-8">
                                             <input type="text" class="form-control form-field" id="lastname"
@@ -73,18 +73,18 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-4">
-                                            <label for="gender">Gender</label>
+                                            <label for="gender">Genre</label>
                                         </div>
                                         <div class="col-8">
                                             <select name="gender" id="gender"
                                                     class="form-control capitalize form-field @error('gender') is-invalid @enderror">
                                                 <option class="capitalize"
                                                         value="male">
-                                                    Male
+                                                    Homme
                                                 </option>
                                                 <option class="capitalize"
                                                         value="female">
-                                                    Female
+                                                    Femme
                                                 </option>
                                             </select>
                                         </div>
@@ -93,7 +93,7 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-4">
-                                            <label for="role">Role</label>
+                                            <label for="role">Rôle</label>
                                         </div>
                                         <div class="col-8">
                                             <select name="role" id="role"
@@ -131,7 +131,7 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-4">
-                                            <label for="status">Status</label>
+                                            <label for="status">Etat</label>
                                         </div>
                                         <div class="col-8">
                                             <label for="status" class="m-0">
@@ -157,7 +157,7 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-4">
-                                            <label for="password">Password</label>
+                                            <label for="password">Mot de passe</label>
                                         </div>
                                         <div class="col-8">
                                             <input type="password" class="form-control form-field" name="password"
@@ -168,7 +168,7 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-4">
-                                            <label for="password_confirmation">Password Confirmation</label>
+                                            <label for="password_confirmation">Confirmation du mot de passe</label>
                                         </div>
                                         <div class="col-8">
                                             <input type="password" class="form-control form-field"
@@ -180,7 +180,7 @@
                                 <div class="row">
                                     <div class="col-md-6 offset-md-3">
                                         <button type="submit" class="btn btn-primary mt-5 full-w">
-                                            <span class="mr-3">Create</span>
+                                            <span class="mr-3">Créer</span>
                                             <i class="fas fa-user-plus"></i>
                                         </button>
                                     </div>

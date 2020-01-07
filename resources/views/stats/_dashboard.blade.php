@@ -171,7 +171,7 @@
                                 @csrf
                                 <div id="tree-view-0" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
-                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </form>
                         </div>
@@ -227,7 +227,7 @@
                                 @csrf
                                 <div id="tree-view-1" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
-                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </form>
                         </div>
@@ -278,7 +278,7 @@
                                 @csrf
                                 <div id="tree-view-2" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
-                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </form>
                         </div>
@@ -329,7 +329,7 @@
                                 @csrf
                                 <div id="tree-view-3" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
-                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </form>
                         </div>
@@ -385,7 +385,7 @@
                                 @csrf
                                 <div id="tree-view-4" class="tree-view d-inline-block"></div>
                                 <button type="submit" class="btn btn-primary float-right">
-                                    <span class="btn-field font-weight-normal position-relative">Refresh</span>
+                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </form>
                         </div>

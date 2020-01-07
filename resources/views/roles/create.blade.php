@@ -13,17 +13,17 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <div class="flex-sm-fill">
-                    <h1 class="h3 my-2 d-inline-block">Roles</h1>
+                    <h1 class="h3 my-2 d-inline-block">Rôles</h1>
                 </div>
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="{{ route('dashboard') }}">Home</a>
+                            <a class="link-fx" href="{{ route('dashboard') }}">Tableau de bord</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="{{ route('roles.index') }}">Roles</a>
+                            <a class="link-fx" href="{{ route('roles.index') }}">Rôles</a>
                         </li>
-                        <li class="breadcrumb-item" aria-current="page">Create</li>
+                        <li class="breadcrumb-item" aria-current="page">Créer</li>
                     </ol>
                 </nav>
             </div>
@@ -40,14 +40,14 @@
                     <div class="col-md-8 offset-md-2">
                         <div class="update-profile">
                             <div class="header">
-                                <h2 class="capitalize">Create Role</h2>
+                                <h2 class="capitalize">Créer Rôle</h2>
                             </div>
                             <hr>
                             <div class="profile-data">
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-4">
-                                            <label for="name">Role Name</label>
+                                            <label for="name">Nom</label>
                                         </div>
                                         <div class="col-8">
                                             <input type="text" class="form-control form-field" id="name"
@@ -59,7 +59,7 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-4">
-                                            <label for="description">Role Description</label>
+                                            <label for="description">Description</label>
                                         </div>
                                         <div class="col-8">
                                             <input type="text" class="form-control form-field" id="description"
@@ -71,7 +71,7 @@
                                 <div class="row">
                                     <div class="col-md-6 offset-md-3">
                                         <button type="submit" class="btn btn-primary mt-5 full-w">
-                                            <span class="mr-3">Create</span>
+                                            <span class="mr-3">Créer</span>
                                             <i class="fas fa-shield-alt"></i>
                                         </button>
                                     </div>

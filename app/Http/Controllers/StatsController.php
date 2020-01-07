@@ -19,6 +19,18 @@ class StatsController extends Controller
         $this->statsRepository = $statsRepository;
     }
 
+    public function index()
+    {
+        return view('stats.index');
+    }
+
+    public function getStats(Request $request)
+    {
+        $stats = $this->statsRepository->getStats();
+//        return $stats;
+        return DataTables::of($stats)->toJson();
+    }
+
     public function getAgencies(Request $request)
     {
         return $this->statsRepository->getAgencies($request);

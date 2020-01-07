@@ -9,6 +9,7 @@ $(function () {
 //     "autoWidth": true, //false,
 // });
     var usersTable = $("#users-data").DataTable({
+        language: frLang,
         responsive: true,
         info: false,
         processing: true,

@@ -74,14 +74,14 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <div class="flex-sm-fill">
-                    <h1 class="h3 my-2 d-inline-block">Role</h1>
+                    <h1 class="h3 my-2 d-inline-block">Rôles</h1>
                 </div>
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="{{ route('dashboard') }}">Home</a>
+                            <a class="link-fx" href="{{ route('dashboard') }}">Tableau de bord</a>
                         </li>
-                        <li class="breadcrumb-item" aria-current="page">Role</li>
+                        <li class="breadcrumb-item" aria-current="page">Rôle</li>
                     </ol>
                 </nav>
             </div>
@@ -115,14 +115,14 @@
                     <div class="col-md-8 offset-md-1 mt-sm-5 mt-5 mt-lg-0 mt-xl-0">
                         <div class="update-profile">
                             <div class="header">
-                                <h2 class="capitalize">Update Role</h2>
+                                <h2 class="capitalize">Modifé Rôle</h2>
                             </div>
                             <hr>
                             <div class="profile-data">
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-4">
-                                            <label for="firstname">Name</label>
+                                            <label for="firstname">Nom</label>
                                         </div>
                                         <div class="col-8">
                                             <input type="text" class="form-control form-field capitalize" id="name"
@@ -149,14 +149,14 @@
                                 <div class="row update-btn mt-lg-5 mt-sm-0">
                                     <div class="col-md-6 mt-3">
                                         <button type="submit" class="btn btn-primary full-w">
-                                            <span class="btn-field font-weight-normal fa-edit pr-4 position-relative">Update</span>
+                                            <span class="btn-field font-weight-normal fa-edit pr-4 position-relative">Modifié</span>
                                         </button>
                                     </div>
                                     <div class="col-md-6 mt-3">
                                         <button class="btn btn-danger full-w delete-role"
                                                 data-role="{{ $role->id }}">
                                             <span
-                                                class="btn-field font-weight-bold fa-trash-alt pr-3 position-relative">Delete</span>
+                                                class="btn-field font-weight-bold fa-trash-alt pr-3 position-relative">Supprimer</span>
                                         </button>
                                     </div>
                                 </div>

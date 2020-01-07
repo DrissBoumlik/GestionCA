@@ -19,10 +19,11 @@
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('reset', 'Auth\LoginController@logout')->name('auth.reset');
 
-Route::group([
-    'middleware' => ['auth'],
-], function () {
+//Route::group([
+//    'middleware' => ['auth'],
+//], function () {
     //Route::get('/', 'HomeController@dashboard')->name('home');
 //Route::get('/_dashboard', 'HomeController@dashboard')->name('home');
     Route::get('/', 'ToolController@home');
@@ -46,29 +47,12 @@ Route::group([
     Route::get('/getPermissions', 'PermissionController@getPermissions');
     Route::get('/getPermissionRoles/{permission}', 'PermissionController@getRoles');
 
-// Skills Routes
-    Route::get('/skills', 'SkillController@index');
-    Route::post('/skills', 'SkillController@store');
-    Route::delete('/skills/{skill}', 'SkillController@destroy');
-    Route::put('/skills/{skill}', 'SkillController@update');
-
-    Route::resource('/skills', 'SkillController');
-    Route::get('/getSkills', 'SkillController@getSkills');
-    Route::get('/getUserSkills', 'SkillController@getUserSkills');
-    Route::get('/editSkills', 'SkillController@editSkills');
-    Route::put('/updateSkills', 'SkillController@updateSkills');
-    Route::post('/chooseSkill', 'SkillController@chooseSkill');
-    Route::put('/chooseTopSkill', 'SkillController@chooseTopSkill');
-
-// Projects Routes
-    Route::resource('/projects', 'ProjectController');
-    Route::get('/getProjects', 'ProjectController@getProjects');
-    Route::get('/getTechs/{project?}', 'ProjectController@getTechs');
-    Route::get('/getCollaborators/{project?}', 'ProjectController@getCollaborators');
-
     Route::get('/unauthorized', 'ToolController@unauthorized');
 
     Route::get('/dashboard', 'StatsController@dashboard')->name('dashboard');
+
+    Route::get('/stats/all-stats', 'StatsController@index')->name('stats.index');
+    Route::post('/stats/get-stats', 'StatsController@getStats')->name('stats.get-stats');
 //Route::post('/getRegionsByDates', 'StatsController@getRegionsByDates');
 //Route::post('/getNonValidatedFoldersByCodeByDates', 'StatsController@getNonValidatedFoldersByCodeByDates');
 //Route::post('/getNonValidatedFoldersByTypeByDates', 'StatsController@getNonValidatedFoldersByTypeByDates');
@@ -119,7 +103,7 @@ Route::group([
 //Route::get('/tasks/get-tasks', 'TaskController@getTasks')->name('tasks.get-tasks');
 //Route::post('/tasks/import-tasks', 'TaskController@importTasks')->name('tasks.import-tasks');
 
-    Route::get('/stats', 'StatsController@index')->name('stats.index');
+    Route::get('/stats', 'StatsController@import')->name('stats.import');
     Route::post('/stats/import-stats', 'StatsController@importStats')->name('stats.import-stats');
 
 //Route::get('/demo', 'DemoController@index');
@@ -143,4 +127,4 @@ Route::group([
     Route::get('/clientsByPerimeter', 'StatsController@getClientsByPerimeter');                                                          // SUM
     Route::get('/clientsByPerimeter/columns', 'StatsController@getClientsByPerimeterColumn');
     Route::get('/demo', 'StatsController@demo');
-});
+//});

@@ -1,5 +1,6 @@
 $(function () {
     var rolesTable = $("#roles-data").DataTable({
+        language: frLang,
         responsive: true,
         info: false,
         processing: true,

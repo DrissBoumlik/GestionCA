@@ -13,6 +13,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class StatsRepository
 {
+    public function getStats()
+    {
+        return Stats::all();
+    }
+
     public function getAgencies(Request $request)
     {
         $stats = Stats::select(['Nom_Region']);

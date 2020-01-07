@@ -14,7 +14,9 @@ $(function () {
 
     const agence_name = $('#agence_name');
     if (agence_name) {
-        agence_code = agence_name.val();
+        if (agence_name.val()) {
+            agence_code = agence_name.val();
+        }
     }
     const params = window.location.href.split('?')[1];
     if (params) {
@@ -191,35 +193,44 @@ $(function () {
         },
     ];
 
+    let treeData = undefined;
+    let datesFilterList = [];
+    let datesFilterValues = [];
 
-
+    let datesFilterListExist = false;
+    let datesFilterValuesExist = false;
     $.ajax({
         url: 'dates',
         method: 'GET',
         success: function (response) {
-            let data = response.dates;
+            datesFilterListExist = true;
+            treeData = response.dates;
+            // console.log(treeData);
             $('.tree-view').each(function (index, item) {
                 let treeId = '#' + $(this).attr('id');
                 new Tree(treeId, {
-                    data: [{id: '-1', text: 'Dates', children: data}],
+                    data: [{id: '-1', text: 'Dates', children: treeData}],
                     closeDepth: 1,
                     loaded: function () {
-                        // this.values = ['0-0-0', '0-1-1', '0-0-2'];
+                        // this.values = ['2019-12-02', '2019-12-03'];
                         // console.log(this.selectedNodes);
                         // console.log(this.values);
                         // this.disables = ['0-0-0', '0-0-1', '0-0-2']
+
+                        datesFilterList[treeId] = this;
+                        //datesFilterList.push([treeId, this]);
+                        // console.log(datesFilterList);
                     },
                     onChange: function () {
-                        console.log(this);
-                        console.log($(this));
-                        console.log($(this)[0].container);
                         dates = this.values;
                     }
                 });
                 // $(treeId + ' .treejs-switcher').click();
                 // $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
             });
-
+            if (datesFilterListExist && datesFilterValuesExist) {
+                assignFilter(datesFilterList, datesFilterValues);
+            }
             // $('.tree-view .treejs-switcher').click();
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -281,6 +292,7 @@ $(function () {
         element: $('#statsRegions'),
         columns: undefined,
         data: undefined,
+        treeElement: '#tree-view-0',
         routeCol: 'regions/columns/Groupement',
         routeData: 'regions/Groupement'
     };
@@ -298,7 +310,6 @@ $(function () {
 
     getColumns(statsRegions, statsRegionsChart, true, true, filterData(), false, false, true, false);
     $('#refreshRegions').on('click', function () {
-        let data = {dates, refreshMode: true};
         getColumns(statsRegions, statsRegionsChart, true, true, filterData(), false, true, true, false);
     });
 
@@ -307,6 +318,7 @@ $(function () {
         element: $('#statsFolders'),
         columns: undefined,
         data: undefined,
+        treeElement: '#tree-view-1',
         routeCol: 'folders/columns/Groupement',
         routeData: 'folders/Groupement'
     };
@@ -318,7 +330,7 @@ $(function () {
     };
     getColumns(statsFolders, statsFoldersChart, true, true, filterData());
     $('#refreshFolders').on('click', function () {
-        getColumns(statsFolders, statsFoldersChart, true, true, filterData());
+        getColumns(statsFolders, statsFoldersChart, true, true, filterData(), false, true);
     });
 
 
@@ -329,6 +341,7 @@ $(function () {
         element: $('#callsStatesAgencies'),
         columns: undefined,
         data: undefined,
+        treeElement: '#tree-view-2',
         routeCol: 'regionsCallState/columns/Nom_Region',
         routeData: 'regionsCallState/Nom_Region'
     };
@@ -340,7 +353,7 @@ $(function () {
     };
     getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false, filterData());
     $('#refreshCallStatesAgencies').on('click', function () {
-        getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false, filterData());
+        getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false, filterData(), false, true);
     });
 
 
@@ -349,6 +362,7 @@ $(function () {
         element: $('#callsStatesWeeks'),
         columns: undefined,
         data: undefined,
+        treeElement: '#tree-view-3',
         routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine',
         routeData: 'regionsCallState/Date_Heure_Note_Semaine'
     };
@@ -360,7 +374,7 @@ $(function () {
     };
     getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false, filterData());
     $('#refreshCallStatesWeeks').on('click', function () {
-        getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false, filterData());
+        getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false, filterData(), false, true);
     });
 
 
@@ -371,6 +385,7 @@ $(function () {
         element: $('#statsCallsPos'),
         columns: undefined,
         data: undefined,
+        treeElement: '#tree-view-4',
         routeCol: 'clientsByCallState/columns/Joignable',
         routeData: 'clientsByCallState/Joignable'
     };
@@ -382,7 +397,7 @@ $(function () {
     };
     getColumns(statscallsPos, statsCallsPosChart, true, false, filterData());
     $('#refreshCallResultPos').on('click', function () {
-        getColumns(statscallsPos, statsCallsPosChart, true, false, filterData());
+        getColumns(statscallsPos, statsCallsPosChart, true, false, filterData(), false, true);
     });
 
     let statscallsNeg = {
@@ -390,6 +405,7 @@ $(function () {
         element: $('#statsCallsNeg'),
         columns: undefined,
         data: undefined,
+        treeElement: '#tree-view-5',
         routeCol: 'clientsByCallState/columns/Injoignable',
         routeData: 'clientsByCallState/Injoignable'
     };
@@ -399,11 +415,10 @@ $(function () {
         data: undefined,
         chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Injoignables)'
     };
-    $('#refreshCallResultNeg').on('click', function () {
-        let data = {dates, refreshMode: true};
-        getColumns(statscallsNeg, statscallsNegChart, true, false, filterData());
-    });
     getColumns(statscallsNeg, statscallsNegChart, true, false, filterData());
+    $('#refreshCallResultNeg').on('click', function () {
+        getColumns(statscallsNeg, statscallsNegChart, true, false, filterData(), false, true);
+    });
 
     /// ====================== FOLDERS CODE / TYPE ==========================
 
@@ -412,6 +427,7 @@ $(function () {
         element: $('#statsFoldersByType'),
         columns: undefined,
         data: undefined,
+        treeElement: '#tree-view-6',
         routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention',
         routeData: 'nonValidatedFolders/Code_Type_Intervention'
     };
@@ -423,7 +439,7 @@ $(function () {
     };
     getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false, filterData());
     $('#refreshFoldersByType').on('click', function () {
-        getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false, filterData());
+        getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false, filterData(), false, true);
     });
 
     let statsFoldersByCode = {
@@ -431,6 +447,7 @@ $(function () {
         element: $('#statsFoldersByCode'),
         columns: undefined,
         data: undefined,
+        treeElement: '#tree-view-7',
         routeCol: 'nonValidatedFolders/columns/Code_Intervention',
         routeData: 'nonValidatedFolders/Code_Intervention'
     };
@@ -442,7 +459,7 @@ $(function () {
     };
     getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false, filterData());
     $('#refreshFoldersByCode').on('click', function () {
-        getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false, filterData());
+        getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false, filterData(), false, true);
     });
 
     /// ====================== CALL PERIMETERS ==========================
@@ -452,6 +469,7 @@ $(function () {
         element: $('#statsPerimeters'),
         columns: undefined,
         data: undefined,
+        treeElement: '#tree-view-8',
         routeCol: 'clientsByPerimeter/columns',
         routeData: 'clientsByPerimeter'
     };
@@ -463,7 +481,7 @@ $(function () {
     };
     getColumns(statsPerimeters, statsPerimetersChart, true, false, filterData());
     $('#refreshPerimeters').on('click', function () {
-        getColumns(statsPerimeters, statsPerimetersChart, true, false, filterData());
+        getColumns(statsPerimeters, statsPerimetersChart, true, false, filterData(), false, true);
     });
 
     /// ====================== FUNCTIONS ==========================
@@ -477,6 +495,18 @@ $(function () {
             method: 'GET',
             data: data,
             success: function (response) {
+                datesFilterValuesExist = true;
+                let filters = response.filter;
+                if (filters !== null && filters !== undefined) {
+                    datesFilterValues.push([object.treeElement, filters.date_filter]);
+                    // if (datesFilterList !== null && datesFilterList !== undefined && datesFilterList.length > 0) {
+                    //     datesFilterList[object.treeElement].values = datesFilterValues[object.treeElement];
+                    // }
+                    if (datesFilterListExist && datesFilterValuesExist) {
+                        assignFilter(datesFilterList, datesFilterValues);
+                    }
+                }
+                // console.log(filters.date_filter);
                 object.columns = [...response.columns];
                 object.data = [...response.data];
                 if (details) {
@@ -486,25 +516,26 @@ $(function () {
                     // if (refreshMode) {
                     //     data = {...data, refreshMode: true}; //{dates: data, refreshMode: true};
                     // }
-                    object.element_dt = InitDataTable(object, pagination, data, details);
+                    if (data !== null && data !== undefined) {
+                        object.element_dt = InitDataTable(object, pagination, data, details);
+                        object.element.on('click', 'td.details-control', function () {
+                            var tr = $(this).closest('tr');
+                            var row = object.element_dt.row(tr);
+                            if (row.child.isShown()) {
+                                // This row is already open - close it
+                                destroyChild(row);
+                                tr.removeClass('shown');
+                            } else {
+                                // Open this row
+                                data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
+                                statsRegionsDetails.element = 'details-' + $('tr').index(tr);
+                                // statsRegionsDetails.routeData = $('#stateregdet-url').attr('url');
 
-                    object.element.on('click', 'td.details-control', function () {
-                        var tr = $(this).closest('tr');
-                        var row = object.element_dt.row(tr);
-                        if (row.child.isShown()) {
-                            // This row is already open - close it
-                            destroyChild(row);
-                            tr.removeClass('shown');
-                        } else {
-                            // Open this row
-                            data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
-                            statsRegionsDetails.element = 'details-' + $('tr').index(tr);
-                            // statsRegionsDetails.routeData = $('#stateregdet-url').attr('url');
-
-                            createChild(row, statsRegionsDetails, data); // class is for background colour
-                            tr.addClass('shown');
-                        }
-                    });
+                                createChild(row, statsRegionsDetails, data); // class is for background colour
+                                tr.addClass('shown');
+                            }
+                        });
+                    }
                 }
                 if (objectChart !== null && objectChart !== undefined) {
                     InitChart(objectChart, response.columns, response.data, removeTotal, removeTotalColumn);
@@ -514,6 +545,12 @@ $(function () {
                 console.log('error');
             }
         });
+    }
+
+    function assignFilter(datesFilterList, datesFilterValues) {
+        for (let [key, value] of datesFilterValues) {
+            datesFilterList[key].values = value;
+        }
     }
 
     function InitChart(objectChart, columns, data, removeTotal = true, removeTotalColumn = false) {
@@ -578,7 +615,7 @@ $(function () {
                             // size: 14
                         },
                         rotation: -45,
-                        display: function(context) {
+                        display: function (context) {
                             // if(context.dataset.data.length > 10) {
                             //     return false;
                             // }
@@ -613,11 +650,13 @@ $(function () {
             });
         }
         const table = object.element.DataTable({
+            language: frLang,
             responsive: true,
             info: false,
             processing: true,
             serverSide: true,
             searching: false,
+            ordering: false,
             bPaginate: pagination,
             ajax: {
                 url: object.routeData,
@@ -642,7 +681,7 @@ $(function () {
         } while (exists);
         uniqueColors.push(color);
         return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
-    };
+    }
 
     function feedBack(message, status) {
         swal(

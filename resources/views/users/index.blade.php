@@ -18,15 +18,15 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <div class="flex-sm-fill">
-                    <h1 class="h3 my-2 d-inline-block">Users</h1>
+                    <h1 class="h3 my-2 d-inline-block">Utilisateurs</h1>
                         <a href="{{ route('users.create') }}" class="link btn btn-primary mgl-10 round" title="Add User"><i class="fas fa-plus"></i></a>
                 </div>
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="{{ route('dashboard') }}">Home</a>
+                            <a class="link-fx" href="{{ route('dashboard') }}">Tableau de board</a>
                         </li>
-                        <li class="breadcrumb-item" aria-current="page">Users</li>
+                        <li class="breadcrumb-item" aria-current="page">Utilisateurs</li>
                     </ol>
                 </nav>
             </div>
@@ -41,7 +41,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header d-none">
-                        <h3 class="card-title float-left">Users</h3>
+                        <h3 class="card-title float-left">Utilisateurs</h3>
 {{--                        <button class="btn btn-primary mgl-10 round" title="Add User">--}}
                             <a href="{{ route('users.create') }}" class="link btn btn-primary mgl-10 round" title="Add User"><i class="fas fa-plus"></i></a>
 {{--                        </button>--}}
@@ -52,13 +52,13 @@
                             <thead>
                             <tr>
                                 <th></th>
-                                <th>Picture</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Gender</th>
+                                <th>Image</th>
+                                <th>Prénom</th>
+                                <th>Nom</th>
+                                <th>Genre</th>
                                 <th>Email</th>
-                                <th>Role</th>
-                                <th>Status</th>
+                                <th>Rôle</th>
+                                <th>Etat</th>
                                 <th>Options</th>
                             </tr>
                             </thead>

@@ -25,6 +25,8 @@
     <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
 
     <script src="{{ asset("/add_ons/tree-view/tree.js") }}"></script>
+    <script src="{{ asset('js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
     <!-- Page JS Code -->
     <script src="{{ asset('add_ons/stats/import-stats.js') }}"></script>
 @endsection
@@ -96,6 +98,7 @@
                                 <label class="d-none">Bootstrap’s Custom File Input</label>
                                 <div class="custom-file">
                                     <!-- Populating custom file input label with the selected filename (data-toggle="custom-file-input" is initialized in Helpers.coreBootstrapCustomFileInput()) -->
+{{--                                    accept=".xlsx, .xls, .xlsm"--}}
                                     <input type="file" class="custom-file-input" data-toggle="custom-file-input"
                                            id="file" name="file">
                                     <label class="custom-file-label" for="file">choisir le fichier</label>

@@ -69,7 +69,7 @@
                         <img class="img-avatar img-avatar48 img-avatar-thumb" src="//images2.imgbox.com/7f/13/gFRcrjpl_o.png" alt="">
                     </div>
                     <div class="p-2">
-                        <h5 class="dropdown-header text-uppercase">User Options</h5>
+                        <h5 class="dropdown-header text-uppercase">Utilisateur</h5>
 {{--                        <a class="dropdown-item d-flex align-items-center justify-content-between"--}}
 {{--                           href="javascript:void(0)">--}}
 {{--                            <span>Inbox</span>--}}
@@ -78,14 +78,13 @@
 {{--                                <i class="si si-envelope-open ml-1"></i>--}}
 {{--                            </span>--}}
 {{--                        </a>--}}
-{{--                        <a class="dropdown-item d-flex align-items-center justify-content-between"--}}
-{{--                           href="/profile">--}}
-{{--                            <span>Profile</span>--}}
-{{--                            <span>--}}
-{{--                                <span class="badge badge-pill badge-success">1</span>--}}
-{{--                                <i class="si si-user ml-1"></i>--}}
-{{--                            </span>--}}
-{{--                        </a>--}}
+                        <a class="dropdown-item d-flex align-items-center justify-content-between"
+                           href="{{ route('users.show', Auth::user()->id) }}">
+                            <span>Profil</span>
+                            <span>
+                                <i class="si si-user ml-1"></i>
+                            </span>
+                        </a>
 {{--                        <a class="dropdown-item d-flex align-items-center justify-content-between"--}}
 {{--                           href="javascript:void(0)">--}}
 {{--                            <span>Settings</span>--}}
@@ -101,7 +100,7 @@
                         <a class="dropdown-item d-flex align-items-center justify-content-between"
                            href="{{ route('logout') }}"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <span>Log Out
+                            <span>Se déconnecter
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                 </form>
@@ -117,26 +116,6 @@
     </div>
     <!-- END Header Content -->
 
-    <!-- Header Search -->
-    <div id="page-header-search" class="overlay-header bg-white">
-        <div class="content-header">
-            <form class="w-100" action="/dashboard" method="POST">
-                @csrf
-                <div class="input-group input-group-sm">
-                    <div class="input-group-prepend">
-                        <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-                        <button type="button" class="btn btn-danger" data-toggle="layout"
-                                data-action="header_search_off">
-                            <i class="fa fa-fw fa-times-circle"></i>
-                        </button>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Search or hit ESC.."
-                           id="page-header-search-input" name="page-header-search-input">
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- END Header Search -->
 
     <!-- Header Loader -->
     <!-- Please check out the Loaders page under Components category to see examples of showing/hiding it -->

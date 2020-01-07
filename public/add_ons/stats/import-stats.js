@@ -170,7 +170,36 @@ $(document).ready(function () {
         return true;
     });
 
+    $("#form-import").validate({
+        errorClass: "error",
+        rules: {
+            file: {
+                required: true,
+                extension: "xlsx|xls|xlsm"
+            }
+        },
+        messages: {
+            file: {
+                required: "Le fichier est obligatoire",
+                extension: "L'extension est invalide"
+            }
+        },
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+
     $(document).on('click', '#btn-import', function (event) {
+        if(!$('#form-import').valid()) {
+            return;
+        }
         $('#modal-import').modal('hide');
         $('#modal-loader').modal('show');
         let formData = new FormData($('#form-import')[0]);
@@ -189,18 +218,13 @@ $(document).ready(function () {
             success: function (data) {
                 $('#modal-loader').modal('hide');
                 let type = data.success ? 'success' : 'error';
-                swal(
-                    data.message,
-                    '',
-                    type
-                );
-                // Swal.fire({
-                //     // position: 'top-end',
-                //     type: type,
-                //     title: data.message,
-                //     showConfirmButton: false,
-                //     timer: 1500
-                // });
+                Swal.fire({
+                    // position: 'top-end',
+                    type: type,
+                    title: data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 // tableTasks.draw(false);
             }
         });
