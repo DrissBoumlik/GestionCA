@@ -19454,13 +19454,13 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\Work\Projects\Circet\circet_svn\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet_svn\resources\sass\main.scss */"./resources/sass/main.scss");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet_svn\resources\sass\oneui\themes\amethyst.scss */"./resources/sass/oneui/themes/amethyst.scss");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet_svn\resources\sass\oneui\themes\city.scss */"./resources/sass/oneui/themes/city.scss");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet_svn\resources\sass\oneui\themes\flat.scss */"./resources/sass/oneui/themes/flat.scss");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet_svn\resources\sass\oneui\themes\modern.scss */"./resources/sass/oneui/themes/modern.scss");
-module.exports = __webpack_require__(/*! D:\Work\Projects\Circet\circet_svn\resources\sass\oneui\themes\smooth.scss */"./resources/sass/oneui/themes/smooth.scss");
+__webpack_require__(/*! C:\Users\Driss Boumlik\Documents\GitHub\circet-stats-monitor\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! C:\Users\Driss Boumlik\Documents\GitHub\circet-stats-monitor\resources\sass\main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! C:\Users\Driss Boumlik\Documents\GitHub\circet-stats-monitor\resources\sass\oneui\themes\amethyst.scss */"./resources/sass/oneui/themes/amethyst.scss");
+__webpack_require__(/*! C:\Users\Driss Boumlik\Documents\GitHub\circet-stats-monitor\resources\sass\oneui\themes\city.scss */"./resources/sass/oneui/themes/city.scss");
+__webpack_require__(/*! C:\Users\Driss Boumlik\Documents\GitHub\circet-stats-monitor\resources\sass\oneui\themes\flat.scss */"./resources/sass/oneui/themes/flat.scss");
+__webpack_require__(/*! C:\Users\Driss Boumlik\Documents\GitHub\circet-stats-monitor\resources\sass\oneui\themes\modern.scss */"./resources/sass/oneui/themes/modern.scss");
+module.exports = __webpack_require__(/*! C:\Users\Driss Boumlik\Documents\GitHub\circet-stats-monitor\resources\sass\oneui\themes\smooth.scss */"./resources/sass/oneui/themes/smooth.scss");
 
 
 /***/ })

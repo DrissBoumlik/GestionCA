@@ -19,11 +19,11 @@
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
-Route::get('reset', 'Auth\LoginController@logout')->name('auth.reset');
+Auth::routes();
 
-//Route::group([
-//    'middleware' => ['auth'],
-//], function () {
+Route::group([
+    'middleware' => ['auth'],
+], function () {
     //Route::get('/', 'HomeController@dashboard')->name('home');
 //Route::get('/_dashboard', 'HomeController@dashboard')->name('home');
     Route::get('/', 'ToolController@home');
@@ -51,7 +51,7 @@ Route::get('reset', 'Auth\LoginController@logout')->name('auth.reset');
 
     Route::get('/dashboard', 'StatsController@dashboard')->name('dashboard');
 
-    Route::get('/stats/all-stats', 'StatsController@index')->name('stats.index');
+    Route::get('/all-stats', 'StatsController@index')->name('stats.index');
     Route::post('/stats/get-stats', 'StatsController@getStats')->name('stats.get-stats');
 //Route::post('/getRegionsByDates', 'StatsController@getRegionsByDates');
 //Route::post('/getNonValidatedFoldersByCodeByDates', 'StatsController@getNonValidatedFoldersByCodeByDates');
@@ -127,4 +127,4 @@ Route::get('reset', 'Auth\LoginController@logout')->name('auth.reset');
     Route::get('/clientsByPerimeter', 'StatsController@getClientsByPerimeter');                                                          // SUM
     Route::get('/clientsByPerimeter/columns', 'StatsController@getClientsByPerimeterColumn');
     Route::get('/demo', 'StatsController@demo');
-//});
+});

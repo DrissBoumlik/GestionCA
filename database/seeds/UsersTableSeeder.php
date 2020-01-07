@@ -27,7 +27,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'firstname' => 'dosez6',
             'lastname' => 'Agent',
-            'email' => 'dosez6',
+            'email' => 'dosez6@circet.fr',
             'status' => true,
             'picture' => 'https://images2.imgbox.com/9c/5e/F8JZCJLn_o.png',
             'gender' => 'male',
