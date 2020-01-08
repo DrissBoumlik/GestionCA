@@ -10,7 +10,10 @@
                         <!-- Sign In Block -->
                         <div class="block block-themed block-fx-shadow mb-0" style="background-color: #d7d7d7">
                             <div class="block-header">
-                                <h3 class="block-title">{{ __('Réinitialiser le mot de passe') }}</h3>
+                                <h3 class="block-title">{{ __('Réinitialiser') }}</h3>
+                                <div class="block-options">
+                                    <a class="btn-block-option font-size-sm" href="{{ route('login') }}">Se connecter</a>
+                                </div>
                             </div>
                             <div class="block-content">
                                 <div class="p-sm-3 px-lg-4 py-lg-5">

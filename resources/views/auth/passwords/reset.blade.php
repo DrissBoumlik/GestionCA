@@ -14,7 +14,10 @@
                     <div class="col-md-8 col-lg-6 col-xl-4">
                         <!-- Sign In Block -->
                         <div class="block block-themed block-fx-shadow mb-0" style="background-color: #d7d7d7">
-                            <div class="block-header">{{ __('Réinitialiser le mot de passe') }}</div>
+                            <div class="block-header">{{ __('Réinitialiser') }}</div>
+                            <div class="block-options">
+                                <a class="btn-block-option font-size-sm" href="{{ route('login') }}">Se connecter</a>
+                            </div>
 
                             <div class="block-content">
                                 <div class="p-sm-3 px-lg-4 py-lg-5">
@@ -44,8 +47,8 @@
 
                                                 @error('password')
                                                 <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
                                                 @enderror
                                             </div>
                                         </div>

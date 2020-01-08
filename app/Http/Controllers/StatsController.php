@@ -208,63 +208,17 @@ class StatsController extends Controller
 
     public function import()
     {
+        // Authorization
+        $this->authorize('view', auth()->user());
+
         return view('stats.import');
     }
 
     public function importStats(Request $request)
     {
+        // Authorization
+        $this->authorize('view', auth()->user());
+
         return response()->json($this->statsRepository->importStats($request));
     }
-
-    public function demo(Request $request)
-    {
-//        $data = \DB::table('stats', 's')
-//            ->joinSub(
-//                \DB::table('stats')
-//                    ->groupBy('id_externe')
-//                    ->select([
-//                        'id_externe',
-//                        \DB::raw('MAX(Date_Heure_Note) as max_date')
-//                    ]),
-//                'unique_ids',
-//                function (JoinClause $join) {
-//                    $join->on('s.id_externe', '=', 'unique_ids.id_externe')
-//                        ->on('s.Date_Heure_Note', '=', 'unique_ids.max_date');
-//                }
-//            )
-//            ->select([
-//                's.id',
-//                's.id_externe',
-//                's.Date_Heure_Note as last_date'
-//            ])
-//            ->orderBy('last_date', 'desc');
-//        $data = Stats::where('Id_Externe', '0000002672962')
-//            ->orderBy('Date_Heure_Note', 'desc')
-//            ->get();
-//            ->unique('Id_Externe');
-//        $data = Stats::select('Id_Externe', 'Date_Heure_Note')
-//            ->where('Id_Externe', '0000002672962')
-//            ->get(); //->unique('Id_Externe');
-//        $data = collect(Stats::
-//        select('Id_Externe', 'Date_Heure_Note')
-//            ->get());
-//        $data = $data->only('Id_Externe', 'Date_Heure_Note');
-//        $data = $data->duplicates('Date_Heure_Note');
-
-        // get your main collection with all the attributes...
-        $data = Stats::cursor();
-//
-//        // build your second collection with a subset of attributes. this new
-//        // collection will be a collection of plain arrays, not Users models.
-        $data = $data->map(function ($item) {
-            return collect($item->toArray())
-                ->only(['Id_Externe', 'Date_Heure_Note'])
-                ->all();
-        });
-
-        $data = $data->sortBy(['Id_Externe', 'Date_Heure_Note']);
-
-        dd($data->all());
-    }
-
 }

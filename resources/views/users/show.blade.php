@@ -190,6 +190,25 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group" id="agent_name" @if ($user->role->id !== 3) style="display: none" @endif>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <label for="role">Agent</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <select name="agent_name" id="agent_name"
+                                                    class="form-control capitalize form-field @error('agent_name') is-invalid @enderror">
+                                                <option value=""></option>
+                                                @foreach(agentsList() as $agent)
+                                                    <option class="capitalize"
+                                                            value="{{ $agent['name'] }}" {{ $user->agent_name == $agent['name'] ? 'selected' : '' }}>
+                                                        {{ $agent['name'] }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-4">

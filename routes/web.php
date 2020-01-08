@@ -21,9 +21,9 @@ Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Auth::routes();
 
-//Route::group([
-//    'middleware' => ['auth'],
-//], function () {
+Route::group([
+    'middleware' => ['auth'],
+], function () {
     //Route::get('/', 'HomeController@dashboard')->name('home');
 //Route::get('/_dashboard', 'HomeController@dashboard')->name('home');
     Route::get('/', 'ToolController@home');
@@ -127,4 +127,4 @@ Auth::routes();
     Route::get('/clientsByPerimeter', 'StatsController@getClientsByPerimeter');                                                          // SUM
     Route::get('/clientsByPerimeter/columns', 'StatsController@getClientsByPerimeterColumn');
     Route::get('/demo', 'StatsController@demo');
-//});
+});

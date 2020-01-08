@@ -15,6 +15,9 @@
                         <div class="block block-themed block-fx-shadow mb-0" style="background-color: #d7d7d7">
                             <div class="block-header">
                                 <h3 class="block-title">{{ __('Confirmation de mot de passe') }}</h3>
+                                <div class="block-options">
+                                    <a class="btn-block-option font-size-sm" href="{{ route('login') }}">Mot de passe oublié?</a>
+                                </div>
                             </div>
                             <div class="block-content">
                                 <div class="p-sm-3 px-lg-4 py-lg-5">

@@ -27,8 +27,13 @@ $(function () {
         role = $(e.currentTarget).val();
         if (role == 2) {
             $('#agence_name').show();
+            $('#agent_name').hide();
+        } else if (role == 3) {
+            $('#agent_name').show();
+            $('#agence_name').hide();
         } else {
             $('#agence_name').hide();
+            $('#agent_name').hide();
         }
     });
 

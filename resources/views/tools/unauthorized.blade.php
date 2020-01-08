@@ -31,12 +31,12 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <div class="flex-sm-fill">
-                    <h1 class="h3 my-2 d-inline-block">Home</h1>
+                    <h1 class="h3 my-2 d-inline-block">Accueil</h1>
                 </div>
                 <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
                         <li class="breadcrumb-item">
-                            <a class="link-fx" href="/">Home</a>
+                            <a class="link-fx" href="/">Accueil</a>
                         </li>
                     </ol>
                 </nav>
@@ -59,8 +59,8 @@
                                         <img src="//images2.imgbox.com/19/67/UJ4adhZl_o.png" id="user-picture" alt=""
                                              class="auto-w">
                                     </div>
-                                    <div class="mgt-10 text-capitalize">
-                                        <h4>You are not authorized to view this page !</h4>
+                                    <div class="mgt-10">
+                                        <h4>Vous n'êtes pas autorisé à afficher cette page !</h4>
                                     </div>
                                 </div>
                             </div>

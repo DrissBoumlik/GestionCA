@@ -37,11 +37,13 @@ class StatsRepository
 
     public function getAgenciesAll()
     {
-        $stats = Stats::select(['Nom_Region'])->distinct('Nom_Region')->orderBy('Nom_Region')->get()->map(function ($s) {
+        $stats = Stats::select(['Nom_Region'])->distinct('Nom_Region')
+            ->whereNotNull('Nom_Region')
+            ->orderBy('Nom_Region')->get()->map(function ($s) {
             $sn = explode(' - ', $s->Nom_Region);
             return [
                 'name' => trim($s->Nom_Region),
-                'code' => trim($sn[1])
+                'code' => trim($s->Nom_Region)
             ];
         });
         return $stats->toArray();
@@ -65,7 +67,7 @@ class StatsRepository
 
     public function getAgentsAll()
     {
-        $stats = Stats::select(['Utilisateur'])->distinct('Utilisateur')->limit(10)->get()->map(function ($s) {
+        $stats = Stats::select(['Utilisateur'])->distinct('Utilisateur')->get()->map(function ($s) {
             return [
                 'name' => trim($s->Utilisateur),
                 'code' => trim($s->Utilisateur)

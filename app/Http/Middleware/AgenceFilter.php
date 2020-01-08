@@ -21,6 +21,9 @@ class AgenceFilter
             if ($user->role->id === 2) {
                 $request['agence_code'] = $user->agence_name;
             }
+            if ($user->role->id === 3) {
+                $request['agent_name'] = $user->agent_name;
+            }
         }
         return $next($request);
     }

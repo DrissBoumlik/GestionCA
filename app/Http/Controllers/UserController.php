@@ -66,7 +66,8 @@ class UserController extends Controller
             'gender' => ['nullable', 'in:male,female'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'exists:roles,id'],
-            'agence_name' => ['required_if:role,==,2', 'max:20']
+            'agence_name' => ['required_if:role,==,2', 'max:20'],
+            'agent_name' => ['required_if:role,==,3', 'max:20']
         ]);
         $user = User::create([
             'firstname' => $request->firstname,
@@ -78,6 +79,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'role_id' => $request->role,
             'agence_name' => $request->agence_name,
+            'agent_name' => $request->agent_name,
         ]);
 
         return redirect('/users');
@@ -153,7 +155,8 @@ class UserController extends Controller
             'gender' => ['nullable', 'in:male,female'],
             'password' => ['nullable', 'string', 'min:8'],
             'role' => ['nullable', 'exists:roles,id'],
-            'agence_name' => ['present', 'max:20']
+            'agence_name' => ['present', 'max:20'],
+            'agent_name' => ['present', 'max:20']
         ]);
         // Update
 //        $picture = $request->file('picture');
@@ -181,6 +184,7 @@ class UserController extends Controller
         $user->password = $request->password ? Hash::make($request->password) : $user->password;
         $user->role_id = $request->role ?? $user->role_id;
         $user->agence_name = $request->agence_name ?? $user->agence_name;
+        $user->agent_name = $request->agent_name ?? $user->agent_name;
         $user->save();
 
         return back()->with('message', 'Successfully updated');

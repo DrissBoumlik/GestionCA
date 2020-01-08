@@ -58,6 +58,9 @@
     @if (request()->has('agence_code'))
     <input type="hidden" name="agence_name" id="agence_name" value="{{$agence}}">
     @endif
+    @if (request()->has('agent_name'))
+        <input type="hidden" name="agent_name" id="agent_name" value="{{$agent}}">
+    @endif
     <div class="bg-image overflow-hidden"
          style="background-image: url('{{ asset('/media/backgrounds/photo3@2x.jpg') }}');">
         <div class="bg-primary-dark-op">
@@ -75,6 +78,7 @@
                         <h2 class="h4 font-w400 text-white-75 mb-0 invisible" data-toggle="appear" data-timeout="250">
                             Bonjour {{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</h2>
                     </div>
+                    @if (Auth::user()->role->id === 1)
                     <div class="flex-sm-00-auto mt-3 mt-sm-0 ml-sm-3">
                         <span class="d-inline-block invisible" data-toggle="appear" data-timeout="350">
                             <a class="btn btn-primary px-4 py-2" data-toggle="click-ripple"
@@ -83,6 +87,7 @@
                             </a>
                         </span>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

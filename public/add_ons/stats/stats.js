@@ -12,10 +12,16 @@ $(function () {
     let agence_code = '';
 
 
-    const agence_name = $('#agence_name');
-    if (agence_name) {
-        if (agence_name.val()) {
-            agence_code = agence_name.val();
+    const agence_name_element = $('#agence_name');
+    if (agence_name_element) {
+        if (agence_name_element.val()) {
+            agence_code = agence_name_element.val();
+        }
+    }
+    const agent_name_element = $('#agent_name');
+    if (agent_name_element) {
+        if (agent_name_element.val()) {
+            agent_name = agent_name_element.val();
         }
     }
     const params = window.location.href.split('?')[1];
