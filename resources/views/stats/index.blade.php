@@ -100,7 +100,7 @@
                                         <tr>
                                             <th>Type Note</th>
                                             <th>Utilisateur</th>
-                                            <th>Resultat Appel</th>
+                                            <th width="200px">Resultat Appel</th>
                                             <th>Date Nveau RDV</th>
                                             <th>Heure Nveau RDV</th>
                                             <th>Marge Nveau RDV</th>

@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $('#stats').DataTable({
         language: frLang,
-        pageLength: 100,
+        pageLength: 10,
         processing: true,
         serverSide: true,
         type: 'POST',
