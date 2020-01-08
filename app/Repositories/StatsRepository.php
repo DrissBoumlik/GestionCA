@@ -333,7 +333,6 @@ class StatsRepository
             ->where('Groupement', 'not like', 'Non Renseigné');
 
         // GETTING COLUMNS BEFORE MAKING THE WHERE CONDITIONS ON THE FOLLOWING LINES
-        $keys = ($regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get())->groupBy(['Nom_Region'])->keys();
 //        dd($keys);
 //        dd($regions);
         // DEMO PLACEHOLDER (1)
@@ -348,6 +347,8 @@ class StatsRepository
         if ($agenceCode) {
             $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
         }
+        $keys = ($regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get())->groupBy(['Nom_Region'])->keys();
+
         if ($resultatAppel) {
             $resultatAppel = array_values($resultatAppel);
             $regions = $regions->whereIn('Resultat_Appel', $resultatAppel);
@@ -512,8 +513,8 @@ class StatsRepository
             ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(Resultat_Appel) as total'))
             ->where('Resultat_Appel', 'not like', '=%');
 
-
         $keys = ($regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get())->groupBy(['Nom_Region'])->keys();
+
         $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
         $key_groupement = clean($key_groupement);
         $regions = $regions->where('key_groupement', 'like', $key_groupement);
@@ -684,7 +685,6 @@ class StatsRepository
             ->where($callResult, 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné');
 
-        $keys = ($regions->groupBy('Nom_Region', $callResult)->get())->groupBy(['Nom_Region'])->keys();
 
 
         if ($agentName) {
@@ -693,6 +693,7 @@ class StatsRepository
         if ($agenceCode) {
             $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
         }
+        $keys = ($regions->groupBy('Nom_Region', $callResult)->get())->groupBy(['Nom_Region'])->keys();
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
@@ -871,7 +872,6 @@ class StatsRepository
             ->where('Groupement', 'not like', 'Non Renseigné');
 
 
-        $keys = ($regions->groupBy($column, 'Gpmt_Appel_Pre')->get())->groupBy([$column])->keys();
 
 
         if ($agentName) {
@@ -880,6 +880,7 @@ class StatsRepository
         if ($agenceCode) {
             $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
         }
+        $keys = ($regions->groupBy($column, 'Gpmt_Appel_Pre')->get())->groupBy([$column])->keys();
         if ($gpmtAppelPre) {
             $gpmtAppelPre = array_values($gpmtAppelPre);
             $regions = $regions->whereIn('Gpmt_Appel_Pre', $gpmtAppelPre);
@@ -1042,16 +1043,14 @@ class StatsRepository
         $regions = \DB::table('stats')
             ->select('Nom_Region', $intervCol, \DB::raw('count(*) as total'));
 
-
-        $keys = ($regions->groupBy('Nom_Region', $intervCol)->get())->groupBy(['Nom_Region'])->keys();
-
-
         if ($agentName) {
             $regions = $regions->where('Utilisateur', $agentName);
         }
         if ($agenceCode) {
             $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
         }
+        $keys = ($regions->groupBy('Nom_Region', $intervCol)->get())->groupBy(['Nom_Region'])->keys();
+
         if ($codeTypeIntervention) {
             $codeTypeIntervention = array_values($codeTypeIntervention);
             $regions = $regions->whereIn('Code_Type_Intervention', $codeTypeIntervention);
@@ -1238,13 +1237,13 @@ class StatsRepository
             ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(Nom_Region) as total'));
 
 //        $keys = $columns->groupBy(['Code_Intervention'])->keys();
-        $keys = ($codes->groupBy('Code_Intervention', 'Nom_Region')->get())->groupBy(['Code_Intervention'])->keys();
         if ($agentName) {
             $codes = $codes->where('Utilisateur', $agentName);
         }
         if ($agenceCode) {
             $codes = $codes->where('Nom_Region', 'like', "%$agenceCode");
         }
+        $keys = ($codes->groupBy('Code_Intervention', 'Nom_Region')->get())->groupBy(['Code_Intervention'])->keys();
         if ($dates) {
             $dates = array_values($dates);
             $codes = $codes->whereIn('Date_Note', $dates);
@@ -1436,11 +1435,6 @@ class StatsRepository
             ->whereNotNull('Groupement')
             ->where('Groupement', 'not like', 'Non Renseigné');
 
-
-
-        $keys = ($results->groupBy('Groupement', 'Nom_Region')->get())->groupBy(['Groupement'])->keys();
-
-
         if ($agentName) {
             $results = $results->where('Utilisateur', $agentName);
         }
@@ -1448,6 +1442,7 @@ class StatsRepository
             $nomRegion = array_values($nomRegion);
             $results = $results->whereIn('Nom_Region', $nomRegion);
         }
+        $keys = ($results->groupBy('Groupement', 'Nom_Region')->get())->groupBy(['Groupement'])->keys();
         if ($agenceCode) {
             $results = $results->where('Nom_Region', 'like', "%$agenceCode");
         }

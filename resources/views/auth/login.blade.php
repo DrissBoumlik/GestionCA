@@ -1,13 +1,13 @@
 @extends('layouts.simple')
 
 @section('page-title')
-    Login
+    Se connecter
 @endsection
 
 @section('content')
 
     <!-- Page Content -->
-    <div class="bg-image" style="background-image: url('assets/media/photos/photo6@2x.jpg');">
+    <div class="bg-image">
         <div class="hero-static bg-white-95">
             <div class="content">
                 <div class="row justify-content-center">
@@ -17,18 +17,13 @@
                             <div class="block-header">
                                 <h3 class="block-title">Se connecter</h3>
                                 <div class="block-options">
-                                    <a class="btn-block-option font-size-sm" href="{{ route('auth.reset') }}">Mot de passe oublié?</a>
+                                    <a class="btn-block-option font-size-sm" href="{{ route('password.request') }}">Mot de passe oublié?</a>
                                 </div>
                             </div>
                             <div class="block-content">
                                 <div class="p-sm-3 px-lg-4 py-lg-5">
-                                    {{--                                    <h1 class="mb-2">OneUI</h1>--}}
                                     <img src="{{ asset('media/circetwhite.png') }}" alt="" style="width: 100%">
                                     <p>Bienvenue, veuillez vous connecter.</p>
-
-                                    <!-- Sign In Form -->
-                                    <!-- jQuery Validation (.js-validation-signin class is initialized in js/pages/op_auth_signin.min.js which was auto compiled from _es6/pages/op_auth_signin.js) -->
-                                    <!-- For more info and examples you can check out https://github.com/jzaefferer/jquery-validation -->
                                     <form class="js-validation-signin" action="{{ route('login') }}" method="POST">
                                         @csrf
                                         <div class="py-3">
@@ -63,7 +58,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <div class="col-md-6 col-xl-5">
+                                            <div class="col-md-12 col-xl-12">
                                                 <button type="submit" class="btn btn-block btn-primary">
                                                     <i class="fa fa-fw fa-sign-in-alt mr-1"></i> Se connecter
                                                 </button>

@@ -99,13 +99,13 @@
                     <span class="nav-main-link-name">Tableau de bord</span>
                 </a>
             </li>
-            <li class="nav-main-item">
-                <a class="nav-main-link{{ (request()->is('all-stats') || request()->is('all-stats/*')) ? ' active' : '' }}" href="{{ route('stats.index') }}">
-                    <i class="nav-main-link-icon si si-info"></i>
-                    <span class="nav-main-link-name">All stats</span>
-                </a>
-            </li>
             @if(Auth::user()->role->id === 1)
+                <li class="nav-main-item">
+                    <a class="nav-main-link{{ (request()->is('all-stats') || request()->is('all-stats/*')) ? ' active' : '' }}" href="{{ route('stats.index') }}">
+                        <i class="nav-main-link-icon si si-info"></i>
+                        <span class="nav-main-link-name">All stats</span>
+                    </a>
+                </li>
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ (request()->is('users') || request()->is('users/*')) ? ' active' : '' }}"
                        href="{{ route('users.index') }}">
@@ -154,7 +154,7 @@
             </li>
 
             <li class="nav-main-item">
-                <a class="nav-main-link{{ request()->is('stats') ? ' active' : '' }}" href="{{ route('stats.index') }}">
+                <a class="nav-main-link{{ request()->is('stats') ? ' active' : '' }}" href="{{ route('stats.import') }}">
                     <i class="nav-main-link-icon si si-cursor"></i>
                     <span class="nav-main-link-name">Importation</span>
                 </a>

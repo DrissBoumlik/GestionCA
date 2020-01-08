@@ -21,7 +21,7 @@ class UserController extends Controller
 
     public function getUsers(Request $request, YDT $dataTables)
     {
-        $users = User::with('role')->orderBy('users.id', 'desc');
+        $users = User::with('role');
         return DataTables::of($users)
             ->setRowId(function ($user) {
                 return 'user-' . $user->id;

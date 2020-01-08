@@ -54,7 +54,7 @@
                                         <div class="col-8">
                                             <input type="text" class="form-control form-field" id="firstname"
                                                    name="firstname"
-                                                   aria-describedby="emailHelp" placeholder="First name">
+                                                   aria-describedby="emailHelp" placeholder="Prénom">
                                         </div>
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@
                                         <div class="col-8">
                                             <input type="text" class="form-control form-field" id="lastname"
                                                    name="lastname"
-                                                   aria-describedby="emailHelp" placeholder="Last name">
+                                                   aria-describedby="emailHelp" placeholder="Nom">
                                         </div>
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@
                                         <div class="col-8">
                                             <input type="email" class="form-control form-field" id="email"
                                                    name="email"
-                                                   aria-describedby="emailHelp" placeholder="Enter email">
+                                                   aria-describedby="emailHelp" placeholder="Email">
                                         </div>
                                     </div>
                                 </div>
@@ -161,7 +161,7 @@
                                         </div>
                                         <div class="col-8">
                                             <input type="password" class="form-control form-field" name="password"
-                                                   id="password" placeholder="Password">
+                                                   id="password" placeholder="Mot de passe">
                                         </div>
                                     </div>
                                 </div>
@@ -173,7 +173,7 @@
                                         <div class="col-8">
                                             <input type="password" class="form-control form-field"
                                                    name="password_confirmation"
-                                                   id="password_confirmation" placeholder="Password Confirmation">
+                                                   id="password_confirmation" placeholder="Confirmation du mot de passe">
                                         </div>
                                     </div>
                                 </div>

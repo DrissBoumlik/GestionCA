@@ -25598,6 +25598,15 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
   background-color: #cacaca;
 }
 
+.data-status + .status:after {
+  position: absolute;
+  top: 0.1rem;
+  display: block;
+  content: "";
+  width: 50%;
+  height: 1.3rem;
+}
+
 .data-status + .status {
   background: #fff;
   border: 4px solid #cacaca;

@@ -1,15 +1,13 @@
 $(document).ready(function () {
     $('#stats').DataTable({
-        language: {
-            url: `/json/jquery.dataTables.fr.l10n.json`
-        },
+        language: frLang,
         pageLength: 100,
         processing: true,
         serverSide: true,
         type: 'POST',
         ajax: {
             type: 'POST',
-            url: `/stats/get-stats`
+            url: `stats/get-stats`
         },
         columns: [
             {

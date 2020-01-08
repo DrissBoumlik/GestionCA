@@ -395,9 +395,9 @@ $(function () {
         data: undefined,
         chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Joignables)'
     };
-    getColumns(statscallsPos, statsCallsPosChart, true, false, filterData());
+    getColumns(statscallsPos, statsCallsPosChart, true, false, filterData(), false, false);
     $('#refreshCallResultPos').on('click', function () {
-        getColumns(statscallsPos, statsCallsPosChart, true, false, filterData(), false, true);
+        getColumns(statscallsPos, statsCallsPosChart, true, false, filterData(), false, true, false, false);
     });
 
     let statscallsNeg = {
@@ -415,9 +415,9 @@ $(function () {
         data: undefined,
         chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Injoignables)'
     };
-    getColumns(statscallsNeg, statscallsNegChart, true, false, filterData());
+    getColumns(statscallsNeg, statscallsNegChart, true, false, filterData(), false, false);
     $('#refreshCallResultNeg').on('click', function () {
-        getColumns(statscallsNeg, statscallsNegChart, true, false, filterData(), false, true);
+        getColumns(statscallsNeg, statscallsNegChart, true, false, filterData(), false, true, false, false);
     });
 
     /// ====================== FOLDERS CODE / TYPE ==========================

@@ -52,7 +52,7 @@
                                         <div class="col-8">
                                             <input type="text" class="form-control form-field" id="name"
                                                    name="name"
-                                                   aria-describedby="emailHelp" placeholder="Role Name">
+                                                   aria-describedby="emailHelp" placeholder="Nom">
                                         </div>
                                     </div>
                                 </div>
@@ -64,7 +64,7 @@
                                         <div class="col-8">
                                             <input type="text" class="form-control form-field" id="description"
                                                    name="description"
-                                                   aria-describedby="emailHelp" placeholder="Role Description">
+                                                   aria-describedby="emailHelp" placeholder="Description">
                                         </div>
                                     </div>
                                 </div>

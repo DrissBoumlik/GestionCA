@@ -238,9 +238,33 @@ class StatsController extends Controller
 //                's.Date_Heure_Note as last_date'
 //            ])
 //            ->orderBy('last_date', 'desc');
-        $data = Stats::orderBy('Date_Heure_Note','desc')->get()->unique('Id_Externe');
+//        $data = Stats::where('Id_Externe', '0000002672962')
+//            ->orderBy('Date_Heure_Note', 'desc')
+//            ->get();
+//            ->unique('Id_Externe');
+//        $data = Stats::select('Id_Externe', 'Date_Heure_Note')
+//            ->where('Id_Externe', '0000002672962')
+//            ->get(); //->unique('Id_Externe');
+//        $data = collect(Stats::
+//        select('Id_Externe', 'Date_Heure_Note')
+//            ->get());
+//        $data = $data->only('Id_Externe', 'Date_Heure_Note');
+//        $data = $data->duplicates('Date_Heure_Note');
 
-        dd($data->pluck('Id_Externe', 'Date_Heure_Note'));
+        // get your main collection with all the attributes...
+        $data = Stats::cursor();
+//
+//        // build your second collection with a subset of attributes. this new
+//        // collection will be a collection of plain arrays, not Users models.
+        $data = $data->map(function ($item) {
+            return collect($item->toArray())
+                ->only(['Id_Externe', 'Date_Heure_Note'])
+                ->all();
+        });
+
+        $data = $data->sortBy(['Id_Externe', 'Date_Heure_Note']);
+
+        dd($data->all());
     }
 
 }

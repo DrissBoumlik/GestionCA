@@ -52,7 +52,8 @@ $(function () {
                         "<i class='fas fa-trash-alt'></i></a>";
                 }
             },
-        ]
+        ],
+        order: [[ 0, "desc" ]]
     });
     let element;
     $('#users-data').on('click', '.delete-user', function () {
