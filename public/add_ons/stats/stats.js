@@ -210,8 +210,29 @@ $(function () {
         method: 'GET',
         success: function (response) {
             datesFilterListExist = true;
-            treeData = response.dates;
-            // console.log(treeData);
+            let treeData = response.dates;
+            // treeData = Object.entries(treeData);
+            // treeData = treeData.map(function (_year, indexY) {
+            //     let year = _year[0];
+            //     let months = Object.entries(_year[1]);
+            //     months = months.map(function (_month, indexM) {
+            //         // _month = Object.entries(_month)[0];
+            //         let month = _month[0];
+            //         let weeks = Object.entries(_month[1]);
+            //         weeks = weeks.map(function (_week, indexW) {
+            //             // _week = Object.entries(_week);
+            //             let week = _week[0];
+            //             let days = Object.keys(_week[1]);
+            //             days = days.map(function (_day, indexD) {
+            //                 return {id: _day, text: _day};
+            //             });
+            //             return {id: week, text: week, children: days};
+            //         });
+            //         return {id: month, text: month, children: weeks};
+            //     });
+            //     return {id: year, text: year, children: months};
+            // });
+
             $('.tree-view').each(function (index, item) {
                 let treeId = '#' + $(this).attr('id');
                 new Tree(treeId, {
@@ -237,7 +258,7 @@ $(function () {
             if (datesFilterListExist && datesFilterValuesExist) {
                 assignFilter(datesFilterList, datesFilterValues);
             }
-            // $('.tree-view .treejs-switcher').click();
+            $('.treejs-node .treejs-nodes .treejs-switcher').click();
         },
         error: function (jqXHR, textStatus, errorThrown) {
         }
@@ -305,7 +326,7 @@ $(function () {
     let statsRegionsDetails = {
         element: undefined,
         columns: undefined,
-        routeData: 'regions/details/groupement' // $('#stateregdet-url').attr('url')
+        routeData: 'regions/details/groupement', // $('#stateregdet-url').attr('url')
     };
     let statsRegionsChart = {
         element_chart: undefined,
@@ -519,32 +540,45 @@ $(function () {
                     $(object.element).find('thead tr').prepend('<th></th>');
                 }
                 if (callInitDT) {
-                    // if (refreshMode) {
-                    //     data = {...data, refreshMode: true}; //{dates: data, refreshMode: true};
-                    // }
                     if (data !== null && data !== undefined) {
-                        object.element_dt = InitDataTable(object, pagination, data, details);
-                        object.element.on('click', 'td.details-control', function () {
-                            var tr = $(this).closest('tr');
-                            var row = object.element_dt.row(tr);
-                            if (row.child.isShown()) {
-                                // This row is already open - close it
-                                destroyChild(row);
-                                tr.removeClass('shown');
-                            } else {
-                                // Open this row
-                                data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
-                                statsRegionsDetails.element = 'details-' + $('tr').index(tr);
-                                // statsRegionsDetails.routeData = $('#stateregdet-url').attr('url');
-
-                                createChild(row, statsRegionsDetails, data); // class is for background colour
-                                tr.addClass('shown');
+                        try {
+                            object.element_dt = InitDataTable(object, pagination, data, details);
+                            if (details) {
+                                object.element.on('click', 'td.details-control', function () {
+                                    var tr = $(this).closest('tr');
+                                    var row = object.element_dt.row(tr);
+                                    if (row.child.isShown()) {
+                                        // This row is already open - close it
+                                        destroyChild(row);
+                                        tr.removeClass('shown');
+                                        if (objectChart !== null && objectChart !== undefined) {
+                                            try {
+                                                InitChart(objectChart, response.columns, response.data, removeTotal, removeTotalColumn);
+                                            } catch (error) {
+                                                console.log(error);
+                                            }
+                                        }
+                                    } else {
+                                        // Open this row
+                                        data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
+                                        statsRegionsDetails.element = 'details-' + $('tr').index(tr);
+                                        // statsRegionsDetails.routeData = $('#stateregdet-url').attr('url');
+                                        createChild(row, statsRegionsDetails, data); // class is for background colour
+                                        tr.addClass('shown');
+                                    }
+                                });
                             }
-                        });
+                        } catch (error) {
+                            console.log(error);
+                        }
                     }
                 }
                 if (objectChart !== null && objectChart !== undefined) {
-                    InitChart(objectChart, response.columns, response.data, removeTotal, removeTotalColumn);
+                    try {
+                        InitChart(objectChart, response.columns, response.data, removeTotal, removeTotalColumn);
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -560,6 +594,7 @@ $(function () {
     }
 
     function InitChart(objectChart, columns, data, removeTotal = true, removeTotalColumn = false) {
+
         // console.log(objectChart.chartTitle);
         // console.log(columns);
         // console.log(data);
@@ -587,8 +622,12 @@ $(function () {
 
         var ctx = document.getElementById(objectChart.element_id).getContext('2d');
         let ChartData = {labels, datasets};
+        console.log(objectChart.element_id);
         if (objectChart.element_chart !== null && objectChart.element_chart !== undefined) {
-            objectChart.element_chart.destroy();
+            // objectChart.element_chart.destroy();
+            objectChart.element_chart.data = ChartData;
+            objectChart.element_chart.update();
+            return;
         }
         objectChart.element_chart = new Chart(ctx, {
             type: 'bar',
@@ -631,9 +670,10 @@ $(function () {
                 }
             }
         });
+
     }
 
-    function InitDataTable(object, pagination = false, data = null, details = false) {
+    function InitDataTable(object, pagination = false, data = null, details = false, detailsChart = false) {
         if ($.fn.DataTable.isDataTable(object.element_dt)) {
             object.element.off('click', 'td.details-control');
             object.element_dt.destroy();
@@ -668,7 +708,13 @@ $(function () {
                 url: object.routeData,
                 data: data,
             },
-            columns: object.columns
+            columns: object.columns,
+            initComplete: function (settings, response) {
+                // Get Chart Data
+                if (detailsChart && statsRegionsChart !== undefined && statsRegionsChart !== null) {
+                    InitChart(statsRegionsChart, object.columns, response.data); //, removeTotal, removeTotalColumn);
+                }
+            }
         });
         return table;
     }
@@ -702,8 +748,8 @@ $(function () {
         object.element = $('<table id="' + object.element + '" class="table-details table table-bordered table-valign-middle capitalize"/>');
         // Display it the child row
         row.child(object.element).show();
+        InitDataTable(object, false, data, false, true);
 
-        InitDataTable(object, false, data);
     }
 
     function destroyChild(row) {

@@ -8,14 +8,15 @@ use App\Models\Filter;
 use App\Models\Stats;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 
 class StatsRepository
 {
-    public function getStats()
+    public function getStats(Request $request)
     {
-        return Stats::select([
+        return DB::table('stats')->select([
             'Type_Note',
             'Utilisateur',
             'Resultat_Appel',
@@ -50,7 +51,8 @@ class StatsRepository
             'EXPORT_ALL_Date_CHARGEMENT_PDA',
             'EXPORT_ALL_Date_SOLDE',
             'EXPORT_ALL_Date_VALIDATION'
-        ])->get();
+        ]);
+
     }
 
     public function getAgencies(Request $request)
@@ -75,12 +77,12 @@ class StatsRepository
         $stats = Stats::select(['Nom_Region'])->distinct('Nom_Region')
             ->whereNotNull('Nom_Region')
             ->orderBy('Nom_Region')->get()->map(function ($s) {
-            $sn = explode(' - ', $s->Nom_Region);
-            return [
-                'name' => trim($s->Nom_Region),
-                'code' => trim($s->Nom_Region)
-            ];
-        });
+                $sn = explode(' - ', $s->Nom_Region);
+                return [
+                    'name' => trim($s->Nom_Region),
+                    'code' => trim($s->Nom_Region)
+                ];
+            });
         return $stats->toArray();
     }
 
@@ -301,14 +303,19 @@ class StatsRepository
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
 
-        $dates = Stats::selectRaw('*');
-        if ($agentName) {
-            $dates = $dates->where('Utilisateur', $agentName);
-        }
-        if ($agenceCode) {
-            $dates = $dates->where('Nom_Region', 'like', "%$agenceCode");
-        }
+        $dates = Stats::select('Date_Heure_Note_Annee', 'Date_Heure_Note_Mois', 'Date_Heure_Note_Semaine', 'Date_Note')
+        ->orderBy('Date_Heure_Note_Annee')
+        ->orderBy('Date_Heure_Note_Mois')
+        ->orderBy('Date_Heure_Note_Semaine')
+        ->orderBy('Date_Note');
+//        if ($agentName) {
+//            $dates = $dates->where('Utilisateur', $agentName);
+//        }
+//        if ($agenceCode) {
+//            $dates = $dates->where('Nom_Region', 'like', "%$agenceCode");
+//        }
         $dates = $dates->get()->groupBy(['Date_Heure_Note_Annee', 'Date_Heure_Note_Mois', 'Date_Heure_Note_Semaine', 'Date_Note']);
+
         $dates = $dates->map(function ($year, $index) {
             $_year = new \stdClass();
             $_year->id = $index; // year name

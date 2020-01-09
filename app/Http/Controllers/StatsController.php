@@ -26,7 +26,7 @@ class StatsController extends Controller
 
     public function getStats(Request $request)
     {
-        $stats = $this->statsRepository->getStats();
+        $stats = $this->statsRepository->getStats($request);
 //        return $stats;
         return DataTables::of($stats)->toJson();
     }

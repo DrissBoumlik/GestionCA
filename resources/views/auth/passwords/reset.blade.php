@@ -14,22 +14,27 @@
                     <div class="col-md-8 col-lg-6 col-xl-4">
                         <!-- Sign In Block -->
                         <div class="block block-themed block-fx-shadow mb-0" style="background-color: #d7d7d7">
-                            <div class="block-header">{{ __('Réinitialiser') }}</div>
-                            <div class="block-options">
-                                <a class="btn-block-option font-size-sm" href="{{ route('login') }}">Se connecter</a>
+                            <div class="block-header">
+                                <h3 class="block-title">{{ __('Réinitialiser') }}</h3>
+                                <div class="block-options">
+                                    <a class="btn-block-option font-size-sm" href="{{ route('login') }}">Se connecter</a>
+                                </div>
                             </div>
-
                             <div class="block-content">
                                 <div class="p-sm-3 px-lg-4 py-lg-5">
                                     <img src="{{ asset('media/circetwhite.png') }}" alt="" style="width: 100%">
-                                    <form class="js-validation-signin" action="{{ route('login') }}" method="POST">
+                                    <form class="js-validation-signin" action="{{ route('password.update') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="token" value="{{ $token }}">
                                         <div class="form-group row">
-                                            <label for="email" class="col-md-12 col-form-label">{{ __('E-Mail Adresse') }}</label>
+                                            <label for="email"
+                                                   class="col-md-12 col-form-label">{{ __('E-Mail Adresse') }}</label>
 
                                             <div class="col-md-12">
-                                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
+                                                <input id="email" type="email"
+                                                       class="form-control @error('email') is-invalid @enderror"
+                                                       name="email" value="{{ $email ?? old('email') }}" required
+                                                       autocomplete="email" autofocus>
 
                                                 @error('email')
                                                 <span class="invalid-feedback" role="alert">
@@ -40,10 +45,13 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <label for="password" class="col-md-12 col-form-label">{{ __('Mot de passe') }}</label>
+                                            <label for="password"
+                                                   class="col-md-12 col-form-label">{{ __('Mot de passe') }}</label>
 
                                             <div class="col-md-12">
-                                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                                <input id="password" type="password"
+                                                       class="form-control @error('password') is-invalid @enderror"
+                                                       name="password" required autocomplete="new-password">
 
                                                 @error('password')
                                                 <span class="invalid-feedback" role="alert">
@@ -54,10 +62,13 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <label for="password-confirm" class="col-md-12 col-form-label">{{ __('Confirmation du mot de pase') }}</label>
+                                            <label for="password-confirm"
+                                                   class="col-md-12 col-form-label">{{ __('Confirmation du mot de pase') }}</label>
 
                                             <div class="col-md-12">
-                                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                                <input id="password-confirm" type="password" class="form-control"
+                                                       name="password_confirmation" required
+                                                       autocomplete="new-password">
                                             </div>
                                         </div>
 

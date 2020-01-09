@@ -196,6 +196,10 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on('click', '#modal-loader', function (event) {
+        $('#modal-loader').modal('show');
+    });
+
     $(document).on('click', '#btn-import', function (event) {
         if(!$('#form-import').valid()) {
             return;
