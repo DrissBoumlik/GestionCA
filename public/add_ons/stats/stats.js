@@ -622,7 +622,6 @@ $(function () {
 
         var ctx = document.getElementById(objectChart.element_id).getContext('2d');
         let ChartData = {labels, datasets};
-        console.log(objectChart.element_id);
         if (objectChart.element_chart !== null && objectChart.element_chart !== undefined) {
             // objectChart.element_chart.destroy();
             objectChart.element_chart.data = ChartData;
