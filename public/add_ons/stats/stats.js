@@ -321,23 +321,42 @@ $(function () {
         data: undefined,
         treeElement: '#tree-view-0',
         routeCol: 'regions/columns/Groupement',
-        routeData: 'regions/Groupement'
-    };
-    let statsRegionsDetails = {
-        element: undefined,
-        columns: undefined,
-        routeData: 'regions/details/groupement', // $('#stateregdet-url').attr('url')
-    };
-    let statsRegionsChart = {
-        element_chart: undefined,
-        element_id: 'statsRegionsChart',
-        data: undefined,
-        chartTitle: 'Résultats Appels (Clients Joints)'
-    };
+        routeData: 'regions/Groupement',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsRegionsChart',
+            data: undefined,
+            chartTitle: 'Résultats Appels (Clients Joints)'
+        },
+        objDetail: {
+            element_dt: undefined,
+            element: undefined,
+            columns: undefined,
+            routeData: 'regions/details/groupement',
+            objChart: {
+                element_chart: undefined,
+                element_id: 'statsRegionsChart',
+                data: undefined,
+                chartTitle: 'Résultats Appels (Clients Joints)'
+            },
+        }
+        // children: {
+        //     routeData: 'regions/details/groupement',
 
-    getColumns(statsRegions, statsRegionsChart, true, true, filterData(), false, false, true, false);
+        // items: [{
+        //     element: undefined,
+        //     columns: undefined,
+        // }]
+    };
+    // let statsRegionsDetails = {
+    //     element: undefined,
+    //     columns: undefined,
+    //     routeData: 'regions/details/groupement', // $('#stateregdet-url').attr('url')
+    // };
+
+    getColumns(statsRegions, true, true, filterData(), false, false, true, false);
     $('#refreshRegions').on('click', function () {
-        getColumns(statsRegions, statsRegionsChart, true, true, filterData(), false, true, true, false);
+        getColumns(statsRegions, true, true, filterData(), false, true, true, false);
     });
 
     let statsFolders = {
@@ -347,21 +366,21 @@ $(function () {
         data: undefined,
         treeElement: '#tree-view-1',
         routeCol: 'folders/columns/Groupement',
-        routeData: 'folders/Groupement'
+        routeData: 'folders/Groupement',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsFoldersChart',
+            data: undefined,
+            chartTitle: 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement'
+        }
     };
-    let statsFoldersChart = {
-        element_chart: undefined,
-        element_id: 'statsFoldersChart',
-        data: undefined,
-        chartTitle: 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement'
-    };
-    getColumns(statsFolders, statsFoldersChart, true, true, filterData());
+    getColumns(statsFolders, true, true, filterData());
     $('#refreshFolders').on('click', function () {
-        getColumns(statsFolders, statsFoldersChart, true, true, filterData(), false, true);
+        getColumns(statsFolders, true, true, filterData(), false, true);
     });
 
 
-    /// ====================== CALLS STATS AGENCIES / WEEKS ==========================
+/// ====================== CALLS STATS AGENCIES / WEEKS ==========================
 
     let callsStatesAgencies = {
         element_dt: undefined,
@@ -370,17 +389,17 @@ $(function () {
         data: undefined,
         treeElement: '#tree-view-2',
         routeCol: 'regionsCallState/columns/Nom_Region',
-        routeData: 'regionsCallState/Nom_Region'
+        routeData: 'regionsCallState/Nom_Region',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'callsStatesAgenciesChart',
+            data: undefined,
+            chartTitle: 'Résultats Appels Préalables par agence'
+        }
     };
-    let callsStatesAgenciesChart = {
-        element_chart: undefined,
-        element_id: 'callsStatesAgenciesChart',
-        data: undefined,
-        chartTitle: 'Résultats Appels Préalables par agence'
-    };
-    getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false, filterData());
+    getColumns(callsStatesAgencies, true, false, filterData());
     $('#refreshCallStatesAgencies').on('click', function () {
-        getColumns(callsStatesAgencies, callsStatesAgenciesChart, true, false, filterData(), false, true);
+        getColumns(callsStatesAgencies, true, false, filterData(), false, true);
     });
 
 
@@ -391,21 +410,21 @@ $(function () {
         data: undefined,
         treeElement: '#tree-view-3',
         routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine',
-        routeData: 'regionsCallState/Date_Heure_Note_Semaine'
+        routeData: 'regionsCallState/Date_Heure_Note_Semaine',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'callsStatesWeeksChart',
+            data: undefined,
+            chartTitle: 'Résultats Appels Préalables par semaine'
+        }
     };
-    let callsStatesWeeksChart = {
-        element_chart: undefined,
-        element_id: 'callsStatesWeeksChart',
-        data: undefined,
-        chartTitle: 'Résultats Appels Préalables par semaine'
-    };
-    getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false, filterData());
+    getColumns(callsStatesWeeks, true, false, filterData());
     $('#refreshCallStatesWeeks').on('click', function () {
-        getColumns(callsStatesWeeks, callsStatesWeeksChart, true, false, filterData(), false, true);
+        getColumns(callsStatesWeeks, true, false, filterData(), false, true);
     });
 
 
-    /// ====================== CALL STATS Joignables / Injoignable ==========================
+/// ====================== CALL STATS Joignables / Injoignable ==========================
 
     let statscallsPos = {
         element_dt: undefined,
@@ -414,17 +433,17 @@ $(function () {
         data: undefined,
         treeElement: '#tree-view-4',
         routeCol: 'clientsByCallState/columns/Joignable',
-        routeData: 'clientsByCallState/Joignable'
+        routeData: 'clientsByCallState/Joignable',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsCallsPosChart',
+            data: undefined,
+            chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Joignables)'
+        }
     };
-    let statsCallsPosChart = {
-        element_chart: undefined,
-        element_id: 'statsCallsPosChart',
-        data: undefined,
-        chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Joignables)'
-    };
-    getColumns(statscallsPos, statsCallsPosChart, true, false, filterData(), false, false);
+    getColumns(statscallsPos, true, false, filterData(), false, false);
     $('#refreshCallResultPos').on('click', function () {
-        getColumns(statscallsPos, statsCallsPosChart, true, false, filterData(), false, true, false, false);
+        getColumns(statscallsPos, true, false, filterData(), false, true, false, false);
     });
 
     let statscallsNeg = {
@@ -434,20 +453,20 @@ $(function () {
         data: undefined,
         treeElement: '#tree-view-5',
         routeCol: 'clientsByCallState/columns/Injoignable',
-        routeData: 'clientsByCallState/Injoignable'
+        routeData: 'clientsByCallState/Injoignable',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statscallsNegChart',
+            data: undefined,
+            chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Injoignables)'
+        }
     };
-    let statscallsNegChart = {
-        element_chart: undefined,
-        element_id: 'statscallsNegChart',
-        data: undefined,
-        chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Injoignables)'
-    };
-    getColumns(statscallsNeg, statscallsNegChart, true, false, filterData(), false, false);
+    getColumns(statscallsNeg, true, false, filterData(), false, false);
     $('#refreshCallResultNeg').on('click', function () {
-        getColumns(statscallsNeg, statscallsNegChart, true, false, filterData(), false, true, false, false);
+        getColumns(statscallsNeg, true, false, filterData(), false, true, false, false);
     });
 
-    /// ====================== FOLDERS CODE / TYPE ==========================
+/// ====================== FOLDERS CODE / TYPE ==========================
 
     let statsFoldersByType = {
         element_dt: undefined,
@@ -456,17 +475,17 @@ $(function () {
         data: undefined,
         treeElement: '#tree-view-6',
         routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention',
-        routeData: 'nonValidatedFolders/Code_Type_Intervention'
+        routeData: 'nonValidatedFolders/Code_Type_Intervention',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsFoldersByTypeChart',
+            data: undefined,
+            chartTitle: 'Répartition des dossiers non validés par Code Type intervention'
+        }
     };
-    let statsFoldersByTypeChart = {
-        element_chart: undefined,
-        element_id: 'statsFoldersByTypeChart',
-        data: undefined,
-        chartTitle: 'Répartition des dossiers non validés par Code Type intervention'
-    };
-    getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false, filterData());
+    getColumns(statsFoldersByType, true, false, filterData());
     $('#refreshFoldersByType').on('click', function () {
-        getColumns(statsFoldersByType, statsFoldersByTypeChart, true, false, filterData(), false, true);
+        getColumns(statsFoldersByType, true, false, filterData(), false, true);
     });
 
     let statsFoldersByCode = {
@@ -476,20 +495,20 @@ $(function () {
         data: undefined,
         treeElement: '#tree-view-7',
         routeCol: 'nonValidatedFolders/columns/Code_Intervention',
-        routeData: 'nonValidatedFolders/Code_Intervention'
+        routeData: 'nonValidatedFolders/Code_Intervention',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsFoldersByCodeChart',
+            data: undefined,
+            chartTitle: 'Répartition des dossiers non validés par code intervention'
+        }
     };
-    let statsFoldersByCodeChart = {
-        element_chart: undefined,
-        element_id: 'statsFoldersByCodeChart',
-        data: undefined,
-        chartTitle: 'Répartition des dossiers non validés par code intervention'
-    };
-    getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false, filterData());
+    getColumns(statsFoldersByCode, true, false, filterData());
     $('#refreshFoldersByCode').on('click', function () {
-        getColumns(statsFoldersByCode, statsFoldersByCodeChart, true, false, filterData(), false, true);
+        getColumns(statsFoldersByCode, true, false, filterData(), false, true);
     });
 
-    /// ====================== CALL PERIMETERS ==========================
+/// ====================== CALL PERIMETERS ==========================
 
     let statsPerimeters = {
         element_dt: undefined,
@@ -498,22 +517,22 @@ $(function () {
         data: undefined,
         treeElement: '#tree-view-8',
         routeCol: 'clientsByPerimeter/columns',
-        routeData: 'clientsByPerimeter'
+        routeData: 'clientsByPerimeter',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsPerimetersChart',
+            data: undefined,
+            chartTitle: 'Production Globale CAM'
+        }
     };
-    let statsPerimetersChart = {
-        element_chart: undefined,
-        element_id: 'statsPerimetersChart',
-        data: undefined,
-        chartTitle: 'Production Globale CAM'
-    };
-    getColumns(statsPerimeters, statsPerimetersChart, true, false, filterData());
+    getColumns(statsPerimeters, true, false, filterData());
     $('#refreshPerimeters').on('click', function () {
-        getColumns(statsPerimeters, statsPerimetersChart, true, false, filterData(), false, true);
+        getColumns(statsPerimeters, true, false, filterData(), false, true);
     });
 
-    /// ====================== FUNCTIONS ==========================
+/// ====================== FUNCTIONS ==========================
 
-    function getColumns(object, objectChart = null, callInitDT = true, pagination = false, data = null, removeTotal = true, refreshMode = false, details = false, removeTotalColumn = true) {
+    function getColumns(object, callInitDT = true, pagination = false, data = null, removeTotal = true, refreshMode = false, details = false, removeTotalColumn = true) {
         if (refreshMode) {
             data = {...data, refreshMode: true}; //{dates: data, refreshMode: true};
         }
@@ -522,7 +541,7 @@ $(function () {
             method: 'GET',
             data: data,
             success: function (response) {
-                datesFilterValuesExist = true;
+                let datesFilterValuesExist = true;
                 let filters = response.filter;
                 if (filters !== null && filters !== undefined) {
                     datesFilterValues.push([object.treeElement, filters.date_filter]);
@@ -542,28 +561,20 @@ $(function () {
                 if (callInitDT) {
                     if (data !== null && data !== undefined) {
                         try {
-                            object.element_dt = InitDataTable(object, pagination, data, details);
+                            object.element_dt = InitDataTable(object, pagination, data, details, removeTotal, removeTotalColumn);
                             if (details) {
                                 object.element.on('click', 'td.details-control', function () {
-                                    var tr = $(this).closest('tr');
-                                    var row = object.element_dt.row(tr);
+                                    const tr = $(this).closest('tr');
+                                    const row = object.element_dt.row(tr);
                                     if (row.child.isShown()) {
                                         // This row is already open - close it
                                         destroyChild(row);
                                         tr.removeClass('shown');
-                                        if (objectChart !== null && objectChart !== undefined) {
-                                            try {
-                                                InitChart(objectChart, response.columns, response.data, removeTotal, removeTotalColumn);
-                                            } catch (error) {
-                                                console.log(error);
-                                            }
-                                        }
                                     } else {
                                         // Open this row
                                         data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
-                                        statsRegionsDetails.element = 'details-' + $('tr').index(tr);
-                                        // statsRegionsDetails.routeData = $('#stateregdet-url').attr('url');
-                                        createChild(row, statsRegionsDetails, data); // class is for background colour
+                                        object.objDetail.element = 'details-' + $('tr').index(tr);
+                                        createChild(row, object.objDetail, data); // class is for background colour
                                         tr.addClass('shown');
                                     }
                                 });
@@ -573,13 +584,13 @@ $(function () {
                         }
                     }
                 }
-                if (objectChart !== null && objectChart !== undefined) {
-                    try {
-                        InitChart(objectChart, response.columns, response.data, removeTotal, removeTotalColumn);
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
+                // if (object.objChart !== null && object.objChart !== undefined) {
+                //     try {
+                //         InitChart(object.objChart, response.columns, response.data, removeTotal, removeTotalColumn);
+                //     } catch (error) {
+                //         console.log(error);
+                //     }
+                // }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log('error');
@@ -594,7 +605,6 @@ $(function () {
     }
 
     function InitChart(objectChart, columns, data, removeTotal = true, removeTotalColumn = false) {
-
         // console.log(objectChart.chartTitle);
         // console.log(columns);
         // console.log(data);
@@ -622,12 +632,9 @@ $(function () {
 
         var ctx = document.getElementById(objectChart.element_id).getContext('2d');
         let ChartData = {labels, datasets};
-        if (objectChart.element_chart !== null && objectChart.element_chart !== undefined) {
-            // objectChart.element_chart.destroy();
-            objectChart.element_chart.data = ChartData;
-            objectChart.element_chart.update();
-            return;
-        }
+        // if (objectChart.element_chart !== null && objectChart.element_chart !== undefined) {
+        //     objectChart.element_chart.destroy();
+        // }
         objectChart.element_chart = new Chart(ctx, {
             type: 'bar',
             data: ChartData,
@@ -669,17 +676,16 @@ $(function () {
                 }
             }
         });
-
     }
 
-    function InitDataTable(object, pagination = false, data = null, details = false, detailsChart = false) {
+    function InitDataTable(object, pagination = false, data = null, details = false, removeTotal = true, removeTotalColumn = false) {
         if ($.fn.DataTable.isDataTable(object.element_dt)) {
             object.element.off('click', 'td.details-control');
             object.element_dt.destroy();
         }
         if (details) {
-            statsRegionsDetails.columns = [...object.columns];
-            statsRegionsDetails.columns = statsRegionsDetails.columns.map(function (item, index) {
+            object.objDetail.columns = [...object.columns];
+            object.objDetail.columns = object.objDetail.columns.map(function (item, index) {
                 if (index === 0) {
                     return {...item, data: 'Resultat_Appel', name: 'Resultat_Appel', title: 'Resultat Appel'};
                 }
@@ -694,7 +700,7 @@ $(function () {
                 width: '10%'
             });
         }
-        const table = object.element.DataTable({
+        return object.element.DataTable({
             language: frLang,
             responsive: true,
             info: false,
@@ -709,13 +715,23 @@ $(function () {
             },
             columns: object.columns,
             initComplete: function (settings, response) {
-                // Get Chart Data
-                if (detailsChart && statsRegionsChart !== undefined && statsRegionsChart !== null) {
-                    InitChart(statsRegionsChart, object.columns, response.data); //, removeTotal, removeTotalColumn);
+                if (object.objChart !== null && object.objChart !== undefined) {
+                    try {
+                        InitChart(object.objChart, object.columns, response.data, removeTotal, removeTotalColumn);
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
             }
         });
-        return table;
+
+        // if (object.objChart !== null && object.objChart !== undefined) {
+        //     try {
+        //         InitChart(object.objChart, object.columns, object.data, removeTotal, removeTotalColumn);
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
+        // }
     }
 
     function dynamicColors(uniqueColors) {
@@ -742,13 +758,21 @@ $(function () {
         )
     }
 
-    function createChild(row, object, data = null) {
+    function createChild(row, objectChild, data = null) {
         // This is the table we'll convert into a DataTable
-        object.element = $('<table id="' + object.element + '" class="table-details table table-bordered table-valign-middle capitalize"/>');
-        // Display it the child row
-        row.child(object.element).show();
-        InitDataTable(object, false, data, false, true);
+        var tableDom = '<table id="' + objectChild.element + '" class="table-details table table-bordered table-valign-middle capitalize"/>';
+        var canvasDom = '<div class="col-12"><canvas id="' + objectChild.element + '-Chart"/></div>';
+        objectChild.objChart.element_id = objectChild.element + '-Chart';
+        objectChild.element = $(tableDom);
 
+        // ');
+
+        let createdChild = tableDom;
+        // Display it the child row
+        row.child(objectChild.element).show();
+        objectChild.element.after(canvasDom);
+        // row.child(objectChild.element).show();
+        InitDataTable(objectChild, false, data, false, false, false);
     }
 
     function destroyChild(row) {

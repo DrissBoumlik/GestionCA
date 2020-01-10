@@ -374,7 +374,8 @@ class StatsRepository
         $regions = \DB::table('stats')
             ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(Nom_Region) as total'))
             ->where($callResult, 'not like', '=%')
-            ->where('Groupement', 'not like', 'Non Renseigné');
+            ->where('Groupement', 'not like', 'Non Renseigné')
+            ->where('Groupement', 'not like', 'Appels post');
 
         // GETTING COLUMNS BEFORE MAKING THE WHERE CONDITIONS ON THE FOLLOWING LINES
 //        dd($keys);
@@ -727,7 +728,8 @@ class StatsRepository
         $regions = \DB::table('stats')
             ->select('Nom_Region', $callResult, \DB::raw('count(Nom_Region) as total'))
             ->where($callResult, 'not like', '=%')
-            ->where('Groupement', 'not like', 'Non Renseigné');
+            ->where('Groupement', 'not like', 'Non Renseigné')
+            ->where('Groupement', 'not like', 'Appels post');
 
 
 
@@ -1477,7 +1479,8 @@ class StatsRepository
         $results = \DB::table('stats')
             ->select('Groupement', 'Nom_Region', \DB::raw('count(*) as total'))
             ->whereNotNull('Groupement')
-            ->where('Groupement', 'not like', 'Non Renseigné');
+            ->where('Groupement', 'not like', 'Non Renseigné')
+            ->where('Groupement', 'not like', 'Appels post');
 
         if ($agentName) {
             $results = $results->where('Utilisateur', $agentName);
