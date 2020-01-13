@@ -69,11 +69,9 @@
                     class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center mt-5 mb-2 text-center text-sm-left">
                     <div class="flex-sm-fill">
                         @if (request()->has('agence_code'))
-                            <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Tableau de bord
-                                Agence {{$agence}}</h1>
+                            <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Tableau de bord Agence {{$agence}}</h1>
                         @elseif(request()->has('agent_name'))
-                            <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Tableau de bord
-                                Agent {{strtoupper($agent)}}</h1>
+                            <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Tableau de bord Agent {{strtoupper($agent)}}</h1>
                         @else
                             <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Tableau de bord</h1>
                         @endif
@@ -155,47 +153,8 @@
             </div>
             <!-- /.row -->
             <hr>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title d-inline-block">Répartition des dossiers traités sur le périmètre
-                                validation, par catégorie de traitement</h3>
-                            <hr>
-                            <div class="refresh-form">
-                                <div id="tree-view-1" class="tree-view d-inline-flex"></div>
-                                <div id="stats-regions-filter" class="tree-region-view d-inline-flex"></div>
-                                <button type="button" id="refreshFolders" class="btn btn-primary float-right">
-                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body table-responsive">
-                            <table id="statsFolders"
-                                   class="table table-bordered table-striped table-valign-middle capitalize">
-                                <thead>
-                                <tr>
-                                    <th>Type Traitement</th>
-                                    @for($i = 1; $i < count($calls_folders); $i++)
-                                        <th>{{ $calls_folders[$i]->name }}</th>
-                                    @endfor
-                                </tr>
-                                </thead>
-                            </table>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
-                </div>
-                <!-- /.col -->
-                <div class="col-12">
-                    <canvas id="statsFoldersChart" class=""></canvas>
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-            <hr>
+
+
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -286,8 +245,7 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-4" class="tree-view d-inline-flex"></div>
-                                <div id="code-rdv-intervention-confirm-filter"
-                                     class="tree-code-rdv-intervention-confirm-view d-inline-flex"></div>
+                                <div id="code-rdv-intervention-confirm-filter" class="tree-code-rdv-intervention-confirm-view d-inline-flex"></div>
                                 <button type="button" id="refreshCallResultPos" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
@@ -328,8 +286,7 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-5" class="tree-view d-inline-flex"></div>
-                                <div id="code-rdv-intervention-filter"
-                                     class="tree-code-rdv-intervention-view d-inline-flex"></div>
+                                <div id="code-rdv-intervention-filter" class="tree-code-rdv-intervention-view d-inline-flex"></div>
                                 <button type="button" id="refreshCallResultNeg" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
@@ -356,130 +313,6 @@
                 <!-- /.col -->
                 <div class="col-12">
                     <canvas id="statscallsNegChart" class=""></canvas>
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-            <hr>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title d-inline-block">Répartition des dossiers non validés par Code Type
-                                intervention</h3>
-                            <hr>
-                            <div class="refresh-form">
-                                <div id="tree-view-6" class="tree-view d-inline-flex"></div>
-                                <div id="code-type-intervention-filter"
-                                     class="tree-code-type-intervention-view d-inline-flex"></div>
-                                <button type="button" id="refreshFoldersByType" class="btn btn-primary float-right">
-                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body table-responsive">
-                            <table id="statsFoldersByType"
-                                   class="table table-bordered table-striped table-valign-middle capitalize">
-                                <thead>
-                                <tr>
-                                    <th>Type Intervention</th>
-                                    @for($i = 1; $i < count($regions_names_type); $i++)
-                                        <th>{{ $regions_names_type[$i]->name }}</th>
-                                    @endfor
-                                </tr>
-                                </thead>
-                            </table>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
-                </div>
-                <!-- /.col -->
-                <div class="col-12">
-                    <canvas id="statsFoldersByTypeChart" class=""></canvas>
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-            <hr>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title d-inline-block">Répartition des dossiers non validés par code
-                                intervention</h3>
-                            <hr>
-                            <div class="refresh-form">
-                                <div id="tree-view-7" class="tree-view d-inline-flex"></div>
-                                <div id="code-intervention-filter"
-                                     class="tree-code-intervention-view d-inline-flex"></div>
-                                <button type="button" id="refreshFoldersByCode" class="btn btn-primary float-right">
-                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body table-responsive">
-                            <table id="statsFoldersByCode"
-                                   class="table table-bordered table-striped table-valign-middle capitalize">
-                                <thead>
-                                <tr>
-                                    <th>Code Intervention</th>
-                                    @for($i = 1; $i < count($regions_names_code); $i++)
-                                        <th>{{ $regions_names_code[$i]->name }}</th>
-                                    @endfor
-                                </tr>
-                                </thead>
-                            </table>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
-                </div>
-                <!-- /.col -->
-                <div class="col-12">
-                    <canvas id="statsFoldersByCodeChart" class=""></canvas>
-                </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-            <hr>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title d-inline-block">Production Globale CAM</h3>
-                            <hr>
-                            <div class="refresh-form">
-                                <div id="tree-view-8" class="tree-view d-inline-flex"></div>
-                                <div id="nom-region-filter" class="tree-nom-region-view d-inline-flex"></div>
-                                <button type="button" id="refreshPerimeters" class="btn btn-primary float-right">
-                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body table-responsive">
-                            <table id="statsPerimeters"
-                                   class="table table-bordered table-striped table-valign-middle capitalize">
-                                <thead>
-                                <tr>
-                                    <th>Région</th>
-                                    @for($i = 1; $i < count($perimeters); $i++)
-                                        <th>{{ $perimeters[$i]->name }}</th>
-                                    @endfor
-                                </tr>
-                                </thead>
-                            </table>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                    <!-- /.card -->
-                </div>
-                <!-- /.col -->
-                <div class="col-12">
-                    <canvas id="statsPerimetersChart" class=""></canvas>
                 </div>
                 <!-- /.col -->
             </div>

@@ -13,8 +13,8 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         User::create([
-            'firstname' => 'Driss',
-            'lastname' => 'Boumlik',
+            'firstname' => 'John',
+            'lastname' => 'Doe',
             'email' => 'a@a.a',
             'status' => true,
             'picture' => 'https://images2.imgbox.com/9c/5e/F8JZCJLn_o.png',

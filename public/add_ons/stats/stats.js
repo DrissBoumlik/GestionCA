@@ -205,33 +205,13 @@ $(function () {
 
     let datesFilterListExist = false;
     let datesFilterValuesExist = false;
+
     $.ajax({
-        url: 'dates',
+        url: APP_URL + '/dates',
         method: 'GET',
         success: function (response) {
             datesFilterListExist = true;
             let treeData = response.dates;
-            // treeData = Object.entries(treeData);
-            // treeData = treeData.map(function (_year, indexY) {
-            //     let year = _year[0];
-            //     let months = Object.entries(_year[1]);
-            //     months = months.map(function (_month, indexM) {
-            //         // _month = Object.entries(_month)[0];
-            //         let month = _month[0];
-            //         let weeks = Object.entries(_month[1]);
-            //         weeks = weeks.map(function (_week, indexW) {
-            //             // _week = Object.entries(_week);
-            //             let week = _week[0];
-            //             let days = Object.keys(_week[1]);
-            //             days = days.map(function (_day, indexD) {
-            //                 return {id: _day, text: _day};
-            //             });
-            //             return {id: week, text: week, children: days};
-            //         });
-            //         return {id: month, text: month, children: weeks};
-            //     });
-            //     return {id: year, text: year, children: months};
-            // });
 
             $('.tree-view').each(function (index, item) {
                 let treeId = '#' + $(this).attr('id');
@@ -252,8 +232,6 @@ $(function () {
                         dates = this.values;
                     }
                 });
-                // $(treeId + ' .treejs-switcher').click();
-                // $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
             });
             if (datesFilterListExist && datesFilterValuesExist) {
                 assignFilter(datesFilterList, datesFilterValues);
@@ -266,7 +244,7 @@ $(function () {
 
     for (let p of paramFiltreList) {
         $.ajax({
-            url: `stats/filter/${p.url}`,
+            url: APP_URL + `stats/filter/${p.url}`,
             data: getData,
             method: 'GET',
             success: function (response) {
@@ -312,6 +290,13 @@ $(function () {
             agence_code
         };
     };
+
+    $('#filterDashboard').on('change', function () {
+        let url = $(this).val();
+        if (url) {
+            window.location = url;
+        }
+    });
 
     /// ====================== REGIONS ==========================
     let statsRegions = {
@@ -537,7 +522,7 @@ $(function () {
             data = {...data, refreshMode: true}; //{dates: data, refreshMode: true};
         }
         $.ajax({
-            url: object.routeCol,
+            url: APP_URL + '/' + object.routeCol,
             method: 'GET',
             data: data,
             success: function (response) {
@@ -593,7 +578,11 @@ $(function () {
                 // }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log('error');
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+                console.log(APP_URL + '/' + object.routeCol);
+                console.log('===========');
             }
         });
     }
@@ -604,7 +593,7 @@ $(function () {
         }
     }
 
-    function InitChart(objectChart, columns, data, removeTotal = true, removeTotalColumn = false) {
+    function InitChart(objectChart, columns, data, removeTotal = true, removeTotalColumn = false, details = false) {
         // console.log(objectChart.chartTitle);
         // console.log(columns);
         // console.log(data);
@@ -612,6 +601,9 @@ $(function () {
         labels = labels.map((column) => {
             return column.data;
         });
+        if (details) {
+            labels.shift();
+        }
         let column = labels.shift();
         if (removeTotalColumn) {
             labels.pop();
@@ -710,14 +702,14 @@ $(function () {
             ordering: false,
             bPaginate: pagination,
             ajax: {
-                url: object.routeData,
+                url: APP_URL + '/' + object.routeData,
                 data: data,
             },
             columns: object.columns,
             initComplete: function (settings, response) {
                 if (object.objChart !== null && object.objChart !== undefined) {
                     try {
-                        InitChart(object.objChart, object.columns, response.data, removeTotal, removeTotalColumn);
+                        InitChart(object.objChart, object.columns, response.data, removeTotal, removeTotalColumn, details);
                     } catch (error) {
                         console.log(error);
                     }

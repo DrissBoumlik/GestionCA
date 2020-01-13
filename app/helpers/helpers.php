@@ -1,5 +1,16 @@
 <?php
 
+if (!function_exists('getRoute')) {
+    function getRoute($route)
+    {
+        $routeURI = $route->uri;
+        $_index = 0;
+        return collect($route->parameters)->reduce(function ($carry, $value) use (&$routeURI, &$_index, $route) {
+            return $routeURI = str_replace('{' . $route->parameterNames[$_index++] . '}', $value, $routeURI);
+        }, $routeURI);
+    }
+}
+
 if (!function_exists('getPicture')) {
     function getPicture($user)
     {

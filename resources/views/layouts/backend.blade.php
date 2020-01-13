@@ -62,7 +62,7 @@
         <!-- END Page Container -->
 
         <script !src="">
-            APP_URL = '{{ env('APP_URL') }}';
+            APP_URL = '{{ URL::to('/') }}';
         </script>
         <!-- OneUI Core JS -->
         <script src="{{ asset('js/oneui.app.js') }}"></script>

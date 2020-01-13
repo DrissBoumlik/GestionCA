@@ -137,7 +137,6 @@ class UserController extends Controller
     {
         // Authorization
         $this->authorize('update', auth()->user());
-
         if ($request->get('method')) {
             $user->status = $request->status == 'true' ? true : false;
             $updated = $user->update();

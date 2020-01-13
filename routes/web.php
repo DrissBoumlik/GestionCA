@@ -127,4 +127,10 @@ Auth::routes();
     Route::get('/clientsByPerimeter', 'StatsController@getClientsByPerimeter');                                                          // SUM
     Route::get('/clientsByPerimeter/columns', 'StatsController@getClientsByPerimeterColumn');
     Route::get('/demo', 'StatsController@demo');
+
+
+//    FILTERS
+    Route::get('/dashboard/appels_prealables', 'StatsController@dashboard_filter');
+    Route::get('/dashboard/clotureOt_TaitementBL', 'StatsController@dashboard_filter');
+    Route::get('/dashboard/production_globale_cam', 'StatsController@dashboard_filter');
 //});

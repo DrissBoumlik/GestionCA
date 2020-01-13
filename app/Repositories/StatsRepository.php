@@ -350,15 +350,6 @@ class StatsRepository
         return $dates->values();
     }
 
-    private function getRoute($route)
-    {
-        $routeURI = $route->uri;
-        $_index = 0;
-        return collect($route->parameters)->reduce(function ($carry, $value) use (&$routeURI, &$_index, $route) {
-            return $routeURI = str_replace('{' . $route->parameterNames[$_index++] . '}', $value, $routeURI);
-        }, $routeURI);
-    }
-
     public function GetDataRegions($callResult, Request $request = null)
     {
         $resultatAppel = $request->get('resultatAppel');
@@ -369,7 +360,7 @@ class StatsRepository
 
 //        TODO: Get Route URI -> replace params with actual value (as ID) - search in filter table if filter exists
 //        TODO => if not check request if it exists save the new filter or just get full data and delete old filter
-        $route = $this->getRoute(Route::current());
+        $route = getRoute(Route::current());
 
         $regions = \DB::table('stats')
             ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(Nom_Region) as total'))
@@ -402,10 +393,10 @@ class StatsRepository
             $groupement = array_values($groupement);
             $regions = $regions->whereIn('Groupement', $groupement);
         }
-//        $route = $this->getRoute(Route::current());
+//        $route = getRoute(Route::current());
         $user = auth()->user() ?? User::find(1);
 
-        $_route = $this->getRoute(Route::current());
+        $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
@@ -584,7 +575,7 @@ class StatsRepository
             $regions = $regions->whereIn('Groupement', $groupement);
         }
         $user = auth()->user() ?? User::find(1);
-        $_route = $this->getRoute(Route::current());
+        $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
@@ -724,7 +715,7 @@ class StatsRepository
         $dates = $request->get('dates');
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
-        $route = $this->getRoute(Route::current());
+        $route = getRoute(Route::current());
         $regions = \DB::table('stats')
             ->select('Nom_Region', $callResult, \DB::raw('count(Nom_Region) as total'))
             ->where($callResult, 'not like', '=%')
@@ -766,7 +757,7 @@ class StatsRepository
         }
 
         $user = auth()->user() ?? User::find(1);
-        $_route = $this->getRoute(Route::current());
+        $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
@@ -912,7 +903,7 @@ class StatsRepository
         $dates = $request->get('dates');
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
-        $route = $this->getRoute(Route::current());
+        $route = getRoute(Route::current());
         $regions = \DB::table('stats')
             ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'))
             ->where('Groupement', 'not like', 'Non Renseigné');
@@ -937,7 +928,7 @@ class StatsRepository
         }
 
         $user = auth()->user() ?? User::find(1);
-        $_route = $this->getRoute(Route::current());
+        $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
@@ -1078,7 +1069,7 @@ class StatsRepository
 
     public function getDataNonValidatedFolders($intervCol, Request $request)
     {
-        $route = $this->getRoute(Route::current());
+        $route = getRoute(Route::current());
 
         $dates = $request->get('dates');
         $agentName = $request->get('agent_name');
@@ -1111,7 +1102,7 @@ class StatsRepository
         }
 
         $user = auth()->user() ?? User::find(1);
-        $_route = $this->getRoute(Route::current());
+        $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
@@ -1272,7 +1263,7 @@ class StatsRepository
 
     public function getDataClientsByCallState($callResult, Request $request)
     {
-        $route = $this->getRoute(Route::current());
+        $route = getRoute(Route::current());
         $dates = $request->get('dates');
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
@@ -1303,7 +1294,7 @@ class StatsRepository
             $codes = $codes->whereIn('Nom_Region', $codeRdvInterventionConfirm);
         }
         $user = auth()->user() ?? User::find(1);
-        $_route = $this->getRoute(Route::current());
+        $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
@@ -1469,7 +1460,7 @@ class StatsRepository
 
     public function getDataClientsByPerimeter(Request $request)
     {
-        $route = $this->getRoute(Route::current());
+        $route = getRoute(Route::current());
 
         $dates = $request->get('dates');
         $nomRegion = $request->get('nomRegion');
@@ -1498,7 +1489,7 @@ class StatsRepository
             $results = $results->whereIn('Date_Note', $dates);
         }
         $user = auth()->user() ?? User::find(1);
-        $_route = $this->getRoute(Route::current());
+        $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 

@@ -141,15 +141,16 @@
                     <span class="nav-main-link-name">Agents</span>
                 </a>
                 <ul class="nav-main-submenu">
-                        <li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('users') ? ' active' : '' }}" href="javascript:void(0)">
-                                <div class="form-group" style="width: 150px">
-                                    <select class="form-control" id="agent-code" name="agent_code" style="width: 100%;">
-                                        <option></option><!-- Required for data-placeholder attribute to work with Select2 plugin -->
-                                    </select>
-                                </div>
-                            </a>
-                        </li>
+                    <li class="nav-main-item">
+                        <a class="nav-main-link{{ request()->is('users') ? ' active' : '' }}" href="javascript:void(0)">
+                            <div class="form-group" style="width: 150px">
+                                <select class="form-control" id="agent-code" name="agent_code" style="width: 100%;">
+                                    <option></option>
+                                    <!-- Required for data-placeholder attribute to work with Select2 plugin -->
+                                </select>
+                            </div>
+                        </a>
+                    </li>
                 </ul>
             </li>
 
