@@ -244,7 +244,7 @@ $(function () {
 
     for (let p of paramFiltreList) {
         $.ajax({
-            url: APP_URL + `stats/filter/${p.url}`,
+            url: `${APP_URL}/stats/filter/${p.url}`,
             data: getData,
             method: 'GET',
             success: function (response) {

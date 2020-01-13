@@ -176,8 +176,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Résultats Appels Préalables par agence</th>
-                                    @for($i = 1; $i < count($calls_states_regions); $i++)
+                                    @for($i = 0; $i < count($calls_states_regions); $i++)
                                         <th>{{ $calls_states_regions[$i]->name }}</th>
                                     @endfor
                                 </tr>
@@ -216,8 +215,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Résultats Appels Préalables</th>
-                                    @for($i = 1; $i < count($calls_states_weeks); $i++)
+                                    @for($i = 0; $i < count($calls_states_weeks); $i++)
                                         <th>{{ $calls_states_weeks[$i]->name }}</th>
                                     @endfor
                                 </tr>
@@ -245,7 +243,8 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-4" class="tree-view d-inline-flex"></div>
-                                <div id="code-rdv-intervention-confirm-filter" class="tree-code-rdv-intervention-confirm-view d-inline-flex"></div>
+                                <div id="code-rdv-intervention-confirm-filter"
+                                     class="tree-code-rdv-intervention-confirm-view d-inline-flex"></div>
                                 <button type="button" id="refreshCallResultPos" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
@@ -257,8 +256,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Résultats Appels Préalables</th>
-                                    @for($i = 1; $i < count($calls_pos); $i++)
+                                    @for($i = 0; $i < count($calls_pos); $i++)
                                         <th>{{ $calls_pos[$i]->name }}</th>
                                     @endfor
                                 </tr>
@@ -286,7 +284,8 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-5" class="tree-view d-inline-flex"></div>
-                                <div id="code-rdv-intervention-filter" class="tree-code-rdv-intervention-view d-inline-flex"></div>
+                                <div id="code-rdv-intervention-filter"
+                                     class="tree-code-rdv-intervention-view d-inline-flex"></div>
                                 <button type="button" id="refreshCallResultNeg" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
@@ -298,8 +297,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Résultats Appels Préalables</th>
-                                    @for($i = 1; $i < count($calls_neg); $i++)
+                                    @for($i = 0; $i < count($calls_neg); $i++)
                                         <th>{{ $calls_neg[$i]->name }}</th>
                                     @endfor
                                 </tr>

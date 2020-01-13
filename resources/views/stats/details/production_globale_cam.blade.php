@@ -134,8 +134,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Région</th>
-                                    @for($i = 1; $i < count($perimeters); $i++)
+                                    @for($i = 0; $i < count($perimeters); $i++)
                                         <th>{{ $perimeters[$i]->name }}</th>
                                     @endfor
                                 </tr>

@@ -535,7 +535,6 @@ class StatsRepository
         }
     }
 
-
     public function GetDataRegionsByGrpCall(Request $request = null)
     {
         $resultatAppel = $request->get('resultatAppel');
@@ -707,7 +706,6 @@ class StatsRepository
         }
     }
 
-
     public function GetDataFolders($callResult, Request $request)
     {
         $resultatAppel = $request->get('resultatAppel');
@@ -830,7 +828,7 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->name = $callResult;
+            $first->name = 'Type Traitement';
             $first->data = $callResult;
             array_unshift($regions_names, $first);
             $last = new \stdClass();
@@ -1006,7 +1004,7 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->name = 'Gpmt_Appel_Pre';
+            $first->name = 'Résultats Appels Préalables';
             $first->data = 'Gpmt_Appel_Pre';
             $last = new \stdClass();
             $last->data = 'total';
@@ -1195,7 +1193,7 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->name = $intervCol;
+            $first->name = $intervCol == 'Code_Intervention' ? 'Code Intervention' : 'Type Intervention';
             $first->data = $intervCol;
             array_unshift($regions_names, $first);
 //            $last = new \stdClass();
@@ -1388,7 +1386,7 @@ class StatsRepository
             });
 
             $first = new \stdClass();
-            $first->name = 'Nom_Region';
+            $first->name = 'Résultats Appels Préalables';
             $first->data = 'Nom_Region';
             $last = new \stdClass();
             $last->data = 'total';
@@ -1567,7 +1565,7 @@ class StatsRepository
             });
 
             $first = new \stdClass();
-            $first->name = 'Nom_Region';
+            $first->name = 'Région';
             $first->data = 'Nom_Region';
             $last = new \stdClass();
             $last->data = 'total';

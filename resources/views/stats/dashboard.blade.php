@@ -109,7 +109,8 @@
                 <option value="2">Appel Post XX</option>
                 <option value="{{ URL::to('/') . '/dashboard/appels_prealables' }}">Appel préalable</option>
                 <option value="{{ URL::to('/') . '/dashboard/production_globale_cam' }}">Appel CAM</option>
-                <option value="{{ URL::to('/') . '/dashboard/clotureOt_TaitementBL' }}">Clôture OT & Traitement BL</option>
+                <option value="{{ URL::to('/') . '/dashboard/clotureOt_TaitementBL' }}">Clôture OT & Traitement BL
+                </option>
                 <option value="3">GEM XX</option>
             </select>
         </div>
@@ -176,8 +177,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Type Traitement</th>
-                                    @for($i = 1; $i < count($calls_folders); $i++)
+                                    @for($i = 0; $i < count($calls_folders); $i++)
                                         <th>{{ $calls_folders[$i]->name }}</th>
                                     @endfor
                                 </tr>
@@ -217,8 +217,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Résultats Appels Préalables par agence</th>
-                                    @for($i = 1; $i < count($calls_states_regions); $i++)
+                                    @for($i = 0; $i < count($calls_states_regions); $i++)
                                         <th>{{ $calls_states_regions[$i]->name }}</th>
                                     @endfor
                                 </tr>
@@ -257,8 +256,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Résultats Appels Préalables</th>
-                                    @for($i = 1; $i < count($calls_states_weeks); $i++)
+                                    @for($i = 0; $i < count($calls_states_weeks); $i++)
                                         <th>{{ $calls_states_weeks[$i]->name }}</th>
                                     @endfor
                                 </tr>
@@ -299,8 +297,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Résultats Appels Préalables</th>
-                                    @for($i = 1; $i < count($calls_pos); $i++)
+                                    @for($i = 0; $i < count($calls_pos); $i++)
                                         <th>{{ $calls_pos[$i]->name }}</th>
                                     @endfor
                                 </tr>
@@ -341,8 +338,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Résultats Appels Préalables</th>
-                                    @for($i = 1; $i < count($calls_neg); $i++)
+                                    @for($i = 0; $i < count($calls_neg); $i++)
                                         <th>{{ $calls_neg[$i]->name }}</th>
                                     @endfor
                                 </tr>
@@ -383,8 +379,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Type Intervention</th>
-                                    @for($i = 1; $i < count($regions_names_type); $i++)
+                                    @for($i = 0; $i < count($regions_names_type); $i++)
                                         <th>{{ $regions_names_type[$i]->name }}</th>
                                     @endfor
                                 </tr>
@@ -425,8 +420,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Code Intervention</th>
-                                    @for($i = 1; $i < count($regions_names_code); $i++)
+                                    @for($i = 0; $i < count($regions_names_code); $i++)
                                         <th>{{ $regions_names_code[$i]->name }}</th>
                                     @endfor
                                 </tr>
@@ -465,8 +459,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Région</th>
-                                    @for($i = 1; $i < count($perimeters); $i++)
+                                    @for($i = 0; $i < count($perimeters); $i++)
                                         <th>{{ $perimeters[$i]->name }}</th>
                                     @endfor
                                 </tr>

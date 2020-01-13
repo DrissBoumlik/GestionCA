@@ -120,7 +120,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title d-inline-block">Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement</h3>
+                            <h3 class="card-title d-inline-block">Répartition des dossiers traités sur le périmètre
+                                validation, par catégorie de traitement</h3>
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-1" class="tree-view d-inline-flex"></div>
@@ -136,8 +137,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Type Traitement</th>
-                                    @for($i = 1; $i < count($calls_folders); $i++)
+                                    @for($i = 0; $i < count($calls_folders); $i++)
                                         <th>{{ $calls_folders[$i]->name }}</th>
                                     @endfor
                                 </tr>
@@ -166,7 +166,8 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-6" class="tree-view d-inline-flex"></div>
-                                <div id="code-type-intervention-filter" class="tree-code-type-intervention-view d-inline-flex"></div>
+                                <div id="code-type-intervention-filter"
+                                     class="tree-code-type-intervention-view d-inline-flex"></div>
                                 <button type="button" id="refreshFoldersByType" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
@@ -178,8 +179,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Type Intervention</th>
-                                    @for($i = 1; $i < count($regions_names_type); $i++)
+                                    @for($i = 0; $i < count($regions_names_type); $i++)
                                         <th>{{ $regions_names_type[$i]->name }}</th>
                                     @endfor
                                 </tr>
@@ -207,7 +207,8 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-7" class="tree-view d-inline-flex"></div>
-                                <div id="code-intervention-filter" class="tree-code-intervention-view d-inline-flex"></div>
+                                <div id="code-intervention-filter"
+                                     class="tree-code-intervention-view d-inline-flex"></div>
                                 <button type="button" id="refreshFoldersByCode" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
@@ -219,8 +220,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    <th>Code Intervention</th>
-                                    @for($i = 1; $i < count($regions_names_code); $i++)
+                                    @for($i = 0; $i < count($regions_names_code); $i++)
                                         <th>{{ $regions_names_code[$i]->name }}</th>
                                     @endfor
                                 </tr>
