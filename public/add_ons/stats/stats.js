@@ -207,7 +207,7 @@ $(function () {
     let datesFilterValuesExist = false;
 
     $.ajax({
-        url: APP_URL + 'dates',
+        url: APP_URL + '/dates',
         method: 'GET',
         success: function (response) {
             datesFilterListExist = true;
@@ -244,7 +244,7 @@ $(function () {
 
     for (let p of paramFiltreList) {
         $.ajax({
-            url: `${APP_URL}stats/filter/${p.url}`,
+            url: `${APP_URL}/stats/filter/${p.url}`,
             data: getData,
             method: 'GET',
             success: function (response) {
@@ -294,7 +294,7 @@ $(function () {
     $('#filterDashboard').on('change', function () {
         let url = $(this).val();
         if (url) {
-            window.location = APP_URL + 'dashboard/' + url;
+            window.location = APP_URL + '/dashboard/' + url;
         }
     });
 
@@ -522,7 +522,7 @@ $(function () {
             data = {...data, refreshMode: true}; //{dates: data, refreshMode: true};
         }
         $.ajax({
-            url: APP_URL + object.routeCol,
+            url: APP_URL + '/' + object.routeCol,
             method: 'GET',
             data: data,
             success: function (response) {
@@ -581,7 +581,7 @@ $(function () {
                 console.log(jqXHR);
                 console.log(textStatus);
                 console.log(errorThrown);
-                console.log(APP_URL + object.routeCol);
+                console.log(APP_URL + '/' + object.routeCol);
                 console.log('===========');
             }
         });
@@ -702,7 +702,7 @@ $(function () {
             // ordering: false,
             bPaginate: pagination,
             ajax: {
-                url: APP_URL + object.routeData,
+                url: APP_URL + '/' + object.routeData,
                 data: data,
             },
             columns: object.columns,
