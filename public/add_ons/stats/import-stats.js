@@ -214,7 +214,7 @@ $(document).ready(function () {
         event.preventDefault();
         $.ajax({
             method: 'post',
-            url: window.APP_URL + 'stats/import-stats',
+            url: APP_URL + 'stats/import-stats',
             data: formData,
             dateType: 'json',
             processData: false,
