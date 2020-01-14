@@ -339,9 +339,19 @@ $(function () {
     //     routeData: 'regions/details/groupement', // $('#stateregdet-url').attr('url')
     // };
 
-    getColumns(statsRegions, true, true, filterData(), false, false, true, false);
+    getColumns(statsRegions, true, true, filterData(), {
+        removeTotal: false,
+        refreshMode: false,
+        details: true,
+        removeTotalColumn: false
+    });
     $('#refreshRegions').on('click', function () {
-        getColumns(statsRegions, true, true, filterData(), false, true, true, false);
+        getColumns(statsRegions, true, true, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: true,
+            removeTotalColumn: false
+        });
     });
 
     let statsFolders = {
@@ -361,7 +371,10 @@ $(function () {
     };
     getColumns(statsFolders, true, true, filterData());
     $('#refreshFolders').on('click', function () {
-        getColumns(statsFolders, true, true, filterData(), false, true);
+        getColumns(statsFolders, true, true, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
     });
 
 
@@ -384,7 +397,10 @@ $(function () {
     };
     getColumns(callsStatesAgencies, true, false, filterData());
     $('#refreshCallStatesAgencies').on('click', function () {
-        getColumns(callsStatesAgencies, true, false, filterData(), false, true);
+        getColumns(callsStatesAgencies, true, false, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
     });
 
 
@@ -405,7 +421,10 @@ $(function () {
     };
     getColumns(callsStatesWeeks, true, false, filterData());
     $('#refreshCallStatesWeeks').on('click', function () {
-        getColumns(callsStatesWeeks, true, false, filterData(), false, true);
+        getColumns(callsStatesWeeks, true, false, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
     });
 
 
@@ -426,9 +445,14 @@ $(function () {
             chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Joignables)'
         }
     };
-    getColumns(statscallsPos, true, false, filterData(), false, false);
+    getColumns(statscallsPos, true, false, filterData(), {removeTotal: false, refreshMode: false});
     $('#refreshCallResultPos').on('click', function () {
-        getColumns(statscallsPos, true, false, filterData(), false, true, false, false);
+        getColumns(statscallsPos, true, false, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false
+        });
     });
 
     let statscallsNeg = {
@@ -446,9 +470,14 @@ $(function () {
             chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Injoignables)'
         }
     };
-    getColumns(statscallsNeg, true, false, filterData(), false, false);
+    getColumns(statscallsNeg, true, false, filterData(), {removeTotal: false, refreshMode: false});
     $('#refreshCallResultNeg').on('click', function () {
-        getColumns(statscallsNeg, true, false, filterData(), false, true, false, false);
+        getColumns(statscallsNeg, true, false, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false
+        });
     });
 
 /// ====================== FOLDERS CODE / TYPE ==========================
@@ -470,7 +499,7 @@ $(function () {
     };
     getColumns(statsFoldersByType, true, false, filterData());
     $('#refreshFoldersByType').on('click', function () {
-        getColumns(statsFoldersByType, true, false, filterData(), false, true);
+        getColumns(statsFoldersByType, true, false, filterData(), {removeTotal: false, refreshMode: true});
     });
 
     let statsFoldersByCode = {
@@ -490,7 +519,7 @@ $(function () {
     };
     getColumns(statsFoldersByCode, true, false, filterData());
     $('#refreshFoldersByCode').on('click', function () {
-        getColumns(statsFoldersByCode, true, false, filterData(), false, true);
+        getColumns(statsFoldersByCode, true, false, filterData(), {removeTotal: false, refreshMode: true});
     });
 
 /// ====================== CALL PERIMETERS ==========================
@@ -512,13 +541,18 @@ $(function () {
     };
     getColumns(statsPerimeters, true, false, filterData());
     $('#refreshPerimeters').on('click', function () {
-        getColumns(statsPerimeters, true, false, filterData(), false, true);
+        getColumns(statsPerimeters, true, false, filterData(), {removeTotal: false, refreshMode: true});
     });
 
 /// ====================== FUNCTIONS ==========================
 
-    function getColumns(object, callInitDT = true, pagination = false, data = null, removeTotal = true, refreshMode = false, details = false, removeTotalColumn = true) {
-        if (refreshMode) {
+    function getColumns(object, callInitDT = true, pagination = false, data = null, params = {
+        removeTotal: true,
+        refreshMode: false,
+        details: false,
+        removeTotalColumn: true
+    }) {
+        if (params.refreshMode) {
             data = {...data, refreshMode: true}; //{dates: data, refreshMode: true};
         }
         $.ajax({
@@ -540,14 +574,18 @@ $(function () {
                 // console.log(filters.date_filter);
                 object.columns = [...response.columns];
                 object.data = [...response.data];
-                if (details) {
+                if (params.details) {
                     $(object.element).find('thead tr').prepend('<th></th>');
                 }
                 if (callInitDT) {
                     if (data !== null && data !== undefined) {
                         try {
-                            object.element_dt = InitDataTable(object, pagination, data, details, removeTotal, removeTotalColumn);
-                            if (details) {
+                            object.element_dt = InitDataTable(object, pagination, data, {
+                                removeTotal: params.removeTotal,
+                                removeTotalColumn: params.removeTotalColumn,
+                                details: params.details
+                            });
+                            if (params.details) {
                                 object.element.on('click', 'td.details-control', function () {
                                     const tr = $(this).closest('tr');
                                     const row = object.element_dt.row(tr);
@@ -593,7 +631,11 @@ $(function () {
         }
     }
 
-    function InitChart(objectChart, columns, data, removeTotal = true, removeTotalColumn = false, details = false) {
+    function InitChart(objectChart, columns, data, params = {
+        removeTotal: true,
+        removeTotalColumn: false,
+        details: false
+    }) {
         // console.log(objectChart.chartTitle);
         // console.log(columns);
         // console.log(data);
@@ -601,15 +643,15 @@ $(function () {
         labels = labels.map((column) => {
             return column.data;
         });
-        if (details) {
+        if (params.details) {
             labels.shift();
         }
         let column = labels.shift();
-        if (removeTotalColumn) {
+        if (params.removeTotalColumn) {
             labels.pop();
         }
         let datasets = [...data];
-        if (removeTotal) {
+        if (params.removeTotal) {
             datasets.pop();
         }
         let uniqueColors = [];
@@ -670,12 +712,16 @@ $(function () {
         });
     }
 
-    function InitDataTable(object, pagination = false, data = null, details = false, removeTotal = true, removeTotalColumn = false) {
+    function InitDataTable(object, pagination = false, data = null, params = {
+        removeTotal: true,
+        removeTotalColumn: false,
+        details: false
+    }) {
         if ($.fn.DataTable.isDataTable(object.element_dt)) {
             object.element.off('click', 'td.details-control');
             object.element_dt.destroy();
         }
-        if (details) {
+        if (params.details) {
             object.objDetail.columns = [...object.columns];
             object.objDetail.columns = object.objDetail.columns.map(function (item, index) {
                 if (index === 0) {
@@ -709,7 +755,11 @@ $(function () {
             initComplete: function (settings, response) {
                 if (object.objChart !== null && object.objChart !== undefined) {
                     try {
-                        InitChart(object.objChart, object.columns, response.data, removeTotal, removeTotalColumn, details);
+                        InitChart(object.objChart, object.columns, response.data, {
+                            removeTotal: params.removeTotal,
+                            removeTotalColumn: params.removeTotalColumn,
+                            details: params.details
+                        });
                     } catch (error) {
                         console.log(error);
                     }
@@ -764,7 +814,7 @@ $(function () {
         row.child(objectChild.element).show();
         objectChild.element.after(canvasDom);
         // row.child(objectChild.element).show();
-        InitDataTable(objectChild, false, data, false, false, false);
+        InitDataTable(objectChild, false, data, {removeTotal: false, removeTotalColumn: false, details: false});
     }
 
     function destroyChild(row) {

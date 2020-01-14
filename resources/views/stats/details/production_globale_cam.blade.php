@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('page-title')
-    Dashboard
+    Production Globale CAM
 @endsection
 
 @section('css_after')

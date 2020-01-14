@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('page-title')
-    Dashboard
+    Clôture OT & Traitement BL
 @endsection
 
 @section('css_after')

@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('page-title')
-    Dashboard
+    Appels Préalables
 @endsection
 
 @section('css_after')
