@@ -129,7 +129,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($calls_folders); $i++)
-                                        <th>{{ $calls_folders[$i]->name }}</th>
+                                        <th>{{ $calls_folders[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -171,7 +171,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($regions_names_type); $i++)
-                                        <th>{{ $regions_names_type[$i]->name }}</th>
+                                        <th>{{ $regions_names_type[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -212,7 +212,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($regions_names_code); $i++)
-                                        <th>{{ $regions_names_code[$i]->name }}</th>
+                                        <th>{{ $regions_names_code[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>

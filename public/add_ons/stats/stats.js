@@ -699,7 +699,7 @@ $(function () {
             processing: true,
             serverSide: true,
             searching: false,
-            ordering: false,
+            // ordering: false,
             bPaginate: pagination,
             ajax: {
                 url: APP_URL + '/' + object.routeData,

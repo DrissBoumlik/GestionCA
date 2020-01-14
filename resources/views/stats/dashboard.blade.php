@@ -128,7 +128,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($calls_results); $i++)
-                                        <th>{{ $calls_results[$i]->name }}</th>
+                                        <th>{{ $calls_results[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -168,7 +168,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($calls_folders); $i++)
-                                        <th>{{ $calls_folders[$i]->name }}</th>
+                                        <th>{{ $calls_folders[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -208,7 +208,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($calls_states_regions); $i++)
-                                        <th>{{ $calls_states_regions[$i]->name }}</th>
+                                        <th>{{ $calls_states_regions[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -247,7 +247,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($calls_states_weeks); $i++)
-                                        <th>{{ $calls_states_weeks[$i]->name }}</th>
+                                        <th>{{ $calls_states_weeks[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -288,7 +288,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($calls_pos); $i++)
-                                        <th>{{ $calls_pos[$i]->name }}</th>
+                                        <th>{{ $calls_pos[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -329,7 +329,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($calls_neg); $i++)
-                                        <th>{{ $calls_neg[$i]->name }}</th>
+                                        <th>{{ $calls_neg[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -370,7 +370,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($regions_names_type); $i++)
-                                        <th>{{ $regions_names_type[$i]->name }}</th>
+                                        <th>{{ $regions_names_type[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -411,7 +411,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($regions_names_code); $i++)
-                                        <th>{{ $regions_names_code[$i]->name }}</th>
+                                        <th>{{ $regions_names_code[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -450,7 +450,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($perimeters); $i++)
-                                        <th>{{ $perimeters[$i]->name }}</th>
+                                        <th>{{ $perimeters[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>

@@ -473,16 +473,15 @@ class StatsRepository
             $regions_names = [];
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->data = $key;
-                $regions_names[$index + 1]->name = $key;
+                $regions_names[$index + 1]->data = $regions_names[$index + 1]->name = $regions_names[$index + 1]->text = $key;
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->name = 'Résultats Appels Préalables (Clients Joignable)';
-            $first->data = $callResult;
+            $first->text = 'Résultats Appels Préalables (Clients Joignable)';
+            $first->name = $first->data = $callResult;
             array_unshift($regions_names, $first);
 //            $detailCol = new \stdClass();
 //            $detailCol->name = 'Key_Groupement';
@@ -658,6 +657,7 @@ class StatsRepository
             $first = new \stdClass();
             $first->name = 'Résultats Appels Préalables (Clients Joignable)';
             $first->data = 'Groupement';
+            $first->orderable = false;
             array_unshift($regions_names, $first);
 //            $detailCol = new \stdClass();
 //            $detailCol->name = 'Key_Groupement';
@@ -819,8 +819,7 @@ class StatsRepository
 //            $regions_names[0]->name = $callResult;
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->data = $key;
-                $regions_names[$index + 1]->name = $key;
+                $regions_names[$index + 1]->data = $regions_names[$index + 1]->name = $regions_names[$index + 1]->text = $key;
             });
 
             usort($regions_names, function ($item1, $item2) {
@@ -828,12 +827,13 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->name = 'Type Traitement';
+            $first->name = $callResult;
             $first->data = $callResult;
+            $first->text = 'Type Traitement';
+            $first->orderable = false;
             array_unshift($regions_names, $first);
             $last = new \stdClass();
-            $last->data = 'total';
-            $last->name = 'total';
+            $last->data = $last->name = $last->text = 'total';
             array_push($regions_names, $last);
 
 //            $regions_names[] = new \stdClass();
@@ -995,8 +995,7 @@ class StatsRepository
 //            $columns[0]->name = 'Gpmt_Appel_Pre';
             $keys->map(function ($key, $index) use (&$columns) {
                 $columns[$index + 1] = new \stdClass();
-                $columns[$index + 1]->data = $key;
-                $columns[$index + 1]->name = $key;
+                $columns[$index + 1]->data = $columns[$index + 1]->name = $columns[$index + 1]->text = $key;
             });
 //            $columns = $columns->all();
             usort($columns, function ($item1, $item2) {
@@ -1004,11 +1003,11 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->name = 'Résultats Appels Préalables';
-            $first->data = 'Gpmt_Appel_Pre';
+            $first->text = 'Résultats Appels Préalables';
+            $first->name = $first->data = 'Gpmt_Appel_Pre';
+            $first->orderable = false;
             $last = new \stdClass();
-            $last->data = 'total';
-            $last->name = 'total';
+            $last->data = $last->name = $last->text = 'total';
             array_unshift($columns, $first);
             array_push($columns, $last);
 
@@ -1185,16 +1184,16 @@ class StatsRepository
 //            $regions_names[0]->name = $intervCol;
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->data = $key;
-                $regions_names[$index + 1]->name = $key;
+                $regions_names[$index + 1]->text = $regions_names[$index + 1]->data = $regions_names[$index + 1]->name = $key;
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->name = $intervCol == 'Code_Intervention' ? 'Code Intervention' : 'Type Intervention';
-            $first->data = $intervCol;
+            $first->text = $intervCol == 'Code_Intervention' ? 'Code Intervention' : 'Type Intervention';
+            $first->name = $first->data = $intervCol;
+            $first->orderable = false;
             array_unshift($regions_names, $first);
 //            $last = new \stdClass();
 //            $last->data = 'total';
@@ -1372,8 +1371,7 @@ class StatsRepository
 //        $codes_names[0]->name = 'Nom_Region';
             $keys->map(function ($key, $index) use (&$codes_names) {
                 $codes_names[$index + 1] = new \stdClass();
-                $codes_names[$index + 1]->data = $key;
-                $codes_names[$index + 1]->name = $key;
+                $codes_names[$index + 1]->text = $codes_names[$index + 1]->data = $codes_names[$index + 1]->name = $key;
 //            $_value = new \stdClass();
 //            $_value->data = $key;
 //            $_value->name = $key;
@@ -1386,11 +1384,11 @@ class StatsRepository
             });
 
             $first = new \stdClass();
-            $first->name = 'Résultats Appels Préalables';
-            $first->data = 'Nom_Region';
+            $first->text = 'Résultats Appels Préalables';
+            $first->name = $first->data = 'Nom_Region';
+            $first->orderable = false;
             $last = new \stdClass();
-            $last->data = 'total';
-            $last->name = 'total';
+            $last->text = $last->data = $last->name = 'total';
             array_unshift($codes_names, $first);
             array_push($codes_names, $last);
 
@@ -1551,8 +1549,7 @@ class StatsRepository
 //        $codes_names[0]->name = 'Nom_Region';
             $keys->map(function ($key, $index) use (&$column_names) {
                 $column_names[$index + 1] = new \stdClass();
-                $column_names[$index + 1]->data = $key;
-                $column_names[$index + 1]->name = $key;
+                $column_names[$index + 1]->text = $column_names[$index + 1]->data = $column_names[$index + 1]->name = $key;
 //            $_value = new \stdClass();
 //            $_value->data = $key;
 //            $_value->name = $key;
@@ -1565,11 +1562,11 @@ class StatsRepository
             });
 
             $first = new \stdClass();
-            $first->name = 'Région';
-            $first->data = 'Nom_Region';
+            $first->text = 'Région';
+            $first->name = $first->data = 'Nom_Region';
+            $first->orderable = false;
             $last = new \stdClass();
-            $last->data = 'total';
-            $last->name = 'total';
+            $last->data = $last->name  = $last->text = 'total';
             array_unshift($column_names, $first);
             array_push($column_names, $last);
 

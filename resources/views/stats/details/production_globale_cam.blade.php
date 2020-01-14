@@ -126,7 +126,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($perimeters); $i++)
-                                        <th>{{ $perimeters[$i]->name }}</th>
+                                        <th>{{ $perimeters[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>

@@ -126,7 +126,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($calls_results); $i++)
-                                        <th>{{ $calls_results[$i]->name }}</th>
+                                        <th>{{ $calls_results[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -168,7 +168,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($calls_states_regions); $i++)
-                                        <th>{{ $calls_states_regions[$i]->name }}</th>
+                                        <th>{{ $calls_states_regions[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -207,7 +207,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($calls_states_weeks); $i++)
-                                        <th>{{ $calls_states_weeks[$i]->name }}</th>
+                                        <th>{{ $calls_states_weeks[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -248,7 +248,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($calls_pos); $i++)
-                                        <th>{{ $calls_pos[$i]->name }}</th>
+                                        <th>{{ $calls_pos[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
@@ -289,7 +289,7 @@
                                 <thead>
                                 <tr>
                                     @for($i = 0; $i < count($calls_neg); $i++)
-                                        <th>{{ $calls_neg[$i]->name }}</th>
+                                        <th>{{ $calls_neg[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>
