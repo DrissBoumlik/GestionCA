@@ -21,9 +21,9 @@ Route::post('login', 'Auth\LoginController@login');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Auth::routes();
 
-//Route::group([
-//    'middleware' => ['auth'],
-//], function () {
+Route::group([
+    'middleware' => ['auth'],
+], function () {
     //Route::get('/', 'HomeController@dashboard')->name('home');
 //Route::get('/_dashboard', 'HomeController@dashboard')->name('home');
     Route::get('/', 'ToolController@home');
@@ -133,4 +133,4 @@ Auth::routes();
     Route::get('/dashboard/appels_prealables', 'StatsController@dashboard_filter');
     Route::get('/dashboard/clotureOt_TaitementBL', 'StatsController@dashboard_filter');
     Route::get('/dashboard/production_globale_cam', 'StatsController@dashboard_filter');
-//});
+});

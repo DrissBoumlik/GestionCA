@@ -100,16 +100,7 @@
     <div class="content content-narrow">
         <!-- Filter -->
         <div class="container-fluid">
-            <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Filter :</label>
-            <select class="custom-select my-1 mr-sm-2" id="filterDashboard">
-                <option selected>Choisir...</option>
-                <option value="1">Traitement assistance XX</option>
-                <option value="2">Appel Post XX</option>
-                <option value="{{ URL::to('/') . '/dashboard/appels_prealables' }}">Appel préalable</option>
-                <option value="{{ URL::to('/') . '/dashboard/production_globale_cam' }}">Appel CAM</option>
-                <option value="{{ URL::to('/') . '/dashboard/clotureOt_TaitementBL' }}">Clôture OT & Traitement BL</option>
-                <option value="3">GEM XX</option>
-            </select>
+            @include('stats.layouts.filter_menu')
         </div>
         <hr>
         <!-- Stats -->
