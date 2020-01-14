@@ -364,6 +364,7 @@ class StatsRepository
 
         $regions = \DB::table('stats')
             ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(Nom_Region) as total'))
+            ->whereNotNull('Nom_Region')
             ->where($callResult, 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post');
@@ -545,7 +546,8 @@ class StatsRepository
         $key_groupement = $request->get('key_groupement');
         $regions = \DB::table('stats')
             ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(Resultat_Appel) as total'))
-            ->where('Resultat_Appel', 'not like', '=%');
+            ->where('Resultat_Appel', 'not like', '=%')
+            ->whereNotNull('Nom_Region');
 
         $keys = ($regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get())->groupBy(['Nom_Region'])->keys();
 
@@ -718,7 +720,8 @@ class StatsRepository
             ->select('Nom_Region', $callResult, \DB::raw('count(Nom_Region) as total'))
             ->where($callResult, 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'not like', 'Appels post');
+            ->where('Groupement', 'not like', 'Appels post')
+            ->whereNotNull('Nom_Region');
 
 
 
@@ -904,7 +907,8 @@ class StatsRepository
         $route = getRoute(Route::current());
         $regions = \DB::table('stats')
             ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'))
-            ->where('Groupement', 'not like', 'Non Renseigné');
+            ->where('Groupement', 'not like', 'Non Renseigné')
+            ->whereNotNull('Nom_Region');
 
 
 
@@ -1075,7 +1079,8 @@ class StatsRepository
         $agenceCode = $request->get('agence_code');
 
         $regions = \DB::table('stats')
-            ->select('Nom_Region', $intervCol, \DB::raw('count(*) as total'));
+            ->select('Nom_Region', $intervCol, \DB::raw('count(*) as total'))
+            ->whereNotNull('Nom_Region');
 
         if ($agentName) {
             $regions = $regions->where('Utilisateur', $agentName);
@@ -1268,7 +1273,8 @@ class StatsRepository
         $codeRdvIntervention = $request->get('codeRdvIntervention');
 
         $codes = \DB::table('stats')
-            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(Nom_Region) as total'));
+            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(Nom_Region) as total'))
+            ->whereNotNull('Nom_Region');
 
 //        $keys = $columns->groupBy(['Code_Intervention'])->keys();
         if ($agentName) {
@@ -1467,7 +1473,8 @@ class StatsRepository
             ->select('Groupement', 'Nom_Region', \DB::raw('count(*) as total'))
             ->whereNotNull('Groupement')
             ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'not like', 'Appels post');
+            ->where('Groupement', 'not like', 'Appels post')
+            ->whereNotNull('Nom_Region');
 
         if ($agentName) {
             $results = $results->where('Utilisateur', $agentName);
