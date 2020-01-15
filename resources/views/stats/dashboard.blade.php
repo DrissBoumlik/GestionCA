@@ -154,8 +154,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title d-inline-block">Répartition des dossiers traités sur le périmètre
-                                validation, par catégorie de traitement</h3>
+                            <h3 class="card-title d-inline-block">Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement</h3>
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-1" class="tree-view d-inline-flex"></div>
