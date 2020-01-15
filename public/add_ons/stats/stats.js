@@ -628,7 +628,9 @@ $(function () {
 
     function assignFilter(datesFilterList, datesFilterValues) {
         for (let [key, value] of datesFilterValues) {
-            datesFilterList[key].values = value;
+            if (key in datesFilterList) {
+                datesFilterList[key].values = value;
+            }
         }
     }
 
