@@ -2,7 +2,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title d-inline-block">Applique un filter global</h3>
+                <h3 class="card-title d-inline-block">Applique un filtre global</h3>
                 <hr>
                 <div class="refresh-form">
                     <div id="tree-view-01" class="tree-view d-inline-flex"></div>

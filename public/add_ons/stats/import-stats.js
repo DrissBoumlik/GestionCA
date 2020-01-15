@@ -226,8 +226,11 @@ $(document).ready(function () {
                     // position: 'top-end',
                     type: type,
                     title: data.message,
-                    showConfirmButton: false,
-                    timer: 1500
+                    showConfirmButton: true,
+                    customClass: {
+                        confirmButton: 'btn btn-success m-1',
+                    },
+                    confirmButtonText: 'Ok',
                 });
                 // tableTasks.draw(false);
             }
