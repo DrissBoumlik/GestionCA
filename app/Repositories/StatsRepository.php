@@ -375,7 +375,7 @@ class StatsRepository
             and Groupement not like "=%"
             and Groupement not like "Non Renseigné"
             and Groupement not like "Appels post" ' .
-            ($view_route == 'appels_prealables' ? 'and Groupement like "Appels Préalables"' : '') .
+                ($view_route == 'appels_prealables' ? 'and Groupement like "Appels Préalables"' : '') .
                 ' GROUP BY Id_Externe) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
@@ -384,8 +384,12 @@ class StatsRepository
             ->whereNotNull('Nom_Region')
             ->where('Groupement', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'not like', 'Appels post')
-            ->where('Groupement', 'like', 'Appels Préalables');
+            ->where('Groupement', 'not like', 'Appels post');
+
+        if ($view_route == 'appels_prealables') {
+            $regions = $regions->where('Groupement', 'like', 'Appels Préalables');
+        }
+
 
         // BUILDING THE USER FILTER
         if ($agentName) {
