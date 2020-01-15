@@ -19316,7 +19316,7 @@ frLang = {
   select.select2({
     placeholder: 'Selectione un Agent',
     ajax: {
-      url: APP_URL + "agents/list",
+      url: APP_URL + "/agents/list",
       dataType: 'json',
       data: function data(params) {
         // Query parameters will be ?search=[term]&type=public
