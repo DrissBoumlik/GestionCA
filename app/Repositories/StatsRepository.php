@@ -361,13 +361,26 @@ class StatsRepository
 //        TODO: Get Route URI -> replace params with actual value (as ID) - search in filter table if filter exists
 //        TODO => if not check request if it exists save the new filter or just get full data and delete old filter
 
-        $regions = \DB::table('stats')
+//        $regions = \DB::table('stats')
+//            ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(Nom_Region) as total'))
+//            ->whereNotNull('Nom_Region')
+//            ->where($callResult, 'not like', '=%')
+//            ->where('Groupement', 'not like', 'Non Renseigné')
+//            ->where('Groupement', 'not like', 'Appels post');
+
+//        DB::enableQueryLog();
+        $regions = \DB::table('stats as st')
             ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(Nom_Region) as total'))
+            ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats GROUP BY Id_Externe) groupedst'),
+                function ($join) {
+                    $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
+                    $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
+                })
             ->whereNotNull('Nom_Region')
             ->where($callResult, 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'not like', 'Appels post');
-
+            ->where('Groupement', 'not like', 'Appels post');;
+//        dd(DB::getQueryLog());
 
         // BUILDING THE USER FILTER
         if ($agentName) {
@@ -376,6 +389,7 @@ class StatsRepository
         if ($agenceCode) {
             $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
         }
+
         $keys = ($regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get())->groupBy(['Nom_Region'])->keys();
 
         if ($resultatAppel) {
@@ -419,10 +433,9 @@ class StatsRepository
                 $regions = $regions->whereIn('Date_Note', $filter->date_filter);
             }
         }
-
         $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
         $regions = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
-
+//        dd($regions); // STOP
         $regions = $columns = $this->addRegionWithZero($request, $regions, $columns);
         // logger($regions);
         if (!count($regions)) {
