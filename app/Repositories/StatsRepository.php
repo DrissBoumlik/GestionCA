@@ -900,9 +900,19 @@ class StatsRepository
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
         $route = getRoute(Route::current());
-        $regions = \DB::table('stats')
-            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'))
+//        $regions = \DB::table('stats')
+//            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'))
+//            ->where('Groupement', 'not like', 'Non Renseigné')
+//            ->whereNotNull('Nom_Region');
+        $regions = \DB::table('stats as st')
+            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(Nom_Region) as total'))
+            ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats GROUP BY Id_Externe) groupedst'),
+                function ($join) {
+                    $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
+                    $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
+                })
             ->where('Groupement', 'not like', 'Non Renseigné')
+            ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
             ->whereNotNull('Nom_Region');
 
 
