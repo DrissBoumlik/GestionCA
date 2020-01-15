@@ -298,6 +298,7 @@ $(function () {
         }
     });
 
+
     /// ====================== REGIONS ==========================
     let statsRegions = {
         element_dt: undefined,
@@ -711,6 +712,44 @@ $(function () {
             }
         });
     }
+
+    /// ===================== Global filter =====================
+
+    $("#refreshAll").on('click', function () {
+        getColumns(statsRegions, true, true, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: true,
+            removeTotalColumn: false
+        });
+        getColumns(statsFolders, true, true, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
+        getColumns(callsStatesAgencies, true, false, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
+        getColumns(callsStatesWeeks, true, false, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
+        getColumns(statscallsPos, true, false, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false
+        });
+        getColumns(statscallsNeg, true, false, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false
+        });
+        getColumns(statsFoldersByType, true, false, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsFoldersByCode, true, false, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsPerimeters, true, false, filterData(), {removeTotal: false, refreshMode: true});
+    });
 
     function InitDataTable(object, pagination = false, data = null, params = {
         removeTotal: true,

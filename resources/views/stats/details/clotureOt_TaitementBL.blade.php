@@ -101,6 +101,8 @@
         <!-- Filter -->
         <div class="container-fluid">
             @include('stats.layouts.filter_menu')
+            <hr>
+            @include('stats.layouts.global_date_filter')
         </div>
         <hr>
         <!-- Stats -->
