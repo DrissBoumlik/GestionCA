@@ -206,6 +206,13 @@ $(function () {
     let datesFilterListExist = false;
     let datesFilterValuesExist = false;
 
+
+    let filterList = [];
+    let filterValues = [];
+
+    let filterListExist = false;
+    let filterValuesExist = false;
+
     $.ajax({
         url: APP_URL + '/dates',
         method: 'GET',
@@ -306,6 +313,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         treeElement: '#tree-view-0',
+        filterTreeElement: '#stats-groupement-filter',
         routeCol: 'regions/columns/Groupement',
         routeData: 'regions/Groupement',
         objChart: {
@@ -355,6 +363,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         treeElement: '#tree-view-1',
+        filterTreeElement: '#stats-regions-filter',
         routeCol: 'folders/columns/Groupement',
         routeData: 'folders/Groupement',
         objChart: {
@@ -464,6 +473,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         treeElement: '#tree-view-2',
+        filterTreeElement: '#stats-call-regions-filter',
         routeCol: 'regionsCallState/columns/Nom_Region',
         routeData: 'regionsCallState/Nom_Region',
         objChart: {
@@ -473,11 +483,12 @@ $(function () {
             chartTitle: 'Résultats Appels Préalables par agence'
         }
     };
-    getColumns(callsStatesAgencies, true, false, filterData());
+    getColumns(callsStatesAgencies, true, false, filterData(), {removeTotalColumn: true});
     $('#refreshCallStatesAgencies').on('click', function () {
         getColumns(callsStatesAgencies, true, false, filterData(), {
             removeTotal: false,
-            refreshMode: true
+            refreshMode: true,
+            removeTotalColumn: true
         });
     });
 
@@ -488,6 +499,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         treeElement: '#tree-view-3',
+        filterTreeElement: '#stats-weeks-regions-filter',
         routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine',
         routeData: 'regionsCallState/Date_Heure_Note_Semaine',
         objChart: {
@@ -497,11 +509,12 @@ $(function () {
             chartTitle: 'Résultats Appels Préalables par semaine'
         }
     };
-    getColumns(callsStatesWeeks, true, false, filterData());
+    getColumns(callsStatesWeeks, true, false, filterData(), {removeTotalColumn: true});
     $('#refreshCallStatesWeeks').on('click', function () {
         getColumns(callsStatesWeeks, true, false, filterData(), {
             removeTotal: false,
-            refreshMode: true
+            refreshMode: true,
+            removeTotalColumn: true
         });
     });
 
@@ -514,6 +527,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         treeElement: '#tree-view-4',
+        filterTreeElement: '#code-rdv-intervention-confirm-filter',
         routeCol: 'clientsByCallState/columns/Joignable',
         routeData: 'clientsByCallState/Joignable',
         objChart: {
@@ -539,6 +553,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         treeElement: '#tree-view-5',
+        filterTreeElement: '#code-rdv-intervention-filter',
         routeCol: 'clientsByCallState/columns/Injoignable',
         routeData: 'clientsByCallState/Injoignable',
         objChart: {
@@ -566,6 +581,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         treeElement: '#tree-view-6',
+        filterTreeElement: '#code-type-intervention-filter',
         routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention',
         routeData: 'nonValidatedFolders/Code_Type_Intervention',
         objChart: {
@@ -586,6 +602,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         treeElement: '#tree-view-7',
+        filterTreeElement: '#code-intervention-filter',
         routeCol: 'nonValidatedFolders/columns/Code_Intervention',
         routeData: 'nonValidatedFolders/Code_Intervention',
         objChart: {
@@ -608,6 +625,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         treeElement: '#tree-view-8',
+        filterTreeElement: '#nom-region-filter',
         routeCol: 'clientsByPerimeter/columns',
         routeData: 'clientsByPerimeter',
         objChart: {
@@ -630,9 +648,17 @@ $(function () {
         details: false,
         removeTotalColumn: false
     }) {
+        // if refreshmode is enabled then store the new filter in local storage
         if (params.refreshMode) {
+            localStorage.setItem(object.filterTreeElement, JSON.stringify(data));
             data = {...data, refreshMode: true}; //{dates: data, refreshMode: true};
         }
+        // Search if filter stored in local storage
+        let savedData = JSON.parse(localStorage.getItem(object.filterTreeElement));
+        if (savedData !== null) {
+            data = savedData;
+        }
+
         $.ajax({
             url: APP_URL + '/' + object.routeCol,
             method: 'GET',
