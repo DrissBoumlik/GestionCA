@@ -193,11 +193,8 @@ class StatsController extends Controller
 
     #endregion
 
-    public function dashboard_filter(Request $request)
+    public function dashboard_filter(Request $request, $filter)
     {
-        $route = getRoute(Route::current());
-        $viewName = str_replace('dashboard/', '', $route);
-
         $agenceCode = $request->agence_code;
         $AgentName = $request->agent_name;
         $dataRegionsCallResult = $this->statsRepository->GetDataRegions('Groupement', $request);
@@ -232,6 +229,9 @@ class StatsController extends Controller
             'agent' => $AgentName
         ];
 
+//        $route = getRoute(Route::current());
+//        $viewName = str_replace('dashboard/', '', $route);
+        $viewName = $filter;
         return view('stats.details.' . $viewName)->with($columns);
     }
 

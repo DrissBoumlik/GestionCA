@@ -400,6 +400,34 @@ $(function () {
         });
     });
 
+    let statsCallsGem = {
+        element_dt: undefined,
+        element: $('#statsCallsGem'),
+        columns: undefined,
+        data: undefined,
+        treeElement: '#tree-view-1',
+        routeCol: 'regions/columns/Groupement',
+        routeData: 'regions/details/groupement?key_groupement=Appels-pralables',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsCallsGemChart',
+            data: undefined,
+            chartTitle: '===='
+        }
+    };
+    getColumns(statsCallsGem, true, false, filterData(), {
+        removeTotal: false,
+        refreshMode: false,
+        removeTotalColumn: false
+    });
+    $('#refreshCallsGem').on('click', function () {
+        getColumns(statsCallsGem, true, false, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            removeTotalColumn: false
+        });
+    });
+
     let statsCallsCloture = {
         element_dt: undefined,
         element: $('#statsCallsCloture'),

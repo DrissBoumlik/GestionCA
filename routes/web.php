@@ -130,7 +130,5 @@ Route::group([
 
 
 //    FILTERS
-    Route::get('/dashboard/appels_prealables', 'StatsController@dashboard_filter');
-    Route::get('/dashboard/clotureOt_TaitementBL', 'StatsController@dashboard_filter');
-    Route::get('/dashboard/production_globale_cam', 'StatsController@dashboard_filter');
+    Route::get('/dashboard/{filter}', 'StatsController@dashboard_filter');
 });
