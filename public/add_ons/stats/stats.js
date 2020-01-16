@@ -387,13 +387,13 @@ $(function () {
             chartTitle: '===='
         }
     };
-    getColumns(statsCallsPrealable, true, true, filterData(), {
+    getColumns(statsCallsPrealable, true, false, filterData(), {
         removeTotal: false,
         refreshMode: false,
         removeTotalColumn: false
     });
     $('#refreshCallsPrealable').on('click', function () {
-        getColumns(statsCallsPrealable, true, true, filterData(), {
+        getColumns(statsCallsPrealable, true, false, filterData(), {
             removeTotal: false,
             refreshMode: true,
             removeTotalColumn: false

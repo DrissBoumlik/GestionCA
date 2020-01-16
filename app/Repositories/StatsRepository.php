@@ -699,7 +699,7 @@ class StatsRepository
                 $col_arr = $keys->all();
                 $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
                     $row->Key_Groupement = $call->Key_Groupement;
-                    $row->Groupement = $call->Groupement;
+                    $row->Groupement = $call->Resultat_Appel;
                     $row->Resultat_Appel = $call->Resultat_Appel;
                     $nom_region = $call->Nom_Region;
 
