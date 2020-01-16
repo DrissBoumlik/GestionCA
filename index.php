@@ -1,4 +1,4 @@
 <?php
 
-header("Location: public/index.php", true, 301);
+header("Location: public/", true, 301);
 exit();
