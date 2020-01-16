@@ -1,5 +1,39 @@
 <?php
 
+if (!function_exists('sortWeeksDates')) {
+    function sortWeeksDates($dates, $desc = false)
+    {
+        uksort($dates, function ($item1, $item2) use ($desc) {
+            $date1 = explode('_', $item1);
+            $date2 = explode('_', $item2);
+            $year1 = $date1[1];
+            $year2 = $date2[1];
+            if ($year1 != $year2) {
+                return ($year1 == $year2) ? 0 :
+                    ($desc ? ($year1 < $year2 ? -1 : 1)
+                        : ($year1 > $year2 ? -1 : 1));
+            } else {
+                $week1 = $date1[0];
+                $week2 = $date2[0];
+                return ($week1 == $week2) ? 0 :
+                    ($desc ? ($week1 < $week2 ? -1 : 1)
+                        : ($week1 > $week2 ? -1 : 1));
+            }
+        });
+    }
+}
+
+if (!function_exists('sortColumns')) {
+    function sortColumns($columns, $desc = false)
+    {
+        usort($columns, function ($item1, $item2) use ($desc) {
+            return ($item1->data == $item2->data) ? 0 :
+                ($desc ? ($item1->data > $item2->data ? -1 : 1)
+                    : ($item1->data < $item2->data ? -1 : 1));
+        });
+    }
+}
+
 if (!function_exists('getRoute')) {
     function getRoute($route)
     {
@@ -25,6 +59,7 @@ if (!function_exists('agencesList')) {
         return $agenceRepository->getAgenciesAll();
     }
 }
+
 if (!function_exists('agentsList')) {
     function agentsList()
     {
@@ -69,6 +104,7 @@ if (!function_exists('fullImageUrl')) {
         return strpos($path, '//') ? $path : URL::to('/') . '/' . $path;
     }
 }
+
 if (!function_exists('pictures')) {
     function pictures()
     {
@@ -241,8 +277,9 @@ if (!function_exists('pictures')) {
     }
 }
 
-if(!function_exists('clean')) {
-    function clean($string) {
+if (!function_exists('clean')) {
+    function clean($string)
+    {
         $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
 
         return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.

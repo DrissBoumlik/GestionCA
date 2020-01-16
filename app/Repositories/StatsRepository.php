@@ -944,7 +944,7 @@ class StatsRepository
 //            ->where('Groupement', 'not like', 'Non Renseigné')
 //            ->whereNotNull('Nom_Region');
         $regions = \DB::table('stats as st')
-            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(Nom_Region) as total'))
+            ->select($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee', \DB::raw('count(Nom_Region) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
             where Groupement not like "Non Renseigné" 
             and Gpmt_Appel_Pre not like "Hors Périmètre" 
@@ -965,7 +965,17 @@ class StatsRepository
         if ($agenceCode) {
             $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
         }
-        $keys = ($regions->groupBy($column, 'Gpmt_Appel_Pre')->get())->groupBy([$column])->keys();
+        $keys = ($regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->get())->groupBy([$column])->keys();
+
+        if ($column == 'Date_Heure_Note_Semaine') {
+            $keys = ($regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->get())
+                ->map(function ($item) {
+                    $item->key = $item->Date_Heure_Note_Semaine . '_' . $item->Date_Heure_Note_Annee;
+                    return $item;
+                })
+                ->groupBy(['key'])->keys();
+        }
+
         if ($gpmtAppelPre) {
             $gpmtAppelPre = array_values($gpmtAppelPre);
             $regions = $regions->whereIn('Gpmt_Appel_Pre', $gpmtAppelPre);
@@ -1008,10 +1018,10 @@ class StatsRepository
         }
 
 
-        $columns = $regions->groupBy($column, 'Gpmt_Appel_Pre')->get();
+        $columns = $regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->get();
 
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
-        $regions = $regions->groupBy($column, 'Gpmt_Appel_Pre')->get();
+        $regions = $regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->get();
         $regions = $columns = $this->addRegionWithZero($request, $regions, $columns, $column);
 
         if (!count($regions)) {
@@ -1069,6 +1079,23 @@ class StatsRepository
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
+            if ($column == 'Date_Heure_Note_Semaine') {
+                usort($columns, function ($item1, $item2) {
+                    $date1 = explode('_', $item1->data);
+                    $date2 = explode('_', $item2->data);
+                    $year1 = $date1[1];
+                    $year2 = $date2[1];
+                    if($year1 != $year2) {
+                        return ($year1 == $year2) ? 0 :
+                            ($year1 < $year2) ? -1 : 1;
+                    } else {
+                        $week1 = $date1[0];
+                        $week2 = $date2[0];
+                        return ($week1 == $week2) ? 0 :
+                            ($week1 < $week2) ? -1 : 1;
+                    }
+                });
+            }
             $first = new \stdClass();
             $first->text = 'Résultats Appels Préalables';
             $first->name = $first->data = 'Gpmt_Appel_Pre';
@@ -1092,13 +1119,24 @@ class StatsRepository
 
                 $col_arr = $keys->all();
                 $item = $region->map(function ($call, $index) use (&$row, &$col_arr, $column) {
+//                    dd($call);
+                    if ($column == 'Date_Heure_Note_Semaine') {
+                        $column_week = $call->Date_Heure_Note_Semaine;
+                        $column_name = $call->Date_Heure_Note_Semaine . '_' . $call->Date_Heure_Note_Annee;
+                        $row->$column_name = $call->total . ' / ' . $call->$column_week . ' %';
+                        $col_arr = array_diff($col_arr, [$column_name]);
+                        $row->values[$column_name] = $call->total;
+                    }
+                    else {
+                        $column_name = $call->$column;
+                        $col_arr = array_diff($col_arr, [$column_name]);
+                        $row->values[$column_name] = $call->total;
+                        $row->$column_name = $call->total . ' / ' . $call->$column_name . ' %';
+                    }
                     $row->Gpmt_Appel_Pre = $call->Gpmt_Appel_Pre;
-                    $column_name = $call->$column;
-                    $col_arr = array_diff($col_arr, [$column_name]);
-                    $row->values[$column_name] = $call->total;
-                    $row->$column_name = $call->total . ' / ' .  $call->$column_name . ' %';
                     $row->column = $call->Gpmt_Appel_Pre;
                     $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
+
 //                $row->_total = $call->total;
 //                $row->total = $total; //round(array_sum($row->regions) / count($row->regions), 2) . '%';
                     return $row;
@@ -1110,17 +1148,23 @@ class StatsRepository
                     $_item->$col = 0; //'0%';
                 }
                 ksort($_item->values);
-                collect($_item->values)->map(function ($value, $index) use (&$total) {
+                collect($_item->values)->map(function ($value, $index) use (&$total, $_item) {
+//                    dd($value, $index);
                     $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
                     $total->$index = $total->values[$index];
                 });
-
-
+//                dd($_item->values);
+                if ($column == 'Date_Heure_Note_Semaine') {
+                    sortWeeksDates($_item->values, true);
+                }
                 $_item->values = collect($_item->values)->values();
                 return $_item;
             });
             $total->Gpmt_Appel_Pre = 'Total Général';
             $total->total = round(array_sum($total->values), 2);
+            if ($column == 'Date_Heure_Note_Semaine') {
+                sortWeeksDates($total->values, true);
+            }
             $total->values = collect($total->values)->values();
             $regions->push($total);
 
