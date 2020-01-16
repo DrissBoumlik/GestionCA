@@ -119,18 +119,18 @@
                             <div class="refresh-form">
                                 <div id="tree-view-1" class="tree-view d-inline-flex"></div>
                                 <div id="stats-regions-filter" class="tree-region-view d-inline-flex"></div>
-                                <button type="button" id="refreshFolders" class="btn btn-primary float-right">
+                                <button type="button" id="refreshCallsCloture" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="statsFolders"
+                            <table id="statsCallsCloture"
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    @for($i = 0; $i < count($calls_folders); $i++)
+                                    @for($i = 0; $i < count($calls_results); $i++)
                                         <th>{{ $calls_folders[$i]->text }}</th>
                                     @endfor
                                 </tr>
@@ -143,7 +143,7 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-12">
-                    <canvas id="statsFoldersChart" class=""></canvas>
+                    <canvas id="statsCallsClotureChart" class=""></canvas>
                 </div>
                 <!-- /.col -->
             </div>

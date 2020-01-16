@@ -400,6 +400,34 @@ $(function () {
         });
     });
 
+    let statsCallsCloture = {
+        element_dt: undefined,
+        element: $('#statsCallsCloture'),
+        columns: undefined,
+        data: undefined,
+        treeElement: '#tree-view-1',
+        routeCol: 'regions/columns/Groupement',
+        routeData: 'regions/details/groupement?key_groupement=Appels-clture',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsCallsClotureChart',
+            data: undefined,
+            chartTitle: '===='
+        }
+    };
+    getColumns(statsCallsCloture, true, false, filterData(), {
+        removeTotal: false,
+        refreshMode: false,
+        removeTotalColumn: false
+    });
+    $('#refreshCallsCloture').on('click', function () {
+        getColumns(statsCallsCloture, true, false, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            removeTotalColumn: false
+        });
+    });
+
 /// ====================== CALLS STATS AGENCIES / WEEKS ==========================
 
     let callsStatesAgencies = {
@@ -572,7 +600,7 @@ $(function () {
         removeTotal: true,
         refreshMode: false,
         details: false,
-        removeTotalColumn: true
+        removeTotalColumn: false
     }) {
         if (params.refreshMode) {
             data = {...data, refreshMode: true}; //{dates: data, refreshMode: true};
