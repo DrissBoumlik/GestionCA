@@ -116,14 +116,14 @@
                             <div class="refresh-form">
                                 <div id="tree-view-0" class="tree-view d-inline-flex"></div>
                                 <div id="stats-groupement-filter" class="tree-groupement-view d-inline-flex"></div>
-                                <button type="button" id="refreshRegions" class="btn btn-primary float-right">
+                                <button type="button" id="refreshCallsPrealable" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
-                            <table id="statsRegions"
+                            <table id="statsCallsPrealable"
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
@@ -140,7 +140,7 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-12">
-                    <canvas id="statsRegionsChart" class=""></canvas>
+                    <canvas id="statsCallsPrealableChart" class=""></canvas>
                 </div>
                 <!-- /.col -->
             </div>

@@ -334,12 +334,6 @@ $(function () {
         //     columns: undefined,
         // }]
     };
-    // let statsRegionsDetails = {
-    //     element: undefined,
-    //     columns: undefined,
-    //     routeData: 'regions/details/groupement', // $('#stateregdet-url').attr('url')
-    // };
-
     getColumns(statsRegions, true, true, filterData(), {
         removeTotal: false,
         refreshMode: false,
@@ -378,6 +372,33 @@ $(function () {
         });
     });
 
+    let statsCallsPrealable = {
+        element_dt: undefined,
+        element: $('#statsCallsPrealable'),
+        columns: undefined,
+        data: undefined,
+        treeElement: '#tree-view-1',
+        routeCol: 'regions/columns/Groupement',
+        routeData: 'regions/details/groupement?key_groupement=Appels-pralables',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsCallsPrealableChart',
+            data: undefined,
+            chartTitle: '===='
+        }
+    };
+    getColumns(statsCallsPrealable, true, true, filterData(), {
+        removeTotal: false,
+        refreshMode: false,
+        removeTotalColumn: false
+    });
+    $('#refreshCallsPrealable').on('click', function () {
+        getColumns(statsCallsPrealable, true, true, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            removeTotalColumn: false
+        });
+    });
 
 /// ====================== CALLS STATS AGENCIES / WEEKS ==========================
 
