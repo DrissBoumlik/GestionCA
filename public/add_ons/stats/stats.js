@@ -373,11 +373,14 @@ $(function () {
             chartTitle: 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement'
         }
     };
-    getColumns(statsFolders, true, false, filterData());
+    getColumns(statsFolders, true, false, filterData(), {
+        removeTotalColumn: true
+    });
     $('#refreshFolders').on('click', function () {
         getColumns(statsFolders, true, false, filterData(), {
             removeTotal: false,
-            refreshMode: true
+            refreshMode: true,
+            removeTotalColumn: true
         });
     });
 
@@ -483,10 +486,10 @@ $(function () {
             chartTitle: 'Résultats Appels Préalables par agence'
         }
     };
-    getColumns(callsStatesAgencies, true, false, filterData(), {removeTotalColumn: true});
+    getColumns(callsStatesAgencies, true, false, filterData(), {removeTotalColumn: true, removeTotal: true});
     $('#refreshCallStatesAgencies').on('click', function () {
         getColumns(callsStatesAgencies, true, false, filterData(), {
-            removeTotal: false,
+            removeTotal: true,
             refreshMode: true,
             removeTotalColumn: true
         });
@@ -509,10 +512,10 @@ $(function () {
             chartTitle: 'Résultats Appels Préalables par semaine'
         }
     };
-    getColumns(callsStatesWeeks, true, false, filterData(), {removeTotalColumn: true});
+    getColumns(callsStatesWeeks, true, false, filterData(), {removeTotalColumn: true, removeTotal: true});
     $('#refreshCallStatesWeeks').on('click', function () {
         getColumns(callsStatesWeeks, true, false, filterData(), {
-            removeTotal: false,
+            removeTotal: true,
             refreshMode: true,
             removeTotalColumn: true
         });
@@ -537,13 +540,13 @@ $(function () {
             chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Joignables)'
         }
     };
-    getColumns(statscallsPos, true, false, filterData(), {removeTotal: false, refreshMode: false});
+    getColumns(statscallsPos, true, false, filterData(), {removeTotal: false, refreshMode: false, removeTotalColumn: true});
     $('#refreshCallResultPos').on('click', function () {
         getColumns(statscallsPos, true, false, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: false
+            removeTotalColumn: true
         });
     });
 
@@ -563,13 +566,13 @@ $(function () {
             chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Injoignables)'
         }
     };
-    getColumns(statscallsNeg, true, false, filterData(), {removeTotal: false, refreshMode: false});
+    getColumns(statscallsNeg, true, false, filterData(), {removeTotal: false, refreshMode: false, removeTotalColumn: true});
     $('#refreshCallResultNeg').on('click', function () {
         getColumns(statscallsNeg, true, false, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: false
+            removeTotalColumn: true
         });
     });
 
@@ -635,9 +638,9 @@ $(function () {
             chartTitle: 'Production Globale CAM'
         }
     };
-    getColumns(statsPerimeters, true, false, filterData());
+    getColumns(statsPerimeters, true, false, filterData(), {removeTotalColumn: true, removeTotal: true});
     $('#refreshPerimeters').on('click', function () {
-        getColumns(statsPerimeters, true, false, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsPerimeters, true, false, filterData(), {removeTotal: true, refreshMode: true, removeTotalColumn: true});
     });
 
 /// ====================== FUNCTIONS ==========================
