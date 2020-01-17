@@ -575,8 +575,6 @@ class StatsRepository
             ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('Nom_Region');
 
-        $keys = ($regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get())->groupBy(['Nom_Region'])->keys();
-
         $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
         $key_groupement = clean($key_groupement);
         $regions = $regions->where('key_groupement', 'like', $key_groupement);
@@ -588,6 +586,9 @@ class StatsRepository
         if ($agenceCode) {
             $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
         }
+
+        $keys = ($regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get())->groupBy(['Nom_Region'])->keys();
+
         if ($resultatAppel) {
             $resultatAppel = array_values($resultatAppel);
             $regions = $regions->whereIn('Resultat_Appel', $resultatAppel);
