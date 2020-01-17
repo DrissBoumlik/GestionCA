@@ -87,6 +87,6 @@ frLang = {
     //Events
     $(document).on('change', '#agent-code', (e) => {
         agence_code = $(e.currentTarget).val();
-        window.location.href = `agents?agent_name=${agence_code}`;
+        window.location.href = APP_URL + `/agents?agent_name=${agence_code}`;
     });
 })(jQuery);
