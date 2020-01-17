@@ -342,14 +342,14 @@ $(function () {
         //     columns: undefined,
         // }]
     };
-    getColumns(statsRegions, true, true, filterData(), {
+    getColumns(statsRegions, true, false, filterData(), {
         removeTotal: false,
         refreshMode: false,
         details: true,
         removeTotalColumn: false
     });
     $('#refreshRegions').on('click', function () {
-        getColumns(statsRegions, true, true, filterData(), {
+        getColumns(statsRegions, true, false, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: true,
@@ -373,9 +373,9 @@ $(function () {
             chartTitle: 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement'
         }
     };
-    getColumns(statsFolders, true, true, filterData());
+    getColumns(statsFolders, true, false, filterData());
     $('#refreshFolders').on('click', function () {
-        getColumns(statsFolders, true, true, filterData(), {
+        getColumns(statsFolders, true, false, filterData(), {
             removeTotal: false,
             refreshMode: true
         });
