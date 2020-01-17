@@ -944,20 +944,39 @@ class StatsRepository
 //            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'))
 //            ->where('Groupement', 'not like', 'Non Renseigné')
 //            ->whereNotNull('Nom_Region');
-        $regions = \DB::table('stats as st')
-            ->select($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee', \DB::raw('count(Nom_Region) as total'))
-            ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
+        if($column == 'Date_Heure_Note_Semaine') {
+            $regions = \DB::table('stats as st')
+                ->select($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee', \DB::raw('count(Nom_Region) as total'))
+                ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
             where Groupement not like "Non Renseigné" 
             and Gpmt_Appel_Pre not like "Hors Périmètre" 
             and Nom_Region is not null 
             GROUP BY Id_Externe) groupedst'),
-                function ($join) {
-                    $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
-                    $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
-                })
-            ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
-            ->whereNotNull('Nom_Region');
+                    function ($join) {
+                        $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
+                        $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
+                    })
+                ->where('Groupement', 'not like', 'Non Renseigné')
+                ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
+                ->whereNotNull('Nom_Region');
+        } else  {
+            $regions = \DB::table('stats as st')
+                ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(Nom_Region) as total'))
+                ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
+            where Groupement not like "Non Renseigné" 
+            and Gpmt_Appel_Pre not like "Hors Périmètre" 
+            and Nom_Region is not null 
+            GROUP BY Id_Externe) groupedst'),
+                    function ($join) {
+                        $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
+                        $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
+                    })
+                ->where('Groupement', 'not like', 'Non Renseigné')
+                ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
+                ->whereNotNull('Nom_Region');
+        }
+
+
 
 
         if ($agentName) {
@@ -966,7 +985,6 @@ class StatsRepository
         if ($agenceCode) {
             $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
         }
-        $keys = ($regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->get())->groupBy([$column])->keys();
 
         if ($column == 'Date_Heure_Note_Semaine') {
             $keys = ($regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->get())
@@ -975,6 +993,8 @@ class StatsRepository
                     return $item;
                 })
                 ->groupBy(['key'])->keys();
+        } else {
+            $keys = ($regions->groupBy($column, 'Gpmt_Appel_Pre')->get())->groupBy([$column])->keys();
         }
 
         if ($gpmtAppelPre) {
@@ -1018,11 +1038,15 @@ class StatsRepository
             }
         }
 
-
-        $columns = $regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->get();
+        if ($column == 'Date_Heure_Note_Semaine') {
+            $columns = $regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->get();
+            $regions = $regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->get();
+        } else {
+            $columns = $regions->groupBy($column, 'Gpmt_Appel_Pre')->get();
+            $regions = $regions->groupBy($column, 'Gpmt_Appel_Pre')->get();
+        }
 
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
-        $regions = $regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->get();
         $regions = $columns = $this->addRegionWithZero($request, $regions, $columns, $column);
 
         if (!count($regions)) {
@@ -1044,7 +1068,6 @@ class StatsRepository
                     return $call;
                 });
             });
-//            dd($temp);
 
             $regions = $temp->flatten();
 //            $regions = $regions->groupBy($column);
@@ -1120,7 +1143,6 @@ class StatsRepository
 
                 $col_arr = $keys->all();
                 $item = $region->map(function ($call, $index) use (&$row, &$col_arr, $column) {
-//                    dd($call);
                     if ($column == 'Date_Heure_Note_Semaine') {
                         $column_week = $call->Date_Heure_Note_Semaine;
                         $column_name = $call->Date_Heure_Note_Semaine . '_' . $call->Date_Heure_Note_Annee;
@@ -1137,7 +1159,6 @@ class StatsRepository
                     $row->Gpmt_Appel_Pre = $call->Gpmt_Appel_Pre;
                     $row->column = $call->Gpmt_Appel_Pre;
                     $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
-
 //                $row->_total = $call->total;
 //                $row->total = $total; //round(array_sum($row->regions) / count($row->regions), 2) . '%';
                     return $row;
