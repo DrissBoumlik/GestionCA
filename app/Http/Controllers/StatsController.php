@@ -25,6 +25,42 @@ class StatsController extends Controller
         return view('stats.index');
     }
 
+    public function getColumns(Request $request)
+    {
+        $agenceCode = $request->agence_code;
+        $AgentName = $request->agent_name;
+        $dataRegionsCallResult = $this->statsRepository->GetDataRegions('Groupement', $request);
+        $dataFoldersCallResult = $this->statsRepository->GetDataFolders('Groupement', $request);
+
+        $dataRegionsCallStateByRegions = $this->statsRepository->GetDataRegionsCallState('Nom_Region', $request);
+        $dataRegionsCallStateByWeek = $this->statsRepository->GetDataRegionsCallState('Date_Heure_Note_Semaine', $request);
+//        dd($dataRegionsCallStateByRegions, $dataRegionsCallStateByWeek);
+        $dataCallsPos = $this->statsRepository->getDataClientsByCallState('Joignable', $request);
+        $dataCallsNeg = $this->statsRepository->getDataClientsByCallState('Injoignable', $request);
+
+        $dataTypeInterv = $this->statsRepository->getDataNonValidatedFolders('Code_Type_Intervention', $request);
+        $dataCodeInterv = $this->statsRepository->getDataNonValidatedFolders('Code_Intervention', $request);
+
+        $dataPerimeter = $this->statsRepository->getDataClientsByPerimeter($request);
+        return [
+            'calls_results' => $dataRegionsCallResult['columns'],
+            'calls_folders' => $dataFoldersCallResult['columns'],
+
+            'calls_states_regions' => $dataRegionsCallStateByRegions['columns'],
+            'calls_states_weeks' => $dataRegionsCallStateByWeek['columns'],
+
+            'regions_names_type' => $dataTypeInterv['columns'],
+            'regions_names_code' => $dataCodeInterv['columns'],
+
+            'calls_pos' => $dataCallsPos['columns'],
+            'calls_neg' => $dataCallsNeg['columns'],
+
+            'perimeters' => $dataPerimeter['columns'],
+            'agence' => $agenceCode,
+            'agent' => $AgentName
+        ];
+    }
+
     public function getStats(Request $request)
     {
         $stats = $this->statsRepository->getStats($request);
@@ -52,40 +88,7 @@ class StatsController extends Controller
 
     public function dashboard(Request $request)
     {
-        $agenceCode = $request->agence_code;
-        $AgentName = $request->agent_name;
-        $dataRegionsCallResult = $this->statsRepository->GetDataRegions('Groupement', $request);
-        $dataFoldersCallResult = $this->statsRepository->GetDataFolders('Groupement', $request);
-
-        $dataRegionsCallStateByRegions = $this->statsRepository->GetDataRegionsCallState('Nom_Region', $request);
-        $dataRegionsCallStateByWeek = $this->statsRepository->GetDataRegionsCallState('Date_Heure_Note_Semaine', $request);
-//        dd($dataRegionsCallStateByRegions, $dataRegionsCallStateByWeek);
-        $dataCallsPos = $this->statsRepository->getDataClientsByCallState('Joignable', $request);
-        $dataCallsNeg = $this->statsRepository->getDataClientsByCallState('Injoignable', $request);
-
-        $dataTypeInterv = $this->statsRepository->getDataNonValidatedFolders('Code_Type_Intervention', $request);
-        $dataCodeInterv = $this->statsRepository->getDataNonValidatedFolders('Code_Intervention', $request);
-
-        $dataPerimeter = $this->statsRepository->getDataClientsByPerimeter($request);
-
-        $columns = [
-            'calls_results' => $dataRegionsCallResult['columns'],
-            'calls_folders' => $dataFoldersCallResult['columns'],
-
-            'calls_states_regions' => $dataRegionsCallStateByRegions['columns'],
-            'calls_states_weeks' => $dataRegionsCallStateByWeek['columns'],
-
-            'regions_names_type' => $dataTypeInterv['columns'],
-            'regions_names_code' => $dataCodeInterv['columns'],
-
-            'calls_pos' => $dataCallsPos['columns'],
-            'calls_neg' => $dataCallsNeg['columns'],
-
-            'perimeters' => $dataPerimeter['columns'],
-            'agence' => $agenceCode,
-            'agent' => $AgentName
-        ];
-//        return $columns;
+        $columns = $this->getColumns($request);
         return view('stats.dashboard')->with($columns);
     }
 
@@ -195,42 +198,9 @@ class StatsController extends Controller
 
     public function dashboard_filter(Request $request, $filter)
     {
-        $agenceCode = $request->agence_code;
-        $AgentName = $request->agent_name;
-        $dataRegionsCallResult = $this->statsRepository->GetDataRegions('Groupement', $request);
-        $dataFoldersCallResult = $this->statsRepository->GetDataFolders('Groupement', $request);
-
-        $dataRegionsCallStateByRegions = $this->statsRepository->GetDataRegionsCallState('Nom_Region', $request);
-        $dataRegionsCallStateByWeek = $this->statsRepository->GetDataRegionsCallState('Date_Heure_Note_Semaine', $request);
-//        dd($dataRegionsCallStateByRegions, $dataRegionsCallStateByWeek);
-        $dataCallsPos = $this->statsRepository->getDataClientsByCallState('Joignable', $request);
-        $dataCallsNeg = $this->statsRepository->getDataClientsByCallState('Injoignable', $request);
-
-        $dataTypeInterv = $this->statsRepository->getDataNonValidatedFolders('Code_Type_Intervention', $request);
-        $dataCodeInterv = $this->statsRepository->getDataNonValidatedFolders('Code_Intervention', $request);
-
-        $dataPerimeter = $this->statsRepository->getDataClientsByPerimeter($request);
-
-        $columns = [
-            'calls_results' => $dataRegionsCallResult['columns'],
-            'calls_folders' => $dataFoldersCallResult['columns'],
-
-            'calls_states_regions' => $dataRegionsCallStateByRegions['columns'],
-            'calls_states_weeks' => $dataRegionsCallStateByWeek['columns'],
-
-            'regions_names_type' => $dataTypeInterv['columns'],
-            'regions_names_code' => $dataCodeInterv['columns'],
-
-            'calls_pos' => $dataCallsPos['columns'],
-            'calls_neg' => $dataCallsNeg['columns'],
-
-            'perimeters' => $dataPerimeter['columns'],
-            'agence' => $agenceCode,
-            'agent' => $AgentName
-        ];
-
 //        $route = getRoute(Route::current());
 //        $viewName = str_replace('dashboard/', '', $route);
+        $columns = $this->getColumns($request);
         $viewName = $filter;
         return view('stats.details.' . $viewName)->with($columns);
     }
