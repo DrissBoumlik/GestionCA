@@ -20,6 +20,7 @@ if (!function_exists('sortWeeksDates')) {
                         : ($week1 > $week2 ? -1 : 1));
             }
         });
+        return $dates;
     }
 }
 

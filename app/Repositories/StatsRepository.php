@@ -1148,6 +1148,10 @@ class StatsRepository
                     $_item->$col = 0; //'0%';
                 }
                 ksort($_item->values);
+                if ($column == 'Date_Heure_Note_Semaine') {
+                    $_item->values = sortWeeksDates($_item->values, true);
+                }
+//                dd($_item);
                 collect($_item->values)->map(function ($value, $index) use (&$total, $_item) {
 //                    dd($value, $index);
                     $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
