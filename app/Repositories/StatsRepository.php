@@ -895,7 +895,7 @@ class StatsRepository
 
                     $row->values[$nom_region] = $call->$nom_region;
                     $row->$nom_region = $call->$nom_region;
-                    $row->total = $call->$nom_region; //round(array_sum($row->values) / count($row->values), 2) . '%';
+                    $row->total = array_sum($row->values); //$call->$nom_region; //round(array_sum($row->values) / count($row->values), 2) . '%';
                     $row->_total = $call->total;
                     $row->column = $callResult;
                     return $row;
