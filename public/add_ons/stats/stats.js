@@ -298,15 +298,8 @@ $(function () {
         };
     };
 
-    $('#filterDashboard').on('change', function () {
-        let url = $(this).val();
-        if (url) {
-            window.location = APP_URL + '/dashboard/' + url;
-        }
-    });
 
-
-    /// ====================== REGIONS ==========================
+    //<editor-fold desc="REGIONS">
     let statsRegions = {
         element_dt: undefined,
         element: $('#statsRegions'),
@@ -383,7 +376,9 @@ $(function () {
             removeTotalColumn: true
         });
     });
+    //</editor-fold>
 
+    //<editor-fold desc="SELECTED FILTER">
     let statsCallsPrealable = {
         element_dt: undefined,
         element: $('#statsCallsPrealable'),
@@ -467,9 +462,9 @@ $(function () {
             removeTotalColumn: false
         });
     });
+    //</editor-fold>
 
-/// ====================== CALLS STATS AGENCIES / WEEKS ==========================
-
+    //<editor-fold desc="CALLS STATS AGENCIES / WEEKS">
     let callsStatesAgencies = {
         element_dt: undefined,
         element: $('#callsStatesAgencies'),
@@ -520,10 +515,9 @@ $(function () {
             removeTotalColumn: true
         });
     });
+    //</editor-fold>
 
-
-/// ====================== CALL STATS Joignables / Injoignable ==========================
-
+    //<editor-fold desc="CALL STATS Joignables / Injoignable">
     let statscallsPos = {
         element_dt: undefined,
         element: $('#statsCallsPos'),
@@ -575,9 +569,9 @@ $(function () {
             removeTotalColumn: true
         });
     });
+    //</editor-fold>
 
-/// ====================== FOLDERS CODE / TYPE ==========================
-
+    //<editor-fold desc="FOLDERS CODE / TYPE">
     let statsFoldersByType = {
         element_dt: undefined,
         element: $('#statsFoldersByType'),
@@ -619,9 +613,9 @@ $(function () {
     $('#refreshFoldersByCode').on('click', function () {
         getColumns(statsFoldersByCode, true, false, filterData(), {removeTotal: false, refreshMode: true});
     });
+    //</editor-fold>
 
-/// ====================== CALL PERIMETERS ==========================
-
+    //<editor-fold desc="CALL PERIMETERS">
     let statsPerimeters = {
         element_dt: undefined,
         element: $('#statsPerimeters'),
@@ -642,9 +636,9 @@ $(function () {
     $('#refreshPerimeters').on('click', function () {
         getColumns(statsPerimeters, true, false, filterData(), {removeTotal: true, refreshMode: true, removeTotalColumn: true});
     });
+    //</editor-fold>
 
-/// ====================== FUNCTIONS ==========================
-
+    //<editor-fold desc="FUNCTIONS">
     function getColumns(object, callInitDT = true, pagination = false, data = null, params = {
         removeTotal: true,
         refreshMode: false,
@@ -732,12 +726,68 @@ $(function () {
         });
     }
 
-    function assignFilter(datesFilterList, datesFilterValues) {
-        for (let [key, value] of datesFilterValues) {
-            if (key in datesFilterList) {
-                datesFilterList[key].values = value;
-            }
+    function InitDataTable(object, pagination = false, data = null, params = {
+        removeTotal: true,
+        removeTotalColumn: false,
+        details: false
+    }) {
+        if ($.fn.DataTable.isDataTable(object.element_dt)) {
+            object.element.off('click', 'td.details-control');
+            object.element_dt.destroy();
         }
+        if (params.details) {
+            object.objDetail.columns = [...object.columns];
+            object.objDetail.columns = object.objDetail.columns.map(function (item, index) {
+                if (index === 0) {
+                    return {...item, data: 'Resultat_Appel', name: 'Resultat_Appel', title: 'Resultat Appel'};
+                }
+                return {...item, title: item.name};
+            });
+
+            object.columns.unshift({
+                className: 'details-control',
+                orderable: false,
+                data: null,
+                defaultContent: '',
+                width: '10%'
+            });
+        }
+        return object.element.DataTable({
+            language: frLang,
+            responsive: true,
+            info: false,
+            processing: true,
+            serverSide: true,
+            searching: false,
+            // ordering: false,
+            bPaginate: pagination,
+            ajax: {
+                url: APP_URL + '/' + object.routeData,
+                data: data,
+            },
+            columns: object.columns,
+            initComplete: function (settings, response) {
+                if (object.objChart !== null && object.objChart !== undefined) {
+                    try {
+                        InitChart(object.objChart, object.columns, response.data, {
+                            removeTotal: params.removeTotal,
+                            removeTotalColumn: params.removeTotalColumn,
+                            details: params.details
+                        });
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+            }
+        });
+
+        // if (object.objChart !== null && object.objChart !== undefined) {
+        //     try {
+        //         InitChart(object.objChart, object.columns, object.data, removeTotal, removeTotalColumn);
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
+        // }
     }
 
     function InitChart(objectChart, columns, data, params = {
@@ -821,108 +871,17 @@ $(function () {
         });
     }
 
-    /// ===================== Global filter =====================
-
-    $("#refreshAll").on('click', function () {
-        getColumns(statsRegions, true, true, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: true,
-            removeTotalColumn: false
-        });
-        getColumns(statsFolders, true, true, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(callsStatesAgencies, true, false, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(callsStatesWeeks, true, false, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(statscallsPos, true, false, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: false
-        });
-        getColumns(statscallsNeg, true, false, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: false
-        });
-        getColumns(statsFoldersByType, true, false, filterData(), {removeTotal: false, refreshMode: true});
-        getColumns(statsFoldersByCode, true, false, filterData(), {removeTotal: false, refreshMode: true});
-        getColumns(statsPerimeters, true, false, filterData(), {removeTotal: false, refreshMode: true});
-    });
-
-    function InitDataTable(object, pagination = false, data = null, params = {
-        removeTotal: true,
-        removeTotalColumn: false,
-        details: false
-    }) {
-        if ($.fn.DataTable.isDataTable(object.element_dt)) {
-            object.element.off('click', 'td.details-control');
-            object.element_dt.destroy();
-        }
-        if (params.details) {
-            object.objDetail.columns = [...object.columns];
-            object.objDetail.columns = object.objDetail.columns.map(function (item, index) {
-                if (index === 0) {
-                    return {...item, data: 'Resultat_Appel', name: 'Resultat_Appel', title: 'Resultat Appel'};
-                }
-                return {...item, title: item.name};
-            });
-
-            object.columns.unshift({
-                className: 'details-control',
-                orderable: false,
-                data: null,
-                defaultContent: '',
-                width: '10%'
-            });
-        }
-        return object.element.DataTable({
-            language: frLang,
-            responsive: true,
-            info: false,
-            processing: true,
-            serverSide: true,
-            searching: false,
-            // ordering: false,
-            bPaginate: pagination,
-            ajax: {
-                url: APP_URL + '/' + object.routeData,
-                data: data,
-            },
-            columns: object.columns,
-            initComplete: function (settings, response) {
-                if (object.objChart !== null && object.objChart !== undefined) {
-                    try {
-                        InitChart(object.objChart, object.columns, response.data, {
-                            removeTotal: params.removeTotal,
-                            removeTotalColumn: params.removeTotalColumn,
-                            details: params.details
-                        });
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
+    function assignFilter(datesFilterList, datesFilterValues) {
+        for (let [key, value] of datesFilterValues) {
+            if (key in datesFilterList) {
+                datesFilterList[key].values = value;
             }
-        });
-
-        // if (object.objChart !== null && object.objChart !== undefined) {
-        //     try {
-        //         InitChart(object.objChart, object.columns, object.data, removeTotal, removeTotalColumn);
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-        // }
+        }
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc="FUNCTIONS TOOLS">
     function dynamicColors(uniqueColors) {
         let color = {
             r: Math.floor(Math.random() * 255),
@@ -972,4 +931,51 @@ $(function () {
         // And then hide the row
         row.child.hide();
     }
+    //</editor-fold>
+
+    //<editor-fold desc="GLOBAL FILTER">
+    $('#filterDashboard').on('change', function () {
+        let url = $(this).val();
+        if (url) {
+            window.location = APP_URL + '/dashboard/' + url;
+        }
+    });
+
+    $("#refreshAll").on('click', function () {
+        getColumns(statsRegions, true, true, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: true,
+            removeTotalColumn: false
+        });
+        getColumns(statsFolders, true, true, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
+        getColumns(callsStatesAgencies, true, false, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
+        getColumns(callsStatesWeeks, true, false, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
+        getColumns(statscallsPos, true, false, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false
+        });
+        getColumns(statscallsNeg, true, false, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false
+        });
+        getColumns(statsFoldersByType, true, false, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsFoldersByCode, true, false, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsPerimeters, true, false, filterData(), {removeTotal: false, refreshMode: true});
+    });
+    //</editor-fold>
+
 });
