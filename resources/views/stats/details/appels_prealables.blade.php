@@ -32,7 +32,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
 
-    <script src="{{ asset("/add_ons/stats/stats.js") }}"></script>
+    <script src="{{ asset("/add_ons/stats/details/appels_prealables/stats.js") }}"></script>
     <script>
         $(function () {
             @if($errors->any())
@@ -127,8 +127,8 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    @for($i = 0; $i < count($calls_results); $i++)
-                                        <th>{{ $calls_results[$i]->text }}</th>
+                                    @for($i = 0; $i < count($calls_results_details); $i++)
+                                        <th>{{ $calls_results_details[$i]->text }}</th>
                                     @endfor
                                 </tr>
                                 </thead>

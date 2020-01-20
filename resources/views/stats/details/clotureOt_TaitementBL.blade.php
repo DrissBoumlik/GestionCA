@@ -32,7 +32,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
 
-    <script src="{{ asset("/add_ons/stats/stats.js") }}"></script>
+    <script src="{{ asset("/add_ons/stats/details/clotureOt_TaitementBL/stats.js") }}"></script>
     <script>
         $(function () {
             @if($errors->any())
