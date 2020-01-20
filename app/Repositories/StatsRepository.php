@@ -601,7 +601,6 @@ class StatsRepository
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-
         if ($request && count($request->all())) {
             if ($request->exists('refreshMode')) {
                 if ($dates) {

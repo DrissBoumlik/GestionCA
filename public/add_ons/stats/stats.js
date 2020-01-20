@@ -413,8 +413,8 @@ $(function () {
         columns: undefined,
         data: undefined,
         treeElement: '#tree-view-1',
-        routeCol: 'regions/columns/Groupement',
-        routeData: 'regions/details/groupement?key_groupement=Appels-pralables',
+        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-GEM',
+        routeData: 'regions/details/groupement?key_groupement=Appels-GEM',
         objChart: {
             element_chart: undefined,
             element_id: 'statsCallsGemChart',
@@ -441,7 +441,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         treeElement: '#tree-view-1',
-        routeCol: 'regions/columns/Groupement',
+        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
         routeData: 'regions/details/groupement?key_groupement=Appels-clture',
         objChart: {
             element_chart: undefined,
@@ -647,14 +647,14 @@ $(function () {
     }) {
         // if refreshmode is enabled then store the new filter in local storage
         if (params.refreshMode) {
-            localStorage.setItem(object.filterTreeElement, JSON.stringify(data));
+            // localStorage.setItem(object.filterTreeElement, JSON.stringify(data));
             data = {...data, refreshMode: true}; //{dates: data, refreshMode: true};
         }
         // Search if filter stored in local storage
-        let savedData = JSON.parse(localStorage.getItem(object.filterTreeElement));
-        if (savedData !== null) {
-            data = savedData;
-        }
+        // let savedData = JSON.parse(localStorage.getItem(object.filterTreeElement));
+        // if (savedData !== null) {
+        //     data = savedData;
+        // }
 
         $.ajax({
             url: APP_URL + '/' + object.routeCol,
