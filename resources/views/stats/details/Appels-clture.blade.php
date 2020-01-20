@@ -130,7 +130,7 @@
                                    class="table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
-                                    @for($i = 0; $i < count($calls_results); $i++)
+                                    @for($i = 0; $i < count($calls_folders); $i++)
                                         <th>{{ $calls_folders[$i]->text }}</th>
                                     @endfor
                                 </tr>

@@ -131,10 +131,10 @@ Route::group([
 
 
 //    FILTERS
-    Route::get('/dashboard/{filter}', 'StatsController@dashboard_filter');
+    Route::get('/dashboard/{filter}', 'FiltreController@dashboard_filter');
 
     //"Appel Prealable " Filter
-    Route::get('Appels-pralables/regions/details/groupement', 'FiltreController@getRegionsByGrpCall'); // column = key_groupement value // // PERCENT
+    Route::get('appels-pralables/regions/details/groupement', 'FiltreController@getRegionsByGrpCall'); // column = key_groupement value // // PERCENT
     Route::get('appels-pralables/regions/details/groupement/columns', 'FiltreController@getRegionsByGrpCallColumns'); // column = key_groupement value // // PERCENT
     Route::get('appels-pralables/regionsCallState/{column}', 'FiltreController@getRegionsCallState'); // column = Nom_Region / Date_Heure_Note_Semaine   // SUM
     Route::get('appels-pralables/regionsCallState/columns/{column}', 'FiltreController@getRegionsCallStateColumn');

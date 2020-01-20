@@ -1,5 +1,170 @@
 <?php
 
+use App\Models\Stats;
+use Illuminate\Http\Request;
+
+if (!function_exists('addRegionWithZero')) {
+    function addRegionWithZero(Request $request, $regions, $columns, $column = null)
+    {
+        $agenceCode = $request->get('agence_code');
+        $agentName = $request->get('agent_name');
+        //$resultatAppel = $request->get('resultatAppel');
+        $groupement = $request->get('groupement');
+        $nomRegion = $request->get('nomRegion');
+        $codeRdvInterventionConfirm = $request->get('codeRdvInterventionConfirm');
+        $codeRdvIntervention = $request->get('codeRdvIntervention');
+        $codeTypeIntervention = $request->get('codeTypeIntervention');
+        $codeIntervention = $request->get('codeIntervention');
+        $gpmtAppelPre = $request->get('gpmtAppelPre');
+
+        if ($nomRegion) {
+            $groupmentColumns = Stats::select('Groupement')->distinct('Groupement')
+                ->where('Groupement', 'not like', 'Non Renseigné')
+                ->when($agenceCode, function ($query, $agenceCode) {
+                    return $query->where('Nom_Region', 'like', "%$agenceCode");
+                })->when($agentName, function ($query, $agentName) {
+                    return $query->where('Utilisateur', $agentName);
+                })->get();
+            if ($nomRegion) {
+                foreach ($nomRegion as $gr) {
+                    foreach ($groupmentColumns as $col) {
+                        if (!in_array($col->Groupement, $regions->filter(function ($r) use ($gr) {
+                            return $r->Nom_Region === $gr;
+                        })->map(function ($r) {
+                            return $r->Groupement;
+                        })->toArray())) {
+                            if ($col->Groupement) {
+                                $rObj = new \stdClass();
+                                $rObj->Groupement = $col->Groupement;
+                                $rObj->Key_Groupement = $col->Key_Groupement;
+                                $rObj->Nom_Region = $gr;
+                                $rObj->total = 0;
+                                $columns[] = $rObj;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if ($groupement || $codeIntervention || $codeTypeIntervention || $gpmtAppelPre) {
+            $regionsColumns = Stats::select('Nom_Region')->distinct('Nom_Region')
+                ->where('Groupement', 'not like', 'Non Renseigné')
+                ->when($agenceCode, function ($query, $agenceCode) {
+                    return $query->where('Nom_Region', 'like', "%$agenceCode");
+                })
+                ->when($agentName, function ($query, $agentName) {
+                    return $query->where('Utilisateur', $agentName);
+                })->get();
+
+            if ($groupement) {
+                foreach ($groupement as $gr) {
+                    foreach ($regionsColumns as $col) {
+                        if (!in_array($col->Nom_Region, $regions->filter(function ($r) use ($gr) {
+                            return $r->Groupement === $gr;
+                        })->map(function ($r) {
+                            return $r->Nom_Region;
+                        })->toArray())) {
+                            $rObj = new \stdClass();
+                            $rObj->Nom_Region = $col->Nom_Region;
+                            $rObj->Key_Groupement = $col->Key_Groupement;
+                            $rObj->Groupement = $gr;
+                            $rObj->total = 0;
+                            $columns[] = $rObj;
+                        }
+                    }
+                }
+            }
+            if ($codeTypeIntervention) {
+                foreach ($codeTypeIntervention as $type) {
+                    foreach ($regionsColumns as $col) {
+                        if (!in_array($col->Nom_Region, $regions->filter(function ($r) use ($type) {
+                            return $r->Code_Type_Intervention === $type;
+                        })->map(function ($r) {
+                            return $r->Nom_Region;
+                        })->toArray())) {
+                            $rObj = new \stdClass();
+                            $rObj->Nom_Region = $col->Nom_Region;
+                            $rObj->Code_Type_Intervention = $type;
+                            $rObj->total = 0;
+                            $columns[] = $rObj;
+                        }
+                    }
+                }
+            }
+            if ($codeIntervention) {
+                foreach ($codeIntervention as $type) {
+                    foreach ($regionsColumns as $col) {
+                        if (!in_array($col->Nom_Region, $regions->filter(function ($r) use ($type) {
+                            return $r->Code_Intervention === $type;
+                        })->map(function ($r) {
+                            return $r->Nom_Region;
+                        })->toArray())) {
+                            $rObj = new \stdClass();
+                            $rObj->Nom_Region = $col->Nom_Region;
+                            $rObj->Code_Intervention = $type;
+                            $rObj->total = 0;
+                            $columns[] = $rObj;
+                        }
+                    }
+                }
+            }
+            if ($column !== 'Date_Heure_Note_Semaine') {
+                if ($gpmtAppelPre) {
+                    $column = $column ?? 'Nom_Region';
+                    foreach ($gpmtAppelPre as $gpm) {
+                        foreach ($regionsColumns as $col) {
+                            if (!in_array($col->$column, $regions->filter(function ($r) use ($gpm, $column) {
+                                return $r->Gpmt_Appel_Pre === $gpm;
+                            })->map(function ($r) use ($column) {
+                                return $r->$column;
+                            })->toArray())) {
+                                $rObj = new \stdClass();
+                                $rObj->$column = $col->$column;
+                                $rObj->Gpmt_Appel_Pre = $gpm;
+                                $rObj->total = 0;
+                                $columns[] = $rObj;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if ($codeRdvInterventionConfirm || $codeRdvIntervention) {
+            $codeColumns = Stats::select('Code_Intervention')->distinct('Code_Intervention')
+                ->whereNotNull('Code_Intervention')
+                ->when($agenceCode, function ($query, $agenceCode) {
+                    return $query->where('Nom_Region', 'like', "%$agenceCode");
+                })
+                ->when($agentName, function ($query, $agentName) {
+                    return $query->where('Utilisateur', $agentName);
+                })->get();
+
+            $code = $codeRdvInterventionConfirm ? $codeRdvInterventionConfirm : $codeRdvIntervention;
+            if ($code) {
+                foreach ($code as $gr) {
+                    foreach ($codeColumns as $col) {
+                        if (!in_array($col->Code_Intervention, $regions->filter(function ($r) use ($gr) {
+                            return $r->Nom_Region === $gr;
+                        })->map(function ($r) {
+                            return $r->Code_Intervention;
+                        })->toArray())) {
+                            if ($col->Nom_Region !== '') {
+                                $rObj = new \stdClass();
+                                $rObj->Nom_Region = $col->Nom_Region;
+                                $rObj->Code_Intervention = $col->Code_Intervention;
+                                $rObj->total = 0;
+                                $columns[] = $rObj;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $columns;
+    }
+}
+
 if (!function_exists('sortWeeksDates')) {
     function sortWeeksDates($dates, $desc = false)
     {

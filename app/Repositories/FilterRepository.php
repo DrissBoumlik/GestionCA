@@ -12,14 +12,14 @@ use Illuminate\Support\Facades\Route;
 
 class FilterRepository
 {
-    public function GetDataRegionsByGrpCall(Request $request = null)
+    public function GetDataRegionsByGrpCall(Request $request, $filter = null)
     {
         $resultatAppel = $request->get('resultatAppel');
         $groupement = $request->get('groupement');
         $dates = $request->get('dates');
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
-        $radical_route = getRadicalRoute(Route::current());
+        $radical_route = $filter ?? getRadicalRoute(Route::current());
         $key_groupement = $request->get('key_groupement');
 //        $regions = \DB::table('stats')
 //            ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(Resultat_Appel) as total'))
@@ -196,14 +196,14 @@ class FilterRepository
         }
     }
 
-    public function GetDataRegionsCallState($column, Request $request)
+    public function GetDataRegionsCallState(Request $request, $column, $filter = null)
     {
         $gpmtAppelPre = $request->get('gpmtAppelPre');
         $dates = $request->get('dates');
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
         $route = getRoute(Route::current());
-        $radical_route = getRadicalRoute(Route::current());
+        $radical_route = $filter ?? getRadicalRoute(Route::current());
 //        $regions = \DB::table('stats')
 //            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'))
 //            ->where('Groupement', 'not like', 'Non Renseigné')
@@ -313,7 +313,7 @@ class FilterRepository
         }
 
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
-        $regions = $columns = $this->addRegionWithZero($request, $regions, $columns, $column);
+        $regions = $columns = addRegionWithZero($request, $regions, $columns, $column);
 
         if (!count($regions)) {
             $data = ['columns' => [], 'data' => []];
@@ -466,7 +466,7 @@ class FilterRepository
         }
     }
 
-    public function getDataClientsByCallState($callResult, Request $request)
+    public function getDataClientsByCallState(Request $request, $callResult, $filter = null)
     {
         $route = getRoute(Route::current());
         $dates = $request->get('dates');
@@ -474,7 +474,7 @@ class FilterRepository
         $agenceCode = $request->get('agence_code');
         $codeRdvInterventionConfirm = $request->get('codeRdvInterventionConfirm');
         $codeRdvIntervention = $request->get('codeRdvIntervention');
-        $radical_route = getRadicalRoute(Route::current());
+        $radical_route = $filter ?? getRadicalRoute(Route::current());
 
 //        $codes = \DB::table('stats')
 //            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(Nom_Region) as total'))
@@ -549,7 +549,7 @@ class FilterRepository
         $columns = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
 
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
-        $codes = $columns = $this->addRegionWithZero($request, $codes, $columns, null, 'Gpmt_Appel_Pre', $callResult);
+        $codes = $columns = addRegionWithZero($request, $codes, $columns, null, 'Gpmt_Appel_Pre', $callResult);
         if (!count($codes)) {
             $data = ['columns' => [], 'data' => []];
             return $data;

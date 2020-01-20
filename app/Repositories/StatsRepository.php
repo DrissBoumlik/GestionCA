@@ -138,165 +138,6 @@ class StatsRepository
         });
     }
 
-    public function addRegionWithZero(Request $request, $regions, $columns, $column = null)
-    {
-        $agenceCode = $request->get('agence_code');
-        $agentName = $request->get('agent_name');
-        //$resultatAppel = $request->get('resultatAppel');
-        $groupement = $request->get('groupement');
-        $nomRegion = $request->get('nomRegion');
-        $codeRdvInterventionConfirm = $request->get('codeRdvInterventionConfirm');
-        $codeRdvIntervention = $request->get('codeRdvIntervention');
-        $codeTypeIntervention = $request->get('codeTypeIntervention');
-        $codeIntervention = $request->get('codeIntervention');
-        $gpmtAppelPre = $request->get('gpmtAppelPre');
-
-        if ($nomRegion) {
-            $groupmentColumns = Stats::select('Groupement')->distinct('Groupement')
-                ->where('Groupement', 'not like', 'Non Renseigné')
-                ->when($agenceCode, function ($query, $agenceCode) {
-                    return $query->where('Nom_Region', 'like', "%$agenceCode");
-                })->when($agentName, function ($query, $agentName) {
-                    return $query->where('Utilisateur', $agentName);
-                })->get();
-            if ($nomRegion) {
-                foreach ($nomRegion as $gr) {
-                    foreach ($groupmentColumns as $col) {
-                        if (!in_array($col->Groupement, $regions->filter(function ($r) use ($gr) {
-                            return $r->Nom_Region === $gr;
-                        })->map(function ($r) {
-                            return $r->Groupement;
-                        })->toArray())) {
-                            if ($col->Groupement) {
-                                $rObj = new \stdClass();
-                                $rObj->Groupement = $col->Groupement;
-                                $rObj->Key_Groupement = $col->Key_Groupement;
-                                $rObj->Nom_Region = $gr;
-                                $rObj->total = 0;
-                                $columns[] = $rObj;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if ($groupement || $codeIntervention || $codeTypeIntervention || $gpmtAppelPre) {
-            $regionsColumns = Stats::select('Nom_Region')->distinct('Nom_Region')
-                ->where('Groupement', 'not like', 'Non Renseigné')
-                ->when($agenceCode, function ($query, $agenceCode) {
-                    return $query->where('Nom_Region', 'like', "%$agenceCode");
-                })
-                ->when($agentName, function ($query, $agentName) {
-                    return $query->where('Utilisateur', $agentName);
-                })->get();
-
-            if ($groupement) {
-                foreach ($groupement as $gr) {
-                    foreach ($regionsColumns as $col) {
-                        if (!in_array($col->Nom_Region, $regions->filter(function ($r) use ($gr) {
-                            return $r->Groupement === $gr;
-                        })->map(function ($r) {
-                            return $r->Nom_Region;
-                        })->toArray())) {
-                            $rObj = new \stdClass();
-                            $rObj->Nom_Region = $col->Nom_Region;
-                            $rObj->Key_Groupement = $col->Key_Groupement;
-                            $rObj->Groupement = $gr;
-                            $rObj->total = 0;
-                            $columns[] = $rObj;
-                        }
-                    }
-                }
-            }
-            if ($codeTypeIntervention) {
-                foreach ($codeTypeIntervention as $type) {
-                    foreach ($regionsColumns as $col) {
-                        if (!in_array($col->Nom_Region, $regions->filter(function ($r) use ($type) {
-                            return $r->Code_Type_Intervention === $type;
-                        })->map(function ($r) {
-                            return $r->Nom_Region;
-                        })->toArray())) {
-                            $rObj = new \stdClass();
-                            $rObj->Nom_Region = $col->Nom_Region;
-                            $rObj->Code_Type_Intervention = $type;
-                            $rObj->total = 0;
-                            $columns[] = $rObj;
-                        }
-                    }
-                }
-            }
-            if ($codeIntervention) {
-                foreach ($codeIntervention as $type) {
-                    foreach ($regionsColumns as $col) {
-                        if (!in_array($col->Nom_Region, $regions->filter(function ($r) use ($type) {
-                            return $r->Code_Intervention === $type;
-                        })->map(function ($r) {
-                            return $r->Nom_Region;
-                        })->toArray())) {
-                            $rObj = new \stdClass();
-                            $rObj->Nom_Region = $col->Nom_Region;
-                            $rObj->Code_Intervention = $type;
-                            $rObj->total = 0;
-                            $columns[] = $rObj;
-                        }
-                    }
-                }
-            }
-            if ($column !== 'Date_Heure_Note_Semaine') {
-                if ($gpmtAppelPre) {
-                    $column = $column ?? 'Nom_Region';
-                    foreach ($gpmtAppelPre as $gpm) {
-                        foreach ($regionsColumns as $col) {
-                            if (!in_array($col->$column, $regions->filter(function ($r) use ($gpm, $column) {
-                                return $r->Gpmt_Appel_Pre === $gpm;
-                            })->map(function ($r) use ($column) {
-                                return $r->$column;
-                            })->toArray())) {
-                                $rObj = new \stdClass();
-                                $rObj->$column = $col->$column;
-                                $rObj->Gpmt_Appel_Pre = $gpm;
-                                $rObj->total = 0;
-                                $columns[] = $rObj;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if ($codeRdvInterventionConfirm || $codeRdvIntervention) {
-            $codeColumns = Stats::select('Code_Intervention')->distinct('Code_Intervention')
-                ->whereNotNull('Code_Intervention')
-                ->when($agenceCode, function ($query, $agenceCode) {
-                    return $query->where('Nom_Region', 'like', "%$agenceCode");
-                })
-                ->when($agentName, function ($query, $agentName) {
-                    return $query->where('Utilisateur', $agentName);
-                })->get();
-
-            $code = $codeRdvInterventionConfirm ? $codeRdvInterventionConfirm : $codeRdvIntervention;
-            if ($code) {
-                foreach ($code as $gr) {
-                    foreach ($codeColumns as $col) {
-                        if (!in_array($col->Code_Intervention, $regions->filter(function ($r) use ($gr) {
-                            return $r->Nom_Region === $gr;
-                        })->map(function ($r) {
-                            return $r->Code_Intervention;
-                        })->toArray())) {
-                            if ($col->Nom_Region !== '') {
-                                $rObj = new \stdClass();
-                                $rObj->Nom_Region = $col->Nom_Region;
-                                $rObj->Code_Intervention = $col->Code_Intervention;
-                                $rObj->total = 0;
-                                $columns[] = $rObj;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return $columns;
-    }
 
     public function getDateNotes(Request $request)
     {
@@ -350,7 +191,7 @@ class StatsRepository
         return $dates->values();
     }
 
-    public function GetDataRegions($callResult, Request $request = null)
+    public function GetDataRegions(Request $request, $callResult)
     {
         $resultatAppel = $request->get('resultatAppel');
         $groupement = $request->get('groupement');
@@ -444,7 +285,7 @@ class StatsRepository
         $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
         $regions = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
 //        dd($regions); // STOP
-        $regions = $columns = $this->addRegionWithZero($request, $regions, $columns);
+        $regions = $columns = addRegionWithZero($request, $regions, $columns);
         // logger($regions);
         if (!count($regions)) {
             $data = ['columns' => [], 'data' => []];
@@ -548,7 +389,7 @@ class StatsRepository
         }
     }
 
-    public function GetDataRegionsByGrpCall(Request $request = null)
+    public function GetDataRegionsByGrpCall(Request $request, $filter = null)
     {
         $resultatAppel = $request->get('resultatAppel');
         $groupement = $request->get('groupement');
@@ -574,9 +415,8 @@ class StatsRepository
                 })
             ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('Nom_Region');
-
         $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
-        $key_groupement = clean($key_groupement);
+        $key_groupement = $key_groupement ? clean($key_groupement) : $filter;
         $regions = $regions->where('key_groupement', 'like', $key_groupement);
 //        $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
         // BUILDING THE USER FILTER
@@ -588,7 +428,6 @@ class StatsRepository
         }
 
         $keys = ($regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get())->groupBy(['Nom_Region'])->keys();
-
         if ($resultatAppel) {
             $resultatAppel = array_values($resultatAppel);
             $regions = $regions->whereIn('Resultat_Appel', $resultatAppel);
@@ -673,14 +512,16 @@ class StatsRepository
                 $regions_names[$index + 1] = new \stdClass();
                 $regions_names[$index + 1]->data = $key;
                 $regions_names[$index + 1]->name = $key;
+                $regions_names[$index + 1]->text = $key;
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->name = 'Résultats Appels Préalables (Clients Joignable)';
+            $first->name = 'Groupement';
             $first->data = 'Groupement';
+            $first->text = 'Résultats Appels Préalables (Clients Joignable)';
             $first->orderable = false;
             array_unshift($regions_names, $first);
 //            $detailCol = new \stdClass();
@@ -730,7 +571,7 @@ class StatsRepository
         }
     }
 
-    public function GetDataFolders($callResult, Request $request)
+    public function GetDataFolders(Request $request, $callResult)
     {
         $resultatAppel = $request->get('resultatAppel');
         $groupement = $request->get('groupement');
@@ -828,7 +669,7 @@ class StatsRepository
         $columns = $regions->groupBy('Nom_Region', $callResult)->get();
 
         $regions = $regions->groupBy('Nom_Region', $callResult)->get();
-        $regions = $columns = $this->addRegionWithZero($request, $regions, $columns);
+        $regions = $columns = addRegionWithZero($request, $regions, $columns);
         if (!count($regions)) {
             $data = ['columns' => [], 'data' => []];
             return $data;
@@ -932,7 +773,7 @@ class StatsRepository
         }
     }
 
-    public function GetDataRegionsCallState($column, Request $request)
+    public function GetDataRegionsCallState(Request $request, $column)
     {
         $gpmtAppelPre = $request->get('gpmtAppelPre');
         $dates = $request->get('dates');
@@ -1046,7 +887,7 @@ class StatsRepository
         }
 
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
-        $regions = $columns = $this->addRegionWithZero($request, $regions, $columns, $column);
+        $regions = $columns = addRegionWithZero($request, $regions, $columns, $column);
 
         if (!count($regions)) {
             $data = ['columns' => [], 'data' => []];
@@ -1199,7 +1040,7 @@ class StatsRepository
         }
     }
 
-    public function getDataNonValidatedFolders($intervCol, Request $request)
+    public function getDataNonValidatedFolders(Request $request, $intervCol)
     {
         $route = getRoute(Route::current());
 
@@ -1282,7 +1123,7 @@ class StatsRepository
 
 
         $regions = $regions->groupBy('Nom_Region', $intervCol)->get();
-        $regions = $columns = $this->addRegionWithZero($request, $regions, $columns);
+        $regions = $columns = addRegionWithZero($request, $regions, $columns);
 
         if (!count($regions)) {
             $data = ['columns' => [], 'data' => []];
@@ -1391,7 +1232,7 @@ class StatsRepository
 
             $total->$intervCol = 'Total Général';
             $total->total = round(array_sum($total->values)); //round(array_sum($total->values) / count($total->values), 2) . '%';
-
+            $total->values = collect($total->values)->values();
             $regions->push($total);
 
             $regions = $regions->values();
@@ -1400,7 +1241,7 @@ class StatsRepository
         }
     }
 
-    public function getDataClientsByCallState($callResult, Request $request)
+    public function getDataClientsByCallState(Request $request, $callResult)
     {
         $route = getRoute(Route::current());
         $dates = $request->get('dates');
@@ -1480,7 +1321,7 @@ class StatsRepository
         $columns = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
 
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
-        $codes = $columns = $this->addRegionWithZero($request, $codes, $columns, null, 'Gpmt_Appel_Pre', $callResult);
+        $codes = $columns = addRegionWithZero($request, $codes, $columns, null, 'Gpmt_Appel_Pre', $callResult);
         if (!count($codes)) {
             $data = ['columns' => [], 'data' => []];
             return $data;
@@ -1693,7 +1534,7 @@ class StatsRepository
         $columns = $results->groupBy('Groupement', 'Nom_Region')->get();
 
         $results = $results->groupBy('Groupement', 'Nom_Region')->get();
-        $results = $columns = $this->addRegionWithZero($request, $results, $columns);
+        $results = $columns = addRegionWithZero($request, $results, $columns);
 
         if (!count($results)) {
             $data = ['columns' => [], 'data' => []];
