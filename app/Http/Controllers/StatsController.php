@@ -112,6 +112,12 @@ class StatsController extends Controller
         return DataTables::of($data['data'])->toJson();
     }
 
+    public function getRegionsByGrpCallColumns(Request $request)
+    {
+        $data = $this->statsRepository->GetDataRegionsByGrpCall($request);
+        return $data;
+    }
+
     public function getRegionsByGrpCall(Request $request)
     {
         $data = $this->statsRepository->GetDataRegionsByGrpCall($request);

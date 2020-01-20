@@ -108,7 +108,8 @@ Route::group([
 
 //Route::get('/demo', 'DemoController@index');
 
-    Route::get('/regions/details/groupement', 'StatsController@getRegionsByGrpCall')->name('stateregdet'); // column = key_groupement value // // PERCENT
+    Route::get('/regions/details/groupement', 'StatsController@getRegionsByGrpCall'); // column = key_groupement value // // PERCENT
+    Route::get('/regions/details/groupement/columns', 'StatsController@getRegionsByGrpCallColumns'); // column = key_groupement value // // PERCENT
     Route::get('/regions/{callResult}', 'StatsController@getRegions'); // column = Resultat_Appel                                       // PERCENT
     Route::get('/regions/columns/{callResult}', 'StatsController@getRegionsColumn');
 

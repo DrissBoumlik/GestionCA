@@ -385,7 +385,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         treeElement: '#tree-view-1',
-        routeCol: 'regions/columns/Groupement',
+        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-pralables',
         routeData: 'regions/details/groupement?key_groupement=Appels-pralables',
         objChart: {
             element_chart: undefined,
