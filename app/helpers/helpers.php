@@ -46,6 +46,18 @@ if (!function_exists('getRoute')) {
     }
 }
 
+if (!function_exists('getRadicalRoute')) {
+    function getRadicalRoute($route)
+    {
+        $radicalRoute = explode('/', getRoute($route));
+        if(count($radicalRoute)) {
+            return $radicalRoute[0];
+        } else {
+            return null;
+        }
+    }
+}
+
 if (!function_exists('getPicture')) {
     function getPicture($user)
     {
