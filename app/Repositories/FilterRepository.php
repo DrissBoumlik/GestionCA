@@ -31,14 +31,14 @@ class FilterRepository
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Resultat_Appel not like "=%"
             and Nom_Region is not null
-            and Key_Groupement like '. $radical_route .'
+            and key_Groupement like "'. $radical_route .'"
             GROUP BY Id_Externe) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
             ->where('Resultat_Appel', 'not like', '=%')
-            ->where('Key_Groupement','like', $radical_route)
+            ->where('key_Groupement','like', 'Appels-pralables')
             ->whereNotNull('Nom_Region');
 
         $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
@@ -215,7 +215,7 @@ class FilterRepository
             where Groupement not like "Non Renseigné"
             and Gpmt_Appel_Pre not like "Hors Périmètre"
             and Nom_Region is not null
-            and Key_Groupement like '. $radical_route .'
+            and Key_Groupement like "'. $radical_route .'"
             GROUP BY Id_Externe) groupedst'),
                     function ($join) {
                         $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
@@ -484,7 +484,7 @@ class FilterRepository
             ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(Nom_Region) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
              where Nom_Region is not null
-             and Key_Groupement like '. $radical_route .'
+             and Key_Groupement like "'. $radical_route .'"
              GROUP BY Id_Externe) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
