@@ -128,13 +128,6 @@
                         <div class="card-body table-responsive">
                             <table id="statsCallsCloture"
                                    class="table table-bordered table-striped table-valign-middle capitalize">
-                                <thead>
-                                <tr>
-                                    @for($i = 0; $i < count($calls_folders); $i++)
-                                        <th>{{ $calls_folders[$i]->text }}</th>
-                                    @endfor
-                                </tr>
-                                </thead>
                             </table>
                         </div>
                         <!-- /.card-body -->
@@ -170,13 +163,6 @@
                         <div class="card-body table-responsive">
                             <table id="statsFoldersByType"
                                    class="table table-bordered table-striped table-valign-middle capitalize">
-                                <thead>
-                                <tr>
-                                    @for($i = 0; $i < count($regions_names_type); $i++)
-                                        <th>{{ $regions_names_type[$i]->text }}</th>
-                                    @endfor
-                                </tr>
-                                </thead>
                             </table>
                         </div>
                         <!-- /.card-body -->
@@ -211,13 +197,6 @@
                         <div class="card-body table-responsive">
                             <table id="statsFoldersByCode"
                                    class="table table-bordered table-striped table-valign-middle capitalize">
-                                <thead>
-                                <tr>
-                                    @for($i = 0; $i < count($regions_names_code); $i++)
-                                        <th>{{ $regions_names_code[$i]->text }}</th>
-                                    @endfor
-                                </tr>
-                                </thead>
                             </table>
                         </div>
                         <!-- /.card-body -->
