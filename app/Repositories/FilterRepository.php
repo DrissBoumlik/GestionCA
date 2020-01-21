@@ -42,7 +42,7 @@ class FilterRepository
             ->whereNotNull('Nom_Region');
 
         $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
-        $key_groupement = clean($key_groupement);
+        $key_groupement = $key_groupement ? clean($key_groupement) : $filter;
         $regions = $regions->where('key_groupement', 'like', $key_groupement);
 //        $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
         // BUILDING THE USER FILTER
@@ -139,14 +139,16 @@ class FilterRepository
                 $regions_names[$index + 1] = new \stdClass();
                 $regions_names[$index + 1]->data = $key;
                 $regions_names[$index + 1]->name = $key;
+                $regions_names[$index + 1]->text = $key;
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->name = 'Résultats Appels Préalables (Clients Joignable)';
+            $first->name = 'Groupement';
             $first->data = 'Groupement';
+            $first->text = 'Résultats Appels Préalables (Clients Joignable)';
             $first->orderable = false;
             array_unshift($regions_names, $first);
 //            $detailCol = new \stdClass();
@@ -191,7 +193,6 @@ class FilterRepository
                 return $_item;
             });
             $regions = $regions->values();
-
             return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
         }
     }
