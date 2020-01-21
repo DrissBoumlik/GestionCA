@@ -6,7 +6,7 @@ use App\Repositories\FilterRepository;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-class FiltreController extends Controller
+class FilterController extends Controller
 {
     private $filterRepository;
 

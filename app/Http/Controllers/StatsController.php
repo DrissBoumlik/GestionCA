@@ -62,23 +62,23 @@ class StatsController extends Controller
     {
         $agenceCode = $request->agence_code;
         $AgentName = $request->agent_name;
-        $dataRegionsCallResult = $this->statsRepository->GetDataRegions('Groupement', $request);
-        $dataRegionsCallResultDetails = $this->statsRepository->GetDataRegionsByGrpCall($request);
-        $dataFoldersCallResult = $this->statsRepository->GetDataFolders('Groupement', $request);
-
-        $dataRegionsCallStateByRegions = $this->statsRepository->GetDataRegionsCallState('Nom_Region', $request);
-        $dataRegionsCallStateByWeek = $this->statsRepository->GetDataRegionsCallState('Date_Heure_Note_Semaine', $request);
+        $dataRegionsCallResult = $this->statsRepository->GetDataRegions($request,'Groupement');
+//        $dataRegionsCallResultDetails = $this->statsRepository->GetDataRegionsByGrpCall($request);
+        $dataFoldersCallResult = $this->statsRepository->GetDataFolders($request, 'Groupement');
+//
+        $dataRegionsCallStateByRegions = $this->statsRepository->GetDataRegionsCallState($request,'Nom_Region');
+        $dataRegionsCallStateByWeek = $this->statsRepository->GetDataRegionsCallState($request,'Date_Heure_Note_Semaine');
 //        dd($dataRegionsCallStateByRegions, $dataRegionsCallStateByWeek);
-        $dataCallsPos = $this->statsRepository->getDataClientsByCallState('Joignable', $request);
-        $dataCallsNeg = $this->statsRepository->getDataClientsByCallState('Injoignable', $request);
-
-        $dataTypeInterv = $this->statsRepository->getDataNonValidatedFolders('Code_Type_Intervention', $request);
-        $dataCodeInterv = $this->statsRepository->getDataNonValidatedFolders('Code_Intervention', $request);
+        $dataCallsPos = $this->statsRepository->getDataClientsByCallState($request,'Joignable');
+        $dataCallsNeg = $this->statsRepository->getDataClientsByCallState($request,'Injoignable');
+//
+        $dataTypeInterv = $this->statsRepository->getDataNonValidatedFolders($request,'Code_Type_Intervention');
+        $dataCodeInterv = $this->statsRepository->getDataNonValidatedFolders($request,'Code_Intervention');
 
         $dataPerimeter = $this->statsRepository->getDataClientsByPerimeter($request);
         return [
             'calls_results' => $dataRegionsCallResult['columns'],
-            'calls_results_details' => $dataRegionsCallResultDetails['columns'],
+//            'calls_results_details' => $dataRegionsCallResultDetails['columns'],
             'calls_folders' => $dataFoldersCallResult['columns'],
 
             'calls_states_regions' => $dataRegionsCallStateByRegions['columns'],

@@ -131,14 +131,14 @@ Route::group([
 
 
 //    FILTERS
-    Route::get('/dashboard/{filter}', 'FiltreController@dashboard_filter');
+    Route::get('/dashboard/{filter}', 'FilterController@dashboard_filter');
 
     //"Appel Prealable " Filter
-    Route::get('appels-pralables/regions/details/groupement', 'FiltreController@getRegionsByGrpCall'); // column = key_groupement value // // PERCENT
-    Route::get('appels-pralables/regions/details/groupement/columns', 'FiltreController@getRegionsByGrpCallColumns'); // column = key_groupement value // // PERCENT
-    Route::get('appels-pralables/regionsCallState/{column}', 'FiltreController@getRegionsCallState'); // column = Nom_Region / Date_Heure_Note_Semaine   // SUM
-    Route::get('appels-pralables/regionsCallState/columns/{column}', 'FiltreController@getRegionsCallStateColumn');
-    Route::get('appels-pralables/clientsByCallState/{callResult}', 'FiltreController@getClientsByCallState'); // value = Injoignable / Joignable         // PERCENT
-    Route::get('appels-pralables/clientsByCallState/columns/{callResult}', 'FiltreController@getClientsByCallStateColumn');
+    Route::get('appels-pralables/regions/details/groupement', 'FilterController@getRegionsByGrpCall'); // column = key_groupement value // // PERCENT
+    Route::get('appels-pralables/regions/details/groupement/columns', 'FilterController@getRegionsByGrpCallColumns'); // column = key_groupement value // // PERCENT
+    Route::get('appels-pralables/regionsCallState/{column}', 'FilterController@getRegionsCallState'); // column = Nom_Region / Date_Heure_Note_Semaine   // SUM
+    Route::get('appels-pralables/regionsCallState/columns/{column}', 'FilterController@getRegionsCallStateColumn');
+    Route::get('appels-pralables/clientsByCallState/{callResult}', 'FilterController@getClientsByCallState'); // value = Injoignable / Joignable         // PERCENT
+    Route::get('appels-pralables/clientsByCallState/columns/{callResult}', 'FilterController@getClientsByCallStateColumn');
 
 });

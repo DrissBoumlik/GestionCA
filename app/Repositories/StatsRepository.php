@@ -416,7 +416,7 @@ class StatsRepository
             ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('Nom_Region');
         $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
-        $key_groupement = $key_groupement ? clean($key_groupement) : $filter;
+        $key_groupement = clean($key_groupement);
         $regions = $regions->where('key_groupement', 'like', $key_groupement);
 //        $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
         // BUILDING THE USER FILTER
