@@ -721,7 +721,10 @@ class StatsRepository
             $first->orderable = false;
             array_unshift($regions_names, $first);
             $last = new \stdClass();
-            $last->data = $last->name = $last->text = 'total';
+            $last->data =
+            $last->name =
+            $last->text =
+            $last->title = 'total';
             array_push($regions_names, $last);
 
 //            $regions_names[] = new \stdClass();
@@ -977,7 +980,10 @@ class StatsRepository
             $first->name = $first->data = 'Gpmt_Appel_Pre';
             $first->orderable = false;
             $last = new \stdClass();
-            $last->data = $last->name = $last->text = 'total';
+            $last->data =
+            $last->name =
+            $last->text =
+            $last->title = 'total';
             array_unshift($columns, $first);
             array_push($columns, $last);
 
@@ -1402,7 +1408,10 @@ class StatsRepository
             $first->name = $first->data = 'Nom_Region';
             $first->orderable = false;
             $last = new \stdClass();
-            $last->text = $last->data = $last->name = 'total';
+            $last->text =
+            $last->data =
+            $last->name =
+            $last->title = 'total';
             array_unshift($codes_names, $first);
             array_push($codes_names, $last);
 
@@ -1628,7 +1637,10 @@ class StatsRepository
             $first->name = $first->data = 'Nom_Region';
             $first->orderable = false;
             $last = new \stdClass();
-            $last->data = $last->name = $last->text = 'total';
+            $last->data =
+            $last->name =
+            $last->text =
+            $last->title = 'total';
             array_unshift($column_names, $first);
             array_push($column_names, $last);
 

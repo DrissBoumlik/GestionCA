@@ -31,14 +31,14 @@ class FilterRepository
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Resultat_Appel not like "=%"
             and Nom_Region is not null
-            and key_Groupement like "'. $radical_route .'"
+            and key_Groupement like "' . $radical_route . '"
             GROUP BY Id_Externe) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
             ->where('Resultat_Appel', 'not like', '=%')
-            ->where('key_Groupement','like', 'Appels-pralables')
+            ->where('key_Groupement', 'like', 'Appels-pralables')
             ->whereNotNull('Nom_Region');
 
         $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
@@ -140,6 +140,7 @@ class FilterRepository
                 $regions_names[$index + 1]->data = $key;
                 $regions_names[$index + 1]->name = $key;
                 $regions_names[$index + 1]->text = $key;
+                $regions_names[$index + 1]->title = $key;
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
@@ -149,6 +150,7 @@ class FilterRepository
             $first->name = 'Resultat_Appel';
             $first->data = 'Resultat_Appel';
             $first->text = 'Résultats Appels Préalables (Clients Joignable)';
+            $first->title = 'Résultats Appels Préalables (Clients Joignable)';
             $first->orderable = false;
             array_unshift($regions_names, $first);
 //            $detailCol = new \stdClass();
@@ -209,14 +211,14 @@ class FilterRepository
 //            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'))
 //            ->where('Groupement', 'not like', 'Non Renseigné')
 //            ->whereNotNull('Nom_Region');
-        if($column == 'Date_Heure_Note_Semaine') {
+        if ($column == 'Date_Heure_Note_Semaine') {
             $regions = \DB::table('stats as st')
                 ->select($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee', \DB::raw('count(Nom_Region) as total'))
                 ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Groupement not like "Non Renseigné"
             and Gpmt_Appel_Pre not like "Hors Périmètre"
             and Nom_Region is not null
-            and Key_Groupement like "'. $radical_route .'"
+            and Key_Groupement like "' . $radical_route . '"
             GROUP BY Id_Externe) groupedst'),
                     function ($join) {
                         $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
@@ -224,9 +226,9 @@ class FilterRepository
                     })
                 ->where('Groupement', 'not like', 'Non Renseigné')
                 ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
-                ->where('Key_Groupement','like', $radical_route)
+                ->where('Key_Groupement', 'like', $radical_route)
                 ->whereNotNull('Nom_Region');
-        } else  {
+        } else {
             $regions = \DB::table('stats as st')
                 ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(Nom_Region) as total'))
                 ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
@@ -242,8 +244,6 @@ class FilterRepository
                 ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
                 ->whereNotNull('Nom_Region');
         }
-
-
 
 
         if ($agentName) {
@@ -363,7 +363,10 @@ class FilterRepository
 //            $columns[0]->name = 'Gpmt_Appel_Pre';
             $keys->map(function ($key, $index) use (&$columns) {
                 $columns[$index + 1] = new \stdClass();
-                $columns[$index + 1]->data = $columns[$index + 1]->name = $columns[$index + 1]->text = $key;
+                $columns[$index + 1]->data =
+                $columns[$index + 1]->name =
+                $columns[$index + 1]->text =
+                $columns[$index + 1]->title = $key;
             });
 //            $columns = $columns->all();
             usort($columns, function ($item1, $item2) {
@@ -376,7 +379,7 @@ class FilterRepository
                     $date2 = explode('_', $item2->data);
                     $year1 = $date1[1];
                     $year2 = $date2[1];
-                    if($year1 != $year2) {
+                    if ($year1 != $year2) {
                         return ($year1 == $year2) ? 0 :
                             ($year1 < $year2) ? -1 : 1;
                     } else {
@@ -388,11 +391,15 @@ class FilterRepository
                 });
             }
             $first = new \stdClass();
+            $first->title = 'Résultats Appels Préalables';
             $first->text = 'Résultats Appels Préalables';
             $first->name = $first->data = 'Gpmt_Appel_Pre';
             $first->orderable = false;
             $last = new \stdClass();
-            $last->data = $last->name = $last->text = 'total';
+            $last->data =
+            $last->name =
+            $last->text =
+            $last->title = 'total';
             array_unshift($columns, $first);
             array_push($columns, $last);
 
@@ -416,8 +423,7 @@ class FilterRepository
                         $row->$column_name = $call->total . ' / ' . $call->$column_week . ' %';
                         $col_arr = array_diff($col_arr, [$column_name]);
                         $row->values[$column_name] = $call->total;
-                    }
-                    else {
+                    } else {
                         $column_name = $call->$column;
                         $col_arr = array_diff($col_arr, [$column_name]);
                         $row->values[$column_name] = $call->total;
@@ -485,13 +491,13 @@ class FilterRepository
             ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(Nom_Region) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
              where Nom_Region is not null
-             and Key_Groupement like "'. $radical_route .'"
+             and Key_Groupement like "' . $radical_route . '"
              GROUP BY Id_Externe) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
-            ->where('Key_Groupement','like', $radical_route)
+            ->where('Key_Groupement', 'like', $radical_route)
             ->whereNotNull('Nom_Region');
 
 //        $keys = $columns->groupBy(['Code_Intervention'])->keys();
@@ -595,7 +601,10 @@ class FilterRepository
 //        $codes_names[0]->name = 'Nom_Region';
             $keys->map(function ($key, $index) use (&$codes_names) {
                 $codes_names[$index + 1] = new \stdClass();
-                $codes_names[$index + 1]->text = $codes_names[$index + 1]->data = $codes_names[$index + 1]->name = $key;
+                $codes_names[$index + 1]->title =
+                $codes_names[$index + 1]->text =
+                $codes_names[$index + 1]->data =
+                $codes_names[$index + 1]->name = $key;
 //            $_value = new \stdClass();
 //            $_value->data = $key;
 //            $_value->name = $key;
@@ -608,11 +617,15 @@ class FilterRepository
             });
 
             $first = new \stdClass();
+            $first->title = 'Résultats Appels Préalables';
             $first->text = 'Résultats Appels Préalables';
             $first->name = $first->data = 'Nom_Region';
             $first->orderable = false;
             $last = new \stdClass();
-            $last->text = $last->data = $last->name = 'total';
+            $last->title =
+            $last->text =
+            $last->data =
+            $last->name = 'total';
             array_unshift($codes_names, $first);
             array_push($codes_names, $last);
 

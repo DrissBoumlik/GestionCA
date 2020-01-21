@@ -53,50 +53,8 @@ class StatsController extends Controller
 
     public function dashboard(Request $request)
     {
-        $columns = $this->getColumns($request, null);
-        return view('stats.dashboard')->with($columns);
+        return view('stats.dashboard');
     }
-
-    #region Get Columns
-    public function getColumns(Request $request)
-    {
-        $agenceCode = $request->agence_code;
-        $AgentName = $request->agent_name;
-        $dataRegionsCallResult = $this->statsRepository->GetDataRegions($request,'Groupement');
-//        $dataRegionsCallResultDetails = $this->statsRepository->GetDataRegionsByGrpCall($request);
-        $dataFoldersCallResult = $this->statsRepository->GetDataFolders($request, 'Groupement');
-//
-        $dataRegionsCallStateByRegions = $this->statsRepository->GetDataRegionsCallState($request,'Nom_Region');
-        $dataRegionsCallStateByWeek = $this->statsRepository->GetDataRegionsCallState($request,'Date_Heure_Note_Semaine');
-//        dd($dataRegionsCallStateByRegions, $dataRegionsCallStateByWeek);
-        $dataCallsPos = $this->statsRepository->getDataClientsByCallState($request,'Joignable');
-        $dataCallsNeg = $this->statsRepository->getDataClientsByCallState($request,'Injoignable');
-//
-        $dataTypeInterv = $this->statsRepository->getDataNonValidatedFolders($request,'Code_Type_Intervention');
-        $dataCodeInterv = $this->statsRepository->getDataNonValidatedFolders($request,'Code_Intervention');
-
-        $dataPerimeter = $this->statsRepository->getDataClientsByPerimeter($request);
-        return [
-            'calls_results' => $dataRegionsCallResult['columns'],
-//            'calls_results_details' => $dataRegionsCallResultDetails['columns'],
-            'calls_folders' => $dataFoldersCallResult['columns'],
-
-            'calls_states_regions' => $dataRegionsCallStateByRegions['columns'],
-            'calls_states_weeks' => $dataRegionsCallStateByWeek['columns'],
-
-            'regions_names_type' => $dataTypeInterv['columns'],
-            'regions_names_code' => $dataCodeInterv['columns'],
-
-            'calls_pos' => $dataCallsPos['columns'],
-            'calls_neg' => $dataCallsNeg['columns'],
-
-            'perimeters' => $dataPerimeter['columns'],
-            'agence' => $agenceCode,
-            'agent' => $AgentName
-        ];
-    }
-    #endregion
-
 
     public function getDates(Request $request)
     {
