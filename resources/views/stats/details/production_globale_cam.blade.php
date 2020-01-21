@@ -125,13 +125,6 @@
                         <div class="card-body table-responsive">
                             <table id="statsPerimeters"
                                    class="table table-bordered table-striped table-valign-middle capitalize">
-                                <thead>
-                                <tr>
-                                    @for($i = 0; $i < count($perimeters); $i++)
-                                        <th>{{ $perimeters[$i]->text }}</th>
-                                    @endfor
-                                </tr>
-                                </thead>
                             </table>
                         </div>
                         <!-- /.card-body -->
