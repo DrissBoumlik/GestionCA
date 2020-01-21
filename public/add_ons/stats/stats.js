@@ -341,14 +341,16 @@ $(function () {
             removeTotal: false,
             refreshMode: false,
             details: true,
-            removeTotalColumn: false
+            removeTotalColumn: false,
+            pagination: false
         });
         $('#refreshRegions').on('click', function () {
             getColumns(statsRegions, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
                 details: true,
-                removeTotalColumn: false
+                removeTotalColumn: false,
+                pagination: false
             });
         });
     }
@@ -370,13 +372,19 @@ $(function () {
     };
     if (elementExists(statsFolders)) {
         getColumns(statsFolders, filterData(), {
-            removeTotalColumn: true
+            removeTotalColumn: true,
+            removeTotal: true,
+            refreshMode: false,
+            details: false,
+            pagination: false
         });
         $('#refreshFolders').on('click', function () {
             getColumns(statsFolders, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
-                removeTotalColumn: true
+                removeTotalColumn: true,
+                details: false,
+                pagination: false
             });
         });
     }
@@ -400,12 +408,20 @@ $(function () {
         }
     };
     if (elementExists(callsStatesAgencies)) {
-        getColumns(callsStatesAgencies, filterData(), {removeTotalColumn: true, removeTotal: true});
+        getColumns(callsStatesAgencies, filterData(), {
+            removeTotalColumn: true,
+            removeTotal: true,
+            refreshMode: false,
+            details: false,
+            pagination: false
+        });
         $('#refreshCallStatesAgencies').on('click', function () {
             getColumns(callsStatesAgencies, filterData(), {
                 removeTotal: true,
                 refreshMode: true,
-                removeTotalColumn: true
+                removeTotalColumn: true,
+                details: false,
+                pagination: false
             });
         });
     }
@@ -428,12 +444,20 @@ $(function () {
         }
     };
     if (elementExists(callsStatesWeeks)) {
-        getColumns(callsStatesWeeks, filterData(), {removeTotalColumn: true, removeTotal: true});
+        getColumns(callsStatesWeeks, filterData(), {
+            removeTotalColumn: true,
+            removeTotal: true,
+            refreshMode: false,
+            details: false,
+            pagination: false
+        });
         $('#refreshCallStatesWeeks').on('click', function () {
             getColumns(callsStatesWeeks, filterData(), {
                 removeTotal: true,
                 refreshMode: true,
-                removeTotalColumn: true
+                removeTotalColumn: true,
+                details: false,
+                pagination: false
             });
         });
     }
@@ -460,14 +484,17 @@ $(function () {
         getColumns(statscallsPos, filterData(), {
             removeTotal: false,
             refreshMode: false,
-            removeTotalColumn: true
+            removeTotalColumn: true,
+            details: false,
+            pagination: false
         });
         $('#refreshCallResultPos').on('click', function () {
             getColumns(statscallsPos, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
                 details: false,
-                removeTotalColumn: true
+                removeTotalColumn: true,
+                pagination: false
             });
         });
     }
@@ -492,14 +519,17 @@ $(function () {
         getColumns(statscallsNeg, filterData(), {
             removeTotal: false,
             refreshMode: false,
-            removeTotalColumn: true
+            removeTotalColumn: true,
+            details: false,
+            pagination: false
         });
         $('#refreshCallResultNeg').on('click', function () {
             getColumns(statscallsNeg, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
                 details: false,
-                removeTotalColumn: true
+                removeTotalColumn: true,
+                pagination: false
             });
         });
     }
@@ -525,7 +555,13 @@ $(function () {
     if (elementExists(statsFoldersByType)) {
         getColumns(statsFoldersByType, filterData());
         $('#refreshFoldersByType').on('click', function () {
-            getColumns(statsFoldersByType, filterData(), {removeTotal: false, refreshMode: true});
+            getColumns(statsFoldersByType, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: false,
+                pagination: false
+            });
         });
     }
 
@@ -548,7 +584,13 @@ $(function () {
     if (elementExists(statsFoldersByCode)) {
         getColumns(statsFoldersByCode, filterData());
         $('#refreshFoldersByCode').on('click', function () {
-            getColumns(statsFoldersByCode, filterData(), {removeTotal: false, refreshMode: true});
+            getColumns(statsFoldersByCode, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: false,
+                pagination: false
+            });
         });
     }
     //</editor-fold>
@@ -571,12 +613,20 @@ $(function () {
         }
     };
     if (elementExists(statsPerimeters)) {
-        getColumns(statsPerimeters, filterData(), {removeTotalColumn: true, removeTotal: true});
+        getColumns(statsPerimeters, filterData(), {
+            removeTotalColumn: true,
+            removeTotal: true,
+            refreshMode: false,
+            details: false,
+            pagination: false
+        });
         $('#refreshPerimeters').on('click', function () {
             getColumns(statsPerimeters, filterData(), {
                 removeTotal: true,
                 refreshMode: true,
-                removeTotalColumn: true
+                removeTotalColumn: true,
+                details: false,
+                pagination: false
             });
         });
     }
@@ -590,6 +640,7 @@ $(function () {
         removeTotalColumn: false,
         pagination: false
     }) {
+        console.log(object.routeData, params);
         // if refreshmode is enabled then store the new filter in local storage
         if (params.refreshMode) {
             // localStorage.setItem(object.filterTreeElement, JSON.stringify(data));

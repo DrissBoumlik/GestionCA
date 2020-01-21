@@ -297,7 +297,7 @@ $(function () {
             agence_code
         };
     };
-    
+
     //<editor-fold desc="CALL PERIMETERS">
     let statsPerimeters = {
         element_dt: undefined,
@@ -315,10 +315,24 @@ $(function () {
             chartTitle: 'Production Globale CAM'
         }
     };
-    getColumns(statsPerimeters, filterData(), {removeTotalColumn: true, removeTotal: true});
-    $('#refreshPerimeters').on('click', function () {
-        getColumns(statsPerimeters, filterData(), {removeTotal: true, refreshMode: true, removeTotalColumn: true});
-    });
+    if (elementExists(statsPerimeters)) {
+        getColumns(statsPerimeters, filterData(), {
+            removeTotalColumn: true,
+            removeTotal: true,
+            refreshMode: false,
+            details: false,
+            pagination: false
+        });
+        $('#refreshPerimeters').on('click', function () {
+            getColumns(statsPerimeters, filterData(), {
+                removeTotal: true,
+                refreshMode: true,
+                removeTotalColumn: true,
+                details: false,
+                pagination: false
+            });
+        });
+    }
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS">
@@ -329,6 +343,7 @@ $(function () {
         removeTotalColumn: false,
         pagination: false
     }) {
+        console.log(object.routeData, params);
         // if refreshmode is enabled then store the new filter in local storage
         if (params.refreshMode) {
             // localStorage.setItem(object.filterTreeElement, JSON.stringify(data));
@@ -566,6 +581,18 @@ $(function () {
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS TOOLS">
+
+    function elementExists(object) {
+        if (object !== null && object !== undefined) {
+            if (object.element !== null && object.element !== undefined) {
+                return object.element.length;
+            } else {
+                return object.length;
+            }
+        }
+        return false;
+    }
+
     function dynamicColors(uniqueColors) {
         let color = {
             r: Math.floor(Math.random() * 255),
@@ -604,7 +631,8 @@ $(function () {
         row.child(objectChild.element).show();
         objectChild.element.after(canvasDom);
         // row.child(objectChild.element).show();
-        InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
+        getColumns(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
+        // InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
     }
 
     function destroyChild(row) {
@@ -627,7 +655,39 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
-        getColumns(statsPerimeters, filterData(), {removeTotal: true, refreshMode: true, removeTotalColumn: true});
+        getColumns(statsRegions, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: true,
+            removeTotalColumn: false
+        });
+        getColumns(statsFolders, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
+        getColumns(callsStatesAgencies, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
+        getColumns(callsStatesWeeks, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
+        getColumns(statscallsPos, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false
+        });
+        getColumns(statscallsNeg, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false
+        });
+        getColumns(statsFoldersByType, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsFoldersByCode, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsPerimeters, filterData(), {removeTotal: false, refreshMode: true});
     });
     //</editor-fold>
 

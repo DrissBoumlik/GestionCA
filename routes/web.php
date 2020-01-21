@@ -143,10 +143,10 @@ Route::group([
 
     // "Appels Gem" Filters
 
-    Route::get('Appels-GEM/regions/details/groupement', 'FilterController@getRegionsByGrpCall'); // column = key_groupement value // // PERCENT
-    Route::get('Appels-GEM/regions/details/groupement/columns', 'FilterController@getRegionsByGrpCallColumns'); // column = key_groupement value // // PERCENT
-    Route::get('Appels-GEM/regionsCallState/{column}', 'FilterController@getRegionsCallState'); // column = Nom_Region / Date_Heure_Note_Semaine   // SUM
-    Route::get('Appels-GEM/regionsCallState/columns/{column}', 'FilterController@getRegionsCallStateColumn');
+    Route::get('appels-gem/regions/details/groupement', 'FilterController@getRegionsByGrpCall'); // column = key_groupement value // // PERCENT
+    Route::get('appels-gem/regions/details/groupement/columns', 'FilterController@getRegionsByGrpCallColumns'); // column = key_groupement value // // PERCENT
+    Route::get('appels-gem/regionsCallState/{column}', 'FilterController@getRegionsCallState'); // column = Nom_Region / Date_Heure_Note_Semaine   // SUM
+    Route::get('appels-gem/regionsCallState/columns/{column}', 'FilterController@getRegionsCallStateColumn');
 
     // "production_globale_cam" Filters
 //    Route::get('production_globale_cam/clientsByPerimeter', 'StatsController@getClientsByPerimeter');                                                          // SUM
@@ -154,9 +154,11 @@ Route::group([
 
     // "clotureOt_TaitementBL" Filters
 
-    Route::get('Appels-clture/folders/{callResult}', 'FilterController@getFolders'); // column = Resultat_Appel                                       // SUM
-    Route::get('Appels-clture/folders/columns/{callResult}', 'FilterController@getFoldersColumn');
-    Route::get('Appels-clture/nonValidatedFolders/{column}', 'FilterController@getNonValidatedFolders'); // column = Code_Intervention / Code_Type_Intervention   // PERCENT
-    Route::get('Appels-clture/nonValidatedFolders/columns/{column}', 'FilterController@getNonValidatedFoldersColumn');
+    Route::get('appels-clture/regions/details/groupement', 'FilterController@getRegionsByGrpCall'); // column = key_groupement value // // PERCENT
+    Route::get('appels-clture/regions/details/groupement/columns', 'FilterController@getRegionsByGrpCallColumns'); // column = key_groupement value // // PERCENT
+    Route::get('appels-clture/folders/{callResult}', 'FilterController@getFolders'); // column = Resultat_Appel                                       // SUM
+    Route::get('appels-clture/folders/columns/{callResult}', 'FilterController@getFoldersColumn');
+    Route::get('appels-clture/nonValidatedFolders/{column}', 'FilterController@getNonValidatedFolders'); // column = Code_Intervention / Code_Type_Intervention   // PERCENT
+    Route::get('appels-clture/nonValidatedFolders/columns/{column}', 'FilterController@getNonValidatedFoldersColumn');
 
 });

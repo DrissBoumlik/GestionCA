@@ -39,347 +39,7 @@ $(function () {
     }
 
     const getData = {};
-    //<editor-fold desc="FUNCTIONS">
-    function getColumns(object, data = null, params = {
-        removeTotal: true,
-        refreshMode: false,
-        details: false,
-        removeTotalColumn: false,
-        pagination: false
-    }) {
-        // if refreshmode is enabled then store the new filter in local storage
-        if (params.refreshMode) {
-            // localStorage.setItem(object.filterTreeElement, JSON.stringify(data));
-            data = {...data, refreshMode: true}; //{dates: data, refreshMode: true};
-        }
-        // Search if filter stored in local storage
-        // let savedData = JSON.parse(localStorage.getItem(object.filterTreeElement));
-        // if (savedData !== null) {
-        //     data = savedData;
-        // }
 
-        $.ajax({
-            url: APP_URL + '/' + object.routeCol,
-            method: 'GET',
-            data: data,
-            success: function (response) {
-                let datesFilterValuesExist = true;
-                let filters = response.filter;
-                if (filters !== null && filters !== undefined) {
-                    datesFilterValues.push([object.treeElement, filters.date_filter]);
-                    // if (datesFilterList !== null && datesFilterList !== undefined && datesFilterList.length > 0) {
-                    //     datesFilterList[object.treeElement].values = datesFilterValues[object.treeElement];
-                    // }
-                    if (datesFilterListExist && datesFilterValuesExist) {
-                        assignFilter(datesFilterList, datesFilterValues);
-                    }
-                }
-                // console.log(filters.date_filter);
-                object.columns = [...response.columns];
-                object.data = [...response.data];
-                if (params.details) {
-                    $(object.element).find('thead tr').prepend('<th></th>');
-                }
-                if (data !== null && data !== undefined) {
-                    try {
-                        object.element_dt = InitDataTable(object, data, {
-                            removeTotal: params.removeTotal,
-                            removeTotalColumn: params.removeTotalColumn,
-                            details: params.details,
-                            pagination: params.pagination
-                        });
-                        if (params.details) {
-                            object.element.on('click', 'td.details-control', function () {
-                                const tr = $(this).closest('tr');
-                                const row = object.element_dt.row(tr);
-                                if (row.child.isShown()) {
-                                    // This row is already open - close it
-                                    destroyChild(row);
-                                    tr.removeClass('shown');
-                                } else {
-                                    // Open this row
-                                    data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
-                                    object.objDetail.element = 'details-' + $('tr').index(tr);
-                                    createChild(row, object.objDetail, data); // class is for background colour
-                                    tr.addClass('shown');
-                                }
-                            });
-                        }
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
-                // if (object.objChart !== null && object.objChart !== undefined) {
-                //     try {
-                //         InitChart(object.objChart, response.columns, response.data, removeTotal, removeTotalColumn);
-                //     } catch (error) {
-                //         console.log(error);
-                //     }
-                // }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR);
-                console.log(textStatus);
-                console.log(errorThrown);
-                console.log(APP_URL + '/' + object.routeCol);
-                console.log('===========');
-            }
-        });
-    }
-
-    function InitDataTable(object, data = null, params = {
-        removeTotal: true,
-        removeTotalColumn: false,
-        details: false,
-        pagination: false
-    }) {
-        if ($.fn.DataTable.isDataTable(object.element_dt)) {
-            object.element.off('click', 'td.details-control');
-            object.element_dt.destroy();
-        }
-        if (params.details) {
-            object.objDetail.columns = [...object.columns];
-            object.objDetail.columns = object.objDetail.columns.map(function (item, index) {
-                if (index === 0) {
-                    return {...item, data: 'Resultat_Appel', name: 'Resultat_Appel', title: 'Resultat Appel'};
-                }
-                return {...item, title: item.name};
-            });
-
-            object.columns.unshift({
-                className: 'details-control',
-                orderable: false,
-                data: null,
-                defaultContent: '',
-                width: '10%'
-            });
-        }
-        return object.element.DataTable({
-            language: frLang,
-            responsive: true,
-            info: false,
-            processing: true,
-            serverSide: true,
-            searching: false,
-            // ordering: false,
-            bPaginate: params.pagination,
-            ajax: {
-                url: APP_URL + '/' + object.routeData,
-                data: data,
-            },
-            columns: object.columns,
-            initComplete: function (settings, response) {
-                if (object.objChart !== null && object.objChart !== undefined) {
-                    try {
-                        InitChart(object.objChart, object.columns, response.data, {
-                            removeTotal: params.removeTotal,
-                            removeTotalColumn: params.removeTotalColumn,
-                            details: params.details
-                        });
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
-            }
-        });
-
-        // if (object.objChart !== null && object.objChart !== undefined) {
-        //     try {
-        //         InitChart(object.objChart, object.columns, object.data, removeTotal, removeTotalColumn);
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-        // }
-    }
-
-    function InitChart(objectChart, columns, data, params = {
-        removeTotal: true,
-        removeTotalColumn: false,
-        details: false
-    }) {
-        // console.log(objectChart.chartTitle);
-        // console.log(columns);
-        // console.log(data);
-        let labels = [...columns];
-        labels = labels.map((column) => {
-            return column.data;
-        });
-        if (params.details) {
-            labels.shift();
-        }
-        let column = labels.shift();
-        if (params.removeTotalColumn) {
-            labels.pop();
-        }
-        let datasets = [...data];
-        if (params.removeTotal) {
-            datasets.pop();
-        }
-        let uniqueColors = [];
-        datasets = datasets.map((item) => {
-            let regions = item.values.map((value) => {
-                return parseFloat(isNaN(value) ? value.replace('%', '') : value);
-            });
-            let _dataItem = {label: item[column], backgroundColor: dynamicColors(uniqueColors), data: regions};
-            // let _dataItem = {label: item[column], backgroundColor: dynamicColors(uniqueColors), data: regions, fill: false, borderColor: dynamicColors(uniqueColors)};
-            return _dataItem;
-        });
-
-        var ctx = document.getElementById(objectChart.element_id).getContext('2d');
-        let ChartData = {labels, datasets};
-        // if (objectChart.element_chart !== null && objectChart.element_chart !== undefined) {
-        //     objectChart.element_chart.destroy();
-        // }
-        objectChart.element_chart = new Chart(ctx, {
-            type: 'bar',
-            data: ChartData,
-            options: {
-                title: {
-                    display: true,
-                    text: objectChart.chartTitle
-                },
-                tooltips: {
-                    mode: 'index',
-                    intersect: true
-                },
-                responsive: true,
-                scales: {
-                    xAxes: [{
-                        stacked: false,
-                    }],
-                    yAxes: [{
-                        stacked: false
-                    }]
-                },
-                plugins: {
-                    // Change options for ALL labels of THIS CHART
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'end',
-                        font: {
-                            weight: 'bold',
-                            // size: 14
-                        },
-                        rotation: -45,
-                        display: function (context) {
-                            // if(context.dataset.data.length > 10) {
-                            //     return false;
-                            // }
-                            return context.dataset.data[context.dataIndex] !== 0;
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    function assignFilter(datesFilterList, datesFilterValues) {
-        for (let [key, value] of datesFilterValues) {
-            if (key in datesFilterList) {
-                datesFilterList[key].values = value;
-            }
-        }
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="FUNCTIONS TOOLS">
-    function dynamicColors(uniqueColors) {
-        let color = {
-            r: Math.floor(Math.random() * 255),
-            g: Math.floor(Math.random() * 255),
-            b: Math.floor(Math.random() * 255)
-        };
-        let exists = false;
-        do {
-            exists = uniqueColors.some(function (uniqueColor) {
-                return uniqueColor.r === color.r && uniqueColor.g === color.g && uniqueColor.b === color.b;
-            });
-        } while (exists);
-        uniqueColors.push(color);
-        return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
-    }
-
-    function feedBack(message, status) {
-        swal(
-            status.replace(/^\w/, c => c.toUpperCase()) + '!',
-            message,
-            status
-        )
-    }
-
-    function createChild(row, objectChild, data = null) {
-        // This is the table we'll convert into a DataTable
-        var tableDom = '<table id="' + objectChild.element + '" class="table-details table table-bordered table-valign-middle capitalize"/>';
-        var canvasDom = '<div class="col-12"><canvas id="' + objectChild.element + '-Chart"/></div>';
-        objectChild.objChart.element_id = objectChild.element + '-Chart';
-        objectChild.element = $(tableDom);
-
-        // ');
-
-        let createdChild = tableDom;
-        // Display it the child row
-        row.child(objectChild.element).show();
-        objectChild.element.after(canvasDom);
-        // row.child(objectChild.element).show();
-        InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
-    }
-
-    function destroyChild(row) {
-        var table = $("table", row.child());
-        table.detach();
-        table.DataTable().destroy();
-
-        // And then hide the row
-        row.child.hide();
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="GLOBAL FILTER">
-    $('#filterDashboard').on('change', function () {
-        let url = $(this).val();
-        if (url) {
-            window.location = APP_URL + '/dashboard/' + url;
-        }
-    });
-
-    $("#refreshAll").on('click', function () {
-        getColumns(statsRegions, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: true,
-            removeTotalColumn: false
-        });
-        getColumns(statsFolders, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(callsStatesAgencies, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(callsStatesWeeks, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(statscallsPos, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: false
-        });
-        getColumns(statscallsNeg,filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: false
-        });
-        getColumns(statsFoldersByType, filterData(), {removeTotal: false, refreshMode: true});
-        getColumns(statsFoldersByCode, filterData(), {removeTotal: false, refreshMode: true});
-        getColumns(statsPerimeters, filterData(), {removeTotal: false, refreshMode: true});
-    });
-    //</editor-fold>
 
     if (agence_code) {
         getData['agence_code'] = agence_code;
@@ -647,27 +307,33 @@ $(function () {
         columns: undefined,
         data: undefined,
         treeElement: '#tree-view-1',
-        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
-        routeData: 'regions/details/groupement?key_groupement=Appels-clture',
+        routeCol: 'appels-clture/regions/details/groupement/columns?key_groupement=Appels-clture',
+        routeData: 'appels-clture/regions/details/groupement?key_groupement=Appels-clture',
         objChart: {
             element_chart: undefined,
             element_id: 'statsCallsClotureChart',
             data: undefined,
-            chartTitle: '===='
+            chartTitle: 'Résultats Appels Préalables (Clients Joignable)'
         }
     };
-    getColumns(statsCallsCloture, filterData(), {
-        removeTotal: false,
-        refreshMode: false,
-        removeTotalColumn: false
-    });
-    $('#refreshCallsCloture').on('click', function () {
+    if (elementExists(statsCallsCloture)) {
         getColumns(statsCallsCloture, filterData(), {
             removeTotal: false,
-            refreshMode: true,
-            removeTotalColumn: false
+            refreshMode: false,
+            removeTotalColumn: false,
+            details: false,
+            pagination: false
         });
-    });
+        $('#refreshCallsCloture').on('click', function () {
+            getColumns(statsCallsCloture, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                removeTotalColumn: false,
+                details: false,
+                pagination: false
+            });
+        });
+    }
     //</editor-fold>
 
     //<editor-fold desc="FOLDERS CODE / TYPE">
@@ -678,8 +344,8 @@ $(function () {
         data: undefined,
         treeElement: '#tree-view-6',
         filterTreeElement: '#code-type-intervention-filter',
-        routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention',
-        routeData: 'nonValidatedFolders/Code_Type_Intervention',
+        routeCol: 'appels-clture/nonValidatedFolders/columns/Code_Type_Intervention',
+        routeData: 'appels-clture/nonValidatedFolders/Code_Type_Intervention',
         objChart: {
             element_chart: undefined,
             element_id: 'statsFoldersByTypeChart',
@@ -687,10 +353,18 @@ $(function () {
             chartTitle: 'Répartition des dossiers non validés par Code Type intervention'
         }
     };
-    getColumns(statsFoldersByType, filterData());
-    $('#refreshFoldersByType').on('click', function () {
-        getColumns(statsFoldersByType, filterData(), {refreshMode: true});
-    });
+    if (elementExists(statsFoldersByType)) {
+        getColumns(statsFoldersByType, filterData());
+        $('#refreshFoldersByType').on('click', function () {
+            getColumns(statsFoldersByType, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: false,
+                pagination: false
+            });
+        });
+    }
 
     let statsFoldersByCode = {
         element_dt: undefined,
@@ -699,8 +373,8 @@ $(function () {
         data: undefined,
         treeElement: '#tree-view-7',
         filterTreeElement: '#code-intervention-filter',
-        routeCol: 'nonValidatedFolders/columns/Code_Intervention',
-        routeData: 'nonValidatedFolders/Code_Intervention',
+        routeCol: 'appels-clture/nonValidatedFolders/columns/Code_Intervention',
+        routeData: 'appels-clture/nonValidatedFolders/Code_Intervention',
         objChart: {
             element_chart: undefined,
             element_id: 'statsFoldersByCodeChart',
@@ -708,10 +382,18 @@ $(function () {
             chartTitle: 'Répartition des dossiers non validés par code intervention'
         }
     };
-    getColumns(statsFoldersByCode, filterData());
-    $('#refreshFoldersByCode').on('click', function () {
-        getColumns(statsFoldersByCode, filterData(), {refreshMode: true});
-    });
+    if (elementExists(statsFoldersByCode)) {
+        getColumns(statsFoldersByCode, filterData());
+        $('#refreshFoldersByCode').on('click', function () {
+            getColumns(statsFoldersByCode, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: false,
+                pagination: false
+            });
+        });
+    }
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS">
@@ -1068,5 +750,4 @@ $(function () {
         getColumns(statsPerimeters, filterData(), {removeTotal: false, refreshMode: true});
     });
     //</editor-fold>
-
 });

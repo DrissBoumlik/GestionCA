@@ -300,89 +300,36 @@ $(function () {
 
 
     //<editor-fold desc="SELECTED FILTER">
-    let statsCallsPrealable = {
-        element_dt: undefined,
-        element: $('#statsCallsPrealable'),
-        columns: undefined,
-        data: undefined,
-        treeElement: '#tree-view-1',
-        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-pralables',
-        routeData: 'regions/details/groupement?key_groupement=Appels-pralables',
-        objChart: {
-            element_chart: undefined,
-            element_id: 'statsCallsPrealableChart',
-            data: undefined,
-            chartTitle: '===='
-        }
-    };
-    getColumns(statsCallsPrealable, filterData(), {
-        removeTotal: false,
-        refreshMode: false,
-        removeTotalColumn: false
-    });
-    $('#refreshCallsPrealable').on('click', function () {
-        getColumns(statsCallsPrealable, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            removeTotalColumn: false
-        });
-    });
-
     let statsCallsGem = {
         element_dt: undefined,
         element: $('#statsCallsGem'),
         columns: undefined,
         data: undefined,
         treeElement: '#tree-view-1',
-        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-GEM',
-        routeData: 'regions/details/groupement?key_groupement=Appels-GEM',
+        routeCol: 'appels-gem/regions/details/groupement/columns?key_groupement=Appels-GEM',
+        routeData: 'appels-gem/regions/details/groupement?key_groupement=Appels-GEM',
         objChart: {
             element_chart: undefined,
             element_id: 'statsCallsGemChart',
             data: undefined,
-            chartTitle: '===='
+            chartTitle: 'Résultats Appels Préalables (Clients Joignable)'
         }
     };
-    getColumns(statsCallsGem, filterData(), {
-        removeTotal: false,
-        refreshMode: false,
-        removeTotalColumn: false
-    });
-    $('#refreshCallsGem').on('click', function () {
+    if (elementExists(statsCallsGem)) {
         getColumns(statsCallsGem, filterData(), {
             removeTotal: false,
-            refreshMode: true,
+            refreshMode: false,
             removeTotalColumn: false
         });
-    });
+        $('#refreshCallsGem').on('click', function () {
+            getColumns(statsCallsGem, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                removeTotalColumn: false
+            });
+        });
+    }
 
-    let statsCallsCloture = {
-        element_dt: undefined,
-        element: $('#statsCallsCloture'),
-        columns: undefined,
-        data: undefined,
-        treeElement: '#tree-view-1',
-        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
-        routeData: 'regions/details/groupement?key_groupement=Appels-clture',
-        objChart: {
-            element_chart: undefined,
-            element_id: 'statsCallsClotureChart',
-            data: undefined,
-            chartTitle: '===='
-        }
-    };
-    getColumns(statsCallsCloture, filterData(), {
-        removeTotal: false,
-        refreshMode: false,
-        removeTotalColumn: false
-    });
-    $('#refreshCallsCloture').on('click', function () {
-        getColumns(statsCallsCloture, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            removeTotalColumn: false
-        });
-    });
     //</editor-fold>
 
     //<editor-fold desc="CALLS STATS AGENCIES / WEEKS">
@@ -393,8 +340,8 @@ $(function () {
         data: undefined,
         treeElement: '#tree-view-2',
         filterTreeElement: '#stats-call-regions-filter',
-        routeCol: 'regionsCallState/columns/Nom_Region',
-        routeData: 'regionsCallState/Nom_Region',
+        routeCol: 'appels-gem/regionsCallState/columns/Nom_Region',
+        routeData: 'appels-gem/regionsCallState/Nom_Region',
         objChart: {
             element_chart: undefined,
             element_id: 'callsStatesAgenciesChart',
@@ -402,14 +349,24 @@ $(function () {
             chartTitle: 'Résultats Appels Préalables par agence'
         }
     };
-    getColumns(callsStatesAgencies, filterData(), {removeTotalColumn: true, removeTotal: true});
-    $('#refreshCallStatesAgencies').on('click', function () {
+    if (elementExists(callsStatesAgencies)) {
         getColumns(callsStatesAgencies, filterData(), {
+            removeTotalColumn: true,
             removeTotal: true,
-            refreshMode: true,
-            removeTotalColumn: true
+            refreshMode: false,
+            details: false,
+            pagination: false
         });
-    });
+        $('#refreshCallStatesAgencies').on('click', function () {
+            getColumns(callsStatesAgencies, filterData(), {
+                removeTotal: true,
+                refreshMode: true,
+                removeTotalColumn: true,
+                details: false,
+                pagination: false
+            });
+        });
+    }
 
 
     let callsStatesWeeks = {
@@ -419,8 +376,8 @@ $(function () {
         data: undefined,
         treeElement: '#tree-view-3',
         filterTreeElement: '#stats-weeks-regions-filter',
-        routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine',
-        routeData: 'regionsCallState/Date_Heure_Note_Semaine',
+        routeCol: 'appels-gem/regionsCallState/columns/Date_Heure_Note_Semaine',
+        routeData: 'appels-gem/regionsCallState/Date_Heure_Note_Semaine',
         objChart: {
             element_chart: undefined,
             element_id: 'callsStatesWeeksChart',
@@ -428,14 +385,24 @@ $(function () {
             chartTitle: 'Résultats Appels Préalables par semaine'
         }
     };
-    getColumns(callsStatesWeeks, filterData(), {removeTotalColumn: true, removeTotal: true});
-    $('#refreshCallStatesWeeks').on('click', function () {
+    if (elementExists(callsStatesWeeks)) {
         getColumns(callsStatesWeeks, filterData(), {
+            removeTotalColumn: true,
             removeTotal: true,
-            refreshMode: true,
-            removeTotalColumn: true
+            refreshMode: false,
+            details: false,
+            pagination: false
         });
-    });
+        $('#refreshCallStatesWeeks').on('click', function () {
+            getColumns(callsStatesWeeks, filterData(), {
+                removeTotal: true,
+                refreshMode: true,
+                removeTotalColumn: true,
+                details: false,
+                pagination: false
+            });
+        });
+    }
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS">
@@ -446,6 +413,7 @@ $(function () {
         removeTotalColumn: false,
         pagination: false
     }) {
+        console.log(object.routeData, params);
         // if refreshmode is enabled then store the new filter in local storage
         if (params.refreshMode) {
             // localStorage.setItem(object.filterTreeElement, JSON.stringify(data));
@@ -683,6 +651,18 @@ $(function () {
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS TOOLS">
+
+    function elementExists(object) {
+        if (object !== null && object !== undefined) {
+            if (object.element !== null && object.element !== undefined) {
+                return object.element.length;
+            } else {
+                return object.length;
+            }
+        }
+        return false;
+    }
+
     function dynamicColors(uniqueColors) {
         let color = {
             r: Math.floor(Math.random() * 255),
@@ -721,7 +701,8 @@ $(function () {
         row.child(objectChild.element).show();
         objectChild.element.after(canvasDom);
         // row.child(objectChild.element).show();
-        InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
+        getColumns(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
+        // InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
     }
 
     function destroyChild(row) {
@@ -744,31 +725,39 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
-        getColumns(statsCallsPrealable, filterData(), {
+        getColumns(statsRegions, filterData(), {
             removeTotal: false,
             refreshMode: true,
+            details: true,
             removeTotalColumn: false
         });
-        getColumns(statsCallsGem, filterData(), {
+        getColumns(statsFolders, filterData(), {
             removeTotal: false,
-            refreshMode: true,
-            removeTotalColumn: false
-        });
-        getColumns(statsCallsCloture, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            removeTotalColumn: false
+            refreshMode: true
         });
         getColumns(callsStatesAgencies, filterData(), {
-            removeTotal: true,
-            refreshMode: true,
-            removeTotalColumn: true
+            removeTotal: false,
+            refreshMode: true
         });
         getColumns(callsStatesWeeks, filterData(), {
-            removeTotal: true,
-            refreshMode: true,
-            removeTotalColumn: true
+            removeTotal: false,
+            refreshMode: true
         });
+        getColumns(statscallsPos, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false
+        });
+        getColumns(statscallsNeg, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false
+        });
+        getColumns(statsFoldersByType, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsFoldersByCode, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsPerimeters, filterData(), {removeTotal: false, refreshMode: true});
     });
     //</editor-fold>
 

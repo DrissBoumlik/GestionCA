@@ -311,21 +311,23 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsCallsPrealableChart',
             data: undefined,
-            chartTitle: '===='
+            chartTitle: 'Résultats Appels Préalables (Clients Joignable)'
         }
     };
-    getColumns(statsCallsPrealable, filterData(), {
-        removeTotal: false,
-        refreshMode: false,
-        removeTotalColumn: false
-    });
-    $('#refreshCallsPrealable').on('click', function () {
+    if (elementExists(statsCallsPrealable)) {
         getColumns(statsCallsPrealable, filterData(), {
             removeTotal: false,
-            refreshMode: true,
+            refreshMode: false,
             removeTotalColumn: false
         });
-    });
+        $('#refreshCallsPrealable').on('click', function () {
+            getColumns(statsCallsPrealable, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                removeTotalColumn: false
+            });
+        });
+    }
     //</editor-fold>
 
     //<editor-fold desc="CALLS STATS AGENCIES / WEEKS">
@@ -345,14 +347,24 @@ $(function () {
             chartTitle: 'Résultats Appels Préalables par agence'
         }
     };
-    getColumns(callsStatesAgencies, filterData(), {removeTotalColumn: true, removeTotal: true});
-    $('#refreshCallStatesAgencies').on('click', function () {
+    if (elementExists(callsStatesAgencies)) {
         getColumns(callsStatesAgencies, filterData(), {
+            removeTotalColumn: true,
             removeTotal: true,
-            refreshMode: true,
-            removeTotalColumn: true
+            refreshMode: false,
+            details: false,
+            pagination: false
         });
-    });
+        $('#refreshCallStatesAgencies').on('click', function () {
+            getColumns(callsStatesAgencies, filterData(), {
+                removeTotal: true,
+                refreshMode: true,
+                removeTotalColumn: true,
+                details: false,
+                pagination: false
+            });
+        });
+    }
 
 
     let callsStatesWeeks = {
@@ -371,14 +383,24 @@ $(function () {
             chartTitle: 'Résultats Appels Préalables par semaine'
         }
     };
-    getColumns(callsStatesWeeks, filterData(), {removeTotalColumn: true, removeTotal: true});
-    $('#refreshCallStatesWeeks').on('click', function () {
+    if (elementExists(callsStatesWeeks)) {
         getColumns(callsStatesWeeks, filterData(), {
+            removeTotalColumn: true,
             removeTotal: true,
-            refreshMode: true,
-            removeTotalColumn: true
+            refreshMode: false,
+            details: false,
+            pagination: false
         });
-    });
+        $('#refreshCallStatesWeeks').on('click', function () {
+            getColumns(callsStatesWeeks, filterData(), {
+                removeTotal: true,
+                refreshMode: true,
+                removeTotalColumn: true,
+                details: false,
+                pagination: false
+            });
+        });
+    }
     //</editor-fold>
 
     //<editor-fold desc="CALL STATS Joignables / Injoignable">
@@ -398,15 +420,24 @@ $(function () {
             chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Joignables)'
         }
     };
-    getColumns(statscallsPos, filterData(), {removeTotal: false, refreshMode: false, removeTotalColumn: true});
-    $('#refreshCallResultPos').on('click', function () {
+    if (elementExists(statscallsPos)) {
         getColumns(statscallsPos, filterData(), {
             removeTotal: false,
-            refreshMode: true,
+            refreshMode: false,
+            removeTotalColumn: true,
             details: false,
-            removeTotalColumn: true
+            pagination: false
         });
-    });
+        $('#refreshCallResultPos').on('click', function () {
+            getColumns(statscallsPos, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: true,
+                pagination: false
+            });
+        });
+    }
 
     let statscallsNeg = {
         element_dt: undefined,
@@ -424,15 +455,24 @@ $(function () {
             chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Injoignables)'
         }
     };
-    getColumns(statscallsNeg, filterData(), {removeTotal: false, refreshMode: false, removeTotalColumn: true});
-    $('#refreshCallResultNeg').on('click', function () {
+    if (elementExists(statscallsNeg)) {
         getColumns(statscallsNeg, filterData(), {
             removeTotal: false,
-            refreshMode: true,
+            refreshMode: false,
+            removeTotalColumn: true,
             details: false,
-            removeTotalColumn: true
+            pagination: false
         });
-    });
+        $('#refreshCallResultNeg').on('click', function () {
+            getColumns(statscallsNeg, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: true,
+                pagination: false
+            });
+        });
+    }
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS">
@@ -443,6 +483,7 @@ $(function () {
         removeTotalColumn: false,
         pagination: false
     }) {
+        console.log(object.routeData, params);
         // if refreshmode is enabled then store the new filter in local storage
         if (params.refreshMode) {
             // localStorage.setItem(object.filterTreeElement, JSON.stringify(data));
@@ -680,6 +721,18 @@ $(function () {
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS TOOLS">
+
+    function elementExists(object) {
+        if (object !== null && object !== undefined) {
+            if (object.element !== null && object.element !== undefined) {
+                return object.element.length;
+            } else {
+                return object.length;
+            }
+        }
+        return false;
+    }
+
     function dynamicColors(uniqueColors) {
         let color = {
             r: Math.floor(Math.random() * 255),
@@ -718,7 +771,8 @@ $(function () {
         row.child(objectChild.element).show();
         objectChild.element.after(canvasDom);
         // row.child(objectChild.element).show();
-        InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
+        getColumns(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
+        // InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
     }
 
     function destroyChild(row) {
@@ -741,33 +795,39 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
-        getColumns(statsCallsPrealable, filterData(), {
+        getColumns(statsRegions, filterData(), {
             removeTotal: false,
             refreshMode: true,
+            details: true,
             removeTotalColumn: false
         });
+        getColumns(statsFolders, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
         getColumns(callsStatesAgencies, filterData(), {
-            removeTotal: true,
-            refreshMode: true,
-            removeTotalColumn: true
+            removeTotal: false,
+            refreshMode: true
         });
         getColumns(callsStatesWeeks, filterData(), {
-            removeTotal: true,
-            refreshMode: true,
-            removeTotalColumn: true
+            removeTotal: false,
+            refreshMode: true
         });
         getColumns(statscallsPos, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: true
+            removeTotalColumn: false
         });
         getColumns(statscallsNeg, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: true
+            removeTotalColumn: false
         });
+        getColumns(statsFoldersByType, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsFoldersByCode, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsPerimeters, filterData(), {removeTotal: false, refreshMode: true});
     });
     //</editor-fold>
 
