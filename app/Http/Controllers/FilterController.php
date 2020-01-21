@@ -48,6 +48,30 @@ class FilterController extends Controller
         return DataTables::of($data['data'])->toJson();
     }
 
+    public function getFoldersColumn(Request $request, $callResult)
+    {
+        $data = $this->filterRepository->GetDataFolders($request, $callResult);
+        return $data;
+    }
+
+    public function getFolders(Request $request, $callResult)
+    {
+        $data = $this->filterRepository->GetDataFolders($request, $callResult);
+        return DataTables::of($data['data'])->toJson();
+    }
+
+    public function getNonValidatedFoldersColumn(Request $request, $column)
+    {
+        $data = $this->filterRepository->getDataNonValidatedFolders($request, $column);
+        return $data;
+    }
+
+    public function getNonValidatedFolders(Request $request, $column)
+    {
+        $data = $this->filterRepository->getDataNonValidatedFolders($request, $column);
+        return DataTables::of($data['data'])->toJson();
+    }
+
     public function dashboard_filter(Request $request, $filter)
     {
         $viewName = $filter;
