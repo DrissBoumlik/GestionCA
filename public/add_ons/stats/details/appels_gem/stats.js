@@ -315,13 +315,13 @@ $(function () {
             chartTitle: '===='
         }
     };
-    getColumns(statsCallsPrealable, true, false, filterData(), {
+    getColumns(statsCallsPrealable, filterData(), {
         removeTotal: false,
         refreshMode: false,
         removeTotalColumn: false
     });
     $('#refreshCallsPrealable').on('click', function () {
-        getColumns(statsCallsPrealable, true, false, filterData(), {
+        getColumns(statsCallsPrealable, filterData(), {
             removeTotal: false,
             refreshMode: true,
             removeTotalColumn: false
@@ -343,13 +343,13 @@ $(function () {
             chartTitle: '===='
         }
     };
-    getColumns(statsCallsGem, true, false, filterData(), {
+    getColumns(statsCallsGem, filterData(), {
         removeTotal: false,
         refreshMode: false,
         removeTotalColumn: false
     });
     $('#refreshCallsGem').on('click', function () {
-        getColumns(statsCallsGem, true, false, filterData(), {
+        getColumns(statsCallsGem, filterData(), {
             removeTotal: false,
             refreshMode: true,
             removeTotalColumn: false
@@ -371,13 +371,13 @@ $(function () {
             chartTitle: '===='
         }
     };
-    getColumns(statsCallsCloture, true, false, filterData(), {
+    getColumns(statsCallsCloture, filterData(), {
         removeTotal: false,
         refreshMode: false,
         removeTotalColumn: false
     });
     $('#refreshCallsCloture').on('click', function () {
-        getColumns(statsCallsCloture, true, false, filterData(), {
+        getColumns(statsCallsCloture, filterData(), {
             removeTotal: false,
             refreshMode: true,
             removeTotalColumn: false
@@ -402,9 +402,9 @@ $(function () {
             chartTitle: 'Résultats Appels Préalables par agence'
         }
     };
-    getColumns(callsStatesAgencies, true, false, filterData(), {removeTotalColumn: true, removeTotal: true});
+    getColumns(callsStatesAgencies, filterData(), {removeTotalColumn: true, removeTotal: true});
     $('#refreshCallStatesAgencies').on('click', function () {
-        getColumns(callsStatesAgencies, true, false, filterData(), {
+        getColumns(callsStatesAgencies, filterData(), {
             removeTotal: true,
             refreshMode: true,
             removeTotalColumn: true
@@ -428,9 +428,9 @@ $(function () {
             chartTitle: 'Résultats Appels Préalables par semaine'
         }
     };
-    getColumns(callsStatesWeeks, true, false, filterData(), {removeTotalColumn: true, removeTotal: true});
+    getColumns(callsStatesWeeks, filterData(), {removeTotalColumn: true, removeTotal: true});
     $('#refreshCallStatesWeeks').on('click', function () {
-        getColumns(callsStatesWeeks, true, false, filterData(), {
+        getColumns(callsStatesWeeks, filterData(), {
             removeTotal: true,
             refreshMode: true,
             removeTotalColumn: true
@@ -439,11 +439,12 @@ $(function () {
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS">
-    function getColumns(object, callInitDT = true, pagination = false, data = null, params = {
+    function getColumns(object, data = null, params = {
         removeTotal: true,
         refreshMode: false,
         details: false,
-        removeTotalColumn: false
+        removeTotalColumn: false,
+        pagination: false
     }) {
         // if refreshmode is enabled then store the new filter in local storage
         if (params.refreshMode) {
@@ -478,34 +479,33 @@ $(function () {
                 if (params.details) {
                     $(object.element).find('thead tr').prepend('<th></th>');
                 }
-                if (callInitDT) {
-                    if (data !== null && data !== undefined) {
-                        try {
-                            object.element_dt = InitDataTable(object, pagination, data, {
-                                removeTotal: params.removeTotal,
-                                removeTotalColumn: params.removeTotalColumn,
-                                details: params.details
+                if (data !== null && data !== undefined) {
+                    try {
+                        object.element_dt = InitDataTable(object, data, {
+                            removeTotal: params.removeTotal,
+                            removeTotalColumn: params.removeTotalColumn,
+                            details: params.details,
+                            pagination: params.pagination
+                        });
+                        if (params.details) {
+                            object.element.on('click', 'td.details-control', function () {
+                                const tr = $(this).closest('tr');
+                                const row = object.element_dt.row(tr);
+                                if (row.child.isShown()) {
+                                    // This row is already open - close it
+                                    destroyChild(row);
+                                    tr.removeClass('shown');
+                                } else {
+                                    // Open this row
+                                    data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
+                                    object.objDetail.element = 'details-' + $('tr').index(tr);
+                                    createChild(row, object.objDetail, data); // class is for background colour
+                                    tr.addClass('shown');
+                                }
                             });
-                            if (params.details) {
-                                object.element.on('click', 'td.details-control', function () {
-                                    const tr = $(this).closest('tr');
-                                    const row = object.element_dt.row(tr);
-                                    if (row.child.isShown()) {
-                                        // This row is already open - close it
-                                        destroyChild(row);
-                                        tr.removeClass('shown');
-                                    } else {
-                                        // Open this row
-                                        data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
-                                        object.objDetail.element = 'details-' + $('tr').index(tr);
-                                        createChild(row, object.objDetail, data); // class is for background colour
-                                        tr.addClass('shown');
-                                    }
-                                });
-                            }
-                        } catch (error) {
-                            console.log(error);
                         }
+                    } catch (error) {
+                        console.log(error);
                     }
                 }
                 // if (object.objChart !== null && object.objChart !== undefined) {
@@ -526,10 +526,11 @@ $(function () {
         });
     }
 
-    function InitDataTable(object, pagination = false, data = null, params = {
+    function InitDataTable(object, data = null, params = {
         removeTotal: true,
         removeTotalColumn: false,
-        details: false
+        details: false,
+        pagination: false
     }) {
         if ($.fn.DataTable.isDataTable(object.element_dt)) {
             object.element.off('click', 'td.details-control');
@@ -560,7 +561,7 @@ $(function () {
             serverSide: true,
             searching: false,
             // ordering: false,
-            bPaginate: pagination,
+            bPaginate: params.pagination,
             ajax: {
                 url: APP_URL + '/' + object.routeData,
                 data: data,
@@ -720,7 +721,7 @@ $(function () {
         row.child(objectChild.element).show();
         objectChild.element.after(canvasDom);
         // row.child(objectChild.element).show();
-        InitDataTable(objectChild, false, data, {removeTotal: false, removeTotalColumn: false, details: false});
+        InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
     }
 
     function destroyChild(row) {
@@ -731,6 +732,7 @@ $(function () {
         // And then hide the row
         row.child.hide();
     }
+
     //</editor-fold>
 
     //<editor-fold desc="GLOBAL FILTER">
@@ -742,39 +744,31 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
-        getColumns(statsRegions, true, true, filterData(), {
+        getColumns(statsCallsPrealable, filterData(), {
             removeTotal: false,
             refreshMode: true,
-            details: true,
             removeTotalColumn: false
         });
-        getColumns(statsFolders, true, true, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(callsStatesAgencies, true, false, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(callsStatesWeeks, true, false, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(statscallsPos, true, false, filterData(), {
+        getColumns(statsCallsGem, filterData(), {
             removeTotal: false,
             refreshMode: true,
-            details: false,
             removeTotalColumn: false
         });
-        getColumns(statscallsNeg, true, false, filterData(), {
+        getColumns(statsCallsCloture, filterData(), {
             removeTotal: false,
             refreshMode: true,
-            details: false,
             removeTotalColumn: false
         });
-        getColumns(statsFoldersByType, true, false, filterData(), {removeTotal: false, refreshMode: true});
-        getColumns(statsFoldersByCode, true, false, filterData(), {removeTotal: false, refreshMode: true});
-        getColumns(statsPerimeters, true, false, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(callsStatesAgencies, filterData(), {
+            removeTotal: true,
+            refreshMode: true,
+            removeTotalColumn: true
+        });
+        getColumns(callsStatesWeeks, filterData(), {
+            removeTotal: true,
+            refreshMode: true,
+            removeTotalColumn: true
+        });
     });
     //</editor-fold>
 
