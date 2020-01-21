@@ -235,6 +235,7 @@ class FilterRepository
             where Groupement not like "Non Renseigné"
             and Gpmt_Appel_Pre not like "Hors Périmètre"
             and Nom_Region is not null
+            and Key_Groupement like "' . $radical_route . '"
             GROUP BY Id_Externe) groupedst'),
                     function ($join) {
                         $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
@@ -242,8 +243,10 @@ class FilterRepository
                     })
                 ->where('Groupement', 'not like', 'Non Renseigné')
                 ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
+                ->where('Key_Groupement', 'like', $radical_route)
                 ->whereNotNull('Nom_Region');
         }
+
 
 
         if ($agentName) {
