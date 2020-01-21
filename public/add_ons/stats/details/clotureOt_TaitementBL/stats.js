@@ -524,7 +524,7 @@ $(function () {
                 url: APP_URL + '/' + object.routeData,
                 data: data,
             },
-            columns: object.columns,
+            columns: object.columns.length ? object.columns : [{title: 'Résultats'}],
             initComplete: function (settings, response) {
                 if (object.objChart !== null && object.objChart !== undefined) {
                     try {
