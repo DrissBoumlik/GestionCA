@@ -319,6 +319,7 @@ $(function () {
             element_dt: undefined,
             element: undefined,
             columns: undefined,
+            routeCol: 'regions/details/groupement/columns',
             routeData: 'regions/details/groupement',
             objChart: {
                 element_chart: undefined,
@@ -335,21 +336,22 @@ $(function () {
         //     columns: undefined,
         // }]
     };
-    getColumns(statsRegions, filterData(), {
-        removeTotal: false,
-        refreshMode: false,
-        details: true,
-        removeTotalColumn: false
-    });
-    $('#refreshRegions').on('click', function () {
+    if (elementExists(statsRegions)) {
         getColumns(statsRegions, filterData(), {
             removeTotal: false,
-            refreshMode: true,
+            refreshMode: false,
             details: true,
             removeTotalColumn: false
         });
-    });
-
+        $('#refreshRegions').on('click', function () {
+            getColumns(statsRegions, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: true,
+                removeTotalColumn: false
+            });
+        });
+    }
     let statsFolders = {
         element_dt: undefined,
         element: $('#statsFolders'),
@@ -366,102 +368,18 @@ $(function () {
             chartTitle: 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement'
         }
     };
-    getColumns(statsFolders, filterData(), {
-        removeTotalColumn: true
-    });
-    $('#refreshFolders').on('click', function () {
+    if (elementExists(statsFolders)) {
         getColumns(statsFolders, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
             removeTotalColumn: true
         });
-    });
-    //</editor-fold>
-
-    //<editor-fold desc="SELECTED FILTER">
-    let statsCallsPrealable = {
-        element_dt: undefined,
-        element: $('#statsCallsPrealable'),
-        columns: undefined,
-        data: undefined,
-        treeElement: '#tree-view-1',
-        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-pralables',
-        routeData: 'regions/details/groupement?key_groupement=Appels-pralables',
-        objChart: {
-            element_chart: undefined,
-            element_id: 'statsCallsPrealableChart',
-            data: undefined,
-            chartTitle: '===='
-        }
-    };
-    getColumns(statsCallsPrealable, filterData(), {
-        removeTotal: false,
-        refreshMode: false,
-        removeTotalColumn: false
-    });
-    $('#refreshCallsPrealable').on('click', function () {
-        getColumns(statsCallsPrealable, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            removeTotalColumn: false
+        $('#refreshFolders').on('click', function () {
+            getColumns(statsFolders, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                removeTotalColumn: true
+            });
         });
-    });
-
-    let statsCallsGem = {
-        element_dt: undefined,
-        element: $('#statsCallsGem'),
-        columns: undefined,
-        data: undefined,
-        treeElement: '#tree-view-1',
-        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-GEM',
-        routeData: 'regions/details/groupement?key_groupement=Appels-GEM',
-        objChart: {
-            element_chart: undefined,
-            element_id: 'statsCallsGemChart',
-            data: undefined,
-            chartTitle: '===='
-        }
-    };
-    getColumns(statsCallsGem, filterData(), {
-        removeTotal: false,
-        refreshMode: false,
-        removeTotalColumn: false
-    });
-    $('#refreshCallsGem').on('click', function () {
-        getColumns(statsCallsGem, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            removeTotalColumn: false
-        });
-    });
-
-    let statsCallsCloture = {
-        element_dt: undefined,
-        element: $('#statsCallsCloture'),
-        columns: undefined,
-        data: undefined,
-        treeElement: '#tree-view-1',
-        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
-        routeData: 'regions/details/groupement?key_groupement=Appels-clture',
-        objChart: {
-            element_chart: undefined,
-            element_id: 'statsCallsClotureChart',
-            data: undefined,
-            chartTitle: '===='
-        }
-    };
-    getColumns(statsCallsCloture, filterData(), {
-        removeTotal: false,
-        refreshMode: false,
-        removeTotalColumn: false
-    });
-    $('#refreshCallsCloture').on('click', function () {
-        getColumns(statsCallsCloture, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            removeTotalColumn: false
-        });
-    });
+    }
     //</editor-fold>
 
     //<editor-fold desc="CALLS STATS AGENCIES / WEEKS">
@@ -481,14 +399,16 @@ $(function () {
             chartTitle: 'Résultats Appels Préalables par agence'
         }
     };
-    getColumns(callsStatesAgencies, filterData(), {removeTotalColumn: true, removeTotal: true});
-    $('#refreshCallStatesAgencies').on('click', function () {
-        getColumns(callsStatesAgencies, filterData(), {
-            removeTotal: true,
-            refreshMode: true,
-            removeTotalColumn: true
+    if (elementExists(callsStatesAgencies)) {
+        getColumns(callsStatesAgencies, filterData(), {removeTotalColumn: true, removeTotal: true});
+        $('#refreshCallStatesAgencies').on('click', function () {
+            getColumns(callsStatesAgencies, filterData(), {
+                removeTotal: true,
+                refreshMode: true,
+                removeTotalColumn: true
+            });
         });
-    });
+    }
 
 
     let callsStatesWeeks = {
@@ -507,14 +427,16 @@ $(function () {
             chartTitle: 'Résultats Appels Préalables par semaine'
         }
     };
-    getColumns(callsStatesWeeks, filterData(), {removeTotalColumn: true, removeTotal: true});
-    $('#refreshCallStatesWeeks').on('click', function () {
-        getColumns(callsStatesWeeks, filterData(), {
-            removeTotal: true,
-            refreshMode: true,
-            removeTotalColumn: true
+    if (elementExists(callsStatesWeeks)) {
+        getColumns(callsStatesWeeks, filterData(), {removeTotalColumn: true, removeTotal: true});
+        $('#refreshCallStatesWeeks').on('click', function () {
+            getColumns(callsStatesWeeks, filterData(), {
+                removeTotal: true,
+                refreshMode: true,
+                removeTotalColumn: true
+            });
         });
-    });
+    }
     //</editor-fold>
 
     //<editor-fold desc="CALL STATS Joignables / Injoignable">
@@ -534,19 +456,21 @@ $(function () {
             chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Joignables)'
         }
     };
-    getColumns(statscallsPos, filterData(), {
-        removeTotal: false,
-        refreshMode: false,
-        removeTotalColumn: true
-    });
-    $('#refreshCallResultPos').on('click', function () {
+    if (elementExists(statscallsPos)) {
         getColumns(statscallsPos, filterData(), {
             removeTotal: false,
-            refreshMode: true,
-            details: false,
+            refreshMode: false,
             removeTotalColumn: true
         });
-    });
+        $('#refreshCallResultPos').on('click', function () {
+            getColumns(statscallsPos, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: true
+            });
+        });
+    }
 
     let statscallsNeg = {
         element_dt: undefined,
@@ -564,19 +488,21 @@ $(function () {
             chartTitle: 'Code Interventions liés aux RDV Confirmés (Clients Injoignables)'
         }
     };
-    getColumns(statscallsNeg, filterData(), {
-        removeTotal: false,
-        refreshMode: false,
-        removeTotalColumn: true
-    });
-    $('#refreshCallResultNeg').on('click', function () {
+    if (elementExists(statscallsNeg)) {
         getColumns(statscallsNeg, filterData(), {
             removeTotal: false,
-            refreshMode: true,
-            details: false,
+            refreshMode: false,
             removeTotalColumn: true
         });
-    });
+        $('#refreshCallResultNeg').on('click', function () {
+            getColumns(statscallsNeg, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: true
+            });
+        });
+    }
     //</editor-fold>
 
     //<editor-fold desc="FOLDERS CODE / TYPE">
@@ -596,10 +522,12 @@ $(function () {
             chartTitle: 'Répartition des dossiers non validés par Code Type intervention'
         }
     };
-    getColumns(statsFoldersByType, filterData());
-    $('#refreshFoldersByType').on('click', function () {
-        getColumns(statsFoldersByType, filterData(), {removeTotal: false, refreshMode: true});
-    });
+    if (elementExists(statsFoldersByType)) {
+        getColumns(statsFoldersByType, filterData());
+        $('#refreshFoldersByType').on('click', function () {
+            getColumns(statsFoldersByType, filterData(), {removeTotal: false, refreshMode: true});
+        });
+    }
 
     let statsFoldersByCode = {
         element_dt: undefined,
@@ -617,10 +545,12 @@ $(function () {
             chartTitle: 'Répartition des dossiers non validés par code intervention'
         }
     };
-    getColumns(statsFoldersByCode, filterData());
-    $('#refreshFoldersByCode').on('click', function () {
-        getColumns(statsFoldersByCode, filterData(), {removeTotal: false, refreshMode: true});
-    });
+    if (elementExists(statsFoldersByCode)) {
+        getColumns(statsFoldersByCode, filterData());
+        $('#refreshFoldersByCode').on('click', function () {
+            getColumns(statsFoldersByCode, filterData(), {removeTotal: false, refreshMode: true});
+        });
+    }
     //</editor-fold>
 
     //<editor-fold desc="CALL PERIMETERS">
@@ -640,14 +570,16 @@ $(function () {
             chartTitle: 'Production Globale CAM'
         }
     };
-    getColumns(statsPerimeters, filterData(), {removeTotalColumn: true, removeTotal: true});
-    $('#refreshPerimeters').on('click', function () {
-        getColumns(statsPerimeters, filterData(), {
-            removeTotal: true,
-            refreshMode: true,
-            removeTotalColumn: true
+    if (elementExists(statsPerimeters)) {
+        getColumns(statsPerimeters, filterData(), {removeTotalColumn: true, removeTotal: true});
+        $('#refreshPerimeters').on('click', function () {
+            getColumns(statsPerimeters, filterData(), {
+                removeTotal: true,
+                refreshMode: true,
+                removeTotalColumn: true
+            });
         });
-    });
+    }
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS">
@@ -895,6 +827,18 @@ $(function () {
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS TOOLS">
+
+    function elementExists(object) {
+        if (object !== null && object !== undefined) {
+            if (object.element !== null && object.element !== undefined) {
+                return object.element.length;
+            } else {
+                return object.length;
+            }
+        }
+        return false;
+    }
+
     function dynamicColors(uniqueColors) {
         let color = {
             r: Math.floor(Math.random() * 255),
@@ -933,7 +877,8 @@ $(function () {
         row.child(objectChild.element).show();
         objectChild.element.after(canvasDom);
         // row.child(objectChild.element).show();
-        InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
+        getColumns(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
+        // InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
     }
 
     function destroyChild(row) {
@@ -980,7 +925,7 @@ $(function () {
             details: false,
             removeTotalColumn: false
         });
-        getColumns(statscallsNeg,filterData(), {
+        getColumns(statscallsNeg, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,

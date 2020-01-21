@@ -328,13 +328,17 @@ class StatsRepository
             $regions_names = [];
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->data = $regions_names[$index + 1]->name = $regions_names[$index + 1]->text = $key;
+                $regions_names[$index + 1]->data =
+                $regions_names[$index + 1]->name =
+                $regions_names[$index + 1]->text =
+                $regions_names[$index + 1]->title = $key;
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
+            $first->title = 'Résultats Appels Préalables (Clients Joignable)';
             $first->text = 'Résultats Appels Préalables (Clients Joignable)';
             $first->name = $first->data = $callResult;
             array_unshift($regions_names, $first);
@@ -389,7 +393,7 @@ class StatsRepository
         }
     }
 
-    public function GetDataRegionsByGrpCall(Request $request, $filter = null)
+    public function GetDataRegionsByGrpCall(Request $request)
     {
         $resultatAppel = $request->get('resultatAppel');
         $groupement = $request->get('groupement');
@@ -513,15 +517,17 @@ class StatsRepository
                 $regions_names[$index + 1]->data = $key;
                 $regions_names[$index + 1]->name = $key;
                 $regions_names[$index + 1]->text = $key;
+                $regions_names[$index + 1]->title = $key;
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->name = 'Groupement';
-            $first->data = 'Groupement';
+            $first->name = 'Resultat_Appel';
+            $first->data = 'Resultat_Appel';
             $first->text = 'Résultats Appels Préalables (Clients Joignable)';
+            $first->title = 'Résultats Appels Préalables (Clients Joignable)';
             $first->orderable = false;
             array_unshift($regions_names, $first);
 //            $detailCol = new \stdClass();
@@ -697,7 +703,10 @@ class StatsRepository
 //            $regions_names[0]->name = $callResult;
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->data = $regions_names[$index + 1]->name = $regions_names[$index + 1]->text = $key;
+                $regions_names[$index + 1]->data =
+                $regions_names[$index + 1]->name =
+                $regions_names[$index + 1]->text =
+                $regions_names[$index + 1]->title = $key;
             });
 
             usort($regions_names, function ($item1, $item2) {
@@ -708,6 +717,7 @@ class StatsRepository
             $first->name = $callResult;
             $first->data = $callResult;
             $first->text = 'Type Traitement';
+            $first->title = 'Type Traitement';
             $first->orderable = false;
             array_unshift($regions_names, $first);
             $last = new \stdClass();
@@ -784,7 +794,7 @@ class StatsRepository
 //            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(*) as total'))
 //            ->where('Groupement', 'not like', 'Non Renseigné')
 //            ->whereNotNull('Nom_Region');
-        if($column == 'Date_Heure_Note_Semaine') {
+        if ($column == 'Date_Heure_Note_Semaine') {
             $regions = \DB::table('stats as st')
                 ->select($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee', \DB::raw('count(Nom_Region) as total'))
                 ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
@@ -799,7 +809,7 @@ class StatsRepository
                 ->where('Groupement', 'not like', 'Non Renseigné')
                 ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
                 ->whereNotNull('Nom_Region');
-        } else  {
+        } else {
             $regions = \DB::table('stats as st')
                 ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(Nom_Region) as total'))
                 ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
@@ -815,8 +825,6 @@ class StatsRepository
                 ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
                 ->whereNotNull('Nom_Region');
         }
-
-
 
 
         if ($agentName) {
@@ -936,7 +944,10 @@ class StatsRepository
 //            $columns[0]->name = 'Gpmt_Appel_Pre';
             $keys->map(function ($key, $index) use (&$columns) {
                 $columns[$index + 1] = new \stdClass();
-                $columns[$index + 1]->data = $columns[$index + 1]->name = $columns[$index + 1]->text = $key;
+                $columns[$index + 1]->data =
+                $columns[$index + 1]->name =
+                $columns[$index + 1]->text =
+                $columns[$index + 1]->title = $key;
             });
 //            $columns = $columns->all();
             usort($columns, function ($item1, $item2) {
@@ -949,7 +960,7 @@ class StatsRepository
                     $date2 = explode('_', $item2->data);
                     $year1 = $date1[1];
                     $year2 = $date2[1];
-                    if($year1 != $year2) {
+                    if ($year1 != $year2) {
                         return ($year1 == $year2) ? 0 :
                             ($year1 < $year2) ? -1 : 1;
                     } else {
@@ -961,6 +972,7 @@ class StatsRepository
                 });
             }
             $first = new \stdClass();
+            $first->title = 'Résultats Appels Préalables';
             $first->text = 'Résultats Appels Préalables';
             $first->name = $first->data = 'Gpmt_Appel_Pre';
             $first->orderable = false;
@@ -989,8 +1001,7 @@ class StatsRepository
                         $row->$column_name = $call->total . ' / ' . $call->$column_week . ' %';
                         $col_arr = array_diff($col_arr, [$column_name]);
                         $row->values[$column_name] = $call->total;
-                    }
-                    else {
+                    } else {
                         $column_name = $call->$column;
                         $col_arr = array_diff($col_arr, [$column_name]);
                         $row->values[$column_name] = $call->total;
@@ -1167,13 +1178,17 @@ class StatsRepository
 //            $regions_names[0]->name = $intervCol;
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->text = $regions_names[$index + 1]->data = $regions_names[$index + 1]->name = $key;
+                $regions_names[$index + 1]->text =
+                $regions_names[$index + 1]->data =
+                $regions_names[$index + 1]->name =
+                $regions_names[$index + 1]->title = $key;
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
+            $first->title = $intervCol == 'Code_Intervention' ? 'Code Intervention' : 'Type Intervention';
             $first->text = $intervCol == 'Code_Intervention' ? 'Code Intervention' : 'Type Intervention';
             $first->name = $first->data = $intervCol;
             $first->orderable = false;
@@ -1366,7 +1381,10 @@ class StatsRepository
 //        $codes_names[0]->name = 'Nom_Region';
             $keys->map(function ($key, $index) use (&$codes_names) {
                 $codes_names[$index + 1] = new \stdClass();
-                $codes_names[$index + 1]->text = $codes_names[$index + 1]->data = $codes_names[$index + 1]->name = $key;
+                $codes_names[$index + 1]->text =
+                $codes_names[$index + 1]->data =
+                $codes_names[$index + 1]->name =
+                $codes_names[$index + 1]->title = $key;
 //            $_value = new \stdClass();
 //            $_value->data = $key;
 //            $_value->name = $key;
@@ -1379,6 +1397,7 @@ class StatsRepository
             });
 
             $first = new \stdClass();
+            $first->title = 'Résultats Appels Préalables';
             $first->text = 'Résultats Appels Préalables';
             $first->name = $first->data = 'Nom_Region';
             $first->orderable = false;
@@ -1588,7 +1607,10 @@ class StatsRepository
 //        $codes_names[0]->name = 'Nom_Region';
             $keys->map(function ($key, $index) use (&$column_names) {
                 $column_names[$index + 1] = new \stdClass();
-                $column_names[$index + 1]->text = $column_names[$index + 1]->data = $column_names[$index + 1]->name = $key;
+                $column_names[$index + 1]->text =
+                $column_names[$index + 1]->data =
+                $column_names[$index + 1]->name =
+                $column_names[$index + 1]->title = $key;
 //            $_value = new \stdClass();
 //            $_value->data = $key;
 //            $_value->name = $key;
@@ -1601,6 +1623,7 @@ class StatsRepository
             });
 
             $first = new \stdClass();
+            $first->title = 'Région';
             $first->text = 'Région';
             $first->name = $first->data = 'Nom_Region';
             $first->orderable = false;

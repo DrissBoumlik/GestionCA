@@ -146,8 +146,8 @@ class FilterRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->name = 'Groupement';
-            $first->data = 'Groupement';
+            $first->name = 'Resultat_Appel';
+            $first->data = 'Resultat_Appel';
             $first->text = 'Résultats Appels Préalables (Clients Joignable)';
             $first->orderable = false;
             array_unshift($regions_names, $first);
