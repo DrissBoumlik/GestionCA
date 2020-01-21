@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('page-title')
-    Appels Préalables
+    Appels GEM
 @endsection
 
 @section('css_after')
@@ -125,13 +125,6 @@
                         <div class="card-body table-responsive">
                             <table id="statsCallsGem"
                                    class="table table-bordered table-striped table-valign-middle capitalize">
-                                <thead>
-                                <tr>
-                                    @for($i = 0; $i < count($calls_results_details); $i++)
-                                        <th>{{ $calls_results_details[$i]->text }}</th>
-                                    @endfor
-                                </tr>
-                                </thead>
                             </table>
                         </div>
                         <!-- /.card-body -->
@@ -167,13 +160,6 @@
                         <div class="card-body table-responsive">
                             <table id="callsStatesAgencies"
                                    class="table table-bordered table-striped table-valign-middle capitalize">
-                                <thead>
-                                <tr>
-                                    @for($i = 0; $i < count($calls_states_regions); $i++)
-                                        <th>{{ $calls_states_regions[$i]->text }}</th>
-                                    @endfor
-                                </tr>
-                                </thead>
                             </table>
                         </div>
                         <!-- /.card-body -->
@@ -206,13 +192,6 @@
                         <div class="card-body table-responsive">
                             <table id="callsStatesWeeks"
                                    class="table table-bordered table-striped table-valign-middle capitalize">
-                                <thead>
-                                <tr>
-                                    @for($i = 0; $i < count($calls_states_weeks); $i++)
-                                        <th>{{ $calls_states_weeks[$i]->text }}</th>
-                                    @endfor
-                                </tr>
-                                </thead>
                             </table>
                         </div>
                         <!-- /.card-body -->
