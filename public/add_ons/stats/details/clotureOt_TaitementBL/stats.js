@@ -715,11 +715,12 @@ $(function () {
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS">
-    function getColumns(object, callInitDT = true, pagination = false, data = null, params = {
+    function getColumns(object, data = null, params = {
         removeTotal: true,
         refreshMode: false,
         details: false,
-        removeTotalColumn: false
+        removeTotalColumn: false,
+        pagination: false
     }) {
         // if refreshmode is enabled then store the new filter in local storage
         if (params.refreshMode) {
@@ -754,34 +755,33 @@ $(function () {
                 if (params.details) {
                     $(object.element).find('thead tr').prepend('<th></th>');
                 }
-                if (callInitDT) {
-                    if (data !== null && data !== undefined) {
-                        try {
-                            object.element_dt = InitDataTable(object, pagination, data, {
-                                removeTotal: params.removeTotal,
-                                removeTotalColumn: params.removeTotalColumn,
-                                details: params.details
+                if (data !== null && data !== undefined) {
+                    try {
+                        object.element_dt = InitDataTable(object, data, {
+                            removeTotal: params.removeTotal,
+                            removeTotalColumn: params.removeTotalColumn,
+                            details: params.details,
+                            pagination: params.pagination
+                        });
+                        if (params.details) {
+                            object.element.on('click', 'td.details-control', function () {
+                                const tr = $(this).closest('tr');
+                                const row = object.element_dt.row(tr);
+                                if (row.child.isShown()) {
+                                    // This row is already open - close it
+                                    destroyChild(row);
+                                    tr.removeClass('shown');
+                                } else {
+                                    // Open this row
+                                    data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
+                                    object.objDetail.element = 'details-' + $('tr').index(tr);
+                                    createChild(row, object.objDetail, data); // class is for background colour
+                                    tr.addClass('shown');
+                                }
                             });
-                            if (params.details) {
-                                object.element.on('click', 'td.details-control', function () {
-                                    const tr = $(this).closest('tr');
-                                    const row = object.element_dt.row(tr);
-                                    if (row.child.isShown()) {
-                                        // This row is already open - close it
-                                        destroyChild(row);
-                                        tr.removeClass('shown');
-                                    } else {
-                                        // Open this row
-                                        data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
-                                        object.objDetail.element = 'details-' + $('tr').index(tr);
-                                        createChild(row, object.objDetail, data); // class is for background colour
-                                        tr.addClass('shown');
-                                    }
-                                });
-                            }
-                        } catch (error) {
-                            console.log(error);
                         }
+                    } catch (error) {
+                        console.log(error);
                     }
                 }
                 // if (object.objChart !== null && object.objChart !== undefined) {
@@ -802,10 +802,11 @@ $(function () {
         });
     }
 
-    function InitDataTable(object, pagination = false, data = null, params = {
+    function InitDataTable(object, data = null, params = {
         removeTotal: true,
         removeTotalColumn: false,
-        details: false
+        details: false,
+        pagination: false
     }) {
         if ($.fn.DataTable.isDataTable(object.element_dt)) {
             object.element.off('click', 'td.details-control');
@@ -836,7 +837,7 @@ $(function () {
             serverSide: true,
             searching: false,
             // ordering: false,
-            bPaginate: pagination,
+            bPaginate: params.pagination,
             ajax: {
                 url: APP_URL + '/' + object.routeData,
                 data: data,
@@ -958,6 +959,18 @@ $(function () {
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS TOOLS">
+
+    function elementExists(object) {
+        if (object !== null && object !== undefined) {
+            if (object.element !== null && object.element !== undefined) {
+                return object.element.length;
+            } else {
+                return object.length;
+            }
+        }
+        return false;
+    }
+
     function dynamicColors(uniqueColors) {
         let color = {
             r: Math.floor(Math.random() * 255),
@@ -996,7 +1009,8 @@ $(function () {
         row.child(objectChild.element).show();
         objectChild.element.after(canvasDom);
         // row.child(objectChild.element).show();
-        InitDataTable(objectChild, false, data, {removeTotal: false, removeTotalColumn: false, details: false});
+        getColumns(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
+        // InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
     }
 
     function destroyChild(row) {
@@ -1007,6 +1021,7 @@ $(function () {
         // And then hide the row
         row.child.hide();
     }
+
     //</editor-fold>
 
     //<editor-fold desc="GLOBAL FILTER">
@@ -1018,13 +1033,39 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
-        getColumns(statsCallsCloture, filterData(), {
+        getColumns(statsRegions, filterData(), {
             removeTotal: false,
             refreshMode: true,
+            details: true,
             removeTotalColumn: false
         });
-        getColumns(statsFoldersByType, filterData(), {refreshMode: true});
-        getColumns(statsFoldersByCode, filterData(), {refreshMode: true});
+        getColumns(statsFolders, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
+        getColumns(callsStatesAgencies, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
+        getColumns(callsStatesWeeks, filterData(), {
+            removeTotal: false,
+            refreshMode: true
+        });
+        getColumns(statscallsPos, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false
+        });
+        getColumns(statscallsNeg, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false
+        });
+        getColumns(statsFoldersByType, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsFoldersByCode, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsPerimeters, filterData(), {removeTotal: false, refreshMode: true});
     });
     //</editor-fold>
 
