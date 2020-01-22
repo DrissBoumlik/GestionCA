@@ -411,8 +411,10 @@ class StatsRepository
             ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(Resultat_Appel) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Resultat_Appel not like "=%"
-            and Nom_Region is not null
-            GROUP BY Id_Externe) groupedst'),
+            and Nom_Region is not null '.
+            ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+            ' GROUP BY Id_Externe) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
@@ -599,10 +601,10 @@ class StatsRepository
              where Groupement not like "=%"
              and  Groupement not like "Non Renseigné"
              and  Groupement not like "Appels post"
-             and  Nom_Region is not null '.
-            ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
-            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
-            ' GROUP BY Id_Externe) groupedst'),
+             and  Nom_Region is not null ' .
+                ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+                ' GROUP BY Id_Externe) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
@@ -807,9 +809,9 @@ class StatsRepository
             and Groupement like "Appels préalables" 
             and Gpmt_Appel_Pre not like "Hors Périmètre" 
             and Nom_Region is not null ' .
-            ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
-            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
-            ' GROUP BY Id_Externe) groupedst'),
+                    ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+                    ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+                    ' GROUP BY Id_Externe) groupedst'),
                     function ($join) {
                         $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                         $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
@@ -826,9 +828,9 @@ class StatsRepository
             and Groupement like "Appels préalables" 
             and Gpmt_Appel_Pre not like "Hors Périmètre" 
             and Nom_Region is not null ' .
-            ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
-            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
-            ' GROUP BY Id_Externe) groupedst'),
+                    ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+                    ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+                    ' GROUP BY Id_Externe) groupedst'),
                     function ($join) {
                         $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                         $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
@@ -1086,8 +1088,10 @@ class StatsRepository
             ->select('Nom_Region', $intervCol, \DB::raw('count(Nom_Region) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
             where Nom_Region is not null 
-            and Groupement like "Appels clôture" 
-            GROUP BY Id_Externe) groupedst'),
+            and Groupement like "Appels clôture" ' .
+                ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+                ' GROUP BY Id_Externe) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
@@ -1291,8 +1295,10 @@ class StatsRepository
         $codes = \DB::table('stats as st')
             ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(Nom_Region) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
-             where Nom_Region is not null
-             GROUP BY Id_Externe) groupedst'),
+             where Nom_Region is not null ' .
+                ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+                ' GROUP BY Id_Externe) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
@@ -1499,12 +1505,12 @@ class StatsRepository
 
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
-        $results = \DB::table('stats')
-            ->select('Groupement', 'Nom_Region', \DB::raw('count(*) as total'))
-            ->whereNotNull('Groupement')
-            ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'not like', 'Appels post')
-            ->whereNotNull('Nom_Region');
+//        $results = \DB::table('stats')
+//            ->select('Groupement', 'Nom_Region', \DB::raw('count(*) as total'))
+//            ->whereNotNull('Groupement')
+//            ->where('Groupement', 'not like', 'Non Renseigné')
+//            ->where('Groupement', 'not like', 'Appels post')
+//            ->whereNotNull('Nom_Region');
 
         $results = \DB::table('stats as st')
             ->select('Groupement', 'Nom_Region', \DB::raw('count(Nom_Region) as total'))
@@ -1513,9 +1519,10 @@ class StatsRepository
              where Groupement is not null
              and Groupement not like "Non Renseigné"
              and Groupement not like "Appels post"
-             and Nom_Region is not null
-             
-             GROUP BY Id_Externe) groupedst'),
+             and Nom_Region is not null '.
+                ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+                ' GROUP BY Id_Externe) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
