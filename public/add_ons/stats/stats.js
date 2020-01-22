@@ -313,7 +313,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsRegionsChart',
             data: undefined,
-            chartTitle: 'Résultats Appels (Clients Joints)'
+            chartTitle: 'Résultats Appels'
         },
         objDetail: {
             element_dt: undefined,
@@ -325,7 +325,7 @@ $(function () {
                 element_chart: undefined,
                 element_id: 'statsRegionsChart',
                 data: undefined,
-                chartTitle: 'Résultats Appels (Clients Joints)'
+                chartTitle: 'Résultats Appels'
             },
         }
         // children: {
@@ -367,7 +367,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsFoldersChart',
             data: undefined,
-            chartTitle: 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement'
+            chartTitle: 'Répartition des dossiers traités par périmètre'
         }
     };
     if (elementExists(statsFolders)) {
@@ -760,7 +760,7 @@ $(function () {
                 url: APP_URL + '/' + object.routeData,
                 data: data,
             },
-            columns: object.columns.length ? object.columns : [{title: 'Résultats'}],
+            columns: object.data.length ? object.columns : [{title: 'Résultats'}],
             initComplete: function (settings, response) {
                 if (object.objChart !== null && object.objChart !== undefined) {
                     try {

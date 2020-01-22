@@ -165,7 +165,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title d-inline-block">Résultats Appels (Clients Joints)</h3>
+                            <h3 class="card-title d-inline-block">Résultats Appels</h3>
                             <hr>
                             <form action="getRegionsByDates" method="POST">
                                 @csrf

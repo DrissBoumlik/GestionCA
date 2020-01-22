@@ -53,7 +53,10 @@ class StatsController extends Controller
 
     public function dashboard(Request $request)
     {
-        return view('stats.dashboard');
+        $agenceCode = $request->agence_code;
+        $AgentName = $request->agent_name;
+        $data = ['agence' => $agenceCode, 'agent' => $AgentName];
+        return view('stats.dashboard')->with($data);
     }
 
     public function getDates(Request $request)

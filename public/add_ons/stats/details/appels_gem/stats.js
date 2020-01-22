@@ -312,7 +312,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsCallsGemChart',
             data: undefined,
-            chartTitle: 'Résultats Appels Préalables (Clients Joignable)'
+            chartTitle: 'Résultats Appels Préalables'
         }
     };
     if (elementExists(statsCallsGem)) {

@@ -313,7 +313,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsCallsClotureChart',
             data: undefined,
-            chartTitle: 'Résultats Appels Préalables (Clients Joignable)'
+            chartTitle: 'Résultats Appels Préalables'
         }
     };
     if (elementExists(statsCallsCloture)) {

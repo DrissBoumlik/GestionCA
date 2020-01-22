@@ -149,8 +149,8 @@ class FilterRepository
             $first = new \stdClass();
             $first->name = 'Resultat_Appel';
             $first->data = 'Resultat_Appel';
-            $first->text = 'Résultats Appels Préalables (Clients Joignable)';
-            $first->title = 'Résultats Appels Préalables (Clients Joignable)';
+            $first->text = 'Résultats Appels Préalables';
+            $first->title = 'Résultats Appels Préalables';
             $first->orderable = false;
             array_unshift($regions_names, $first);
 //            $detailCol = new \stdClass();
