@@ -406,17 +406,23 @@ $(function () {
         routeData: 'appels-clture/Cloturetech',
         objChart: {
             element_chart: undefined,
-            element_id: 'statsColturetech',
+            element_id: 'statsColturetechChart',
             data: undefined,
-            chartTitle: 'Répartition des dossiers non validés par code intervention'
+            chartTitle: 'ALL DATE SOLDE'
         }
     };
     if (elementExists(statsColturetech)) {
-        getColumns(statsColturetech, filterData());
+        getColumns(statsColturetech, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
         $('#refreshColturetech').on('click', function () {
             getColumns(statsColturetech, filterData(), {
                 removeTotal: false,
-                refreshMode: true,
+                refreshMode: false,
                 details: false,
                 removeTotalColumn: false,
                 pagination: false

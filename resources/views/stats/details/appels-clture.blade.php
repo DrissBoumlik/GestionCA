@@ -238,7 +238,7 @@
                 </div>
                 <!-- /.col -->
                 <div class="col-12">
-                    <canvas id="statsColturetech" class=""></canvas>
+                    <canvas id="statsColturetechChart" class=""></canvas>
                 </div>
                 <!-- /.col -->
             </div>
