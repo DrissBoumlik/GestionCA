@@ -72,6 +72,18 @@ class FilterController extends Controller
         return DataTables::of($data['data'])->toJson();
     }
 
+    public function getCloturetech(Request $request){
+        $data = $this->filterRepository->getCloturetechCall($request);
+        return DataTables::of($data['data'])->toJson();
+
+    }
+
+    public function getCloturetechColumn(Request $request){
+
+        return $this->filterRepository->getCloturetechCall($request);
+    }
+
+
     public function dashboard_filter(Request $request, $filter)
     {
         $viewName = $filter;

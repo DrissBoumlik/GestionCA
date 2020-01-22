@@ -248,7 +248,6 @@ class FilterRepository
         }
 
 
-
         if ($agentName) {
             $regions = $regions->where('Utilisateur', $agentName);
         }
@@ -694,7 +693,7 @@ class FilterRepository
         }
     }
 
-    public function GetDataFolders(Request $request, $callResult, $filter = null )
+    public function GetDataFolders(Request $request, $callResult, $filter = null)
     {
         $resultatAppel = $request->get('resultatAppel');
         $groupement = $request->get('groupement');
@@ -1112,5 +1111,83 @@ class FilterRepository
             return $data;
         }
     }
+
+    public function getCloturetechCall(Request $request, $filter = null)
+    {
+        $dates = $request->get('dates');
+        $agentName = $request->get('agent_name');
+        $codeTypeIntervention = $request->get('codeTypeIntervention');
+        $codeIntervention = $request->get('codeIntervention');
+        $agenceCode = $request->get('agence_code');
+        $radical_route = $filter ?? getRadicalRoute(Route::current());
+
+        $regions = \DB::table('stats as st')
+            ->select('Nom_Region', \DB::raw('count(1) as count'), \DB::raw('CASE
+                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_VALIDATION,EXPORT_ALL_Date_SOLDE) > 1440 THEN "superieur d\'un jour"
+                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_VALIDATION,EXPORT_ALL_Date_SOLDE) between 60 and 360   then "ENTTRE 6h and 1J "
+                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_VALIDATION,EXPORT_ALL_Date_SOLDE) BETWEEN 30 and 60 then "ENTTRE 30 min and 1H "
+                    ELSE "ENTRE 0 and 30 min "
+                    END as Title')
+            )->whereNotNull('EXPORT_ALL_Date_VALIDATION')
+            ->whereNotNull('EXPORT_ALL_Date_SOLDE');
+        $keys = ($regions->groupBy('Nom_Region', 'Title')->get())->groupBy(['Nom_Region'])->keys();
+        $regions = $regions->groupBy(['Title']);
+
+
+        $regions_names = [];
+
+        $keys->map(function ($key, $index) use (&$regions_names) {
+            $regions_names[$index + 1] = new \stdClass();
+            $regions_names[$index + 1]->data = $key;
+            $regions_names[$index + 1]->name = $key;
+            $regions_names[$index + 1]->text = $key;
+            $regions_names[$index + 1]->title = $key;
+        });
+        usort($regions_names, function ($item1, $item2) {
+            return ($item1->data == $item2->data) ? 0 :
+                ($item1->data < $item2->data) ? -1 : 1;
+        });
+        $first = new \stdClass();
+        $first->title = 'Nom_region';
+        $first->name = 'Nom_region';
+        $first->data = 'Nom_region';
+        $first->orderable = false;
+        array_unshift($regions_names, $first);
+
+        $regions = $regions->groupBy('Nom_Region', 'title')->get()->groupBy('title');
+
+        $regions = $regions->map(function ($region) use ($keys) {
+            $row = new \stdClass();
+            $row->values = [];
+
+            $col_arr = $keys->all();
+            $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
+                $row->Nom_region = $call->Title;
+                $region_name = $call->Nom_Region;
+                $row->$region_name = $call->count;
+                $row->values[$region_name] = $call->count;
+                $col_arr = array_diff($col_arr, [$region_name]);
+                return $row;
+            });
+
+            $_item = $items->last();
+
+            $index = count($_item->values);
+            foreach ($col_arr as $col) {
+                $_item->values[$col] = 0;
+                $_item->$col = '0';
+            }
+
+            ksort($_item->values);
+
+            $_item->values = collect($_item->values)->values();
+
+            return $_item;
+        });
+        $regions = $regions->values();
+
+        return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
+    }
+
 
 }
