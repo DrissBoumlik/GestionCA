@@ -1123,13 +1123,14 @@ class FilterRepository
 
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', \DB::raw('count(1) as count'), \DB::raw('CASE
-                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_VALIDATION,EXPORT_ALL_Date_SOLDE) > 1440 THEN "superieur d\'un jour"
-                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_VALIDATION,EXPORT_ALL_Date_SOLDE) between 60 and 360   then "ENTTRE 6h and 1J "
-                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_VALIDATION,EXPORT_ALL_Date_SOLDE) BETWEEN 30 and 60 then "ENTTRE 30 min and 1H "
+                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440 THEN "superieur d\'un jour"
+                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) between 60 and 360   then "ENTTRE 1h and 6h "
+                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) BETWEEN 30 and 60 then "ENTTRE 30 min and 1H "
                     ELSE "ENTRE 0 and 30 min "
                     END as Title')
             )->whereNotNull('EXPORT_ALL_Date_VALIDATION')
-            ->whereNotNull('EXPORT_ALL_Date_SOLDE');
+            ->whereNotNull('EXPORT_ALL_Date_SOLDE')
+            ->whereNotNull('Nom_Region');
         $keys = ($regions->groupBy('Nom_Region', 'Title')->get())->groupBy(['Nom_Region'])->keys();
         $regions = $regions->groupBy(['Title']);
 
@@ -1154,8 +1155,8 @@ class FilterRepository
         $first->orderable = false;
         array_unshift($regions_names, $first);
 
-        $regions = $regions->groupBy('Nom_Region', 'title')->get()->groupBy('title');
-
+        $regions = $regions->groupBy('Nom_Region', 'Title')->get();
+        $regions = $regions->groupBy('Title');
         $regions = $regions->map(function ($region) use ($keys) {
             $row = new \stdClass();
             $row->values = [];
