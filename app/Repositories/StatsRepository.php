@@ -599,9 +599,10 @@ class StatsRepository
              where Groupement not like "=%"
              and  Groupement not like "Non Renseigné"
              and  Groupement not like "Appels post"
-             and  Nom_Region is not null
-            
-            GROUP BY Id_Externe) groupedst'),
+             and  Nom_Region is not null '.
+            ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+            ' GROUP BY Id_Externe) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
@@ -610,13 +611,14 @@ class StatsRepository
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
             ->whereNotNull('Nom_Region');
-
         if ($agentName) {
             $regions = $regions->where('Utilisateur', $agentName);
         }
         if ($agenceCode) {
             $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
         }
+
+//        dd($regions->groupBy('Nom_Region', $callResult)->toSql());
         $keys = ($regions->groupBy('Nom_Region', $callResult)->get())->groupBy(['Nom_Region'])->keys();
         if ($dates) {
             $dates = array_values($dates);
@@ -804,8 +806,10 @@ class StatsRepository
             where Groupement not like "Non Renseigné" 
             and Groupement like "Appels préalables" 
             and Gpmt_Appel_Pre not like "Hors Périmètre" 
-            and Nom_Region is not null 
-            GROUP BY Id_Externe) groupedst'),
+            and Nom_Region is not null ' .
+            ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+            ' GROUP BY Id_Externe) groupedst'),
                     function ($join) {
                         $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                         $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
@@ -821,8 +825,10 @@ class StatsRepository
             where Groupement not like "Non Renseigné" 
             and Groupement like "Appels préalables" 
             and Gpmt_Appel_Pre not like "Hors Périmètre" 
-            and Nom_Region is not null 
-            GROUP BY Id_Externe) groupedst'),
+            and Nom_Region is not null ' .
+            ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+            ' GROUP BY Id_Externe) groupedst'),
                     function ($join) {
                         $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                         $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
@@ -833,13 +839,14 @@ class StatsRepository
                 ->whereNotNull('Nom_Region');
         }
 
-
         if ($agentName) {
             $regions = $regions->where('Utilisateur', $agentName);
         }
         if ($agenceCode) {
             $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
         }
+
+//        dd($regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->toSql());
 
         if ($column == 'Date_Heure_Note_Semaine') {
             $keys = ($regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->get())
