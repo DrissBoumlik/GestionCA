@@ -102,13 +102,14 @@
     <div class="content content-narrow">
         <!-- Filters -->
         <!-- Global date filter-->
-
-        <div class="container-fluid">
-            @include('stats.layouts.filter_menu')
-            <hr>
-            @include('stats.layouts.global_date_filter')
-        </div>
+        @if(!$agence && !$agent)
+            <div class="container-fluid">
+                @include('stats.layouts.filter_menu')
+                <hr>
+                @include('stats.layouts.global_date_filter')
+            </div>
         <hr>
+        @endif
         <!-- Stats -->
         <div class="container-fluid">
             <div class="row">
