@@ -394,6 +394,41 @@ $(function () {
             });
         });
     }
+
+    let statsColturetech = {
+        element_dt: undefined,
+        element: $('#statsColturetech'),
+        columns: undefined,
+        data: undefined,
+        treeElement: '#tree-view-02',
+        filterTreeElement: undefined,
+        routeCol: 'appels-clture/Cloturetech/columns',
+        routeData: 'appels-clture/Cloturetech',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsColturetechChart',
+            data: undefined,
+            chartTitle: 'ALL DATE SOLDE'
+        }
+    };
+    if (elementExists(statsColturetech)) {
+        getColumns(statsColturetech, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
+        $('#refreshColturetech').on('click', function () {
+            getColumns(statsColturetech, filterData(), {
+                removeTotal: false,
+                refreshMode: false,
+                details: false,
+                removeTotalColumn: false,
+                pagination: false
+            });
+        });
+    }
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS">

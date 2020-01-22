@@ -22,7 +22,7 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Auth::routes();
 
 Route::group([
-    'middleware' => ['auth'],
+   'middleware' => ['auth'],
 ], function () {
     //Route::get('/', 'HomeController@dashboard')->name('home');
 //Route::get('/_dashboard', 'HomeController@dashboard')->name('home');
@@ -160,5 +160,6 @@ Route::group([
     Route::get('appels-clture/folders/columns/{callResult}', 'FilterController@getFoldersColumn');
     Route::get('appels-clture/nonValidatedFolders/{column}', 'FilterController@getNonValidatedFolders'); // column = Code_Intervention / Code_Type_Intervention   // PERCENT
     Route::get('appels-clture/nonValidatedFolders/columns/{column}', 'FilterController@getNonValidatedFoldersColumn');
-
+    Route::get('appels-clture/Cloturetech', 'FilterController@getCloturetech'); // column = Code_Intervention / Code_Type_Intervention   // PERCENT
+    Route::get('appels-clture/Cloturetech/columns', 'FilterController@getCloturetechColumn');
 });
