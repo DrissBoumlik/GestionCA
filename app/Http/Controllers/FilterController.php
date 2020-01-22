@@ -83,6 +83,16 @@ class FilterController extends Controller
         return $this->filterRepository->getCloturetechCall($request);
     }
 
+    public function getGlobalDelay(Request $request){
+        $data = $this->filterRepository->getGlobalDelayCall($request);
+        return DataTables::of($data['data'])->toJson();
+
+    }
+
+    public function GlobalDelayColumn(Request $request){
+
+        return $this->filterRepository->getGlobalDelayCall($request);
+    }
 
     public function dashboard_filter(Request $request, $filter)
     {

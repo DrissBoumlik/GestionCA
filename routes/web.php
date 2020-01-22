@@ -160,6 +160,8 @@ Route::group([
     Route::get('appels-clture/folders/columns/{callResult}', 'FilterController@getFoldersColumn');
     Route::get('appels-clture/nonValidatedFolders/{column}', 'FilterController@getNonValidatedFolders'); // column = Code_Intervention / Code_Type_Intervention   // PERCENT
     Route::get('appels-clture/nonValidatedFolders/columns/{column}', 'FilterController@getNonValidatedFoldersColumn');
-    Route::get('appels-clture/Cloturetech', 'FilterController@getCloturetech'); // column = Code_Intervention / Code_Type_Intervention   // PERCENT
+    Route::get('appels-clture/Cloturetech', 'FilterController@getCloturetech');
     Route::get('appels-clture/Cloturetech/columns', 'FilterController@getCloturetechColumn');
+    Route::get('appels-clture/GlobalDelay', 'FilterController@getGlobalDelay');
+    Route::get('appels-clture/GlobalDelay/columns', 'FilterController@GlobalDelayColumn');
 });

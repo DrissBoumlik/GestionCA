@@ -429,6 +429,41 @@ $(function () {
             });
         });
     }
+
+    let statsGlobalDelay = {
+        element_dt: undefined,
+        element: $('#statsGlobalDelay'),
+        columns: undefined,
+        data: undefined,
+        treeElement: '#tree-view-02',
+        filterTreeElement: undefined,
+        routeCol: 'appels-clture/GlobalDelay/columns',
+        routeData: 'appels-clture/GlobalDelay',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsGlobalDelayChart',
+            data: undefined,
+            chartTitle: 'Délai global de traitement OT'
+        }
+    };
+    if (elementExists(statsGlobalDelay)) {
+        getColumns(statsGlobalDelay, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
+        $('#refreshGlobalDelay').on('click', function () {
+            getColumns(statsGlobalDelay, filterData(), {
+                removeTotal: false,
+                refreshMode: false,
+                details: false,
+                removeTotalColumn: false,
+                pagination: false
+            });
+        });
+    }
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS">

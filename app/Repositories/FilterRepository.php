@@ -1190,5 +1190,81 @@ class FilterRepository
         return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
     }
 
+    public function getGlobalDelayCall(Request $request, $filter = null)
+    {
+        $dates = $request->get('dates');
+        $agentName = $request->get('agent_name');
+        $codeTypeIntervention = $request->get('codeTypeIntervention');
+        $codeIntervention = $request->get('codeIntervention');
+        $agenceCode = $request->get('agence_code');
+        $radical_route = $filter ?? getRadicalRoute(Route::current());
+
+        $regions = \DB::table('stats as st')
+            ->select('Nom_Region', \DB::raw('count(1) as count'), \DB::raw('CASE
+                        WHEN TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) > 15 THEN "superieur 15 Jours"
+                        WHEN TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) between 7 and 15   then "ENTRE UNE SEMAINE ET 15 Jours"
+                        ELSE "Moins d\'une semaine"
+                    END as Title')
+            )->whereNotNull('EXPORT_ALL_Date_VALIDATION')
+            ->whereNotNull('EXPORT_ALL_Date_SOLDE')
+            ->whereNotNull('Nom_Region');
+        $keys = ($regions->groupBy('Nom_Region', 'Title')->get())->groupBy(['Nom_Region'])->keys();
+        $regions = $regions->groupBy(['Title']);
+
+
+        $regions_names = [];
+
+        $keys->map(function ($key, $index) use (&$regions_names) {
+            $regions_names[$index + 1] = new \stdClass();
+            $regions_names[$index + 1]->data = $key;
+            $regions_names[$index + 1]->name = $key;
+            $regions_names[$index + 1]->text = $key;
+            $regions_names[$index + 1]->title = $key;
+        });
+        usort($regions_names, function ($item1, $item2) {
+            return ($item1->data == $item2->data) ? 0 :
+                ($item1->data < $item2->data) ? -1 : 1;
+        });
+        $first = new \stdClass();
+        $first->title = 'Nom_region';
+        $first->name = 'Nom_region';
+        $first->data = 'Nom_region';
+        $first->orderable = false;
+        array_unshift($regions_names, $first);
+
+        $regions = $regions->groupBy('Nom_Region', 'Title')->get();
+        $regions = $regions->groupBy('Title');
+        $regions = $regions->map(function ($region) use ($keys) {
+            $row = new \stdClass();
+            $row->values = [];
+
+            $col_arr = $keys->all();
+            $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
+                $row->Nom_region = $call->Title;
+                $region_name = $call->Nom_Region;
+                $row->$region_name = $call->count;
+                $row->values[$region_name] = $call->count;
+                $col_arr = array_diff($col_arr, [$region_name]);
+                return $row;
+            });
+
+            $_item = $items->last();
+
+            $index = count($_item->values);
+            foreach ($col_arr as $col) {
+                $_item->values[$col] = 0;
+                $_item->$col = '0';
+            }
+
+            ksort($_item->values);
+
+            $_item->values = collect($_item->values)->values();
+
+            return $_item;
+        });
+        $regions = $regions->values();
+
+        return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
+    }
 
 }
