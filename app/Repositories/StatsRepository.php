@@ -1085,13 +1085,15 @@ class StatsRepository
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', $intervCol, \DB::raw('count(Nom_Region) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
-            where Nom_Region is not null
+            where Nom_Region is not null 
+            and Groupement like "Appels clôture" 
             GROUP BY Id_Externe) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->where('Groupement', 'Appels clôture');
 
         if ($agentName) {
             $regions = $regions->where('Utilisateur', $agentName);
