@@ -204,7 +204,7 @@ $(function () {
                         options: {
                             title: {
                                 display: true,
-                                text: 'Résultats Appels (Clients Joints)'
+                                text: 'Résultats Appels'
                             },
                             tooltips: {
                                 mode: 'index',

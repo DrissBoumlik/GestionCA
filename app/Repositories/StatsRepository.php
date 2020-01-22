@@ -338,8 +338,8 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->title = 'Résultats Appels Préalables (Clients Joignable)';
-            $first->text = 'Résultats Appels Préalables (Clients Joignable)';
+            $first->title = 'Résultats Appels Préalables';
+            $first->text = 'Résultats Appels Préalables';
             $first->name = $first->data = $callResult;
             array_unshift($regions_names, $first);
 //            $detailCol = new \stdClass();
@@ -526,8 +526,8 @@ class StatsRepository
             $first = new \stdClass();
             $first->name = 'Resultat_Appel';
             $first->data = 'Resultat_Appel';
-            $first->text = 'Résultats Appels Préalables (Clients Joignable)';
-            $first->title = 'Résultats Appels Préalables (Clients Joignable)';
+            $first->text = 'Résultats Appels Préalables';
+            $first->title = 'Résultats Appels Préalables';
             $first->orderable = false;
             array_unshift($regions_names, $first);
 //            $detailCol = new \stdClass();
@@ -802,6 +802,7 @@ class StatsRepository
                 ->select($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee', \DB::raw('count(Nom_Region) as total'))
                 ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
             where Groupement not like "Non Renseigné" 
+            and Groupement like "Appels préalables" 
             and Gpmt_Appel_Pre not like "Hors Périmètre" 
             and Nom_Region is not null 
             GROUP BY Id_Externe) groupedst'),
@@ -810,6 +811,7 @@ class StatsRepository
                         $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                     })
                 ->where('Groupement', 'not like', 'Non Renseigné')
+                ->where('Groupement', 'like', 'Appels préalables')
                 ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
                 ->whereNotNull('Nom_Region');
         } else {
@@ -817,6 +819,7 @@ class StatsRepository
                 ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(Nom_Region) as total'))
                 ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
             where Groupement not like "Non Renseigné" 
+            and Groupement like "Appels préalables" 
             and Gpmt_Appel_Pre not like "Hors Périmètre" 
             and Nom_Region is not null 
             GROUP BY Id_Externe) groupedst'),
@@ -825,6 +828,7 @@ class StatsRepository
                         $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                     })
                 ->where('Groupement', 'not like', 'Non Renseigné')
+                ->where('Groupement', 'like', 'Appels préalables')
                 ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
                 ->whereNotNull('Nom_Region');
         }
@@ -1695,6 +1699,8 @@ class StatsRepository
     public function importStats($request)
     {
         try {
+            $fileName = $request->file('file')->getClientOriginalName();
+            $request->file('file')->storeAs('data source', $fileName);
             Excel::import(new StatsImport($request->days), $request->file('file'));
             return [
                 'success' => true,
