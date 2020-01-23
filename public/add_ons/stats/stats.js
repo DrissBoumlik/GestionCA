@@ -741,8 +741,11 @@ $(function () {
                                 }
                             });
                         }
+                        // CELL CLICK
                         let tableId = '#' + object.element.attr('id');
                         $(tableId + ' tbody').on('click', 'td', function () {
+                            let agent_name = $('#agent_name').val();
+                            let agence_name = $('#agence_name').val();
                             let col = object.element_dt.cell(this).index().column + 1;
                             let row = object.element_dt.cell(this).index().row + 1;
                             let colText = $(tableId + " thead th:nth-child(" + col + ")").text();
@@ -755,7 +758,9 @@ $(function () {
                                     'row=' + object.rowName +
                                     '&rowValue=' + rowText +
                                     '&col=' + object.columnName +
-                                    '&colValue=' + colText;
+                                    '&colValue=' + colText +
+                                    '&agent=' + (agent_name === undefined ? '' : agent_name) +
+                                    '&agence=' + (agence_name === undefined ? '' : agence_name);
                             }
                             // console.log(colText + ' --- ' + rowText)
                         });
