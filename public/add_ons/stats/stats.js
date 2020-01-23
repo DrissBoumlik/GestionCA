@@ -760,7 +760,8 @@ $(function () {
                                     '&col=' + object.columnName +
                                     '&colValue=' + colText +
                                     '&agent=' + (agent_name === undefined ? '' : agent_name) +
-                                    '&agence=' + (agence_name === undefined ? '' : agence_name);
+                                    '&agence=' + (agence_name === undefined ? '' : agence_name) +
+                                    '&dates=' + dates;
                             }
                             // console.log(colText + ' --- ' + rowText)
                         });

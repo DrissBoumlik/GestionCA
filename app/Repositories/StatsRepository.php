@@ -74,6 +74,11 @@ class StatsRepository
             $allStats = $allStats->where('Nom_Region', 'like', "%$agenceCode");
         }
 
+        if ($request->dates) {
+            $dates = explode(',', $request->dates);
+            $allStats = $allStats->whereIn('Date_Note', $dates);
+        }
+
         return $allStats->get();
     }
 
