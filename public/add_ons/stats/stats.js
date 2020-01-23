@@ -748,7 +748,7 @@ $(function () {
                             if (object.columnName === 'Date_Heure_Note_Semaine') {
                                 colText = colText.split('_')[0];
                             }
-                            if (col !== 1 || (params.details && col !== 2)) {
+                            if (col > 1 || (params.details && col > 2)) {
                                 window.location = APP_URL + '/all-stats?' +
                                     'row=' + object.rowName +
                                     '&rowValue=' + rowText +
