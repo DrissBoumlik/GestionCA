@@ -1726,7 +1726,7 @@ class StatsRepository
     {
         try {
             $fileName = $request->file('file')->getClientOriginalName();
-            $request->file('file')->storeAs('data source', $fileName);
+            $request->file('file')->storeAs('data_source', $fileName);
             Excel::import(new StatsImport($request->days), $request->file('file'));
             return [
                 'success' => true,

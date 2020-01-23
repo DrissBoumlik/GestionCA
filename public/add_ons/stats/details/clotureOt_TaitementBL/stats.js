@@ -394,7 +394,10 @@ $(function () {
             });
         });
     }
+    //</editor-fold>
 
+
+    //<editor-fold desc="ALL STATS">
     let statsColturetech = {
         element_dt: undefined,
         element: $('#statsColturetech'),
@@ -422,7 +425,7 @@ $(function () {
         $('#refreshColturetech').on('click', function () {
             getColumns(statsColturetech, filterData(), {
                 removeTotal: false,
-                refreshMode: false,
+                refreshMode: true,
                 details: false,
                 removeTotalColumn: false,
                 pagination: false
