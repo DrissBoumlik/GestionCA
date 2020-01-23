@@ -705,7 +705,10 @@ $(function () {
                                 data = '';
                             }
 
-                            return '<span class="pointer detail-data">' + (splittedData !== null ? splittedData : data) + '<\span>';
+                            let classHasTotalCol = (params.removeTotalColumn) ? 'hasTotal' : '';
+
+                            let rowClass = full.isTotal ? '' : 'pointer detail-data';
+                            return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + (splittedData !== null ? splittedData : data) + '<\span>';
                         }
                     };
                 });
@@ -753,7 +756,10 @@ $(function () {
                             if (object.columnName === 'Date_Heure_Note_Semaine') {
                                 colText = colText.split('_')[0];
                             }
-                            if (col > 1 || (params.details && col > 2)) {
+                            let lastRowIndex = object.element_dt.rows().count();
+                            let lastColumnIndex = object.element_dt.columns().count();
+                            if (((col > 1 || (params.details && col > 2)) && row < lastRowIndex)
+                                && (params.removeTotalColumn && col < lastColumnIndex)) {
                                 window.location = APP_URL + '/all-stats?' +
                                     'row=' + object.rowName +
                                     '&rowValue=' + rowText +
