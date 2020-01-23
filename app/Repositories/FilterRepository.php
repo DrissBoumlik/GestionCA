@@ -1134,6 +1134,36 @@ class FilterRepository
         $keys = ($regions->groupBy('Nom_Region', 'Title')->get())->groupBy(['Nom_Region'])->keys();
         $regions = $regions->groupBy(['Title']);
 
+        $user = auth()->user() ?? User::find(1);
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+        if ($request && count($request->all())) {
+            if ($request->exists('refreshMode')) {
+                if ($dates) {
+                    $dates = array_values($dates);
+                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
+                    $filter->date_filter = $dates;
+                    $filter->save();
+                    $regions = $regions->whereIn('Date_Note', $dates);
+                } else {
+                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                    if ($filter) {
+                        $filter->forceDelete();
+                    }
+                }
+            } else {
+                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                if ($filter) {
+                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+                }
+            }
+        } else {
+            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+            if ($filter) {
+                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+            }
+        }
 
         $regions_names = [];
 
@@ -1211,6 +1241,36 @@ class FilterRepository
         $keys = ($regions->groupBy('Nom_Region', 'Title')->get())->groupBy(['Nom_Region'])->keys();
         $regions = $regions->groupBy(['Title']);
 
+        $user = auth()->user() ?? User::find(1);
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+        if ($request && count($request->all())) {
+            if ($request->exists('refreshMode')) {
+                if ($dates) {
+                    $dates = array_values($dates);
+                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
+                    $filter->date_filter = $dates;
+                    $filter->save();
+                    $regions = $regions->whereIn('Date_Note', $dates);
+                } else {
+                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                    if ($filter) {
+                        $filter->forceDelete();
+                    }
+                }
+            } else {
+                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                if ($filter) {
+                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+                }
+            }
+        } else {
+            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+            if ($filter) {
+                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+            }
+        }
 
         $regions_names = [];
 

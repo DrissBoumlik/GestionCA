@@ -449,7 +449,7 @@ $(function () {
     if (elementExists(statsGlobalDelay)) {
         getColumns(statsGlobalDelay, filterData(), {
             removeTotal: false,
-            refreshMode: false,
+            refreshMode: true,
             details: false,
             removeTotalColumn: false,
             pagination: false
@@ -457,7 +457,7 @@ $(function () {
         $('#refreshGlobalDelay').on('click', function () {
             getColumns(statsGlobalDelay, filterData(), {
                 removeTotal: false,
-                refreshMode: false,
+                refreshMode: true,
                 details: false,
                 removeTotalColumn: false,
                 pagination: false
