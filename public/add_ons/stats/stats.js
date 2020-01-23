@@ -318,6 +318,8 @@ $(function () {
             chartTitle: 'Résultats Appels'
         },
         objDetail: {
+            columnName: 'Nom_Region',
+            rowName: 'Resultat_Appel',
             element_dt: undefined,
             element: undefined,
             columns: undefined,
