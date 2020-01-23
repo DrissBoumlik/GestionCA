@@ -845,16 +845,12 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
-        getColumns(statsRegions, filterData(), {
+        getColumns(statsCallsPrealable, filterData(), {
             removeTotal: false,
             refreshMode: true,
-            details: true,
             removeTotalColumn: false
         });
-        getColumns(statsFolders, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
+
         getColumns(callsStatesAgencies, filterData(), {
             removeTotal: false,
             refreshMode: true
@@ -875,9 +871,7 @@ $(function () {
             details: false,
             removeTotalColumn: false
         });
-        getColumns(statsFoldersByType, filterData(), {removeTotal: false, refreshMode: true});
-        getColumns(statsFoldersByCode, filterData(), {removeTotal: false, refreshMode: true});
-        getColumns(statsPerimeters, filterData(), {removeTotal: false, refreshMode: true});
+
     });
     //</editor-fold>
 

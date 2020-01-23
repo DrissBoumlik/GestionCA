@@ -417,7 +417,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsColturetechChart',
             data: undefined,
-            chartTitle: 'ALL DATE SOLDE'
+            chartTitle: 'Délai de validation post solde'
         }
     };
     if (elementExists(statsColturetech)) {
@@ -835,39 +835,32 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
-        getColumns(statsRegions, filterData(), {
+
+        getColumns(statsCallsCloture, filterData(), {
             removeTotal: false,
             refreshMode: true,
-            details: true,
-            removeTotalColumn: false
-        });
-        getColumns(statsFolders, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(callsStatesAgencies, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(callsStatesWeeks, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(statscallsPos, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
+            removeTotalColumn: false,
             details: false,
-            removeTotalColumn: false
+            pagination: false
         });
-        getColumns(statscallsNeg, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: false
-        });
+
         getColumns(statsFoldersByType, filterData(), {removeTotal: false, refreshMode: true});
         getColumns(statsFoldersByCode, filterData(), {removeTotal: false, refreshMode: true});
-        getColumns(statsPerimeters, filterData(), {removeTotal: false, refreshMode: true});
+
+        getColumns(statsColturetech, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
+        getColumns(statsGlobalDelay, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
     });
     //</editor-fold>
 });
