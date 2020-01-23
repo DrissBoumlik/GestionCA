@@ -20,9 +20,9 @@ class StatsController extends Controller
         $this->statsRepository = $statsRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('stats.index');
+        return view('stats.index')->with(['data' => $request->all()]);
     }
 
     public function getStats(Request $request)

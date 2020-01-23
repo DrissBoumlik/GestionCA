@@ -16,7 +16,11 @@ class StatsRepository
 {
     public function getStats(Request $request)
     {
-        return DB::table('stats')->select([
+        $row = $request->row;
+        $rowValue = $request->rowValue;
+        $col = $request->col;
+        $colValue = $request->colValue;
+        $allStats = DB::table('stats')->select([
             'Type_Note',
             'Utilisateur',
             'Resultat_Appel',
@@ -52,7 +56,13 @@ class StatsRepository
             'EXPORT_ALL_Date_SOLDE',
             'EXPORT_ALL_Date_VALIDATION'
         ]);
-
+        if ($row && $rowValue) {
+            $allStats = $allStats->where($row, $rowValue);
+        }
+        if ($col && $colValue) {
+            $allStats = $allStats->where($col, $colValue);
+        }
+        return $allStats->get();
     }
 
     public function getAgencies(Request $request)
@@ -137,7 +147,6 @@ class StatsRepository
             return $s[$column];
         });
     }
-
 
     public function getDateNotes(Request $request)
     {
@@ -350,9 +359,10 @@ class StatsRepository
 //            $regions_names[count($regions_names) - 1]->data = 'total';
 //            $regions_names[count($regions_names) - 1]->name = 'total';
 
-            $regions = $regions->map(function ($region) use (&$regions_names, $keys, $callResult) {
+            $regions = $regions->map(function ($region, $index) use (&$regions_names, $keys, $callResult) {
                 $row = new \stdClass();
                 $row->values = [];
+                $row->line = $index;
 
                 $col_arr = $keys->all();
 
@@ -411,10 +421,10 @@ class StatsRepository
             ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(Resultat_Appel) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Resultat_Appel not like "=%"
-            and Nom_Region is not null '.
-            ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
-            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
-            ' GROUP BY Id_Externe) groupedst'),
+            and Nom_Region is not null ' .
+                ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+                ' GROUP BY Id_Externe) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
@@ -1519,7 +1529,7 @@ class StatsRepository
              where Groupement is not null
              and Groupement not like "Non Renseigné"
              and Groupement not like "Appels post"
-             and Nom_Region is not null '.
+             and Nom_Region is not null ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
                 ' GROUP BY Id_Externe) groupedst'),

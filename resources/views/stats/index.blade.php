@@ -56,9 +56,11 @@
                     class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center mt-5 mb-2 text-center text-sm-left">
                     <div class="flex-sm-fill">
                         @if (request()->has('agence_code'))
-                            <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard Agence {{$agence}}</h1>
+                            <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard
+                                Agence {{$agence}}</h1>
                         @elseif(request()->has('agent_name'))
-                            <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard Agent {{strtoupper($agent)}}</h1>
+                            <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard
+                                Agent {{strtoupper($agent)}}</h1>
                         @else
                             <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard</h1>
                         @endif
@@ -135,6 +137,7 @@
                                         </tr>
                                     </thead>
                                 </table>
+                                <div id="data-request" data-request="{{ json_encode($data) }}" class="d-none"></div>
                             </div>
                         </div>
                         <!-- /.card-body -->

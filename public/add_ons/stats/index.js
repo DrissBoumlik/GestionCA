@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    let data = $('#data-request').data('request');
     $('#stats').DataTable({
         language: frLang,
         pageLength: 10,
@@ -7,7 +8,8 @@ $(document).ready(function () {
         type: 'POST',
         ajax: {
             type: 'POST',
-            url: `stats/get-stats`
+            url: `stats/get-stats`,
+            data: data
         },
         columns: [
             {
