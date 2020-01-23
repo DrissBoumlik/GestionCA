@@ -20,6 +20,10 @@ class StatsRepository
         $rowValue = $request->rowValue;
         $col = $request->col;
         $colValue = $request->colValue;
+
+        $agentName = $request->agent;
+        $agenceCode = $request->agence;
+
         $allStats = DB::table('stats')->select([
             'Type_Note',
             'Utilisateur',
@@ -62,6 +66,14 @@ class StatsRepository
         if ($col && $colValue) {
             $allStats = $allStats->where($col, $colValue);
         }
+
+        if ($agentName) {
+            $allStats = $allStats->where('Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $allStats = $allStats->where('Nom_Region', 'like', "%$agenceCode");
+        }
+
         return $allStats->get();
     }
 
