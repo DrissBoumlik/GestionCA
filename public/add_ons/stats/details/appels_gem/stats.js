@@ -419,7 +419,6 @@ $(function () {
         removeTotalColumn: false,
         pagination: false
     }) {
-        console.log(object.routeData, params);
         // if refreshmode is enabled then store the new filter in local storage
         if (params.refreshMode) {
             // localStorage.setItem(object.filterTreeElement, JSON.stringify(data));
