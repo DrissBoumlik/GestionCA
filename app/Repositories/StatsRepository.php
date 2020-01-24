@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 
+use App\Exports\StatsExport;
 use App\Imports\StatsImport;
 use App\Models\Filter;
 use App\Models\Stats;
@@ -232,11 +233,11 @@ class StatsRepository
         $view_route = str_replace('dashboard/', '', getRoute(Route::current()));
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(Nom_Region) as total'))
-            ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
+            ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Nom_Region is not null
             and Groupement not like "=%"
             and Groupement not like "Non Renseigné"
-            and Groupement not like "Appels post" 
+            and Groupement not like "Appels post"
             GROUP BY Id_Externe) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
@@ -619,7 +620,7 @@ class StatsRepository
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', $callResult, \DB::raw('count(Nom_Region) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
-            
+
              where Groupement not like "=%"
              and  Groupement not like "Non Renseigné"
              and  Groupement not like "Appels post"
@@ -826,10 +827,10 @@ class StatsRepository
         if ($column == 'Date_Heure_Note_Semaine') {
             $regions = \DB::table('stats as st')
                 ->select($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee', \DB::raw('count(Nom_Region) as total'))
-                ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
-            where Groupement not like "Non Renseigné" 
-            and Groupement like "Appels préalables" 
-            and Gpmt_Appel_Pre not like "Hors Périmètre" 
+                ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
+            where Groupement not like "Non Renseigné"
+            and Groupement like "Appels préalables"
+            and Gpmt_Appel_Pre not like "Hors Périmètre"
             and Nom_Region is not null ' .
                     ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                     ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
@@ -845,10 +846,10 @@ class StatsRepository
         } else {
             $regions = \DB::table('stats as st')
                 ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(Nom_Region) as total'))
-                ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
-            where Groupement not like "Non Renseigné" 
-            and Groupement like "Appels préalables" 
-            and Gpmt_Appel_Pre not like "Hors Périmètre" 
+                ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
+            where Groupement not like "Non Renseigné"
+            and Groupement like "Appels préalables"
+            and Gpmt_Appel_Pre not like "Hors Périmètre"
             and Nom_Region is not null ' .
                     ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                     ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
@@ -1108,8 +1109,8 @@ class StatsRepository
 
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', $intervCol, \DB::raw('count(Nom_Region) as total'))
-            ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
-            where Nom_Region is not null 
+            ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
+            where Nom_Region is not null
             and Groupement like "Appels clôture" ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
@@ -1537,7 +1538,7 @@ class StatsRepository
         $results = \DB::table('stats as st')
             ->select('Groupement', 'Nom_Region', \DB::raw('count(Nom_Region) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
-             
+
              where Groupement is not null
              and Groupement not like "Non Renseigné"
              and Groupement not like "Appels post"
@@ -1750,5 +1751,9 @@ class StatsRepository
                 'message' => 'Une erreur est survenue'
             ];
         }
+    }
+
+    public function exportXlsCall(Request $request){
+        return Excel::download(new StatsExport($request), 'stats.xlsx');
     }
 }

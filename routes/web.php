@@ -22,7 +22,7 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Auth::routes();
 
 Route::group([
-   'middleware' => ['auth'],
+  // 'middleware' => ['auth'],
 ], function () {
     //Route::get('/', 'HomeController@dashboard')->name('home');
 //Route::get('/_dashboard', 'HomeController@dashboard')->name('home');
@@ -164,4 +164,7 @@ Route::group([
     Route::get('appels-clture/Cloturetech/columns', 'FilterController@getCloturetechColumn');
     Route::get('appels-clture/GlobalDelay', 'FilterController@getGlobalDelay');
     Route::get('appels-clture/GlobalDelay/columns', 'FilterController@GlobalDelayColumn');
+
+    Route::get('Export/ExportXls', 'StatsController@exportXls')->name('ExportXls');
+
 });
