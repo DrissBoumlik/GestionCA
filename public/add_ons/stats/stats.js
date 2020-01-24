@@ -758,8 +758,10 @@ $(function () {
                             }
                             let lastRowIndex = object.element_dt.rows().count();
                             let lastColumnIndex = object.element_dt.columns().count();
-                            if (((col > 1 || (params.details && col > 2)) && row < lastRowIndex)
-                                && (params.removeTotalColumn && col < lastColumnIndex)) {
+
+                            if (((params.details && col > 2) || (!params.details && col > 1))
+                                && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
+                                && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
                                 window.location = APP_URL + '/all-stats?' +
                                     'row=' + object.rowName +
                                     '&rowValue=' + rowText +
