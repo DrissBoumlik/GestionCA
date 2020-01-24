@@ -75,6 +75,11 @@ class StatsRepository
             $allStats = $allStats->where('Nom_Region', 'like', "%$agenceCode");
         }
 
+        if ($request->dates) {
+            $dates = explode(',', $request->dates);
+            $allStats = $allStats->whereIn('Date_Note', $dates);
+        }
+
         return $allStats->get();
     }
 
@@ -805,6 +810,7 @@ class StatsRepository
             $total->total = round(array_sum($total->values), 2);
             $total->values = collect($total->values)->values();
 
+            $total->isTotal = true;
             $regions->push($total);
 
             $regions = $regions->values();
@@ -1085,6 +1091,7 @@ class StatsRepository
                 sortWeeksDates($total->values, true);
             }
             $total->values = collect($total->values)->values();
+            $total->isTotal = true;
             $regions->push($total);
 
             $regions = $regions->values();
@@ -1294,6 +1301,7 @@ class StatsRepository
             $total->$intervCol = 'Total Général';
             $total->total = round(array_sum($total->values)); //round(array_sum($total->values) / count($total->values), 2) . '%';
             $total->values = collect($total->values)->values();
+            $total->isTotal = true;
             $regions->push($total);
 
             $regions = $regions->values();
@@ -1727,6 +1735,7 @@ class StatsRepository
             $total->Nom_Region = 'Total Général';
             $total->total = round(array_sum($total->values), 2);
             $total->values = collect($total->values)->values();
+            $total->isTotal = true;
             $results->push($total);
             $results = $results->values();
 
