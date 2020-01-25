@@ -700,7 +700,7 @@ $(function () {
     $('#filterDashboard').on('change', function () {
         let url = $(this).val();
         if (url) {
-            window.location = APP_URL + '/dashboard/' + url;
+            window.location = APP_URL + '/' + url;
         }
     });
 
