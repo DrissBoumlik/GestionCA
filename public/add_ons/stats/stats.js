@@ -318,6 +318,8 @@ $(function () {
             chartTitle: 'Résultats Appels'
         },
         objDetail: {
+            columnName: 'Nom_Region',
+            rowName: 'Resultat_Appel',
             element_dt: undefined,
             element: undefined,
             columns: undefined,
@@ -703,7 +705,10 @@ $(function () {
                                 data = '';
                             }
 
-                            return '<span class="pointer detail-data">' + (splittedData !== null ? splittedData : data) + '<\span>';
+                            let classHasTotalCol = (params.removeTotalColumn) ? 'hasTotal' : '';
+
+                            let rowClass = full.isTotal ? '' : 'pointer detail-data';
+                            return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + (splittedData !== null ? splittedData : data) + '<\span>';
                         }
                     };
                 });
@@ -739,21 +744,32 @@ $(function () {
                                 }
                             });
                         }
+                        // CELL CLICK
                         let tableId = '#' + object.element.attr('id');
                         $(tableId + ' tbody').on('click', 'td', function () {
+                            let agent_name = $('#agent_name').val();
+                            let agence_name = $('#agence_name').val();
                             let col = object.element_dt.cell(this).index().column + 1;
                             let row = object.element_dt.cell(this).index().row + 1;
                             let colText = $(tableId + " thead th:nth-child(" + col + ")").text();
-                            let rowText = $(tableId + " tbody tr:nth-child(" + row + ") td:first-child").text()
+                            let rowText = $(tableId + " tbody tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
                             if (object.columnName === 'Date_Heure_Note_Semaine') {
                                 colText = colText.split('_')[0];
                             }
-                            if (col !== 1) {
+                            let lastRowIndex = object.element_dt.rows().count();
+                            let lastColumnIndex = object.element_dt.columns().count();
+
+                            if (((params.details && col > 2) || (!params.details && col > 1))
+                                && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
+                                && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
                                 window.location = APP_URL + '/all-stats?' +
                                     'row=' + object.rowName +
                                     '&rowValue=' + rowText +
                                     '&col=' + object.columnName +
-                                    '&colValue=' + colText;
+                                    '&colValue=' + colText +
+                                    '&agent=' + (agent_name === undefined ? '' : agent_name) +
+                                    '&agence=' + (agence_name === undefined ? '' : agence_name) +
+                                    '&dates=' + dates;
                             }
                             // console.log(colText + ' --- ' + rowText)
                         });

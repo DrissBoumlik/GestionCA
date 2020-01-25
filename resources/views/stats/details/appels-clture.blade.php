@@ -217,7 +217,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title d-inline-block">ALL DATE SOLDE : date de cloture technicien</h3>
+                            <h3 class="card-title d-inline-block">Délai de validation post solde</h3>
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-02" class="tree-view d-inline-flex"></div>
@@ -251,7 +251,7 @@
                             <h3 class="card-title d-inline-block">Délai global de traitement OT</h3>
                             <hr>
                             <div class="refresh-form">
-                                <div id="tree-view-02" class="tree-view d-inline-flex"></div>
+                                <div id="tree-view-03" class="tree-view d-inline-flex"></div>
                                 <button type="button" id="refreshGlobalDelay" class="btn btn-primary float-right">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>

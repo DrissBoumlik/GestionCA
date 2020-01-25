@@ -36,3 +36,19 @@ td.details-control
 
 tr + tr .table-details
     background-color: transparent !important
+
+.table tbody tr > td:nth-child(n+1) > span.detail-data
+    //background-color: red
+    text-decoration: underline
+
+.table tbody tr > td:first-child > span.detail-data
+    cursor: default
+    text-decoration: none
+
+.table tbody tr > td.details-control + td > span.detail-data
+    //background-color: transparent
+    text-decoration: none
+    cursor: default
+.table tbody > tr > td:last-child span.hasTotal
+    cursor: default
+    text-decoration: none

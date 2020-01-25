@@ -300,6 +300,8 @@ $(function () {
 
     //<editor-fold desc="CALL PERIMETERS">
     let statsPerimeters = {
+        columnName: 'Groupement',
+        rowName: 'Nom_Region',
         element_dt: undefined,
         element: $('#statsPerimeters'),
         columns: undefined,
@@ -371,7 +373,31 @@ $(function () {
                     }
                 }
                 // console.log(filters.date_filter);
-                object.columns = [...response.columns];
+                let reformattedColumns = [...response.columns].map(function (column) {
+
+                    return {
+                        ...column,
+                        render: function (data, type, full, meta) {
+                            let splittedData = null;
+                            if (data !== null) {
+                                data = data.toString();
+                                if (data.indexOf('/') !== -1) {
+                                    splittedData = data.split('/');
+                                    splittedData = splittedData[0] + '<br/>' + splittedData[1];
+                                }
+                            } else {
+                                data = '';
+                            }
+
+                            let classHasTotalCol = (params.removeTotalColumn) ? 'hasTotal' : '';
+                            let rowClass = full.isTotal ? '' : 'pointer detail-data';
+                            return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + (splittedData !== null ? splittedData : data) + '<\span>';
+                        }
+                    };
+                });
+
+                // object.columns = [...response.columns];
+                object.columns = [...reformattedColumns];
                 object.data = [...response.data];
                 if (params.details) {
                     $(object.element).find('thead tr').prepend('<th></th>');
@@ -401,6 +427,31 @@ $(function () {
                                 }
                             });
                         }
+
+                        let tableId = '#' + object.element.attr('id');
+                        $(tableId + ' tbody').on('click', 'td', function () {
+                            let col = object.element_dt.cell(this).index().column + 1;
+                            let row = object.element_dt.cell(this).index().row + 1;
+                            let colText = $(tableId + " thead th:nth-child(" + col + ")").text();
+                            let rowText = $(tableId + " tbody tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
+                            if (object.columnName === 'Date_Heure_Note_Semaine') {
+                                colText = colText.split('_')[0];
+                            }
+                            let lastRowIndex = object.element_dt.rows().count();
+                            let lastColumnIndex = object.element_dt.columns().count();
+
+                            if (((params.details && col > 2) || col > 1)
+                                && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
+                                && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
+                                window.location = APP_URL + '/all-stats?' +
+                                    'row=' + object.rowName +
+                                    '&rowValue=' + rowText +
+                                    '&col=' + object.columnName +
+                                    '&colValue=' + colText +
+                                    '&dates=' + dates;
+                            }
+                            // console.log(colText + ' --- ' + rowText)
+                        });
                     } catch (error) {
                         console.log(error);
                     }
@@ -654,38 +705,7 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
-        getColumns(statsRegions, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: true,
-            removeTotalColumn: false
-        });
-        getColumns(statsFolders, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(callsStatesAgencies, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(callsStatesWeeks, filterData(), {
-            removeTotal: false,
-            refreshMode: true
-        });
-        getColumns(statscallsPos, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: false
-        });
-        getColumns(statscallsNeg, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: false
-        });
-        getColumns(statsFoldersByType, filterData(), {removeTotal: false, refreshMode: true});
-        getColumns(statsFoldersByCode, filterData(), {removeTotal: false, refreshMode: true});
+
         getColumns(statsPerimeters, filterData(), {removeTotal: false, refreshMode: true});
     });
     //</editor-fold>

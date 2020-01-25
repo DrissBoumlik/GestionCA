@@ -184,4 +184,8 @@ class StatsController extends Controller
 
         return response()->json($this->statsRepository->importStats($request));
     }
+
+    public function exportXls(Request $request){
+       return $this->statsRepository->exportXlsCall($request);
+    }
 }

@@ -467,6 +467,7 @@ class FilterRepository
                 sortWeeksDates($total->values, true);
             }
             $total->values = collect($total->values)->values();
+            $total->isTotal = true;
             $regions->push($total);
 
             $regions = $regions->values();
@@ -897,6 +898,7 @@ class FilterRepository
             $total->total = round(array_sum($total->values), 2);
             $total->values = collect($total->values)->values();
 
+            $total->isTotal = true;
             $regions->push($total);
 
             $regions = $regions->values();
@@ -1104,6 +1106,7 @@ class FilterRepository
             $total->$intervCol = 'Total Général';
             $total->total = round(array_sum($total->values)); //round(array_sum($total->values) / count($total->values), 2) . '%';
             $total->values = collect($total->values)->values();
+            $total->isTotal = true;
             $regions->push($total);
 
             $regions = $regions->values();
@@ -1123,71 +1126,132 @@ class FilterRepository
 
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', \DB::raw('count(1) as count'), \DB::raw('CASE
-                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440 THEN "superieur d\'un jour"
-                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) between 60 and 360   then "ENTTRE 1h and 6h "
-                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) BETWEEN 30 and 60 then "ENTTRE 30 min and 1H "
-                    ELSE "ENTRE 0 and 30 min "
+                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440 THEN "4-superieur d\'un jour"
+                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) between 60 and 360   then "3-Entre 1H et 6h"
+                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) BETWEEN 30 and 60 then "2-Entre 30min et 1H"
+                    ELSE "1-Entre 0 et 30min"
                     END as Title')
             )->whereNotNull('EXPORT_ALL_Date_VALIDATION')
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->orderBy('Title');
         $keys = ($regions->groupBy('Nom_Region', 'Title')->get())->groupBy(['Nom_Region'])->keys();
         $regions = $regions->groupBy(['Title']);
 
+        $user = auth()->user() ?? User::find(1);
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+        if ($request && count($request->all())) {
+            if ($request->exists('refreshMode')) {
+                if ($dates) {
+                    $dates = array_values($dates);
+                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
+                    $filter->date_filter = $dates;
+                    $filter->save();
+                    $regions = $regions->whereIn('Date_Note', $dates);
+                } else {
+                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                    if ($filter) {
+                        $filter->forceDelete();
+                    }
+                }
+            } else {
+                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                if ($filter) {
+                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+                }
+            }
+        } else {
+            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+            if ($filter) {
+                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+            }
+        }
 
-        $regions_names = [];
-
-        $keys->map(function ($key, $index) use (&$regions_names) {
-            $regions_names[$index + 1] = new \stdClass();
-            $regions_names[$index + 1]->data = $key;
-            $regions_names[$index + 1]->name = $key;
-            $regions_names[$index + 1]->text = $key;
-            $regions_names[$index + 1]->title = $key;
-        });
-        usort($regions_names, function ($item1, $item2) {
-            return ($item1->data == $item2->data) ? 0 :
-                ($item1->data < $item2->data) ? -1 : 1;
-        });
-        $first = new \stdClass();
-        $first->title = 'Nom_region';
-        $first->name = 'Nom_region';
-        $first->data = 'Nom_region';
-        $first->orderable = false;
-        array_unshift($regions_names, $first);
-
+        $columns = $regions->groupBy('Nom_Region', 'Title')->get();
         $regions = $regions->groupBy('Nom_Region', 'Title')->get();
-        $regions = $regions->groupBy('Title');
-        $regions = $regions->map(function ($region) use ($keys) {
-            $row = new \stdClass();
-            $row->values = [];
+        $regions = $columns = addRegionWithZero($request, $regions, $columns);
 
-            $col_arr = $keys->all();
-            $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
-                $row->Nom_region = $call->Title;
-                $region_name = $call->Nom_Region;
-                $row->$region_name = $call->count;
-                $row->values[$region_name] = $call->count;
-                $col_arr = array_diff($col_arr, [$region_name]);
-                return $row;
+        if (!count($regions)) {
+            $data = ['columns' => [], 'data' => []];
+            return $data;
+        } else {
+
+            $totalCount = Stats::count();
+
+            $temp = $regions->groupBy(['Nom_Region']);
+
+            $temp = $temp->map(function ($calls, $index) {
+                $totalZone = $calls->reduce(function ($carry, $call) {
+                    return $carry + $call->count;
+                }, 0);
+                return $calls->map(function ($call) use ($index, $totalZone) {
+                    $call->$index = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
+                    return $call;
+                });
             });
 
-            $_item = $items->last();
+            $regions = $temp->flatten();
 
-            $index = count($_item->values);
-            foreach ($col_arr as $col) {
-                $_item->values[$col] = 0;
-                $_item->$col = '0';
-            }
+            $regions_names = [];
+            $regions = $regions->groupBy('Title');
+            $keys->map(function ($key, $index) use (&$regions_names) {
+                $regions_names[$index + 1] = new \stdClass();
+                $regions_names[$index + 1]->data = $key;
+                $regions_names[$index + 1]->name = $key;
+                $regions_names[$index + 1]->text = $key;
+                $regions_names[$index + 1]->title = $key;
+            });
+            usort($regions_names, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
+            $first = new \stdClass();
+            $first->title = 'Nom_region';
+            $first->name = 'Nom_region';
+            $first->data = 'Nom_region';
+            $first->orderable = false;
+            array_unshift($regions_names, $first);
 
-            ksort($_item->values);
+            //$regions = $regions->groupBy(['Nom_Region', 'Title'])->get();
+            //$regions = $regions->groupBy('Title');
+            $regions = $regions->map(function ($region) use ($keys) {
+                $row = new \stdClass();
+                $row->values = [];
 
-            $_item->values = collect($_item->values)->values();
+                $col_arr = $keys->all();
+                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
+                    $row->Nom_region = explode('-',$call->Title)[1];
+                    $region_name = $call->Nom_Region;
+                    $row->$region_name = $call->count . '/' . $call->$region_name . '%' ;
+                    $row->values[$region_name] = $call->count;
+                    $col_arr = array_diff($col_arr, [$region_name]);
+                    return $row;
+                });
 
-            return $_item;
-        });
-        $regions = $regions->values();
+                $_item = $items->last();
 
-        return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
+                $index = count($_item->values);
+                foreach ($col_arr as $col) {
+                    $_item->values[$col] = 0;
+                    $_item->$col = '0';
+                }
+
+                ksort($_item->values);
+
+                $_item->values = collect($_item->values)->values();
+
+                return $_item;
+            });
+            $regions = $regions->values();
+
+            return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
+        }
+
+
+
+
     }
 
     public function getGlobalDelayCall(Request $request, $filter = null)
@@ -1201,9 +1265,9 @@ class FilterRepository
 
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', \DB::raw('count(1) as count'), \DB::raw('CASE
-                        WHEN TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) > 15 THEN "superieur 15 Jours"
-                        WHEN TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) between 7 and 15   then "ENTRE UNE SEMAINE ET 15 Jours"
-                        ELSE "Moins d\'une semaine"
+                        WHEN TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) > 15 THEN "3-Superieur 15 Jours"
+                        WHEN TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) between 7 and 15   then "2-Entre une semaine et 15 jours"
+                        ELSE "1-Moins d\'une semaine"
                     END as Title')
             )->whereNotNull('EXPORT_ALL_Date_VALIDATION')
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
@@ -1211,60 +1275,115 @@ class FilterRepository
         $keys = ($regions->groupBy('Nom_Region', 'Title')->get())->groupBy(['Nom_Region'])->keys();
         $regions = $regions->groupBy(['Title']);
 
-
-        $regions_names = [];
-
-        $keys->map(function ($key, $index) use (&$regions_names) {
-            $regions_names[$index + 1] = new \stdClass();
-            $regions_names[$index + 1]->data = $key;
-            $regions_names[$index + 1]->name = $key;
-            $regions_names[$index + 1]->text = $key;
-            $regions_names[$index + 1]->title = $key;
-        });
-        usort($regions_names, function ($item1, $item2) {
-            return ($item1->data == $item2->data) ? 0 :
-                ($item1->data < $item2->data) ? -1 : 1;
-        });
-        $first = new \stdClass();
-        $first->title = 'Nom_region';
-        $first->name = 'Nom_region';
-        $first->data = 'Nom_region';
-        $first->orderable = false;
-        array_unshift($regions_names, $first);
-
+        $user = auth()->user() ?? User::find(1);
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+        if ($request && count($request->all())) {
+            if ($request->exists('refreshMode')) {
+                if ($dates) {
+                    $dates = array_values($dates);
+                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
+                    $filter->date_filter = $dates;
+                    $filter->save();
+                    $regions = $regions->whereIn('Date_Note', $dates);
+                } else {
+                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                    if ($filter) {
+                        $filter->forceDelete();
+                    }
+                }
+            } else {
+                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                if ($filter) {
+                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+                }
+            }
+        } else {
+            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+            if ($filter) {
+                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+            }
+        }
+        $columns = $regions->groupBy('Nom_Region', 'Title')->get();
         $regions = $regions->groupBy('Nom_Region', 'Title')->get();
-        $regions = $regions->groupBy('Title');
-        $regions = $regions->map(function ($region) use ($keys) {
-            $row = new \stdClass();
-            $row->values = [];
+        $regions = $columns = addRegionWithZero($request, $regions, $columns);
 
-            $col_arr = $keys->all();
-            $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
-                $row->Nom_region = $call->Title;
-                $region_name = $call->Nom_Region;
-                $row->$region_name = $call->count;
-                $row->values[$region_name] = $call->count;
-                $col_arr = array_diff($col_arr, [$region_name]);
-                return $row;
+        if (!count($regions)) {
+            $data = ['columns' => [], 'data' => []];
+            return $data;
+        } else {
+
+            $totalCount = Stats::count();
+
+            $temp = $regions->groupBy(['Nom_Region']);
+
+            $temp = $temp->map(function ($calls, $index) {
+                $totalZone = $calls->reduce(function ($carry, $call) {
+                    return $carry + $call->count;
+                }, 0);
+                return $calls->map(function ($call) use ($index, $totalZone) {
+                    $call->$index = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
+                    return $call;
+                });
             });
 
-            $_item = $items->last();
+            $regions = $temp->flatten();
 
-            $index = count($_item->values);
-            foreach ($col_arr as $col) {
-                $_item->values[$col] = 0;
-                $_item->$col = '0';
-            }
+            $regions_names = [];
+            $regions = $regions->groupBy('Title');
+            $keys->map(function ($key, $index) use (&$regions_names) {
+                $regions_names[$index + 1] = new \stdClass();
+                $regions_names[$index + 1]->data = $key;
+                $regions_names[$index + 1]->name = $key;
+                $regions_names[$index + 1]->text = $key;
+                $regions_names[$index + 1]->title = $key;
+            });
+            usort($regions_names, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
+            $first = new \stdClass();
+            $first->title = 'Nom_region';
+            $first->name = 'Nom_region';
+            $first->data = 'Nom_region';
+            $first->orderable = false;
+            array_unshift($regions_names, $first);
 
-            ksort($_item->values);
+            //$regions = $regions->groupBy(['Nom_Region', 'Title'])->get();
+            //$regions = $regions->groupBy('Title');
+            $regions = $regions->map(function ($region) use ($keys) {
+                $row = new \stdClass();
+                $row->values = [];
 
-            $_item->values = collect($_item->values)->values();
+                $col_arr = $keys->all();
+                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
+                    $row->Nom_region = explode('-',$call->Title)[1];
+                    $region_name = $call->Nom_Region;
+                    $row->$region_name = $call->count . '/' . $call->$region_name . '%' ;
+                    $row->values[$region_name] = $call->count;
+                    $col_arr = array_diff($col_arr, [$region_name]);
+                    return $row;
+                });
 
-            return $_item;
-        });
-        $regions = $regions->values();
+                $_item = $items->last();
 
-        return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
+                $index = count($_item->values);
+                foreach ($col_arr as $col) {
+                    $_item->values[$col] = 0;
+                    $_item->$col = '0';
+                }
+
+                ksort($_item->values);
+
+                $_item->values = collect($_item->values)->values();
+
+                return $_item;
+            });
+            $regions = $regions->values();
+
+            return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
+        }
     }
 
 }
