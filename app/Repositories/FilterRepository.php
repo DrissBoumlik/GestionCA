@@ -175,7 +175,8 @@ class FilterRepository
 
                     $col_arr = array_diff($col_arr, [$nom_region]);
                     $row->values[$nom_region] = $call->$nom_region;
-                    $row->$nom_region = $call->$nom_region . '%';
+                    $row->$nom_region = $call->total . ' / ' . $call->$nom_region . '%';
+                    $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
 //                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
 //                    $row->_total = $call->total;
                     $row->column = 'Resultat_Appel';
@@ -649,9 +650,10 @@ class FilterRepository
 //                    dd($call);
 //                    dd($code_intervention, $call->Code_Intervention);
                     $row->values[$code_intervention ?? ''] = $call->$code_intervention;
-                    $row->$code_intervention = $call->$code_intervention . '%';
+                    $row->$code_intervention = $call->total . ' / ' . $call->$code_intervention . '%';
 //                $row->$code_intervention = $call->$code_intervention;
-                    $row->total = ceil(round(array_sum($row->values), 2)) . '%'; // round(array_sum($row->values) / count($row->values), 2) . '%';
+//                    $row->total = ceil(round(array_sum($row->values), 2)) . '%'; // round(array_sum($row->values) / count($row->values), 2) . '%';
+                    $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
 //                dump($code_intervention ? $total->{$code_intervention}[0] : 1);
 //                if ($code_intervention)
 //                    $total->$code_intervention =
@@ -1075,7 +1077,8 @@ class FilterRepository
                     $col_arr = array_diff($col_arr, [$nom_region]);
 
                     $row->values[$nom_region] = $call->$nom_region;
-                    $row->$nom_region = $call->$nom_region . '%';
+                    $row->$nom_region = $call->total . ' / ' . $call->$nom_region . '%';
+                    $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
 //                    $row->total = round(array_sum($row->values), 2); //round(array_sum($row->values) / count($row->values), 2) . '%';
                     return $row;
                 });

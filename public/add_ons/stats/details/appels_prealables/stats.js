@@ -320,13 +320,17 @@ $(function () {
         getColumns(statsCallsPrealable, filterData(), {
             removeTotal: false,
             refreshMode: false,
-            removeTotalColumn: false
+            removeTotalColumn: false,
+            details: false,
+            pagination: false
         });
         $('#refreshCallsPrealable').on('click', function () {
             getColumns(statsCallsPrealable, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
-                removeTotalColumn: false
+                removeTotalColumn: false,
+                details: false,
+                pagination: false
             });
         });
     }

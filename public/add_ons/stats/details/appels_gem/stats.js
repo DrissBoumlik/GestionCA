@@ -321,13 +321,17 @@ $(function () {
         getColumns(statsCallsGem, filterData(), {
             removeTotal: false,
             refreshMode: false,
-            removeTotalColumn: false
+            removeTotalColumn: false,
+            details: false,
+            pagination: false
         });
         $('#refreshCallsGem').on('click', function () {
             getColumns(statsCallsGem, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
-                removeTotalColumn: false
+                removeTotalColumn: false,
+                details: false,
+                pagination: false
             });
         });
     }
