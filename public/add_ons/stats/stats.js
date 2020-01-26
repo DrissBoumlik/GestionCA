@@ -698,8 +698,8 @@ $(function () {
                             if (data !== null) {
                                 data = data.toString();
                                 if (data.indexOf('/') !== -1) {
-                                    splittedData = data.split('/');
-                                    splittedData = splittedData[0] + '<br/>' + splittedData[1];
+                                    splittedData = data.split('/').join('<br/>');
+                                    // splittedData = splittedData[0] + '<br/>' + splittedData[1];
                                 }
                             } else {
                                 data = '';

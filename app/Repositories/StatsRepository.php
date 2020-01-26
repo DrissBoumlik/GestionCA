@@ -1424,6 +1424,9 @@ class StatsRepository
                 $percentRegions = $region->map(function ($codeType) use ($index, $totalZone) {
                     $mergedObject = null;
                     $percentRegion = $codeType->reduce(function ($carry, $call) use (&$mergedObject) {
+                        if ($call->Resultat_Appel == 'Appels clôture - CRI non conforme') {
+                            $call->itemTotal = $call->total;
+                        }
                         $mergedObject = ($mergedObject == null) ? collect($call) : collect($mergedObject)->merge(collect($call));
                         return $carry + $call->total;
                     }, 0);
@@ -1431,10 +1434,10 @@ class StatsRepository
                     $mergedObject->each(function ($value, $key) use (&$item) {
                         $item->$key = $value;
                     });
-
                     $item->Resultat_Appel = 'Appels clôture - CRI non conforme';
                     $item->total = $percentRegion;
                     $item->$index = $totalZone == 0 ? 0.00 : round($percentRegion * 100 / $totalZone, 2);
+//                    dd($item);
                     return $item;
                 });
                 return $percentRegions;
@@ -1499,7 +1502,7 @@ class StatsRepository
                     $col_arr = array_diff($col_arr, [$nom_region]);
 
                     $row->values[$nom_region] = $call->$nom_region;
-                    $row->$nom_region = $call->total . ' / ' . (isset($call->$index) ? $call->$index : 0) . '%';
+                    $row->$nom_region = $call->total . ' / ' . (isset($call->itemTotal) ? $call->itemTotal : 0) . ' / ' . (isset($call->$index) ? $call->$index : 0) . '%';
 //                    $row->$nom_region = $call->total . ' / ' . $call->$nom_region . '%';
                     $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
 //                    $row->total = round(array_sum($row->values), 2); //round(array_sum($row->values) / count($row->values), 2) . '%';
@@ -1509,7 +1512,7 @@ class StatsRepository
                 $index = count($_item->values);
                 foreach ($col_arr as $col) {
                     $_item->values[$col] = 0; //'0%';
-                    $_item->$col = '0%';
+                    $_item->$col = '0';
                 }
 
                 ksort($_item->values);
