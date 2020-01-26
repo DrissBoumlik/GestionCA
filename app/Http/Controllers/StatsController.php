@@ -125,13 +125,21 @@ class StatsController extends Controller
 
     public function getNonValidatedFoldersColumn(Request $request, $column)
     {
-        $data = $this->statsRepository->getDataNonValidatedFolders($request, $column);
+        if ($column == 'Code_Type_Intervention') {
+            $data = $this->statsRepository->getDataNonValidatedFolders_2($request, $column);
+        } else {
+            $data = $this->statsRepository->getDataNonValidatedFolders($request, $column);
+        }
         return $data;
     }
 
     public function getNonValidatedFolders(Request $request, $column)
     {
-        $data = $this->statsRepository->getDataNonValidatedFolders($request, $column);
+        if ($column == 'Code_Type_Intervention') {
+            $data = $this->statsRepository->getDataNonValidatedFolders_2($request, $column);
+        } else {
+            $data = $this->statsRepository->getDataNonValidatedFolders($request, $column);
+        }
         return DataTables::of($data['data'])->toJson();
     }
 
@@ -185,7 +193,8 @@ class StatsController extends Controller
         return response()->json($this->statsRepository->importStats($request));
     }
 
-    public function exportXls(Request $request){
-       return $this->statsRepository->exportXlsCall($request);
+    public function exportXls(Request $request)
+    {
+        return $this->statsRepository->exportXlsCall($request);
     }
 }
