@@ -600,7 +600,7 @@ $(function () {
                                     '&rowValue=' + rowText +
                                     '&col=' + object.columnName +
                                     '&colValue=' + colText +
-                                    '&dates=' + dates;
+                                    '&dates=' + (dates === undefined || dates === null ? '' : dates);
                             }
                             // console.log(colText + ' --- ' + rowText)
                         });

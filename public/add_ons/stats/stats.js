@@ -767,9 +767,9 @@ $(function () {
                                     '&rowValue=' + rowText +
                                     '&col=' + object.columnName +
                                     '&colValue=' + colText +
-                                    '&agent=' + (agent_name === undefined ? '' : agent_name) +
-                                    '&agence=' + (agence_name === undefined ? '' : agence_name) +
-                                    '&dates=' + dates;
+                                    '&agent=' + (agent_name === undefined || agent_name === null ? '' : agent_name) +
+                                    '&agence=' + (agence_name === undefined || agence_name === null? '' : agence_name) +
+                                    '&dates=' + (dates === undefined || dates === null ? '' : dates);
                             }
                             // console.log(colText + ' --- ' + rowText)
                         });

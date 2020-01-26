@@ -25,6 +25,8 @@ class StatsRepository
         $agentName = $request->agent;
         $agenceCode = $request->agence;
 
+        $dates = $request->dates;
+
         $allStats = DB::table('stats')->select([
             'Type_Note',
             'Utilisateur',
@@ -75,7 +77,7 @@ class StatsRepository
             $allStats = $allStats->where('Nom_Region', 'like', "%$agenceCode");
         }
 
-        if ($request->dates) {
+        if ($dates) {
             $dates = explode(',', $request->dates);
             $allStats = $allStats->whereIn('Date_Note', $dates);
         }
