@@ -519,7 +519,7 @@ class StatsRepository
                     return $carry + $call->total;
                 }, 0);
                 return $calls->map(function ($call) use ($index, $totalZone) {
-                    $call->$index = totalZone == 0 ? 0.00 : round($call->total * 100 / $totalZone, 2);
+                    $call->$index = $totalZone == 0 ? 0.00 : round($call->total * 100 / $totalZone, 2);
                     return $call;
                 });
             });
