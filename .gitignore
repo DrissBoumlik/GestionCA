@@ -15,5 +15,5 @@ yarn-error.log
 *.md
 **/*.xls
 *.demo.php
-./public/css
-./public/js
+/public/css/*
+/public/js/*
