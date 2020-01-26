@@ -116,7 +116,7 @@
                             <div class="refresh-form">
                                 <div id="tree-view-0" class="tree-view d-inline-flex"></div>
                                 <div id="stats-groupement-filter" class="tree-groupement-view d-inline-flex"></div>
-                                <button type="button" id="refreshCallsPrealable" class="btn btn-primary float-right">
+                                <button type="button" id="refreshCallsPrealable" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </div>
@@ -151,7 +151,7 @@
                                 <div id="tree-view-2" class="tree-view d-inline-flex"></div>
                                 <div id="stats-call-regions-filter" class="tree-call-region-view d-inline-flex"></div>
                                 <button type="button" id="refreshCallStatesAgencies"
-                                        class="btn btn-primary float-right">
+                                        class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </div>
@@ -183,7 +183,7 @@
                             <div class="refresh-form">
                                 <div id="tree-view-3" class="tree-view d-inline-flex"></div>
                                 <div id="stats-weeks-regions-filter" class="tree-weeks-region-view d-inline-flex"></div>
-                                <button type="button" id="refreshCallStatesWeeks" class="btn btn-primary float-right">
+                                <button type="button" id="refreshCallStatesWeeks" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </div>
@@ -217,7 +217,7 @@
                                 <div id="tree-view-4" class="tree-view d-inline-flex"></div>
                                 <div id="code-rdv-intervention-confirm-filter"
                                      class="tree-code-rdv-intervention-confirm-view d-inline-flex"></div>
-                                <button type="button" id="refreshCallResultPos" class="btn btn-primary float-right">
+                                <button type="button" id="refreshCallResultPos" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </div>
@@ -251,7 +251,7 @@
                                 <div id="tree-view-5" class="tree-view d-inline-flex"></div>
                                 <div id="code-rdv-intervention-filter"
                                      class="tree-code-rdv-intervention-view d-inline-flex"></div>
-                                <button type="button" id="refreshCallResultNeg" class="btn btn-primary float-right">
+                                <button type="button" id="refreshCallResultNeg" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </div>

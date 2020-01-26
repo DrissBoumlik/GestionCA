@@ -6,7 +6,7 @@
                 <hr>
                 <div class="refresh-form">
                     <div id="tree-view-01" class="tree-view d-inline-flex"></div>
-                    <button type="button" id="refreshAll" class="btn btn-primary float-right">
+                    <button type="button" id="refreshAll" class="btn btn-primary float-right d-none">
                         <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                     </button>
                 </div>

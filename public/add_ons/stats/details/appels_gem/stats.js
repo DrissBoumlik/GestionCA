@@ -244,6 +244,7 @@ $(function () {
                 assignFilter(datesFilterList, datesFilterValues);
             }
             $('.treejs-node .treejs-nodes .treejs-switcher').click();
+            $('.refresh-form button').removeClass('d-none');
         },
         error: function (jqXHR, textStatus, errorThrown) {
         }

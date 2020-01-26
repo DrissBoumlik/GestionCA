@@ -244,6 +244,7 @@ $(function () {
                 assignFilter(datesFilterList, datesFilterValues);
             }
             $('.treejs-node .treejs-nodes .treejs-switcher').click();
+            $('.refresh-form button').removeClass('d-none');
         },
         error: function (jqXHR, textStatus, errorThrown) {
         }
@@ -367,8 +368,8 @@ $(function () {
         data: undefined,
         treeElement: '#tree-view-1',
         filterTreeElement: '#stats-regions-filter',
-        routeCol: 'folders/columns/Groupement',
-        routeData: 'folders/Groupement',
+        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
+        routeData: 'regions/details/groupement?key_groupement=Appels-clture',
         objChart: {
             element_chart: undefined,
             element_id: 'statsFoldersChart',

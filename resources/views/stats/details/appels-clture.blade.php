@@ -119,7 +119,7 @@
                             <div class="refresh-form">
                                 <div id="tree-view-1" class="tree-view d-inline-flex"></div>
                                 <div id="stats-regions-filter" class="tree-region-view d-inline-flex"></div>
-                                <button type="button" id="refreshCallsCloture" class="btn btn-primary float-right">
+                                <button type="button" id="refreshCallsCloture" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </div>
@@ -154,7 +154,7 @@
                                 <div id="tree-view-6" class="tree-view d-inline-flex"></div>
                                 <div id="code-type-intervention-filter"
                                      class="tree-code-type-intervention-view d-inline-flex"></div>
-                                <button type="button" id="refreshFoldersByType" class="btn btn-primary float-right">
+                                <button type="button" id="refreshFoldersByType" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </div>
@@ -188,7 +188,7 @@
                                 <div id="tree-view-7" class="tree-view d-inline-flex"></div>
                                 <div id="code-intervention-filter"
                                      class="tree-code-intervention-view d-inline-flex"></div>
-                                <button type="button" id="refreshFoldersByCode" class="btn btn-primary float-right">
+                                <button type="button" id="refreshFoldersByCode" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </div>
@@ -221,7 +221,7 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-02" class="tree-view d-inline-flex"></div>
-                                <button type="button" id="refreshColturetech" class="btn btn-primary float-right">
+                                <button type="button" id="refreshColturetech" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </div>
@@ -252,7 +252,7 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-03" class="tree-view d-inline-flex"></div>
-                                <button type="button" id="refreshGlobalDelay" class="btn btn-primary float-right">
+                                <button type="button" id="refreshGlobalDelay" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
                             </div>
