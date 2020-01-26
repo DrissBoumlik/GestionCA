@@ -394,7 +394,8 @@ class StatsRepository
                     $col_arr = array_diff($col_arr, [$nom_region]);
 
                     $row->values[$nom_region] = $call->$nom_region;
-                    $row->$nom_region = $call->$nom_region . '%';
+                    $row->$nom_region = $call->total . ' / ' . $call->$nom_region . '%';
+//                    $row->$nom_region = $call->$nom_region . '%';
 //                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
 //                    $row->_total = $call->total;
                     $row->column = $callResult;
@@ -525,7 +526,6 @@ class StatsRepository
             });
 
             $regions = $temp->flatten();
-//            dd($temp);
 
 //            $regions = $regions->map(function ($region) use ($totalCount) {
 //                dump($region);
@@ -584,7 +584,8 @@ class StatsRepository
 
                     $col_arr = array_diff($col_arr, [$nom_region]);
                     $row->values[$nom_region] = $call->$nom_region;
-                    $row->$nom_region = $call->$nom_region . '%';
+                    $row->$nom_region = $call->total . ' / ' . $call->$nom_region . '%';
+//                    $row->$nom_region = $call->$nom_region . '%';
 //                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
 //                    $row->_total = $call->total;
                     $row->column = 'Resultat_Appel';

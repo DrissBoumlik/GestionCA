@@ -512,28 +512,34 @@ $(function () {
                     }
                 }
                 // console.log(filters.date_filter);
-                let reformattedColumns = [...response.columns].map(function (column) {
+                let reformattedColumns = [...response.columns];
 
+                reformattedColumns = [...reformattedColumns].map(function (column) {
                     return {
                         ...column,
                         render: function (data, type, full, meta) {
-                            let splittedData = null;
-                            if (data !== null) {
-                                data = data.toString();
-                                if (data.indexOf('/') !== -1) {
-                                    splittedData = data.split('/');
-                                    splittedData = splittedData[0] + '<br/>' + splittedData[1];
+                            let newData = data;
+                            if (newData !== null) {
+                                newData = newData.toString();
+                                if (newData.indexOf('/') !== -1) {
+                                    newData = newData.split('/').join('<br/>');
+                                    // newData = newData[0] + '<br/>' + newData[1];
                                 }
                             } else {
-                                data = '';
+                                newData = '';
+                            }
+
+                            if (['appels-clture/GlobalDelay', 'appels-clture/Cloturetech'].includes(object.routeData)) {
+                                return '<span>' + newData + '</span>';
                             }
 
                             let classHasTotalCol = (params.removeTotalColumn) ? 'hasTotal' : '';
                             let rowClass = full.isTotal ? '' : 'pointer detail-data';
-                            return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + (splittedData !== null ? splittedData : data) + '<\span>';
+                            return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + newData + '<\span>';
                         }
                     };
                 });
+
 
                 // object.columns = [...response.columns];
                 object.columns = [...reformattedColumns];
@@ -569,27 +575,29 @@ $(function () {
 
                         let tableId = '#' + object.element.attr('id');
                         $(tableId + ' tbody').on('click', 'td', function () {
-                            let col = object.element_dt.cell(this).index().column + 1;
-                            let row = object.element_dt.cell(this).index().row + 1;
-                            let colText = $(tableId + " thead th:nth-child(" + col + ")").text();
-                            let rowText = $(tableId + " tbody tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
-                            if (object.columnName === 'Date_Heure_Note_Semaine') {
-                                colText = colText.split('_')[0];
-                            }
-                            let lastRowIndex = object.element_dt.rows().count();
-                            let lastColumnIndex = object.element_dt.columns().count();
+                            if ($(this).has('span.detail-data').length) {
+                                let col = object.element_dt.cell(this).index().column + 1;
+                                let row = object.element_dt.cell(this).index().row + 1;
+                                let colText = $(tableId + " thead th:nth-child(" + col + ")").text();
+                                let rowText = $(tableId + " tbody tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
+                                if (object.columnName === 'Date_Heure_Note_Semaine') {
+                                    colText = colText.split('_')[0];
+                                }
+                                let lastRowIndex = object.element_dt.rows().count();
+                                let lastColumnIndex = object.element_dt.columns().count();
 
-                            if (((params.details && col > 2) || col > 1)
-                                && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
-                                && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
-                                window.location = APP_URL + '/all-stats?' +
-                                    'row=' + object.rowName +
-                                    '&rowValue=' + rowText +
-                                    '&col=' + object.columnName +
-                                    '&colValue=' + colText +
-                                    '&dates=' + (dates === undefined || dates === null ? '' : dates);
+                                if (((params.details && col > 2) || col > 1)
+                                    && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
+                                    && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
+                                    window.location = APP_URL + '/all-stats?' +
+                                        'row=' + object.rowName +
+                                        '&rowValue=' + rowText +
+                                        '&col=' + object.columnName +
+                                        '&colValue=' + colText +
+                                        '&dates=' + (dates === undefined || dates === null ? '' : dates);
+                                }
+                                // console.log(colText + ' --- ' + rowText)
                             }
-                            // console.log(colText + ' --- ' + rowText)
                         });
                     } catch (error) {
                         console.log(error);

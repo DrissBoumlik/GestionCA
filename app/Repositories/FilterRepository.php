@@ -1118,6 +1118,242 @@ class FilterRepository
         }
     }
 
+    public function getDataNonValidatedFolders_2(Request $request, $intervCol)
+    {
+        $dates = $request->get('dates');
+        $agentName = $request->get('agent_name');
+        $codeTypeIntervention = $request->get('codeTypeIntervention');
+        $codeIntervention = $request->get('codeIntervention');
+        $agenceCode = $request->get('agence_code');
+        $radical_route = $filter ?? getRadicalRoute(Route::current());
+
+//        $regions = \DB::table('stats')
+//            ->select('Nom_Region', $intervCol, \DB::raw('count(*) as total'))
+//            ->whereNotNull('Nom_Region');
+
+
+        $regions = \DB::table('stats as st')
+            ->select('Nom_Region', $intervCol, 'Resultat_Appel', \DB::raw('count(Nom_Region) as total'))
+            ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
+            where Nom_Region is not null
+            and key_Groupement like "' . $radical_route . '"
+            and Groupement like "Appels clôture" ' .
+                ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+                ' GROUP BY Id_Externe) groupedst'),
+                function ($join) {
+                    $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
+                    $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
+                })
+            ->whereNotNull('Nom_Region')
+            ->where('key_Groupement', 'like', $radical_route)
+            ->where('Groupement', 'Appels clôture');
+
+        if ($agentName) {
+            $regions = $regions->where('Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
+        }
+        $keys = ($regions->groupBy('Nom_Region', $intervCol, 'Resultat_Appel')->get())->groupBy(['Nom_Region'])->keys();
+
+        if ($codeTypeIntervention) {
+            $codeTypeIntervention = array_values($codeTypeIntervention);
+            $regions = $regions->whereIn('Code_Type_Intervention', $codeTypeIntervention);
+        }
+        if ($codeIntervention) {
+            $codeIntervention = array_values($codeIntervention);
+            $regions = $regions->whereIn('Code_Intervention', $codeIntervention);
+        }
+        if ($dates) {
+            $dates = array_values($dates);
+            $regions = $regions->whereIn('Date_Note', $dates);
+        }
+
+        $user = auth()->user() ?? User::find(1);
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+
+        if ($request && count($request->all())) {
+            if ($request->exists('refreshMode')) {
+                if ($dates) {
+                    $dates = array_values($dates);
+                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
+                    $filter->date_filter = $dates;
+                    $filter->save();
+                    $regions = $regions->whereIn('Date_Note', $dates);
+                } else {
+                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                    if ($filter) {
+                        $filter->forceDelete();
+                    }
+                }
+            } else {
+                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                if ($filter) {
+                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+                }
+            }
+        } else {
+            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+            if ($filter) {
+                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
+            }
+        }
+
+        $columns = $regions->groupBy('Nom_Region', $intervCol, 'Resultat_Appel')->get();
+//        $regions = $regions->groupBy('Nom_Region', $intervCol)->get();
+
+        $regions = $regions->groupBy('Nom_Region', $intervCol, 'Resultat_Appel')->get();
+        $regions = $columns = addRegionWithZero($request, $regions, $columns);
+
+        if (!count($regions)) {
+            $data = ['columns' => [], 'data' => []];
+            return $data;
+        } else {
+            $totalCount = Stats::count();
+            $temp = ($regions->groupBy(['Nom_Region', $intervCol]))->map(function ($region, $index) {
+                $totalZone = 0;
+                $results = $region->map(function ($codeType, $index2) use (&$totalZone, $index) {
+                    $totalCodeType = $codeType->reduce(function ($carry, $call) use (&$totalZone) {
+                        $totalZone += $call->total;
+                        return $carry + $call->total;
+                    }, 0);
+                    $percentResults = $codeType->filter(function ($call) use ($index2, $totalCodeType, $index, $totalZone) {
+                        if ($call->Resultat_Appel == 'Appels clôture - CRI non conforme') {
+                            $call->$index2 = $totalCodeType == 0 ? 0.00 : round($call->total * 100 / $totalCodeType, 2);
+                            return $call;
+                        }
+//                        $call->$index2 = $totalCodeType == 0 ? 0.00 : round($call->total * 100 / $totalCodeType, 2);
+//                        return $call;
+                    });
+                    return $percentResults;
+                });
+//                dd($index, $region->flatten());
+                $percentRegions = $region->map(function ($codeType) use ($index, $totalZone) {
+                    $mergedObject = null;
+                    $percentRegion = $codeType->reduce(function ($carry, $call) use (&$mergedObject) {
+                        if ($call->Resultat_Appel == 'Appels clôture - CRI non conforme') {
+                            $call->itemTotal = $call->total;
+                        }
+                        $mergedObject = ($mergedObject == null) ? collect($call) : collect($mergedObject)->merge(collect($call));
+                        return $carry + $call->total;
+                    }, 0);
+                    $item = new \stdClass();
+                    $mergedObject->each(function ($value, $key) use (&$item) {
+                        $item->$key = $value;
+                    });
+                    $item->Resultat_Appel = 'Appels clôture - CRI non conforme';
+                    $item->total = $percentRegion;
+                    $item->$index = $totalZone == 0 ? 0.00 : round($percentRegion * 100 / $totalZone, 2);
+//                    dd($item);
+                    return $item;
+                });
+                return $percentRegions;
+            });
+            $regions = $temp->flatten();
+//            $regions = $regions->map(function ($region) use ($totalCount) {
+//                $Region = $region->Nom_Region;
+//                $region->$Region = round($region->total * 100 / $totalCount, 2);;
+//                return $region;
+//            });
+//            $columns = $columns->map(function ($region) use ($totalCount) {
+//                $Region = $region->Nom_Region;
+//                $region->$Region = round($region->total * 100 / $totalCount, 2);;
+//                return $region;
+//            });
+//            $keys = $columns->groupBy(['Nom_Region'])->keys();
+            $regions = $regions->groupBy($intervCol);
+//            $regions = $regions->groupBy('Nom_Region');
+
+
+            $regions_names = [];
+//            $regions_names[0] = new \stdClass();
+//            $regions_names[0]->data = $intervCol;
+//            $regions_names[0]->name = $intervCol;
+            $keys->map(function ($key, $index) use (&$regions_names) {
+                $regions_names[$index + 1] = new \stdClass();
+                $regions_names[$index + 1]->text =
+                $regions_names[$index + 1]->data =
+                $regions_names[$index + 1]->name =
+                $regions_names[$index + 1]->title = $key;
+            });
+            usort($regions_names, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
+            $first = new \stdClass();
+            $first->title = $intervCol == 'Code_Intervention' ? 'Code Intervention' : 'Type Intervention';
+            $first->text = $intervCol == 'Code_Intervention' ? 'Code Intervention' : 'Type Intervention';
+            $first->name = $first->data = $intervCol;
+            $first->orderable = false;
+            array_unshift($regions_names, $first);
+//            $last = new \stdClass();
+//            $last->data = 'total';
+//            $last->name = 'total';
+//            array_push($regions_names, $last);
+//            $regions_names[] = new \stdClass();
+//            $regions_names[count($regions_names) - 1]->data = 'total';
+//            $regions_names[count($regions_names) - 1]->name = 'total';
+
+
+            $total = new \stdClass();
+            $total->values = [];
+            $regions = $regions->map(function ($region, $index) use (&$regions_names, $keys, $intervCol, &$total) {
+                $row = new \stdClass();
+                $row->values = [];
+                $col_arr = $keys->all();
+                $item = $region->map(function ($call) use ($index, &$row, &$regions_names, &$col_arr, $intervCol) {
+                    $row->$intervCol = $call->$intervCol;
+
+                    $nom_region = $call->Nom_Region;
+
+                    $col_arr = array_diff($col_arr, [$nom_region]);
+
+                    $row->values[$nom_region] = $call->$nom_region;
+                    $row->$nom_region = $call->total . ' / ' . (isset($call->itemTotal) ? $call->itemTotal : 0) . ' / ' . (isset($call->$index) ? $call->$index : 0) . '%';
+//                    $row->$nom_region = $call->total . ' / ' . $call->$nom_region . '%';
+                    $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
+//                    $row->total = round(array_sum($row->values), 2); //round(array_sum($row->values) / count($row->values), 2) . '%';
+                    return $row;
+                });
+                $_item = $item->last();
+                $index = count($_item->values);
+                foreach ($col_arr as $col) {
+                    $_item->values[$col] = 0; //'0%';
+                    $_item->$col = '0';
+                }
+
+                ksort($_item->values);
+                collect($_item->values)->map(function ($value, $index) use (&$total) {
+                    $value = str_replace('%', '', $value);
+                    $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
+                    $total->$index = $total->values[$index];
+                });
+                $_item->values = collect($_item->values)->values();
+                return $_item;
+//            return $item->last();
+            });
+
+            $dataCount = $regions->count();
+            collect($total->values)->map(function ($value, $index) use (&$total, $dataCount) {
+                $total->values[$index] = ceil(round($total->values[$index], 2)); // round($total->values[$index] / $dataCount, 2);
+                $total->$index = $total->values[$index] . '%';
+            });
+
+            $total->$intervCol = 'Total Général';
+            $total->total = round(array_sum($total->values)); //round(array_sum($total->values) / count($total->values), 2) . '%';
+            $total->values = collect($total->values)->values();
+            $total->isTotal = true;
+            $regions->push($total);
+
+            $regions = $regions->values();
+            $data = ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
+            return $data;
+        }
+    }
+
     public function getCloturetechCall(Request $request, $filter = null)
     {
         $dates = $request->get('dates');

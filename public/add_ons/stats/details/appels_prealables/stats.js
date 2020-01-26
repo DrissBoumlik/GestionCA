@@ -531,20 +531,20 @@ $(function () {
                     return {
                         ...column,
                         render: function (data, type, full, meta) {
-                            let splittedData = null;
-                            if (data !== null) {
-                                data = data.toString();
-                                if (data.indexOf('/') !== -1) {
-                                    splittedData = data.split('/');
-                                    splittedData = splittedData[0] + '<br/>' + splittedData[1];
+                            let newData = data;
+                            if (newData !== null) {
+                                newData = newData.toString();
+                                if (newData.indexOf('/') !== -1) {
+                                    newData = newData.split('/').join('<br/>');
+                                    // newData = newData[0] + '<br/>' + newData[1];
                                 }
                             } else {
-                                data = '';
+                                newData = '';
                             }
 
                             let classHasTotalCol = (params.removeTotalColumn) ? 'hasTotal' : '';
                             let rowClass = full.isTotal ? '' : 'pointer detail-data';
-                            return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + (splittedData !== null ? splittedData : data) + '<\span>';
+                            return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + newData + '<\span>';
                         }
                     };
                 });
