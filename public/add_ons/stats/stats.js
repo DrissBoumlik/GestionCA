@@ -46,158 +46,130 @@ $(function () {
         getData['agent_name'] = agent_name;
     }
 
-    const paramFiltreList = [
-        {
-            url: 'Groupement',
-            elements: [
-                {
-                    id: '#stats-groupement-filter',
-                    text: 'Groupement', values: (v) => {
-                        nomRegion = undefined;
-                        gpmtAppelPre = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        resultatAppel = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                        groupement = v;
-                    }, class: '.tree-groupement-view'
-                },
-                {
-                    id: '#stats-regions-filter',
-                    text: 'Groupement', values: (v) => {
-                        nomRegion = undefined;
-                        gpmtAppelPre = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        resultatAppel = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                        groupement = v;
-                    }, class: '.tree-region-view'
-                }
-            ]
-        },
-        {
-            url: 'Gpmt_Appel_Pre',
-            elements: [
-                {
-                    id: '#stats-call-regions-filter', class: '.tree-call-region-view',
-                    text: 'Résultats Appels Préalables par agence', values: (v) => {
-                        nomRegion = undefined;
-                        groupement = undefined;
-                        resultatAppel = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                        gpmtAppelPre = v;
-                    }
-                },
-                {
-                    id: '#stats-weeks-regions-filter', class: '.tree-weeks-region-view',
-                    text: 'Résultats Appels Préalables par semaine', values: (v) => {
-                        nomRegion = undefined;
-                        groupement = undefined;
-                        resultatAppel = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                        gpmtAppelPre = v;
-                    }
-                }
-            ]
-        },
-        {
-            url: 'Code_Type_Intervention',
-            elements: [
-                {
-                    id: '#code-type-intervention-filter',
-                    class: '.tree-code-type-intervention-view',
-                    text: 'Type Intervention',
-                    values: (v) => {
-                        nomRegion = undefined;
-                        groupement = undefined;
-                        resultatAppel = undefined;
-                        codeTypeIntervention = v;
-                        codeIntervention = undefined;
-                        gpmtAppelPre = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                    }
-                }
-            ],
-        },
-        {
-            url: 'Code_Intervention',
-            elements: [
-                {
-                    id: '#code-intervention-filter', class: '.tree-code-intervention-view',
-                    text: 'Intervention', values: (v) => {
-                        nomRegion = undefined;
-                        groupement = undefined;
-                        resultatAppel = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = v;
-                        gpmtAppelPre = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                    }
-                }
-            ]
-        },
-        {
-            url: 'Nom_Region',
-            elements: [
-                {
-                    id: '#nom-region-filter', class: '.tree-nom-region-view',
-                    text: 'Region',
-                    values: (v) => {
-                        groupement = undefined;
-                        resultatAppel = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        gpmtAppelPre = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                        nomRegion = v;
-                    }
-                },
+    // const paramFiltreList = [
+    //     {
+    //         url: 'Groupement',
+    //         elements: [
+    //             {
+    //                 id: '#stats-groupement-filter',
+    //                 text: 'Groupement', values: (v) => {
+    //                     groupement = v;
+    //                 }, class: '.tree-groupement-view'
+    //             },
+    //             {
+    //                 id: '#stats-regions-filter',
+    //                 text: 'Groupement', values: (v) => {
+    //                     groupement = v;
+    //                 }, class: '.tree-region-view'
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         url: 'Gpmt_Appel_Pre',
+    //         elements: [
+    //             {
+    //                 id: '#stats-call-regions-filter', class: '.tree-call-region-view',
+    //                 text: 'Résultats Appels Préalables par agence', values: (v) => {
+    //                     gpmtAppelPre = v;
+    //                 }
+    //             },
+    //             {
+    //                 id: '#stats-weeks-regions-filter', class: '.tree-weeks-region-view',
+    //                 text: 'Résultats Appels Préalables par semaine', values: (v) => {
+    //                     gpmtAppelPre = v;
+    //                 }
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         url: 'Code_Type_Intervention',
+    //         elements: [
+    //             {
+    //                 id: '#code-type-intervention-filter',
+    //                 class: '.tree-code-type-intervention-view',
+    //                 text: 'Type Intervention',
+    //                 values: (v) => {
+    //                     codeTypeIntervention = v;
+    //                 }
+    //             }
+    //         ],
+    //     },
+    //     {
+    //         url: 'Code_Intervention',
+    //         elements: [
+    //             {
+    //                 id: '#code-intervention-filter', class: '.tree-code-intervention-view',
+    //                 text: 'Intervention', values: (v) => {
+    //                     codeIntervention = v;
+    //                 }
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         url: 'Nom_Region',
+    //         elements: [
+    //             {
+    //                 id: '#nom-region-filter', class: '.tree-nom-region-view',
+    //                 text: 'Region',
+    //                 values: (v) => {
+    //                     nomRegion = v;
+    //                 }
+    //             },
+    //
+    //             {
+    //                 id: '#code-rdv-intervention-confirm-filter', class: '.tree-code-rdv-intervention-confirm-view',
+    //                 text: 'Region',
+    //                 values: (v) => {
+    //                     codeRdvInterventionConfirm = v;
+    //
+    //                 }
+    //             },
+    //
+    //             {
+    //                 id: '#code-rdv-intervention-filter', class: '.tree-code-rdv-intervention-view',
+    //                 text: 'Region',
+    //                 values: (v) => {
+    //                     codeRdvIntervention = v;
+    //                 }
+    //             }
+    //         ],
+    //     },
+    // ];
 
-                {
-                    id: '#code-rdv-intervention-confirm-filter', class: '.tree-code-rdv-intervention-confirm-view',
-                    text: 'Region',
-                    values: (v) => {
-                        groupement = undefined;
-                        resultatAppel = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        gpmtAppelPre = undefined;
-                        nomRegion = undefined;
-                        codeRdvInterventionConfirm = v;
-                        codeRdvIntervention = undefined;
-
-                    }
-                },
-
-                {
-                    id: '#code-rdv-intervention-filter', class: '.tree-code-rdv-intervention-view',
-                    text: 'Region',
-                    values: (v) => {
-                        groupement = undefined;
-                        resultatAppel = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        gpmtAppelPre = undefined;
-                        nomRegion = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = v;
-                    }
-                }
-            ],
-        },
-    ];
+    // if (false) {
+    //     paramFiltreList.forEach(function (p) {
+    //         $.ajax({
+    //             url: `${APP_URL}/stats/filter/${p.url}`,
+    //             data: getData,
+    //             method: 'GET',
+    //             success: function (response) {
+    //                 const data = response.data.map(function (d) {
+    //                     return {
+    //                         id: d,
+    //                         text: d
+    //                     };
+    //                 });
+    //                 p.elements.forEach(function (element) {
+    //                     $(element.class).each(function (index, item) {
+    //                         new Tree(element.id, {
+    //                             data: [{id: '-1', text: element.text, children: data}],
+    //                             closeDepth: 1,
+    //                             loaded: function () {
+    //                             },
+    //                             onChange: function () {
+    //                                 console.log(this.values);
+    //                                 element.values(this.values);
+    //                             }
+    //                         });
+    //                         // $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
+    //                     });
+    //                 });
+    //             },
+    //             error: function (jqXHR, textStatus, errorThrown) {
+    //             }
+    //         });
+    //     });
+    // }
 
     let treeData = undefined;
     let datesFilterList = [];
@@ -250,55 +222,23 @@ $(function () {
         }
     });
 
-    for (let p of paramFiltreList) {
-        $.ajax({
-            url: `${APP_URL}/stats/filter/${p.url}`,
-            data: getData,
-            method: 'GET',
-            success: function (response) {
-                const data = response.data.map(function (d) {
-                    return {
-                        id: d,
-                        text: d
-                    };
-                });
-                for (let element of p.elements) {
-                    $(element.class).each(function (index, item) {
-                        new Tree(element.id, {
-                            data: [{id: '-1', text: element.text, children: data}],
-                            closeDepth: 1,
-                            loaded: function () {
-                            },
-                            onChange: function () {
-                                element.values(this.values);
-                            }
-                        });
-                        // $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
-                    });
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-            }
-        });
-    }
 
     const filterData = () => {
         // console.log(agence_code, agent_name);
         return {
             dates,
-            resultatAppel,
-            gpmtAppelPre,
-            codeTypeIntervention,
-            codeIntervention,
-            codeRdvIntervention,
-            codeRdvInterventionConfirm,
-            groupement,
-            nomRegion,
+            // resultatAppel,
+            // gpmtAppelPre,
+            // codeTypeIntervention,
+            // codeIntervention,
+            // codeRdvIntervention,
+            // codeRdvInterventionConfirm,
+            // groupement,
+            // nomRegion,
             agent_name,
             agence_code
         };
     };
-
 
     //<editor-fold desc="REGIONS / FOLDERS">
     let statsRegions = {
@@ -308,8 +248,8 @@ $(function () {
         element: $('#statsRegions'),
         columns: undefined,
         data: undefined,
-        filter: {dates: undefined, rows: undefined},
-        filterElement: {datesTree: '#tree-view-0', rowsTree: '#stats-groupement-filter'},
+        filterTree: {dates: undefined, rows: undefined},
+        filterElement: {dates: '#tree-view-0', rows: '#stats-groupement-filter'},
         routeCol: 'regions/columns/Groupement',
         routeData: 'regions/Groupement',
         objChart: {
@@ -366,8 +306,8 @@ $(function () {
         element: $('#statsFolders'),
         columns: undefined,
         data: undefined,
-        filter: {dates: undefined, rows: undefined},
-        filterElement: {datesTree: '#tree-view-1', rowsTree: '#stats-regions-filter'},
+        filterTree: {dates: undefined, rows: undefined},
+        filterElement: {dates: '#tree-view-1', rows: '#stats-regions-filter'},
         routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
         routeData: 'regions/details/groupement?key_groupement=Appels-clture',
         objChart: {
@@ -405,8 +345,8 @@ $(function () {
         element: $('#callsStatesAgencies'),
         columns: undefined,
         data: undefined,
-        filter: {dates: undefined, rows: undefined},
-        filterElement: {datesTree: '#tree-view-2', rowsTree: '#stats-call-regions-filter'},
+        filterTree: {dates: undefined, rows: undefined},
+        filterElement: {dates: '#tree-view-2', rows: '#stats-call-regions-filter'},
         routeCol: 'regionsCallState/columns/Nom_Region',
         routeData: 'regionsCallState/Nom_Region',
         objChart: {
@@ -443,8 +383,8 @@ $(function () {
         element: $('#callsStatesWeeks'),
         columns: undefined,
         data: undefined,
-        filter: {dates: undefined, rows: undefined},
-        filterElement: {datesTree: '#tree-view-3', rowsTree: '#stats-weeks-regions-filter'},
+        filterTree: {dates: undefined, rows: undefined},
+        filterElement: {dates: '#tree-view-3', rows: '#stats-weeks-regions-filter'},
         routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine',
         routeData: 'regionsCallState/Date_Heure_Note_Semaine',
         objChart: {
@@ -482,8 +422,8 @@ $(function () {
         element: $('#statsCallsPos'),
         columns: undefined,
         data: undefined,
-        filter: {dates: undefined, rows: undefined},
-        filterElement: {datesTree: '#tree-view-4', rowsTree: '#code-rdv-intervention-confirm-filter'},
+        filterTree: {dates: undefined, rows: undefined},
+        filterElement: {dates: '#tree-view-4', rows: '#code-rdv-intervention-confirm-filter'},
         routeCol: 'clientsByCallState/columns/Joignable',
         routeData: 'clientsByCallState/Joignable',
         objChart: {
@@ -519,8 +459,8 @@ $(function () {
         element: $('#statsCallsNeg'),
         columns: undefined,
         data: undefined,
-        filter: {dates: undefined, rows: undefined},
-        filterElement: {datesTree: '#tree-view-5', rowsTree: '#code-rdv-intervention-filter'},
+        filterTree: {dates: undefined, rows: undefined},
+        filterElement: {dates: '#tree-view-5', rows: '#code-rdv-intervention-filter'},
         routeCol: 'clientsByCallState/columns/Injoignable',
         routeData: 'clientsByCallState/Injoignable',
         objChart: {
@@ -558,8 +498,8 @@ $(function () {
         element: $('#statsFoldersByType'),
         columns: undefined,
         data: undefined,
-        filter: {dates: undefined, rows: undefined},
-        filterElement: {datesTree: '#tree-view-6', rowsTree: '#code-type-intervention-filter'},
+        filterTree: {dates: undefined, rows: undefined},
+        filterElement: {dates: '#tree-view-6', rows: '#code-type-intervention-filter'},
         routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention',
         routeData: 'nonValidatedFolders/Code_Type_Intervention',
         objChart: {
@@ -589,8 +529,8 @@ $(function () {
         element: $('#statsFoldersByCode'),
         columns: undefined,
         data: undefined,
-        filter: {dates: undefined, rows: undefined},
-        filterElement: {datesTree: '#tree-view-7', rowsTree: '#code-intervention-filter'},
+        filterTree: {dates: undefined, rows: undefined},
+        filterElement: {dates: '#tree-view-7', rows: '#code-intervention-filter'},
         routeCol: 'nonValidatedFolders/columns/Code_Intervention',
         routeData: 'nonValidatedFolders/Code_Intervention',
         objChart: {
@@ -622,8 +562,8 @@ $(function () {
         element: $('#statsPerimeters'),
         columns: undefined,
         data: undefined,
-        filter: {dates: undefined, rows: undefined},
-        filterElement: {datesTree: '#tree-view-8', rowsTree: '#nom-region-filter'},
+        filterTree: {dates: undefined, rows: undefined},
+        filterElement: {dates: '#tree-view-8', rows: '#nom-region-filter'},
         routeCol: 'clientsByPerimeter/columns',
         routeData: 'clientsByPerimeter',
         objChart: {
@@ -653,6 +593,8 @@ $(function () {
     }
     //</editor-fold>
 
+    let globalElements = [statsRegions, statsFolders, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, statsFoldersByType, statsFoldersByCode, statsPerimeters];
+
     //<editor-fold desc="FUNCTIONS">
     function getColumns(object, data = null, params = {
         removeTotal: true,
@@ -671,17 +613,38 @@ $(function () {
         // if (savedData !== null) {
         //     data = savedData;
         // }
-
+        data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
         $.ajax({
             url: APP_URL + '/' + object.routeCol,
             method: 'GET',
             data: data,
             success: function (response) {
+                let rowsFilterData = response.rows.map(function (d, index) {
+                    return {
+                        id: d,
+                        text: d
+                    };
+                });
+                new Tree(object.filterElement.rows, {
+                    data: [{id: '-1', text: response.rowsFilterHeader, children: rowsFilterData}],
+                    closeDepth: 1,
+                    loaded: function () {
+                        if (response.filter && response.filter.rows_filter && !params.refreshMode) {
+                            this.values = object.filterTree.rows = response.filter.rows_filter;
+                            console.log(this.values);
+                        }
+                    },
+                    onChange: function () {
+                        object.filterTree.rows = this.values;
+                        console.log(this.values);
+                    }
+                });
+
                 let datesFilterValuesExist = true;
                 let filters = response.filter;
                 if (filters !== null && filters !== undefined) {
-                    object.filter.dates = filters.date_filter;
-                    datesFilterValues.push([object.treeElement, filters.date_filter]);
+                    object.filterTree.dates = filters.date_filter;
+                    datesFilterValues.push([object.filterElement.dates, filters.date_filter]);
                     // if (datesFilterList !== null && datesFilterList !== undefined && datesFilterList.length > 0) {
                     //     datesFilterList[object.treeElement].values = datesFilterValues[object.treeElement];
                     // }
