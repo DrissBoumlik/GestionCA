@@ -820,16 +820,24 @@ $(function () {
         getColumns(statsCallsGem, filterData(), {
             removeTotal: false,
             refreshMode: true,
-            removeTotalColumn: false
+            removeTotalColumn: false,
+            details: false,
+            pagination: false
         });
 
         getColumns(callsStatesAgencies, filterData(), {
             removeTotal: false,
-            refreshMode: true
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
         });
         getColumns(callsStatesWeeks, filterData(), {
             removeTotal: false,
-            refreshMode: true
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
         });
 
     });

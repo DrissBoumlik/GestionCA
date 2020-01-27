@@ -769,7 +769,7 @@ $(function () {
                                     '&col=' + object.columnName +
                                     '&colValue=' + colText +
                                     '&agent=' + (agent_name === undefined || agent_name === null ? '' : agent_name) +
-                                    '&agence=' + (agence_name === undefined || agence_name === null? '' : agence_name) +
+                                    '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) +
                                     '&dates=' + (dates === undefined || dates === null ? '' : dates);
                             }
                             // console.log(colText + ' --- ' + rowText)
@@ -1003,7 +1003,13 @@ $(function () {
         row.child(objectChild.element).show();
         objectChild.element.after(canvasDom);
         // row.child(objectChild.element).show();
-        getColumns(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
+        getColumns(objectChild, data, {
+            removeTotal: false,
+            removeTotalColumn: false,
+            details: false,
+            refreshMode: false,
+            pagination: false
+        });
         // InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
     }
 
@@ -1031,35 +1037,65 @@ $(function () {
             removeTotal: false,
             refreshMode: true,
             details: true,
-            removeTotalColumn: false
+            removeTotalColumn: false,
+            pagination: false
         });
         getColumns(statsFolders, filterData(), {
             removeTotal: false,
-            refreshMode: true
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
         });
         getColumns(callsStatesAgencies, filterData(), {
             removeTotal: false,
-            refreshMode: true
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
         });
         getColumns(callsStatesWeeks, filterData(), {
             removeTotal: false,
-            refreshMode: true
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
         });
         getColumns(statscallsPos, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: false
+            removeTotalColumn: false,
+            pagination: false
         });
         getColumns(statscallsNeg, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: false
+            removeTotalColumn: false,
+            pagination: false
         });
-        getColumns(statsFoldersByType, filterData(), {removeTotal: false, refreshMode: true});
-        getColumns(statsFoldersByCode, filterData(), {removeTotal: false, refreshMode: true});
-        getColumns(statsPerimeters, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsFoldersByType, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
+        getColumns(statsFoldersByCode, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
+        getColumns(statsPerimeters, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
     });
     //</editor-fold>
 

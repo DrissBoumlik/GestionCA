@@ -707,7 +707,13 @@ $(function () {
 
     $("#refreshAll").on('click', function () {
 
-        getColumns(statsPerimeters, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsPerimeters, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
     });
     //</editor-fold>
 

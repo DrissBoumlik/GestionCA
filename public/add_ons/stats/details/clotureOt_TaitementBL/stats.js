@@ -403,7 +403,6 @@ $(function () {
     }
     //</editor-fold>
 
-
     //<editor-fold desc="ALL STATS">
     let statsColturetech = {
         element_dt: undefined,
@@ -861,8 +860,20 @@ $(function () {
             pagination: false
         });
 
-        getColumns(statsFoldersByType, filterData(), {removeTotal: false, refreshMode: true});
-        getColumns(statsFoldersByCode, filterData(), {removeTotal: false, refreshMode: true});
+        getColumns(statsFoldersByType, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
+        getColumns(statsFoldersByCode, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
 
         getColumns(statsColturetech, filterData(), {
             removeTotal: false,
