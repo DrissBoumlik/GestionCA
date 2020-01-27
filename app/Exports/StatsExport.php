@@ -25,13 +25,15 @@ class StatsExport implements FromCollection,WithHeadings, WithMapping, ShouldAut
      */
     public function collection()
     {
-        $row = $this->request->input('row');
-        $rowValue = $this->request->input('rowValue');
-        $col = $this->request->input('col');
-        $colValue = $this->request->input('colValue');
+        $row = $this->request->row;
+        $rowValue = $this->request->rowValue;
+        $col = $this->request->col;
+        $colValue = $this->request->colValue;
 
-        $agentName = $this->request->input('agent');
-        $agenceCode = $this->request->input('agence');
+        $agentName = $this->request->agent;
+        $agenceCode = $this->request->agence;
+
+        $dates = $this->request->dates;
 
         $allStats = DB::table('stats')->select([
             'Type_Note',
@@ -82,8 +84,13 @@ class StatsExport implements FromCollection,WithHeadings, WithMapping, ShouldAut
         if ($agenceCode) {
             $allStats = $allStats->where('Nom_Region', 'like', "%$agenceCode");
         }
-       return $allStats->get();
 
+        if ($dates) {
+            $dates = explode(',', $this->request->dates);
+            $allStats = $allStats->whereIn('Date_Note', $dates);
+        }
+
+        return $allStats->get();
     }
 
     public function headings(): array
