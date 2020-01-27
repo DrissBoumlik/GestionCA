@@ -88,7 +88,7 @@
         <!-- Stats -->
         <div class="container-fluid">
             <a href="{{ URL::route('ExportXls', array('row' => request('row'), 'rowValue' => request('rowValue'),
- 'col' => request('col') , 'colValue' => request('colValue'),'agent' => request('agent') , 'agence' => request('agence') , 'dates' => request('dates') )) }}"
+ 'col' => request('col') , 'colValue' => request('colValue'),'agent' => request('agent') , 'agence' => request('agence') , 'dates' => request('dates'), 'Resultat_Appel' => request('Resultat_Appel') )) }}"
                class="btn btn-primary mb-3 capitalize-first-letter">
                 exporter des données au format excel </a>
             <div class="row">

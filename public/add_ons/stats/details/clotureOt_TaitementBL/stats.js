@@ -593,7 +593,8 @@ $(function () {
                                         '&rowValue=' + rowText +
                                         '&col=' + object.columnName +
                                         '&colValue=' + colText +
-                                        '&dates=' + (dates === undefined || dates === null ? '' : dates);
+                                        '&dates=' + (dates === undefined || dates === null ? '' : dates) +
+                                        (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : '');
                                 }
                                 // console.log(colText + ' --- ' + rowText)
                             }

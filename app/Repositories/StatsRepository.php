@@ -27,6 +27,8 @@ class StatsRepository
 
         $dates = $request->dates;
 
+        $resultat_appel = $request->Resultat_Appel;
+
         $allStats = DB::table('stats')->select([
             'Type_Note',
             'Utilisateur',
@@ -81,6 +83,11 @@ class StatsRepository
             $dates = explode(',', $request->dates);
             $allStats = $allStats->whereIn('Date_Note', $dates);
         }
+
+        if ($resultat_appel) {
+            $allStats = $allStats->where('Resultat_Appel', $resultat_appel);
+        }
+
 
         return $allStats->get();
     }

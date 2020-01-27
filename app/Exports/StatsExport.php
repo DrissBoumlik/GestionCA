@@ -35,6 +35,9 @@ class StatsExport implements FromCollection,WithHeadings, WithMapping, ShouldAut
 
         $dates = $this->request->dates;
 
+        $resultat_appel = $this->request->Resultat_Appel;
+
+
         $allStats = DB::table('stats')->select([
             'Type_Note',
             'Utilisateur',
@@ -89,6 +92,12 @@ class StatsExport implements FromCollection,WithHeadings, WithMapping, ShouldAut
             $dates = explode(',', $this->request->dates);
             $allStats = $allStats->whereIn('Date_Note', $dates);
         }
+
+
+        if ($resultat_appel) {
+            $allStats = $allStats->where('Resultat_Appel', $resultat_appel);
+        }
+
 
         return $allStats->get();
     }
