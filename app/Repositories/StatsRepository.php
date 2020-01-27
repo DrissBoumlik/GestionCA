@@ -148,6 +148,7 @@ class StatsRepository
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
         $groupement = $request->get('groupement');
+        $key_groupement = $request->get('key_groupement');
         $stats = Stats::select([$column])
             ->distinct($column)
             ->where($column, 'not like', '=%')
@@ -161,6 +162,9 @@ class StatsRepository
         }
         if ($agenceCode) {
             $stats = $stats->where('Nom_Region', 'like', "%$agenceCode");
+        }
+        if($key_groupement) {
+            $stats = $stats->where('key_groupement', 'like', $key_groupement);
         }
         $stats = $stats->orderBy($column)->get();
         return $stats->map(function ($s) use ($column) {

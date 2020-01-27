@@ -48,6 +48,38 @@ $(function () {
 
     const paramFiltreList = [
         {
+            url: 'Resultat_Appel',
+            filter: 'key_groupement=Appels-pralables',
+            elements: [
+                {
+                    id: '#stats-callResult-filter',
+                    text: 'Résultat Appels', values: (v) => {
+                        nomRegion = undefined;
+                        gpmtAppelPre = undefined;
+                        codeTypeIntervention = undefined;
+                        codeIntervention = undefined;
+                        resultatAppel = undefined;
+                        codeRdvInterventionConfirm = undefined;
+                        codeRdvIntervention = undefined;
+                        groupement = v;
+                    }, class: '.tree-callResult-view'
+                },
+                {
+                    id: '#stats-regions-filter',
+                    text: 'Groupement', values: (v) => {
+                        nomRegion = undefined;
+                        gpmtAppelPre = undefined;
+                        codeTypeIntervention = undefined;
+                        codeIntervention = undefined;
+                        resultatAppel = undefined;
+                        codeRdvInterventionConfirm = undefined;
+                        codeRdvIntervention = undefined;
+                        groupement = v;
+                    }, class: '.tree-region-view'
+                }
+            ]
+        },
+        {
             url: 'Groupement',
             elements: [
                 {
@@ -206,13 +238,6 @@ $(function () {
     let datesFilterListExist = false;
     let datesFilterValuesExist = false;
 
-
-    let filterList = [];
-    let filterValues = [];
-
-    let filterListExist = false;
-    let filterValuesExist = false;
-
     $.ajax({
         url: APP_URL + '/dates',
         method: 'GET',
@@ -252,7 +277,7 @@ $(function () {
 
     for (let p of paramFiltreList) {
         $.ajax({
-            url: `${APP_URL}/stats/filter/${p.url}`,
+            url: `${APP_URL}/stats/filter/${p.url}` + (p.filter !== undefined && p.filter !== null ? '/?' + p.filter : ''),
             data: getData,
             method: 'GET',
             success: function (response) {
