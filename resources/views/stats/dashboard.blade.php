@@ -105,7 +105,7 @@
         <!-- Global date filter-->
         <div class="container-fluid">
             @if(!$agence && !$agent)
-                <a href="javascript:void(0)" onclick="window.print()" id="printElement"
+                <a href="javascript:void(0)" id="printElement"
                    class="btn btn-primary mb-3 capitalize-first-letter w-100">
                     exporter des données au format PDF </a>
                 @include('stats.layouts.filter_menu')

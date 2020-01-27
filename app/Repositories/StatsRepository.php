@@ -239,8 +239,6 @@ class StatsRepository
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
 
-//        TODO: Get Route URI -> replace params with actual value (as ID) - search in filter table if filter exists
-//        TODO => if not check request if it exists save the new filter or just get full data and delete old filter
 
 //        $regions = \DB::table('stats')
 //            ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(Nom_Region) as total'))
@@ -298,35 +296,10 @@ class StatsRepository
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
-        if ($request && count($request->all())) {
-            if ($request->exists('refreshMode')) {
-                if ($dates) {
-                    $dates = array_values($dates);
-                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
-                    $filter->date_filter = $dates;
-                    $filter->save();
-                    $regions = $regions->whereIn('Date_Note', $dates);
-                } else {
-                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                    if ($filter) {
-                        $filter->forceDelete();
-                    }
-                }
-            } else {
-                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                if ($filter) {
-                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-                }
-            }
-        } else {
-            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-            if ($filter) {
-                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-            }
-        }
+        $filter = $this->applyFilter($request, $route, $regions);
+
         $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
         $regions = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
-//        dd($regions); // STOP
         $regions = $columns = addRegionWithZero($request, $regions, $columns);
         // logger($regions);
         if (!count($regions)) {
@@ -391,7 +364,7 @@ class StatsRepository
 //            $regions_names[] = new \stdClass();
 //            $regions_names[count($regions_names) - 1]->data = 'total';
 //            $regions_names[count($regions_names) - 1]->name = 'total';
-
+            $rowsKeys = $regions->keys();
             $regions = $regions->map(function ($region, $index) use (&$regions_names, $keys, $callResult) {
                 $row = new \stdClass();
                 $row->values = [];
@@ -433,7 +406,7 @@ class StatsRepository
 
             $regions = $regions->values();
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys, 'data' => $regions];
         }
     }
 
@@ -495,32 +468,8 @@ class StatsRepository
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-        if ($request && count($request->all())) {
-            if ($request->exists('refreshMode')) {
-                if ($dates) {
-                    $dates = array_values($dates);
-                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
-                    $filter->date_filter = $dates;
-                    $filter->save();
-                    $regions = $regions->whereIn('Date_Note', $dates);
-                } else {
-                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                    if ($filter) {
-                        $filter->forceDelete();
-                    }
-                }
-            } else {
-                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                if ($filter) {
-                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-                }
-            }
-        } else {
-            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-            if ($filter) {
-                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-            }
-        }
+
+        $filter = $this->applyFilter($request, $route, &$regions); // CHECK: ERROR PASSING BY REFERENCE
 
 //        $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
 
@@ -589,6 +538,7 @@ class StatsRepository
 //            $regions_names[count($regions_names) - 1]->name = 'total';
 //            dd($regions->groupBy('Nom_Region'));
             $regions = $regions->groupBy(['Resultat_Appel']);
+            $rowsKeys = $regions->keys();
             $regions = $regions->map(function ($region) use ($keys) {
                 $row = new \stdClass();
                 $row->values = [];
@@ -624,7 +574,7 @@ class StatsRepository
             });
             $regions = $regions->values();
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys, 'data' => $regions];
         }
     }
 
@@ -786,6 +736,7 @@ class StatsRepository
 
             $total = new \stdClass();
             $total->values = [];
+            $rowsKeys = $regions->keys();
             $regions = $regions->map(function ($region) use (&$regions_names, $keys, $callResult, &$total) {
                 $row = new \stdClass();
                 $row->values = [];
@@ -836,7 +787,7 @@ class StatsRepository
 
             $regions = $regions->values();
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys, 'data' => $regions];
         }
     }
 
@@ -1057,6 +1008,7 @@ class StatsRepository
 
             $total = new \stdClass();
             $total->values = [];
+            $rowsKeys = $regions->keys();
             $regions = $regions->map(function ($region, $index) use (&$columns, $keys, $column, &$total) {
 //            dd($index, $region);
                 $row = new \stdClass();
@@ -1117,7 +1069,7 @@ class StatsRepository
 
             $regions = $regions->values();
 
-            return ['filter' => $filter, 'columns' => $columns, 'data' => $regions];
+            return ['filter' => $filter, 'columns' => $columns, 'rows' => $rowsKeys, 'data' => $regions];
         }
     }
 
@@ -1276,6 +1228,7 @@ class StatsRepository
 
             $total = new \stdClass();
             $total->values = [];
+            $rowsKeys = $regions->keys();
             $regions = $regions->map(function ($region) use (&$regions_names, $keys, $intervCol, &$total) {
                 $row = new \stdClass();
                 $row->values = [];
@@ -1325,7 +1278,7 @@ class StatsRepository
             $regions->push($total);
 
             $regions = $regions->values();
-            $data = ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
+            $data = ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys, 'data' => $regions];
             return $data;
         }
     }
@@ -1509,6 +1462,7 @@ class StatsRepository
 
             $total = new \stdClass();
             $total->values = [];
+            $rowsKeys = $regions->keys();
             $regions = $regions->map(function ($region, $index) use (&$regions_names, $keys, $intervCol, &$total) {
                 $row = new \stdClass();
                 $row->values = [];
@@ -1558,7 +1512,7 @@ class StatsRepository
             $regions->push($total);
 
             $regions = $regions->values();
-            $data = ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
+            $data = ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys, 'data' => $regions];
             return $data;
         }
     }
@@ -1719,6 +1673,7 @@ class StatsRepository
 
             $total = new \stdClass();
             $total->values = [];
+            $rowsKeys = $codes->keys();
             $codes = $codes->map(function ($region) use (&$codes_names, &$total, $keys) {
                 $row = new \stdClass(); //[];
                 $row->values = [];
@@ -1776,7 +1731,7 @@ class StatsRepository
 
 //            $codes->push($total);
             $codes = $codes->values();
-            $data = ['filter' => $filter, 'columns' => $codes_names, 'data' => $codes];
+            $data = ['filter' => $filter, 'columns' => $codes_names, 'rows' => $rowsKeys, 'data' => $codes];
             return $data;
         }
     }
@@ -1844,7 +1799,7 @@ class StatsRepository
                     $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
                     $filter->date_filter = $dates;
                     $filter->save();
-                    $regions = $results->whereIn('Date_Note', $dates);
+                    $results = $results->whereIn('Date_Note', $dates);
                 } else {
                     $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
                     if ($filter) {
@@ -1854,13 +1809,13 @@ class StatsRepository
             } else {
                 $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
                 if ($filter) {
-                    $regions = $results->whereIn('Date_Note', $filter->date_filter);
+                    $results = $results->whereIn('Date_Note', $filter->date_filter);
                 }
             }
         } else {
             $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
             if ($filter) {
-                $regions = $results->whereIn('Date_Note', $filter->date_filter);
+                $results = $results->whereIn('Date_Note', $filter->date_filter);
             }
         }
 
@@ -1952,7 +1907,7 @@ class StatsRepository
 
             $total = new \stdClass();
             $total->values = [];
-
+            $rowsKeys = $results->keys();
             $results = $results->map(function ($region) use (&$column_names, &$total, $keys) {
                 $row = new \stdClass(); //[];
                 $row->values = [];
@@ -1993,7 +1948,7 @@ class StatsRepository
             $results->push($total);
             $results = $results->values();
 
-            $data = ['filter' => $filter, 'columns' => $column_names, 'data' => $results];
+            $data = ['filter' => $filter, 'columns' => $column_names, 'rows' => $rowsKeys, 'data' => $results];
             return $data;
         }
     }
@@ -2019,5 +1974,38 @@ class StatsRepository
     public function exportXlsCall(Request $request)
     {
         return Excel::download(new StatsExport($request), 'stats.xlsx');
+    }
+
+    public function applyFilter(Request $request, $route, $results)
+    {
+        $dates = $request->get('dates');
+        $user = auth()->user();
+        if ($request && count($request->all())) {
+            if ($request->exists('refreshMode')) {
+                if ($dates) {
+                    $dates = array_values($dates);
+                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
+                    $filter->date_filter = $dates;
+                    $filter->save();
+                    $results = $results->whereIn('Date_Note', $dates);
+                } else {
+                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                    if ($filter) {
+                        $filter->forceDelete();
+                    }
+                }
+            } else {
+                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+                if ($filter) {
+                    $results = $results->whereIn('Date_Note', $filter->date_filter);
+                }
+            }
+        } else {
+            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
+            if ($filter) {
+                $results = $results->whereIn('Date_Note', $filter->date_filter);
+            }
+        }
+        return $filter;
     }
 }

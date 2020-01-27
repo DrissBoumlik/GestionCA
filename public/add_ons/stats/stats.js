@@ -308,8 +308,8 @@ $(function () {
         element: $('#statsRegions'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-0',
-        filterTreeElement: '#stats-groupement-filter',
+        filter: {dates: undefined, rows: undefined},
+        filterElement: {datesTree: '#tree-view-0', rowsTree: '#stats-groupement-filter'},
         routeCol: 'regions/columns/Groupement',
         routeData: 'regions/Groupement',
         objChart: {
@@ -366,8 +366,8 @@ $(function () {
         element: $('#statsFolders'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-1',
-        filterTreeElement: '#stats-regions-filter',
+        filter: {dates: undefined, rows: undefined},
+        filterElement: {datesTree: '#tree-view-1', rowsTree: '#stats-regions-filter'},
         routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
         routeData: 'regions/details/groupement?key_groupement=Appels-clture',
         objChart: {
@@ -405,8 +405,8 @@ $(function () {
         element: $('#callsStatesAgencies'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-2',
-        filterTreeElement: '#stats-call-regions-filter',
+        filter: {dates: undefined, rows: undefined},
+        filterElement: {datesTree: '#tree-view-2', rowsTree: '#stats-call-regions-filter'},
         routeCol: 'regionsCallState/columns/Nom_Region',
         routeData: 'regionsCallState/Nom_Region',
         objChart: {
@@ -443,8 +443,8 @@ $(function () {
         element: $('#callsStatesWeeks'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-3',
-        filterTreeElement: '#stats-weeks-regions-filter',
+        filter: {dates: undefined, rows: undefined},
+        filterElement: {datesTree: '#tree-view-3', rowsTree: '#stats-weeks-regions-filter'},
         routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine',
         routeData: 'regionsCallState/Date_Heure_Note_Semaine',
         objChart: {
@@ -482,8 +482,8 @@ $(function () {
         element: $('#statsCallsPos'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-4',
-        filterTreeElement: '#code-rdv-intervention-confirm-filter',
+        filter: {dates: undefined, rows: undefined},
+        filterElement: {datesTree: '#tree-view-4', rowsTree: '#code-rdv-intervention-confirm-filter'},
         routeCol: 'clientsByCallState/columns/Joignable',
         routeData: 'clientsByCallState/Joignable',
         objChart: {
@@ -519,8 +519,8 @@ $(function () {
         element: $('#statsCallsNeg'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-5',
-        filterTreeElement: '#code-rdv-intervention-filter',
+        filter: {dates: undefined, rows: undefined},
+        filterElement: {datesTree: '#tree-view-5', rowsTree: '#code-rdv-intervention-filter'},
         routeCol: 'clientsByCallState/columns/Injoignable',
         routeData: 'clientsByCallState/Injoignable',
         objChart: {
@@ -558,8 +558,8 @@ $(function () {
         element: $('#statsFoldersByType'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-6',
-        filterTreeElement: '#code-type-intervention-filter',
+        filter: {dates: undefined, rows: undefined},
+        filterElement: {datesTree: '#tree-view-6', rowsTree: '#code-type-intervention-filter'},
         routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention',
         routeData: 'nonValidatedFolders/Code_Type_Intervention',
         objChart: {
@@ -589,8 +589,8 @@ $(function () {
         element: $('#statsFoldersByCode'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-7',
-        filterTreeElement: '#code-intervention-filter',
+        filter: {dates: undefined, rows: undefined},
+        filterElement: {datesTree: '#tree-view-7', rowsTree: '#code-intervention-filter'},
         routeCol: 'nonValidatedFolders/columns/Code_Intervention',
         routeData: 'nonValidatedFolders/Code_Intervention',
         objChart: {
@@ -622,8 +622,8 @@ $(function () {
         element: $('#statsPerimeters'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-8',
-        filterTreeElement: '#nom-region-filter',
+        filter: {dates: undefined, rows: undefined},
+        filterElement: {datesTree: '#tree-view-8', rowsTree: '#nom-region-filter'},
         routeCol: 'clientsByPerimeter/columns',
         routeData: 'clientsByPerimeter',
         objChart: {
@@ -680,6 +680,7 @@ $(function () {
                 let datesFilterValuesExist = true;
                 let filters = response.filter;
                 if (filters !== null && filters !== undefined) {
+                    object.filter.dates = filters.date_filter;
                     datesFilterValues.push([object.treeElement, filters.date_filter]);
                     // if (datesFilterList !== null && datesFilterList !== undefined && datesFilterList.length > 0) {
                     //     datesFilterList[object.treeElement].values = datesFilterValues[object.treeElement];
@@ -1109,7 +1110,7 @@ $(function () {
         style.type = 'text/css';
         style.media = 'print';
 
-        if (style.styleSheet){
+        if (style.styleSheet) {
             style.styleSheet.cssText = css;
         } else {
             style.appendChild(document.createTextNode(css));
