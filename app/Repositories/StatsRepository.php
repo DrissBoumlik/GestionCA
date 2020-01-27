@@ -446,7 +446,9 @@ class StatsRepository
             ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(Resultat_Appel) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Resultat_Appel not like "=%"
-            and Nom_Region is not null ' .
+            and Nom_Region is not null 
+            and Groupement not like "Non Renseigné"
+            and Groupement not like "Appels post" ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
                 ' GROUP BY Id_Externe) groupedst'),
@@ -455,7 +457,10 @@ class StatsRepository
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
             ->where('Resultat_Appel', 'not like', '=%')
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->where('Groupement', 'not like', 'Non Renseigné')
+            ->where('Groupement', 'not like', 'Appels post');
+
         $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
         $key_groupement = clean($key_groupement);
         $regions = $regions->where('key_groupement', 'like', $key_groupement);
