@@ -170,7 +170,7 @@ class StatsRepository
         if ($agenceCode) {
             $stats = $stats->where('Nom_Region', 'like', "%$agenceCode");
         }
-        if($key_groupement) {
+        if ($key_groupement) {
             $stats = $stats->where('key_groupement', 'like', $key_groupement);
         }
         $stats = $stats->orderBy($column)->get();
@@ -252,8 +252,10 @@ class StatsRepository
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(Nom_Region) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
-            where Nom_Region is not null
-            and Groupement not like "=%"
+            where Nom_Region is not null ' .
+                ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+                ' and Groupement not like "=%"
             and Groupement not like "Non Renseigné"
             and Groupement not like "Appels post"
             GROUP BY Id_Externe) groupedst'),

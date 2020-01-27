@@ -30,7 +30,9 @@ class FilterRepository
             ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(Resultat_Appel) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Resultat_Appel not like "=%"
-            and Nom_Region is not null
+            and Nom_Region is not null 
+            and `Groupement` not like "Non Renseigné"
+            and `Groupement` not like "Appels post"
             and key_Groupement like "' . $radical_route . '"
             GROUP BY Id_Externe) groupedst'),
                 function ($join) {
@@ -39,7 +41,9 @@ class FilterRepository
                 })
             ->where('Resultat_Appel', 'not like', '=%')
             ->where('key_Groupement', 'like', $radical_route)
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->where('Groupement', 'not like', 'Non Renseigné')
+            ->where('Groupement', 'not like', 'Appels post');
 
         $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
         $key_groupement = $key_groupement ? clean($key_groupement) : $filter;
