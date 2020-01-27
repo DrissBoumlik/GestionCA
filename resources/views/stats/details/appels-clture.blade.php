@@ -118,7 +118,7 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-1" class="tree-view d-inline-flex"></div>
-                                <div id="stats-regions-filter" class="tree-region-view d-inline-flex"></div>
+                                <div id="stats-callResult-filter" class="tree-callResult-view d-inline-flex"></div>
                                 <button type="button" id="refreshCallsCloture" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>

@@ -50,11 +50,12 @@ $(function () {
 
     const paramFiltreList = [
         {
-            url: 'Groupement',
+            url: 'Resultat_Appel',
+            filter: 'key_groupement=Appels-clture',
             elements: [
                 {
-                    id: '#stats-groupement-filter',
-                    text: 'Groupement', values: (v) => {
+                    id: '#stats-callResult-filter',
+                    text: 'Résultat Appels', values: (v) => {
                         nomRegion = undefined;
                         gpmtAppelPre = undefined;
                         codeTypeIntervention = undefined;
@@ -63,23 +64,54 @@ $(function () {
                         codeRdvInterventionConfirm = undefined;
                         codeRdvIntervention = undefined;
                         groupement = v;
-                    }, class: '.tree-groupement-view'
+                    }, class: '.tree-callResult-view'
                 },
-                {
-                    id: '#stats-regions-filter',
-                    text: 'Groupement', values: (v) => {
-                        nomRegion = undefined;
-                        gpmtAppelPre = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        resultatAppel = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                        groupement = v;
-                    }, class: '.tree-region-view'
-                }
+                // {
+                //     id: '#stats-regions-filter',
+                //     text: 'Résultat Appels', values: (v) => {
+                //         nomRegion = undefined;
+                //         gpmtAppelPre = undefined;
+                //         codeTypeIntervention = undefined;
+                //         codeIntervention = undefined;
+                //         resultatAppel = undefined;
+                //         codeRdvInterventionConfirm = undefined;
+                //         codeRdvIntervention = undefined;
+                //         groupement = v;
+                //     }, class: '.tree-region-view'
+                // }
             ]
         },
+        // {
+        //     url: 'Groupement',
+        //     elements: [
+        //         {
+        //             id: '#stats-groupement-filter',
+        //             text: 'Groupement', values: (v) => {
+        //                 nomRegion = undefined;
+        //                 gpmtAppelPre = undefined;
+        //                 codeTypeIntervention = undefined;
+        //                 codeIntervention = undefined;
+        //                 resultatAppel = undefined;
+        //                 codeRdvInterventionConfirm = undefined;
+        //                 codeRdvIntervention = undefined;
+        //                 groupement = v;
+        //             }, class: '.tree-groupement-view'
+        //         },
+        //         {
+        //             id: '#stats-regions-filter',
+        //             text: 'Groupement', values: (v) => {
+        //                 nomRegion = undefined;
+        //                 gpmtAppelPre = undefined;
+        //                 codeTypeIntervention = undefined;
+        //                 codeIntervention = undefined;
+        //                 resultatAppel = undefined;
+        //                 codeRdvInterventionConfirm = undefined;
+        //                 codeRdvIntervention = undefined;
+        //                 groupement = v;
+        //             }, class: '.tree-region-view'
+        //         }
+        //     ]
+        // },
         {
             url: 'Gpmt_Appel_Pre',
             elements: [
@@ -254,7 +286,7 @@ $(function () {
 
     for (let p of paramFiltreList) {
         $.ajax({
-            url: `${APP_URL}/stats/filter/${p.url}`,
+            url: `${APP_URL}/stats/filter/${p.url}` + (p.filter !== undefined && p.filter !== null ? '/?' + p.filter : ''),
             data: getData,
             method: 'GET',
             success: function (response) {
