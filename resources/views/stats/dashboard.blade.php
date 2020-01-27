@@ -10,6 +10,7 @@
     <!-- SweetAlert2 -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
     <link rel="stylesheet" href="{{ asset('js/plugins/sweetalert2/sweetalert2.min.css') }}">
+    <link rel="stylesheet" href="{{asset('css/dashboardPrint.css')}}">
 
 
     {{--        <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4.3.2/css/metro-all.min.css">--}}
@@ -104,12 +105,15 @@
         <!-- Global date filter-->
         <div class="container-fluid">
             @if(!$agence && !$agent)
+                <a href="javascript:void(0)" onclick="window.print()" id="printElement"
+                   class="btn btn-primary" style="margin-bottom: 10px; width:100%;">
+                    exporter des données au format PDF </a>
                 @include('stats.layouts.filter_menu')
                 <hr>
             @endif
             @include('stats.layouts.global_date_filter')
         </div>
-        <hr>
+        <hr class="first-separator">
         <!-- Stats -->
         <div class="container-fluid">
             <div class="row">

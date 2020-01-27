@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Stats;
 use App\Repositories\StatsRepository;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\ParameterBag;

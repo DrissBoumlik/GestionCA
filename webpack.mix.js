@@ -19,6 +19,7 @@ mix
     .sass('resources/sass/oneui/themes/flat.scss', 'public/css/themes/')
     .sass('resources/sass/oneui/themes/modern.scss', 'public/css/themes/')
     .sass('resources/sass/oneui/themes/smooth.scss', 'public/css/themes/')
+    .sass('resources/sass/custom/_pages/_dashboard.sass', 'public/css/dashboardPrint.css')
 
     /* JS */
     .js('resources/js/app.js', 'public/js/laravel.app.js')
