@@ -62,13 +62,21 @@ class FilterController extends Controller
 
     public function getNonValidatedFoldersColumn(Request $request, $column)
     {
-        $data = $this->filterRepository->getDataNonValidatedFolders($request, $column);
+        if ($column == 'Code_Type_Intervention') {
+            $data = $this->filterRepository->getDataNonValidatedFolders_2($request, $column);
+        } else {
+            $data = $this->filterRepository->getDataNonValidatedFolders($request, $column);
+        }
         return $data;
     }
 
     public function getNonValidatedFolders(Request $request, $column)
     {
-        $data = $this->filterRepository->getDataNonValidatedFolders($request, $column);
+        if ($column == 'Code_Type_Intervention') {
+            $data = $this->filterRepository->getDataNonValidatedFolders_2($request, $column);
+        } else {
+            $data = $this->filterRepository->getDataNonValidatedFolders($request, $column);
+        }
         return DataTables::of($data['data'])->toJson();
     }
 

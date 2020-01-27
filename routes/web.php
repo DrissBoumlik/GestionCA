@@ -111,10 +111,10 @@ Route::group([
     Route::get('/regions/details/groupement', 'StatsController@getRegionsByGrpCall'); // column = key_groupement value // // PERCENT
     Route::get('/regions/details/groupement/columns', 'StatsController@getRegionsByGrpCallColumns'); // column = key_groupement value // // PERCENT
 
-    Route::get('/regions/{callResult}', 'StatsController@getRegions'); // column = Resultat_Appel                                       // PERCENT
+    Route::get('/regions/{callResult}', 'StatsController@getRegions'); // column = Groupement                                       // PERCENT
     Route::get('/regions/columns/{callResult}', 'StatsController@getRegionsColumn');
 
-    Route::get('/folders/{callResult}', 'StatsController@getFolders'); // column = Resultat_Appel                                       // SUM
+    Route::get('/folders/{callResult}', 'StatsController@getFolders'); // column = Groupement                                       // SUM
     Route::get('/folders/columns/{callResult}', 'StatsController@getFoldersColumn');
 
     Route::get('/regionsCallState/{column}', 'StatsController@getRegionsCallState'); // column = Nom_Region / Date_Heure_Note_Semaine   // SUM

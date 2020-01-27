@@ -244,6 +244,7 @@ $(function () {
                 assignFilter(datesFilterList, datesFilterValues);
             }
             $('.treejs-node .treejs-nodes .treejs-switcher').click();
+            $('.refresh-form button').removeClass('d-none');
         },
         error: function (jqXHR, textStatus, errorThrown) {
         }
@@ -320,13 +321,17 @@ $(function () {
         getColumns(statsCallsPrealable, filterData(), {
             removeTotal: false,
             refreshMode: false,
-            removeTotalColumn: false
+            removeTotalColumn: false,
+            details: false,
+            pagination: false
         });
         $('#refreshCallsPrealable').on('click', function () {
             getColumns(statsCallsPrealable, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
-                removeTotalColumn: false
+                removeTotalColumn: false,
+                details: false,
+                pagination: false
             });
         });
     }
@@ -526,20 +531,20 @@ $(function () {
                     return {
                         ...column,
                         render: function (data, type, full, meta) {
-                            let splittedData = null;
-                            if (data !== null) {
-                                data = data.toString();
-                                if (data.indexOf('/') !== -1) {
-                                    splittedData = data.split('/');
-                                    splittedData = splittedData[0] + '<br/>' + splittedData[1];
+                            let newData = data;
+                            if (newData !== null) {
+                                newData = newData.toString();
+                                if (newData.indexOf('/') !== -1) {
+                                    newData = newData.split('/').join('<br/>');
+                                    // newData = newData[0] + '<br/>' + newData[1];
                                 }
                             } else {
-                                data = '';
+                                newData = '';
                             }
 
                             let classHasTotalCol = (params.removeTotalColumn) ? 'hasTotal' : '';
                             let rowClass = full.isTotal ? '' : 'pointer detail-data';
-                            return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + (splittedData !== null ? splittedData : data) + '<\span>';
+                            return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + newData + '<\span>';
                         }
                     };
                 });
@@ -587,16 +592,16 @@ $(function () {
                             }
                             let lastRowIndex = object.element_dt.rows().count();
                             let lastColumnIndex = object.element_dt.columns().count();
-                            if (((col > 1 || (params.details && col > 2)) && row < lastRowIndex)
-                                && (params.removeTotalColumn && col < lastColumnIndex)) {
+
+                            if (((params.details && col > 2) || col > 1)
+                                && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
+                                && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
                                 window.location = APP_URL + '/all-stats?' +
                                     'row=' + object.rowName +
                                     '&rowValue=' + rowText +
                                     '&col=' + object.columnName +
                                     '&colValue=' + colText +
-                                    '&agent=' + (agent_name === undefined ? '' : agent_name) +
-                                    '&agence=' + (agence_name === undefined ? '' : agence_name) +
-                                    '&dates=' + dates;
+                                    '&dates=' + (dates === undefined || dates === null ? '' : dates);
                             }
                             // console.log(colText + ' --- ' + rowText)
                         });
@@ -848,7 +853,7 @@ $(function () {
     $('#filterDashboard').on('change', function () {
         let url = $(this).val();
         if (url) {
-            window.location = APP_URL + '/dashboard/' + url;
+            window.location = APP_URL + '/' + url;
         }
     });
 
