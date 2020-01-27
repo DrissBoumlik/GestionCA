@@ -14,7 +14,7 @@ class FiltersAddRowsFilter extends Migration
     public function up()
     {
         Schema::table('filters', function (Blueprint $table) {
-            $table->json('rows_filter');
+            $table->json('rows_filter')->nullable();
         });
     }
 

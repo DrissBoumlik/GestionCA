@@ -17,7 +17,7 @@ class CreateFiltersTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->string('route');
-            $table->json('date_filter');
+            $table->json('date_filter')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
