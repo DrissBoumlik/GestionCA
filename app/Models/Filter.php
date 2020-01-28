@@ -9,10 +9,11 @@ class Filter extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'route', 'date_filter'];
+    protected $fillable = ['user_id', 'route', 'date_filter', 'rows_filter', 'agent_name', 'agence_name'];
 
     protected $casts = [
-        'date_filter' => 'array'
+        'date_filter' => 'array',
+        'rows_filter' => 'array'
     ];
 
     public function user()

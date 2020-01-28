@@ -8,8 +8,11 @@ use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Illuminate\Support\Collection;
 
-class StatsImport implements ToModel, WithHeadingRow
+
+class StatsImport implements ToCollection
 {
     private $days = [];
 
@@ -21,6 +24,59 @@ class StatsImport implements ToModel, WithHeadingRow
         }
     }
 
+    public function collection(Collection $rows)
+    {
+        $rows->shift();
+        $data = $rows->map(function ($row, $index) {
+            $formatted_date = $this->transformDate($row[21]);
+            if (!$this->days || in_array($formatted_date, $this->days)) {
+                $item = [
+                    'Type_Note' => $row[0],
+                    'Utilisateur' => $row[1],
+                    'Resultat_Appel' => $row[2],
+                    'Date_Nveau_RDV' => $row[3],
+                    'Heure_Nveau_RDV' => $row[4],
+                    'Marge_Nveau_RDV' => $row[5],
+                    'Id_Externe' => $row[6],
+                    'Date_Creation' => $row[7],
+                    'Code_Postal_Site' => $row[8],
+//                    'Departement' => $row[],
+                    'Drapeaux' => $row[9],
+                    'Code_Type_Intervention' => $row[10],
+                    'Date_Rdv' => $row[11],
+                    'Nom_Societe' => $row[12],
+                    'Nom_Region' => $row[13],
+                    'Nom_Domaine' => $row[14],
+                    'Nom_Agence' => $row[15],
+                    'Nom_Activite' => $row[16],
+                    'Date_Heure_Note' => $row[17],
+                    'Date_Heure_Note_Annee' => $row[18],
+                    'Date_Heure_Note_Mois' => $row[19],
+                    'Date_Heure_Note_Semaine' => $row[20],
+                    'Date_Note' => $formatted_date, // $row[],
+                    'Groupement' => $row[21],
+                    'key_Groupement' => clean($row[21]),
+
+                    'Gpmt_Appel_Pre' => $row[22],
+                    'Code_Intervention' => $row[23],
+                    'EXPORT_ALL_Nom_SITE' => $row[24],
+                    'EXPORT_ALL_Nom_TECHNICIEN' => $row[25],
+                    'EXPORT_ALL_PRENom_TECHNICIEN' => $row[26],
+//                    'EXPORT_ALL_Nom_CLIENT' => $row['dimension_note'EXPORT_ALL_Nom_CLIENT],
+                    'EXPORT_ALL_Nom_EQUIPEMENT' => $row[27],
+                    'EXPORT_ALL_EXTRACT_CUI' => $row[28],
+                    'EXPORT_ALL_Date_CHARGEMENT_PDA' => $row[29],
+                    'EXPORT_ALL_Date_SOLDE' => $row[30],
+                    'EXPORT_ALL_Date_VALIDATION' => $row[31],
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+                return $item;
+            }
+        });
+        Stats::insert($data->all());
+    }
+
     /**
      * @param array $row
      *
@@ -28,7 +84,7 @@ class StatsImport implements ToModel, WithHeadingRow
      */
     public function model($row)
     {
-        $formatted_date = $this->transformDate($row['dimension_notesdate_note']);
+        $formatted_date = $this->transformDate($row[21]);
         if (!$this->days || in_array($formatted_date, $this->days)) {
             return new Stats([
                 'Type_Note' => $row['dimension_notestype_note'],
