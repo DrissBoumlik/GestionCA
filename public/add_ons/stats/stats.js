@@ -204,6 +204,16 @@ $(function () {
                         // this.disables = ['0-0-0', '0-0-1', '0-0-2']
 
                         datesFilterList[treeId] = this;
+                        let object = globalElements.filter(function (element) {
+                            return element.filterElement.datesTree === treeId;
+                        });
+                        if (object) {
+                            object.filterTree.datesTreeObject = this;
+                            if (object.filterTree.dates) {
+                                object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                            }
+                        }
+
                         //datesFilterList.push([treeId, this]);
                         // console.log(datesFilterList);
                     },
@@ -212,9 +222,9 @@ $(function () {
                     }
                 });
             });
-            if (datesFilterListExist && datesFilterValuesExist) {
-                assignFilter(datesFilterList, datesFilterValues);
-            }
+            // if (datesFilterListExist && datesFilterValuesExist) {
+            //     assignFilter(datesFilterList, datesFilterValues);
+            // }
             $('.treejs-node .treejs-nodes .treejs-switcher').click();
             $('.refresh-form button').removeClass('d-none');
         },
@@ -248,7 +258,7 @@ $(function () {
         element: $('#statsRegions'),
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined},
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-0', rows: '#stats-groupement-filter'},
         routeCol: 'regions/columns/Groupement',
         routeData: 'regions/Groupement',
@@ -306,7 +316,7 @@ $(function () {
         element: $('#statsFolders'),
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined},
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-1', rows: '#stats-regions-filter'},
         routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
         routeData: 'regions/details/groupement?key_groupement=Appels-clture',
@@ -345,7 +355,7 @@ $(function () {
         element: $('#callsStatesAgencies'),
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined},
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-2', rows: '#stats-call-regions-filter'},
         routeCol: 'regionsCallState/columns/Nom_Region',
         routeData: 'regionsCallState/Nom_Region',
@@ -383,7 +393,7 @@ $(function () {
         element: $('#callsStatesWeeks'),
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined},
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-3', rows: '#stats-weeks-regions-filter'},
         routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine',
         routeData: 'regionsCallState/Date_Heure_Note_Semaine',
@@ -422,7 +432,7 @@ $(function () {
         element: $('#statsCallsPos'),
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined},
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-4', rows: '#code-rdv-intervention-confirm-filter'},
         routeCol: 'clientsByCallState/columns/Joignable',
         routeData: 'clientsByCallState/Joignable',
@@ -459,7 +469,7 @@ $(function () {
         element: $('#statsCallsNeg'),
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined},
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-5', rows: '#code-rdv-intervention-filter'},
         routeCol: 'clientsByCallState/columns/Injoignable',
         routeData: 'clientsByCallState/Injoignable',
@@ -498,7 +508,7 @@ $(function () {
         element: $('#statsFoldersByType'),
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined},
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-6', rows: '#code-type-intervention-filter'},
         routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention',
         routeData: 'nonValidatedFolders/Code_Type_Intervention',
@@ -529,7 +539,7 @@ $(function () {
         element: $('#statsFoldersByCode'),
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined},
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-7', rows: '#code-intervention-filter'},
         routeCol: 'nonValidatedFolders/columns/Code_Intervention',
         routeData: 'nonValidatedFolders/Code_Intervention',
@@ -562,7 +572,7 @@ $(function () {
         element: $('#statsPerimeters'),
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined},
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-8', rows: '#nom-region-filter'},
         routeCol: 'clientsByPerimeter/columns',
         routeData: 'clientsByPerimeter',
@@ -619,6 +629,12 @@ $(function () {
             method: 'GET',
             data: data,
             success: function (response) {
+                if (response.filter) {
+                    object.filterTree.dates = response.filter.date_filter;
+                    if (object.filterTree.datesTreeObject) {
+                        object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                    }
+                }
                 let rowsFilterData = response.rows.map(function (d, index) {
                     return {
                         id: d,
