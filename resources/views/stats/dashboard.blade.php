@@ -109,11 +109,11 @@
                    class="btn btn-primary mb-3 capitalize-first-letter w-100">
                     exporter des données au format PDF </a>
                 @include('stats.layouts.filter_menu')
-                <hr>
+                <hr class="separator">
             @endif
             @include('stats.layouts.global_date_filter')
         </div>
-        <hr class="first-separator">
+        <hr class="separator">
         <!-- Stats -->
         <div class="container-fluid">
             <div class="row">
@@ -215,7 +215,7 @@
             <hr>
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card exception-card">
                         <div class="card-header">
                             <h3 class="card-title d-inline-block">Résultats Appels Préalables par semaine</h3>
                             <hr>
