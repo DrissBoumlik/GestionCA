@@ -646,7 +646,7 @@ $(function () {
                     data: [{id: '-1', text: response.rowsFilterHeader, children: rowsFilterData}],
                     closeDepth: 1,
                     loaded: function () {
-                        if (response.filter && response.filter.rows_filter && !params.refreshMode) {
+                        if (response.filter && response.filter.rows_filter) {
                             this.values = object.filterTree.rows = response.filter.rows_filter;
                             console.log(this.values);
                         }
