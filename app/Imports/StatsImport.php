@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Illuminate\Support\Collection;
 
 
-class StatsImport implements ToCollection
+class StatsImport implements ToModel, WithHeadingRow // ToCollection
 {
     private $days = [];
 
@@ -84,7 +84,7 @@ class StatsImport implements ToCollection
      */
     public function model($row)
     {
-        $formatted_date = $this->transformDate($row[21]);
+        $formatted_date = $this->transformDate($row['dimension_notesdate_note']);
         if (!$this->days || in_array($formatted_date, $this->days)) {
             return new Stats([
                 'Type_Note' => $row['dimension_notestype_note'],
