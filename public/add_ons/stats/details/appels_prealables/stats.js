@@ -697,7 +697,7 @@ $(function () {
                 console.log(textStatus);
                 console.log(errorThrown);
                 console.log(APP_URL + '/' + object.routeCol);
-                console.log('===========');
+
             }
         });
     }

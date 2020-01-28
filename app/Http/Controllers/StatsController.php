@@ -192,8 +192,15 @@ class StatsController extends Controller
     {
         // Authorization
         $this->authorize('view', auth()->user());
+        try {
+            return response()->json($this->statsRepository->importStats($request));
+        } catch (\Exception $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Une erreur est survenue'
+            ], 422);
+        }
 
-        return response()->json($this->statsRepository->importStats($request));
     }
 
     public function exportXls(Request $request)

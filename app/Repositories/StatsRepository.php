@@ -1848,16 +1848,19 @@ class StatsRepository
         try {
             $fileName = $request->file('file')->getClientOriginalName();
             $request->file('file')->storeAs('data_source', $fileName);
-            Excel::import(new StatsImport($request->days), $request->file('file'));
+            $statImport = new StatsImport($request->days);
+            Excel::import($statImport, $request->file('file'));
+//            Stats::insert($statImport->data);
             return [
                 'success' => true,
                 'message' => 'Le fichier a été importé avec succès'
             ];
         } catch (Exception $e) {
-            return [
-                'success' => false,
-                'message' => 'Une erreur est survenue'
-            ];
+            throw $e;
+//            return [
+//                'success' => false,
+//                'message' => 'Une erreur est survenue'
+//            ];
         }
     }
 
