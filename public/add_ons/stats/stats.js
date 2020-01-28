@@ -636,26 +636,28 @@ $(function () {
                         object.filterTree.datesTreeObject.values = object.filterTree.dates;
                     }
                 }
-                let rowsFilterData = response.rows.map(function (d, index) {
-                    return {
-                        id: d,
-                        text: d
-                    };
-                });
-                new Tree(object.filterElement.rows, {
-                    data: [{id: '-1', text: response.rowsFilterHeader, children: rowsFilterData}],
-                    closeDepth: 1,
-                    loaded: function () {
-                        if (response.filter && response.filter.rows_filter) {
-                            this.values = object.filterTree.rows = response.filter.rows_filter;
+                if (response.rows.length) {
+                    let rowsFilterData = response.rows.map(function (d, index) {
+                        return {
+                            id: d,
+                            text: d
+                        };
+                    });
+                    new Tree(object.filterElement.rows, {
+                        data: [{id: '-1', text: response.rowsFilterHeader, children: rowsFilterData}],
+                        closeDepth: 1,
+                        loaded: function () {
+                            if (response.filter && response.filter.rows_filter) {
+                                this.values = object.filterTree.rows = response.filter.rows_filter;
+                                console.log(this.values);
+                            }
+                        },
+                        onChange: function () {
+                            object.filterTree.rows = this.values;
                             console.log(this.values);
                         }
-                    },
-                    onChange: function () {
-                        object.filterTree.rows = this.values;
-                        console.log(this.values);
-                    }
-                });
+                    });
+                }
 
                 let datesFilterValuesExist = true;
                 let filters = response.filter;
