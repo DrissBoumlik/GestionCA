@@ -298,7 +298,7 @@ class StatsRepository
         $regions = $columns = addRegionWithZero($request, $regions, $columns);
         // logger($regions);
         if (!count($regions)) {
-            $data = ['columns' => [], 'data' => []];
+            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Groupement'];
             return $data;
         } else {
             $totalCount = Stats::count();
@@ -473,7 +473,7 @@ class StatsRepository
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
         $regions = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
         if (!count($regions)) {
-            $data = ['columns' => [], 'data' => []];
+            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Résultat Appel'];
             return $data;
         } else {
             $totalCount = Stats::where('key_groupement', 'like', $key_groupement)->count();
@@ -653,7 +653,7 @@ class StatsRepository
         $regions = $regions->groupBy('Nom_Region', $callResult)->get();
         $regions = $columns = addRegionWithZero($request, $regions, $columns);
         if (!count($regions)) {
-            $data = ['columns' => [], 'data' => []];
+            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Groupement'];
             return $data;
         } else {
             $totalCount = Stats::count();
@@ -864,7 +864,7 @@ class StatsRepository
         $regions = $columns = addRegionWithZero($request, $regions, $columns, $column);
 
         if (!count($regions)) {
-            $data = ['columns' => [], 'data' => []];
+            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => ($column == 'Date_Heure_Note_Semaine' ? 'Résultats Appels Préalables par semaine' : 'Résultats Appels Préalables par agence')];
             return $data;
         } else {
             $totalCount = Stats::count();
@@ -1047,6 +1047,32 @@ class StatsRepository
                 })
             ->whereNotNull('Nom_Region');
 
+        if ($callResult == 'Joignable') {
+            $codes = $codes->whereIn('Resultat_Appel', [
+                'Appels préalables - RDV confirmé',
+                'Appels préalables - RDV confirmé Client non informé',
+                'Appels préalables - RDV repris et confirmé'
+            ]);
+        } else {
+            $codes = $codes->whereIn('Resultat_Appel', [
+                'Appels préalables - Annulation RDV client non informé',
+                'Appels préalables - Client sauvé',
+                'Appels préalables - Client Souhaite être rappelé plus tard',
+                'Appels préalables - Injoignable / Absence de répondeur',
+                'Appels préalables - Injoignable 2ème Tentative',
+                'Appels préalables - Injoignable 3ème Tentative',
+                'Appels préalables - Injoignable avec Répondeur',
+                'Appels préalables - Numéro erroné',
+                'Appels préalables - Numéro Inaccessible',
+                'Appels préalables - Numéro non attribué',
+                'Appels préalables - Numéro non Renseigné',
+                'Appels préalables - RDV annulé le client ne souhaite plus d’intervention',
+                'Appels préalables - RDV annulé Rétractation/Résiliation',
+                'Appels préalables - RDV planifié mais non confirmé',
+                'Appels préalables - RDV repris Mais non confirmé',
+            ]);
+        }
+
 //        $keys = $columns->groupBy(['Code_Intervention'])->keys();
         if ($agentName) {
             $codes = $codes->where('Utilisateur', $agentName);
@@ -1085,7 +1111,7 @@ class StatsRepository
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
         $codes = $columns = addRegionWithZero($request, $codes, $columns, null, 'Gpmt_Appel_Pre', $callResult);
         if (!count($codes)) {
-            $data = ['columns' => [], 'data' => []];
+            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Region'];
             return $data;
         } else {
 
@@ -1284,7 +1310,7 @@ class StatsRepository
         $regions = $columns = addRegionWithZero($request, $regions, $columns);
 
         if (!count($regions)) {
-            $data = ['columns' => [], 'data' => []];
+            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys];
             return $data;
         } else {
             $totalCount = Stats::count();
@@ -1475,7 +1501,7 @@ class StatsRepository
         $regions = $columns = addRegionWithZero($request, $regions, $columns);
 
         if (!count($regions)) {
-            $data = ['columns' => [], 'data' => []];
+            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => ($intervCol == 'Code_Intervention' ? 'Code Intervention' : 'Type Intervention')];
             return $data;
         } else {
             $totalCount = Stats::count();
@@ -1690,7 +1716,7 @@ class StatsRepository
         $results = $columns = addRegionWithZero($request, $results, $columns);
 
         if (!count($results)) {
-            $data = ['columns' => [], 'data' => []];
+            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Region'];
             return $data;
         } else {
 
@@ -1863,7 +1889,7 @@ class StatsRepository
                 if ($dates) {
                     $results = $results->whereIn('Date_Note', $dates);
                 }
-                if ($rowsFilter) {
+                if ($column && $rowsFilter) {
                     $results = $results->whereIn($column, $rowsFilter);
                 }
             } else {
