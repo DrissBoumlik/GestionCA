@@ -205,9 +205,10 @@ $(function () {
 
                         datesFilterList[treeId] = this;
                         let object = globalElements.filter(function (element) {
-                            return element.filterElement.datesTree === treeId;
+                            return element.filterElement.dates === treeId;
                         });
-                        if (object) {
+                        if (object.length) {
+                            object = object[0];
                             object.filterTree.datesTreeObject = this;
                             if (object.filterTree.dates) {
                                 object.filterTree.datesTreeObject.values = object.filterTree.dates;

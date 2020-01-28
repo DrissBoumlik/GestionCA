@@ -1927,8 +1927,10 @@ class StatsRepository
         } else {
             $filter = Filter::where($filters)->first();
             if ($filter) {
-                $results = $results->whereIn('Date_Note', $filter->date_filter);
-                if ($column) {
+                if ($filter->date_filter) {
+                    $results = $results->whereIn('Date_Note', $filter->date_filter);
+                }
+                if ($column && $filter->rows_filter) {
                     $results = $results->whereIn($column, $filter->rows_filter);
                 }
             }
