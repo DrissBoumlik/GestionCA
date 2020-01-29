@@ -30,14 +30,14 @@ class StatsRepository
 
         $resultat_appel = $request->Resultat_Appel;
 
-        $allStats = DB::table('stats')->select([
+        $allStats = DB::table('stats as st')->select([
             'Type_Note',
             'Utilisateur',
             'Resultat_Appel',
             'Date_Nveau_RDV',
             'Heure_Nveau_RDV',
             'Marge_Nveau_RDV',
-            'Id_Externe',
+            'st.Id_Externe',
             'Date_Creation',
             'Code_Postal_Site',
             'Drapeaux',
@@ -65,7 +65,14 @@ class StatsRepository
             'EXPORT_ALL_Date_CHARGEMENT_PDA',
             'EXPORT_ALL_Date_SOLDE',
             'EXPORT_ALL_Date_VALIDATION'
-        ]);
+        ]) ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats where 1=1 ' .
+            ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+            ' GROUP BY Id_Externe) groupedst'),
+            function ($join) {
+                $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
+                $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
+            });
         if ($row && $rowValue) {
             $allStats = $allStats->where($row, $rowValue);
         }
@@ -424,7 +431,7 @@ class StatsRepository
             ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(Resultat_Appel) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Resultat_Appel not like "=%"
-            and Nom_Region is not null 
+            and Nom_Region is not null
             and Groupement not like "Non Renseigné"
             and Groupement not like "Appels post" ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .

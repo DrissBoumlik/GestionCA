@@ -38,14 +38,14 @@ class StatsExport implements FromCollection,WithHeadings, WithMapping, ShouldAut
         $resultat_appel = $this->request->Resultat_Appel;
 
 
-        $allStats = DB::table('stats')->select([
+        $allStats = DB::table('stats as st')->select([
             'Type_Note',
             'Utilisateur',
             'Resultat_Appel',
             'Date_Nveau_RDV',
             'Heure_Nveau_RDV',
             'Marge_Nveau_RDV',
-            'Id_Externe',
+            'st.Id_Externe',
             'Date_Creation',
             'Code_Postal_Site',
             'Drapeaux',
@@ -73,7 +73,15 @@ class StatsExport implements FromCollection,WithHeadings, WithMapping, ShouldAut
             'EXPORT_ALL_Date_CHARGEMENT_PDA',
             'EXPORT_ALL_Date_SOLDE',
             'EXPORT_ALL_Date_VALIDATION'
-        ]);
+        ]) ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats where 1=1 ' .
+            ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+            ' GROUP BY Id_Externe) groupedst'),
+            function ($join) {
+                $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
+                $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
+            });
+
         if ($row && $rowValue) {
             $allStats = $allStats->where($row, $rowValue);
         }
