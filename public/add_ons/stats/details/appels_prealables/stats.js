@@ -351,7 +351,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsCallsPrealableChart',
             data: undefined,
-            chartTitle: 'Résultats Appels Préalables'
+            chartTitle: 'Type Résultats Appels'
         }
     };
     if (elementExists(statsCallsPrealable)) {

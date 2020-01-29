@@ -360,7 +360,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsCallsClotureChart',
             data: undefined,
-            chartTitle: 'Résultats Appels Préalables'
+            chartTitle: 'Type Résultats Appels'
         }
     };
     if (elementExists(statsCallsCloture)) {

@@ -359,7 +359,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsCallsGemChart',
             data: undefined,
-            chartTitle: 'Résultats Appels Préalables'
+            chartTitle: 'Type Résultats Appels'
         }
     };
     if (elementExists(statsCallsGem)) {
@@ -399,7 +399,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'callsStatesAgenciesChart',
             data: undefined,
-            chartTitle: 'Résultats Appels Préalables par agence'
+            chartTitle: 'Résultats Appels par agence'
         }
     };
     if (elementExists(callsStatesAgencies)) {
@@ -437,7 +437,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'callsStatesWeeksChart',
             data: undefined,
-            chartTitle: 'Résultats Appels Préalables par semaine'
+            chartTitle: 'Résultats Appels par semaine'
         }
     };
     if (elementExists(callsStatesWeeks)) {
