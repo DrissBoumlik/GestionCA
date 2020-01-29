@@ -1120,13 +1120,9 @@ $(function () {
     });
     //</editor-fold>
     $("#printElement").on("click", function () {
-        let statsRegions = document.getElementById('statsRegions');
         let statsRegionsChart = document.getElementById('statsRegionsChart');
-        let statsFolders = document.getElementById('statsFolders');
         let statsFoldersChart = document.getElementById('statsFoldersChart');
-        let callsStatesAgencies = document.getElementById('callsStatesAgencies');
         let callsStatesAgenciesChart = document.getElementById('callsStatesAgenciesChart');
-        let callsStatesWeeks = document.getElementById('callsStatesWeeks');
         let callsStatesWeeksChart = document.getElementById('callsStatesWeeksChart');
         let statsCallsPosChart = document.getElementById('statsCallsPosChart');
         let statscallsNegChart = document.getElementById('statscallsNegChart');
@@ -1134,49 +1130,49 @@ $(function () {
         let statsFoldersByCodeChart = document.getElementById('statsFoldersByCodeChart');
         let statsPerimetersChart = document.getElementById('statsPerimetersChart');
         //creates image
-        let statsRegionsChartImg = statsRegionsChart.toDataURL("image/jpeg", 1.0);
-        let statsFoldersChartImg = statsFoldersChart.toDataURL("image2/jpeg", 1.0);
-        let callsStatesAgenciesChartImg = callsStatesAgenciesChart.toDataURL("image3/jpeg", 1.0);
-        let callsStatesWeeksChartImg = callsStatesWeeksChart.toDataURL("image4/jpeg", 1.0);
-        let statsCallsPosChartImg = statsCallsPosChart.toDataURL("image5/jpeg", 1.0);
-        let statscallsNegChartImg = statscallsNegChart.toDataURL("image6/jpeg", 1.0);
-        let statsFoldersByTypeChartImg = statsFoldersByTypeChart.toDataURL("image7/jpeg", 1.0);
-        let statsFoldersByCodeChartImg = statsFoldersByCodeChart.toDataURL("image8/jpeg", 1.0);
-        let statsPerimetersChartImg = statsPerimetersChart.toDataURL("image9/jpeg", 1.0);
+        let statsRegionsChartImg = statsRegionsChart.toDataURL("image/png", 1.0);
+        let statsFoldersChartImg = statsFoldersChart.toDataURL("image2/png", 1.0);
+        let callsStatesAgenciesChartImg = callsStatesAgenciesChart.toDataURL("image3/png", 1.0);
+        let callsStatesWeeksChartImg = callsStatesWeeksChart.toDataURL("image4/png", 1.0);
+        let statsCallsPosChartImg = statsCallsPosChart.toDataURL("image5/png", 1.0);
+        let statscallsNegChartImg = statscallsNegChart.toDataURL("image6/png", 1.0);
+        let statsFoldersByTypeChartImg = statsFoldersByTypeChart.toDataURL("image7/png", 1.0);
+        let statsFoldersByCodeChartImg = statsFoldersByCodeChart.toDataURL("image8/png", 1.0);
+        let statsPerimetersChartImg = statsPerimetersChart.toDataURL("image9/png", 1.0);
         //creates PDF from img
         let doc = new jsPDF('landscape');
         doc.text(10, 20, 'Résultats Appels');
-        doc.autoTable({html: '#statsRegions', margin: {top: 30}});
+        doc.autoTable({html: '#statsRegions', margin: {top: 30} , pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Résultats Appels');
         doc.addImage(statsRegionsChartImg, 'JPEG', 10, 30, 280, 150);
         doc.addPage();
         doc.text(10, 20, 'Répartition des dossiers traités par périmètre');
-        doc.autoTable({html: '#statsFolders', margin: {top: 30}});
+        doc.autoTable({html: '#statsFolders', margin: {top: 30} , pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Répartition des dossiers traités par périmètre');
         doc.addImage(statsFoldersChartImg, 'JPEG', 10, 30, 280, 150);
         doc.addPage();
         doc.text(10, 20, 'Résultats Appels Préalables par agence');
-        doc.autoTable({html: '#callsStatesAgencies', margin: {top: 30}});
+        doc.autoTable({html: '#callsStatesAgencies', margin: {top: 30} , pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Résultats Appels Préalables par agence');
         doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 10, 30, 280, 100);
         doc.addPage();
         doc.text(10, 20, 'Résultats Appels Préalables par semaine');
-        doc.autoTable({html: '#callsStatesWeeks', margin: {top: 30}});
+        doc.autoTable({html: '#callsStatesWeeks', margin: {top: 30} , pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Résultats Appels Préalables par semaine');
         doc.addImage(callsStatesWeeksChartImg, 'JPEG', 10, 30, 280, 100);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Confirmés (Clients Joignables)');
-        doc.autoTable({html: '#statsCallsPos', margin: {top: 30}});
+        doc.autoTable({html: '#statsCallsPos', margin: {top: 30} , pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Code Interventions liés aux RDV Confirmés (Clients Joignables)');
         doc.addImage(statsCallsPosChartImg, 'JPEG', 10, 30, 280, 100);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)');
-        doc.autoTable({html: '#statsCallsNeg', margin: {top: 30}});
+        doc.autoTable({html: '#statsCallsNeg', margin: {top: 30} , pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)');
         doc.addImage(statscallsNegChartImg, 'JPEG', 10, 30, 280, 100);
@@ -1198,6 +1194,6 @@ $(function () {
         doc.addPage();
         doc.text(10, 20, 'la charte deProduction Globale CAM');
         doc.addImage(statsPerimetersChartImg, 'JPEG', 10, 30, 280, 100);
-        doc.save('canvas.pdf');
+        doc.save('dashboard.pdf');
     })
 });

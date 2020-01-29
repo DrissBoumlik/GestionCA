@@ -933,5 +933,36 @@ $(function () {
 
     });
     //</editor-fold>
+    $("#printElement").on("click",function () {
+
+        let statsCallsGemChart = document.getElementById('statsCallsGemChart');
+        let callsStatesAgenciesChart = document.getElementById('callsStatesAgenciesChart');
+        let callsStatesWeeksChart = document.getElementById('callsStatesWeeksChart');
+        //creates image
+        let statsCallsGemChartImg = statsCallsGemChart.toDataURL("image/png", 1.0);
+        let callsStatesAgenciesChartImg = callsStatesAgenciesChart.toDataURL("image2/png", 1.0);
+        let callsStatesWeeksChartImg = callsStatesWeeksChart.toDataURL("image3/png", 1.0);
+
+        //creates PDF from img
+        let doc = new jsPDF('landscape');
+        doc. text( 10 , 20, 'Résultats Appels GEM' );
+        doc.autoTable({ html: '#statsCallsGem', margin: { top: 30 }, pageBreak : 'auto' });
+        doc.addPage();
+        doc. text( 10 , 20, 'la charte de Résultats Appels' );
+        doc.addImage(statsCallsGemChartImg, 'JPEG', 10 , 30  , 280, 150 );
+        doc.addPage();
+        doc. text( 10 , 20, 'Résultats Appels Préalables par agence' );
+        doc.autoTable({ html: '#callsStatesAgencies', margin: { top: 30 },pageBreak : 'auto' });
+        doc.addPage();
+        doc. text( 10 , 20, 'la charte de Résultats Appels Préalables par agence' );
+        doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.addPage();
+        doc. text( 10 , 20, 'Résultats Appels Préalables par semaine' );
+        doc.autoTable({ html: '#callsStatesWeeks', margin: { top: 30 },pageBreak : 'auto' });
+        doc.addPage();
+        doc. text( 10 , 20, 'la charte de Résultats Appels Préalables par semaine' );
+        doc.addImage(callsStatesWeeksChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.save('Appels Gem.pdf');
+    })
 
 });
