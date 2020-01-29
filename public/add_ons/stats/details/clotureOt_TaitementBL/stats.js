@@ -256,6 +256,9 @@ $(function () {
 
             $('.tree-view').each(function (index, item) {
                 let treeId = '#' + $(this).attr('id');
+                let object = globalElements.filter(function (element) {
+                    return element.filterElement.dates === treeId;
+                });
                 new Tree(treeId, {
                     data: [{id: '-1', text: 'Dates', children: treeData}],
                     closeDepth: 1,
@@ -266,9 +269,6 @@ $(function () {
                         // this.disables = ['0-0-0', '0-0-1', '0-0-2']
 
                         datesFilterList[treeId] = this;
-                        let object = globalElements.filter(function (element) {
-                            return element.filterElement.dates === treeId;
-                        });
                         if (object.length) {
                             object = object[0];
                             object.filterTree.datesTreeObject = this;
@@ -282,6 +282,7 @@ $(function () {
                     },
                     onChange: function () {
                         dates = this.values;
+                        object.filterTree.dates = this.values;
                     }
                 });
             });
@@ -330,15 +331,15 @@ $(function () {
     const filterData = () => {
         // console.log(agence_code, agent_name);
         return {
-            dates,
-            resultatAppel,
-            gpmtAppelPre,
-            codeTypeIntervention,
-            codeIntervention,
-            codeRdvIntervention,
-            codeRdvInterventionConfirm,
-            groupement,
-            nomRegion,
+            // dates,
+            // resultatAppel,
+            // gpmtAppelPre,
+            // codeTypeIntervention,
+            // codeIntervention,
+            // codeRdvIntervention,
+            // codeRdvInterventionConfirm,
+            // groupement,
+            // nomRegion,
             agent_name,
             agence_code
         };
@@ -542,6 +543,9 @@ $(function () {
         if (object.filterTree && object.filterTree.rows) {
             data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
         }
+        if (object.filterTree && object.filterTree.dates) {
+            data = {...data, 'dates': object.filterTree.dates};
+        }
         $.ajax({
             url: APP_URL + '/' + object.routeCol,
             method: 'GET',
@@ -585,14 +589,17 @@ $(function () {
                         // if (datesFilterList !== null && datesFilterList !== undefined && datesFilterList.length > 0) {
                         //     datesFilterList[object.treeElement].values = datesFilterValues[object.treeElement];
                         // }
-                        if (datesFilterListExist && datesFilterValuesExist) {
-                            assignFilter(datesFilterList, datesFilterValues);
-                        }
+                        // if (datesFilterListExist && datesFilterValuesExist) {
+                        //     assignFilter(datesFilterList, datesFilterValues);
+                        // }
                     }
                     // console.log(filters.date_filter);
                 }
 
+
+
                 let reformattedColumns = [...response.columns].map(function (column) {
+
                     return {
                         ...column,
                         render: function (data, type, full, meta) {
@@ -641,7 +648,7 @@ $(function () {
                                     // Open this row
                                     data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
                                     object.objDetail.element = 'details-' + $('tr').index(tr);
-                                    createChild(row, object.objDetail, data); // class is for background colour
+                                    createChild(row, object, data); // class is for background colour
                                     tr.addClass('shown');
                                 }
                             });
@@ -678,6 +685,21 @@ $(function () {
                         });
                     } catch (error) {
                         console.log(error);
+                        // swal(
+                        //     'Error!',
+                        //     "Aucun résultat n'a été trouvé",
+                        //     'error'
+                        // );
+                        Swal.fire({
+                            // position: 'top-end',
+                            type: 'error',
+                            title: "Vous devez actualiser la page",
+                            showConfirmButton: true,
+                            customClass: {
+                                confirmButton: 'btn btn-success m-1',
+                            },
+                            confirmButtonText: 'Ok',
+                        });
                     }
                 }
                 // if (object.objChart !== null && object.objChart !== undefined) {
@@ -693,7 +715,6 @@ $(function () {
                 console.log(textStatus);
                 console.log(errorThrown);
                 console.log(APP_URL + '/' + object.routeCol);
-
             }
         });
     }
@@ -704,7 +725,7 @@ $(function () {
         details: false,
         pagination: false
     }) {
-        if ($.fn.DataTable.isDataTable(object.element_dt)) {
+        if ($.fn.DataTable.isDataTable(object.element)) {
             object.element.off('click', 'td.details-control');
             object.element_dt.destroy();
         }
@@ -736,6 +757,7 @@ $(function () {
         // }
 
         return object.element.DataTable({
+            destroy: true,
             language: frLang,
             responsive: true,
             info: false,

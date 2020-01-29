@@ -194,6 +194,9 @@ $(function () {
 
             $('.tree-view').each(function (index, item) {
                 let treeId = '#' + $(this).attr('id');
+                let object = globalElements.filter(function (element) {
+                    return element.filterElement.dates === treeId;
+                });
                 new Tree(treeId, {
                     data: [{id: '-1', text: 'Dates', children: treeData}],
                     closeDepth: 1,
@@ -204,9 +207,6 @@ $(function () {
                         // this.disables = ['0-0-0', '0-0-1', '0-0-2']
 
                         datesFilterList[treeId] = this;
-                        let object = globalElements.filter(function (element) {
-                            return element.filterElement.dates === treeId;
-                        });
                         if (object.length) {
                             object = object[0];
                             object.filterTree.datesTreeObject = this;
@@ -220,6 +220,7 @@ $(function () {
                     },
                     onChange: function () {
                         dates = this.values;
+                        object.filterTree.dates = this.values;
                     }
                 });
             });
@@ -237,7 +238,7 @@ $(function () {
     const filterData = () => {
         // console.log(agence_code, agent_name);
         return {
-            dates,
+            // dates,
             // resultatAppel,
             // gpmtAppelPre,
             // codeTypeIntervention,
@@ -275,7 +276,7 @@ $(function () {
             element_dt: undefined,
             element: undefined,
             columns: undefined,
-            filterTree: undefined,
+            filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
             filterElement: undefined,
             routeCol: 'regions/details/groupement/columns',
             routeData: 'regions/details/groupement',
@@ -629,6 +630,9 @@ $(function () {
         if (object.filterTree && object.filterTree.rows) {
             data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
         }
+        if (object.filterTree && object.filterTree.dates) {
+            data = {...data, 'dates': object.filterTree.dates};
+        }
         $.ajax({
             url: APP_URL + '/' + object.routeCol,
             method: 'GET',
@@ -637,6 +641,9 @@ $(function () {
                 if (object.filterElement) {
                     if (response.filter) {
                         object.filterTree.dates = response.filter.date_filter;
+                        if (object.objDetail && object.objDetail.filterTree) {
+                            object.objDetail.filterTree.dates = response.filter.date_filter;
+                        }
                         if (object.filterTree.datesTreeObject && object.filterTree.dates) {
                             object.filterTree.datesTreeObject.values = object.filterTree.dates;
                         }
