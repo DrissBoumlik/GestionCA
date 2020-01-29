@@ -1000,11 +1000,11 @@ $(function () {
         let statscallsNegChart = document.getElementById('statscallsNegChart');
 
         //creates image
-        let statsRegionsChartImg = statsCallsPrealableChart.toDataURL("image/jpeg", 1.0);
-        let callsStatesAgenciesChartImg = callsStatesAgenciesChart.toDataURL("image1/jpeg", 1.0);
-        let callsStatesWeeksChartImg = callsStatesWeeksChart.toDataURL("image2/jpeg", 1.0);
-        let statsCallsPosChartImg = statsCallsPosChart.toDataURL("image5/jpeg", 1.0);
-        let statscallsNegChartImg = statscallsNegChart.toDataURL("image6/jpeg", 1.0);
+        let statsRegionsChartImg = statsCallsPrealableChart.toDataURL("image/png", 1.0);
+        let callsStatesAgenciesChartImg = callsStatesAgenciesChart.toDataURL("image1/png", 1.0);
+        let callsStatesWeeksChartImg = callsStatesWeeksChart.toDataURL("image2/png", 1.0);
+        let statsCallsPosChartImg = statsCallsPosChart.toDataURL("image5/png", 1.0);
+        let statscallsNegChartImg = statscallsNegChart.toDataURL("image6/png", 1.0);
         //creates PDF from img
         let doc = new jsPDF('landscape');
         doc. text( 10 , 20, 'Résultats Appels' );
@@ -1036,7 +1036,7 @@ $(function () {
         doc.addPage();
         doc. text( 10 , 20, 'la charte de Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)' );
         doc.addImage(statscallsNegChartImg, 'JPEG', 10 , 30 , 280, 100 );
-        doc.save('canvas.pdf');
+        doc.save('Appels Préalables.pdf');
     })
 
 });

@@ -916,9 +916,9 @@ $(function () {
         let callsStatesAgenciesChart = document.getElementById('callsStatesAgenciesChart');
         let callsStatesWeeksChart = document.getElementById('callsStatesWeeksChart');
         //creates image
-        let statsCallsGemChartImg = statsCallsGemChart.toDataURL("image/jpeg", 1.0);
-        let callsStatesAgenciesChartImg = callsStatesAgenciesChart.toDataURL("image2/jpeg", 1.0);
-        let callsStatesWeeksChartImg = callsStatesWeeksChart.toDataURL("image3/jpeg", 1.0);
+        let statsCallsGemChartImg = statsCallsGemChart.toDataURL("image/png", 1.0);
+        let callsStatesAgenciesChartImg = callsStatesAgenciesChart.toDataURL("image2/png", 1.0);
+        let callsStatesWeeksChartImg = callsStatesWeeksChart.toDataURL("image3/png", 1.0);
 
         //creates PDF from img
         let doc = new jsPDF('landscape');
@@ -939,7 +939,7 @@ $(function () {
         doc.addPage();
         doc. text( 10 , 20, 'la charte de Résultats Appels Préalables par semaine' );
         doc.addImage(callsStatesWeeksChartImg, 'JPEG', 10 , 30 , 280, 100 );
-        doc.save('canvas.pdf');
+        doc.save('Appels Gem.pdf');
     })
 
 });

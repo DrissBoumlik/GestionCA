@@ -985,4 +985,51 @@ $(function () {
         });
     });
     //</editor-fold>
+    $("#printElement").on("click", function () {
+        let statsCallsClotureChart = document.getElementById('statsCallsClotureChart');
+        let statsFoldersByTypeChart = document.getElementById('statsFoldersByTypeChart');
+        let statsFoldersByCodeChart = document.getElementById('statsFoldersByCodeChart');
+        let statsColturetechChart = document.getElementById('statsColturetechChart');
+        let statsGlobalDelayChart = document.getElementById('statsGlobalDelayChart');
+
+        //creates image
+        let statsCallsClotureChartImg = statsCallsClotureChart.toDataURL("image/png", 1.0);
+        let statsFoldersByTypeChartImg = statsFoldersByTypeChart.toDataURL("image1/png", 1.0);
+        let statsFoldersByCodeChartImg = statsFoldersByCodeChart.toDataURL("image2/png", 1.0);
+        let statsColturetechChartImg = statsColturetechChart.toDataURL("image3/png", 1.0);
+        let statsGlobalDelayChartImg = statsGlobalDelayChart.toDataURL("image4/png", 1.0);
+
+        //creates PDF from img
+        let doc = new jsPDF('landscape');
+        doc.text(10, 20, 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement');
+        doc.autoTable({html: '#statsCallsCloture', margin: {top: 30}, pageBreak: 'auto' });
+        doc.addPage();
+        doc.text(10, 20, 'la charte de Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement');
+        doc.addImage(statsCallsClotureChartImg, 'JPEG', 10, 30, 280, 150);
+        doc.addPage();
+        doc.text(10, 20, 'Répartition des dossiers non validés par Code Type intervention');
+        doc.autoTable({html: '#statsFoldersByType', margin: {top: 30} , pageBreak: 'auto'});
+        doc.addPage();
+        doc.text(10, 20, 'la charte de Répartition des dossiers non validés par Code Type intervention');
+        doc.addImage(statsFoldersByTypeChartImg, 'JPEG', 10, 30, 280, 150);
+        doc.addPage();
+        doc.text(10, 20, 'Répartition des dossiers non validés par code intervention');
+        doc.autoTable({html: '#statsFoldersByCode', margin: {top: 30} , pageBreak: 'auto'});
+        doc.addPage();
+        doc.text(10, 20, 'la charte de Répartition des dossiers non validés par code intervention');
+        doc.addImage(statsFoldersByCodeChartImg, 'JPEG', 10, 30, 280, 100);
+        doc.addPage();
+        doc.text(10, 20, 'Délai de validation post solde');
+        doc.autoTable({html: '#statsColturetech', margin: {top: 30} , pageBreak: 'auto'});
+        doc.addPage();
+        doc.text(10, 20, 'la charte de Délai de validation post solde');
+        doc.addImage(statsColturetechChartImg, 'JPEG', 10, 30, 280, 100);
+        doc.addPage();
+        doc.text(10, 20, 'Délai global de traitement OT');
+        doc.autoTable({html: '#statsGlobalDelay', margin: {top: 30} , pageBreak: 'auto'});
+        doc.addPage();
+        doc.text(10, 20, 'la charte de Délai global de traitement OT');
+        doc.addImage(statsGlobalDelayChartImg, 'JPEG', 10, 30, 280, 100);
+        doc.save('Appels Clôture.pdf');
+    })
 });

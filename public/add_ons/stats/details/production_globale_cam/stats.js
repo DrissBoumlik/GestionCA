@@ -788,7 +788,7 @@ $(function () {
     $("#printElement").on("click",function () {
         let statsPerimetersChart = document.getElementById('statsPerimetersChart');
         //creates image
-        let statsPerimetersChartImg = statsPerimetersChart.toDataURL("image/jpeg", 1.0);
+        let statsPerimetersChartImg = statsPerimetersChart.toDataURL("image/png", 1.0);
         //creates PDF from img
         let doc = new jsPDF('landscape');
         doc. text( 10 , 20, 'Production Globale CAM' );
@@ -796,7 +796,7 @@ $(function () {
         doc.addPage();
         doc. text( 10 , 20, 'la charte deProduction Globale CAM' );
         doc.addImage(statsPerimetersChartImg, 'JPEG', 10 , 30 , 280, 100 );
-        doc.save('canvas.pdf');
+        doc.save('Appels cam.pdf');
     })
 
 });
