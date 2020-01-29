@@ -275,6 +275,8 @@ $(function () {
             element_dt: undefined,
             element: undefined,
             columns: undefined,
+            filterTree: undefined,
+            filterElement: undefined,
             routeCol: 'regions/details/groupement/columns',
             routeData: 'regions/details/groupement',
             objChart: {
@@ -624,54 +626,60 @@ $(function () {
         // if (savedData !== null) {
         //     data = savedData;
         // }
-        data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
+        if (object.filterTree && object.filterTree.rows) {
+            data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
+        }
         $.ajax({
             url: APP_URL + '/' + object.routeCol,
             method: 'GET',
             data: data,
             success: function (response) {
-                if (response.filter) {
-                    object.filterTree.dates = response.filter.date_filter;
-                    if (object.filterTree.datesTreeObject && object.filterTree.dates) {
-                        object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                if (object.filterElement) {
+                    if (response.filter) {
+                        object.filterTree.dates = response.filter.date_filter;
+                        if (object.filterTree.datesTreeObject && object.filterTree.dates) {
+                            object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                        }
                     }
-                }
-                if (response.rows && response.rows.length) {
-                    let rowsFilterData = response.rows.map(function (d, index) {
-                        return {
-                            id: d,
-                            text: d
-                        };
-                    });
-                    new Tree(object.filterElement.rows, {
-                        data: [{id: '-1', text: response.rowsFilterHeader, children: rowsFilterData}],
-                        closeDepth: 1,
-                        loaded: function () {
-                            if (response.filter && response.filter.rows_filter) {
-                                this.values = object.filterTree.rows = response.filter.rows_filter;
+                    if (response.rows && response.rows.length) {
+                        let rowsFilterData = response.rows.map(function (d, index) {
+                            return {
+                                id: d,
+                                text: d
+                            };
+                        });
+                        new Tree(object.filterElement.rows, {
+                            data: [{id: '-1', text: response.rowsFilterHeader, children: rowsFilterData}],
+                            closeDepth: 1,
+                            loaded: function () {
+                                if (response.filter && response.filter.rows_filter) {
+                                    this.values = object.filterTree.rows = response.filter.rows_filter;
+                                    console.log(this.values);
+                                }
+                            },
+                            onChange: function () {
+                                object.filterTree.rows = this.values;
                                 console.log(this.values);
                             }
-                        },
-                        onChange: function () {
-                            object.filterTree.rows = this.values;
-                            console.log(this.values);
-                        }
-                    });
+                        });
+                    }
+
+                    let datesFilterValuesExist = true;
+                    let filters = response.filter;
+                    if (filters !== null && filters !== undefined) {
+                        object.filterTree.dates = filters.date_filter;
+                        datesFilterValues.push([object.filterElement.dates, filters.date_filter]);
+                        // if (datesFilterList !== null && datesFilterList !== undefined && datesFilterList.length > 0) {
+                        //     datesFilterList[object.treeElement].values = datesFilterValues[object.treeElement];
+                        // }
+                        // if (datesFilterListExist && datesFilterValuesExist) {
+                        //     assignFilter(datesFilterList, datesFilterValues);
+                        // }
+                    }
+                    // console.log(filters.date_filter);
                 }
 
-                let datesFilterValuesExist = true;
-                let filters = response.filter;
-                if (filters !== null && filters !== undefined) {
-                    object.filterTree.dates = filters.date_filter;
-                    datesFilterValues.push([object.filterElement.dates, filters.date_filter]);
-                    // if (datesFilterList !== null && datesFilterList !== undefined && datesFilterList.length > 0) {
-                    //     datesFilterList[object.treeElement].values = datesFilterValues[object.treeElement];
-                    // }
-                    // if (datesFilterListExist && datesFilterValuesExist) {
-                    //     assignFilter(datesFilterList, datesFilterValues);
-                    // }
-                }
-                // console.log(filters.date_filter);
+
 
                 let reformattedColumns = [...response.columns].map(function (column) {
 
@@ -1107,7 +1115,7 @@ $(function () {
         });
     });
     //</editor-fold>
-    $("#printElement").on("click",function () {
+    $("#printElement").on("click", function () {
         let statsRegions = document.getElementById('statsRegions');
         let statsRegionsChart = document.getElementById('statsRegionsChart');
         let statsFolders = document.getElementById('statsFolders');
@@ -1133,59 +1141,59 @@ $(function () {
         let statsPerimetersChartImg = statsPerimetersChart.toDataURL("image9/jpeg", 1.0);
         //creates PDF from img
         let doc = new jsPDF('landscape');
-        doc. text( 10 , 20, 'Résultats Appels' );
-        doc.autoTable({ html: '#statsRegions', margin: { top: 30 } });
+        doc.text(10, 20, 'Résultats Appels');
+        doc.autoTable({html: '#statsRegions', margin: {top: 30}});
         doc.addPage();
-        doc. text( 10 , 20, 'la charte de Résultats Appels' );
-        doc.addImage(statsRegionsChartImg, 'JPEG', 10 , 30  , 280, 150 );
+        doc.text(10, 20, 'la charte de Résultats Appels');
+        doc.addImage(statsRegionsChartImg, 'JPEG', 10, 30, 280, 150);
         doc.addPage();
-        doc. text( 10 , 20, 'Répartition des dossiers traités par périmètre' );
-        doc.autoTable({ html: '#statsFolders', margin: { top: 30 } });
+        doc.text(10, 20, 'Répartition des dossiers traités par périmètre');
+        doc.autoTable({html: '#statsFolders', margin: {top: 30}});
         doc.addPage();
-        doc. text( 10 , 20, 'la charte de Répartition des dossiers traités par périmètre' );
-        doc.addImage(statsFoldersChartImg, 'JPEG', 10 , 30  , 280, 150 );
+        doc.text(10, 20, 'la charte de Répartition des dossiers traités par périmètre');
+        doc.addImage(statsFoldersChartImg, 'JPEG', 10, 30, 280, 150);
         doc.addPage();
-        doc. text( 10 , 20, 'Résultats Appels Préalables par agence' );
-        doc.autoTable({ html: '#callsStatesAgencies', margin: { top: 30 } });
+        doc.text(10, 20, 'Résultats Appels Préalables par agence');
+        doc.autoTable({html: '#callsStatesAgencies', margin: {top: 30}});
         doc.addPage();
-        doc. text( 10 , 20, 'la charte de Résultats Appels Préalables par agence' );
-        doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.text(10, 20, 'la charte de Résultats Appels Préalables par agence');
+        doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 10, 30, 280, 100);
         doc.addPage();
-        doc. text( 10 , 20, 'Résultats Appels Préalables par semaine' );
-        doc.autoTable({ html: '#callsStatesWeeks', margin: { top: 30 } });
+        doc.text(10, 20, 'Résultats Appels Préalables par semaine');
+        doc.autoTable({html: '#callsStatesWeeks', margin: {top: 30}});
         doc.addPage();
-        doc. text( 10 , 20, 'la charte de Résultats Appels Préalables par semaine' );
-        doc.addImage(callsStatesWeeksChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.text(10, 20, 'la charte de Résultats Appels Préalables par semaine');
+        doc.addImage(callsStatesWeeksChartImg, 'JPEG', 10, 30, 280, 100);
         doc.addPage();
-        doc. text( 10 , 20, 'Code Interventions liés aux RDV Confirmés (Clients Joignables)' );
-        doc.autoTable({ html: '#statsCallsPos',margin : { top: 30 } });
+        doc.text(10, 20, 'Code Interventions liés aux RDV Confirmés (Clients Joignables)');
+        doc.autoTable({html: '#statsCallsPos', margin: {top: 30}});
         doc.addPage();
-        doc. text( 10 , 20, 'la charte de Code Interventions liés aux RDV Confirmés (Clients Joignables)' );
-        doc.addImage(statsCallsPosChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.text(10, 20, 'la charte de Code Interventions liés aux RDV Confirmés (Clients Joignables)');
+        doc.addImage(statsCallsPosChartImg, 'JPEG', 10, 30, 280, 100);
         doc.addPage();
-        doc. text( 10 , 20, 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)' );
-        doc.autoTable({ html: '#statsCallsNeg',margin : { top: 30 } });
+        doc.text(10, 20, 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)');
+        doc.autoTable({html: '#statsCallsNeg', margin: {top: 30}});
         doc.addPage();
-        doc. text( 10 , 20, 'la charte de Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)' );
-        doc.addImage(statscallsNegChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.text(10, 20, 'la charte de Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)');
+        doc.addImage(statscallsNegChartImg, 'JPEG', 10, 30, 280, 100);
         doc.addPage();
-        doc. text( 10 , 20, 'Répartition des dossiers non validés par Code Type intervention' );
-        doc.autoTable({ html: '#statsFoldersByType', pageBreak : 'auto',margin : { top: 30 } });
+        doc.text(10, 20, 'Répartition des dossiers non validés par Code Type intervention');
+        doc.autoTable({html: '#statsFoldersByType', pageBreak: 'auto', margin: {top: 30}});
         doc.addPage();
-        doc. text( 10 , 20, 'la charte de Répartition des dossiers non validés par Code Type intervention' );
-        doc.addImage(statsFoldersByTypeChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.text(10, 20, 'la charte de Répartition des dossiers non validés par Code Type intervention');
+        doc.addImage(statsFoldersByTypeChartImg, 'JPEG', 10, 30, 280, 100);
         doc.addPage();
-        doc. text( 10 , 20, 'Répartition des dossiers non validés par code intervention' );
-        doc.autoTable({ html: '#statsFoldersByCode', pageBreak : 'auto',margin : { top: 30 } });
+        doc.text(10, 20, 'Répartition des dossiers non validés par code intervention');
+        doc.autoTable({html: '#statsFoldersByCode', pageBreak: 'auto', margin: {top: 30}});
         doc.addPage();
-        doc. text( 10 , 20, 'la charte de Répartition des dossiers non validés par code intervention' );
-        doc.addImage(statsFoldersByCodeChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.text(10, 20, 'la charte de Répartition des dossiers non validés par code intervention');
+        doc.addImage(statsFoldersByCodeChartImg, 'JPEG', 10, 30, 280, 100);
         doc.addPage();
-        doc. text( 10 , 20, 'Production Globale CAM' );
-        doc.autoTable({ html: '#statsPerimeters', pageBreak : 'auto',margin : { top: 30 } });
+        doc.text(10, 20, 'Production Globale CAM');
+        doc.autoTable({html: '#statsPerimeters', pageBreak: 'auto', margin: {top: 30}});
         doc.addPage();
-        doc. text( 10 , 20, 'la charte deProduction Globale CAM' );
-        doc.addImage(statsPerimetersChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.text(10, 20, 'la charte deProduction Globale CAM');
+        doc.addImage(statsPerimetersChartImg, 'JPEG', 10, 30, 280, 100);
         doc.save('canvas.pdf');
     })
 });

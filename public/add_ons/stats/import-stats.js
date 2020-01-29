@@ -238,6 +238,7 @@ $(document).ready(function () {
                 console.log(jqXHR);
                 console.log(textStatus);
                 console.log(errorThrown);
+                $('#modal-loader').modal('hide');
                 Swal.fire({
                     // position: 'top-end',
                     type: 'error',

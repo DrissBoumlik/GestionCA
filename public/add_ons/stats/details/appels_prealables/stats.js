@@ -351,7 +351,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsCallsPrealableChart',
             data: undefined,
-            chartTitle: 'Résultats Appels Préalables'
+            chartTitle: 'Type Résultats Appels'
         }
     };
     if (elementExists(statsCallsPrealable)) {
@@ -547,54 +547,58 @@ $(function () {
         // if (savedData !== null) {
         //     data = savedData;
         // }
-        data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
+        if (object.filterTree && object.filterTree.rows) {
+            data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
+        }
         $.ajax({
             url: APP_URL + '/' + object.routeCol,
             method: 'GET',
             data: data,
             success: function (response) {
-                if (response.filter) {
-                    object.filterTree.dates = response.filter.date_filter;
-                    if (object.filterTree.datesTreeObject && object.filterTree.dates) {
-                        object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                if (object.filterElement) {
+                    if (response.filter) {
+                        object.filterTree.dates = response.filter.date_filter;
+                        if (object.filterTree.datesTreeObject && object.filterTree.dates) {
+                            object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                        }
                     }
-                }
-                if (response.rows && response.rows.length) {
-                    let rowsFilterData = response.rows.map(function (d, index) {
-                        return {
-                            id: d,
-                            text: d
-                        };
-                    });
-                    new Tree(object.filterElement.rows, {
-                        data: [{id: '-1', text: response.rowsFilterHeader, children: rowsFilterData}],
-                        closeDepth: 1,
-                        loaded: function () {
-                            if (response.filter && response.filter.rows_filter) {
-                                this.values = object.filterTree.rows = response.filter.rows_filter;
+                    if (response.rows && response.rows.length) {
+                        let rowsFilterData = response.rows.map(function (d, index) {
+                            return {
+                                id: d,
+                                text: d
+                            };
+                        });
+                        new Tree(object.filterElement.rows, {
+                            data: [{id: '-1', text: response.rowsFilterHeader, children: rowsFilterData}],
+                            closeDepth: 1,
+                            loaded: function () {
+                                if (response.filter && response.filter.rows_filter) {
+                                    this.values = object.filterTree.rows = response.filter.rows_filter;
+                                    console.log(this.values);
+                                }
+                            },
+                            onChange: function () {
+                                object.filterTree.rows = this.values;
                                 console.log(this.values);
                             }
-                        },
-                        onChange: function () {
-                            object.filterTree.rows = this.values;
-                            console.log(this.values);
-                        }
-                    });
-                }
-
-                let datesFilterValuesExist = true;
-                let filters = response.filter;
-                if (filters !== null && filters !== undefined) {
-                    object.filterTree.dates = filters.date_filter;
-                    datesFilterValues.push([object.filterElement.dates, filters.date_filter]);
-                    // if (datesFilterList !== null && datesFilterList !== undefined && datesFilterList.length > 0) {
-                    //     datesFilterList[object.treeElement].values = datesFilterValues[object.treeElement];
-                    // }
-                    if (datesFilterListExist && datesFilterValuesExist) {
-                        assignFilter(datesFilterList, datesFilterValues);
+                        });
                     }
+
+                    let datesFilterValuesExist = true;
+                    let filters = response.filter;
+                    if (filters !== null && filters !== undefined) {
+                        object.filterTree.dates = filters.date_filter;
+                        datesFilterValues.push([object.filterElement.dates, filters.date_filter]);
+                        // if (datesFilterList !== null && datesFilterList !== undefined && datesFilterList.length > 0) {
+                        //     datesFilterList[object.treeElement].values = datesFilterValues[object.treeElement];
+                        // }
+                        if (datesFilterListExist && datesFilterValuesExist) {
+                            assignFilter(datesFilterList, datesFilterValues);
+                        }
+                    }
+                    // console.log(filters.date_filter);
                 }
-                // console.log(filters.date_filter);
 
                 let reformattedColumns = [...response.columns].map(function (column) {
                     return {
