@@ -24,7 +24,8 @@
     <script src={{ asset("/add_ons/datatables-bs4/js/dataTables.bootstrap4.js") }}></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
     <script src="{{ asset("js/plugins/sweetalert2/sweetalert2.all.min.js") }}"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script src="https://unpkg.com/jspdf-autotable@3.2.11/dist/jspdf.plugin.autotable.js"></script>
     <!-- TREE VIEW -->
     {{--        <script src="https://cdn.metroui.org.ua/v4.3.2/js/metro.min.js"></script>--}}
     <script src="{{ asset("/add_ons/tree-view/tree.js") }}"></script>
@@ -105,7 +106,7 @@
         <!-- Global date filter-->
         <div class="container-fluid">
             @if(!$agence && !$agent)
-                <a href="javascript:void(0)" onclick="window.print()" id="printElement"
+                <a href="javascript:void(0)"  id="printElement"
                    class="btn btn-primary mb-3 capitalize-first-letter w-100">
                     exporter des données au format PDF </a>
                 @include('stats.layouts.filter_menu')
@@ -116,7 +117,7 @@
         <hr class="separator">
         <!-- Stats -->
         <div class="container-fluid">
-            <div class="row">
+            <div class="row ">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -148,7 +149,7 @@
             </div>
             <!-- /.row -->
             <hr>
-            <div class="row">
+            <div class="row ">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -180,7 +181,7 @@
             </div>
             <!-- /.row -->
             <hr>
-            <div class="row">
+            <div class="row ">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -213,7 +214,7 @@
             </div>
             <!-- /.row -->
             <hr>
-            <div class="row">
+            <div class="row ">
                 <div class="col-12">
                     <div class="card exception-card">
                         <div class="card-header">
@@ -245,7 +246,7 @@
             </div>
             <!-- /.row -->
             <hr>
-            <div class="row">
+            <div class="row ">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -279,7 +280,7 @@
             </div>
             <!-- /.row -->
             <hr>
-            <div class="row">
+            <div class="row ">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -314,7 +315,7 @@
             <!-- /.row -->
             <hr>
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 special-case-col">
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title d-inline-block">Répartition des dossiers non validés par Code Type
@@ -347,7 +348,7 @@
             </div>
             <!-- /.row -->
             <hr>
-            <div class="row">
+            <div class="row ">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -381,7 +382,7 @@
             </div>
             <!-- /.row -->
             <hr>
-            <div class="row">
+            <div class="row ">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">

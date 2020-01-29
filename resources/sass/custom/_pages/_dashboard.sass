@@ -1,5 +1,5 @@
 @media print
-    .bg-image,  .refresh-form,  .global-filtre, #printElement,  .filter_menu, .first-separator
+    .bg-image,  .refresh-form,  .global-filtre, #printElement,  .filter_menu, .separator
         display: none
     #statsCallsPos
         width: 1250px !important
@@ -9,16 +9,20 @@
         padding: 0 !important
     #statsCallsNeg
         width: 1250px !important
-    #statsCallsNeg > th.sorting_asc,#statsCallsNeg > th.sorting_desc,#statsCallsNeg > th.sorting,#statsCallsNeg > td.sorting_asc,#statsCallsNeg > td.sorting_desc,#statsCallsNeg > td.sorting
+    th.sorting_asc,th.sorting_desc, th.sorting,td.sorting_asc, td.sorting_desc, td.sorting
         padding-right: 0 !important
     #statsCallsNeg th,#statsCallsNeg td
         padding: 0 !important
     .card-header
         background-color: #DDEBF7
         -webkit-print-color-adjust: exact
-    .card
-        margin: 30px 0
-
+    .define-height
+        height: 1900px !important
+        margin-bottom: 50px
+    .define-height:first-of-type
+        margin: 0 !important
+    .special-case-col
+        margin: 120px !important
 
 
 
