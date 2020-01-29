@@ -539,7 +539,7 @@ $(function () {
         // if (savedData !== null) {
         //     data = savedData;
         // }
-        if (object.filterTree.rows) {
+        if (object.filterTree && object.filterTree.rows) {
             data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
         }
         $.ajax({

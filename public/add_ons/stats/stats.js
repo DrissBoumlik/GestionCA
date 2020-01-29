@@ -275,6 +275,8 @@ $(function () {
             element_dt: undefined,
             element: undefined,
             columns: undefined,
+            filterTree: undefined,
+            filterElement: undefined,
             routeCol: 'regions/details/groupement/columns',
             routeData: 'regions/details/groupement',
             objChart: {
@@ -624,7 +626,7 @@ $(function () {
         // if (savedData !== null) {
         //     data = savedData;
         // }
-        if (object.filterTree.rows) {
+        if (object.filterTree && object.filterTree.rows) {
             data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
         }
         $.ajax({
