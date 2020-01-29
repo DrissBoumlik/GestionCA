@@ -988,5 +988,51 @@ $(function () {
 
     });
     //</editor-fold>
+    $("#printElement").on("click",function () {
+        let statsCallsPrealableChart = document.getElementById('statsCallsPrealableChart');
+        let callsStatesAgenciesChart = document.getElementById('callsStatesAgenciesChart');
+        let callsStatesWeeksChart = document.getElementById('callsStatesWeeksChart');
+        let statsCallsPosChart = document.getElementById('statsCallsPosChart');
+        let statscallsNegChart = document.getElementById('statscallsNegChart');
+
+        //creates image
+        let statsRegionsChartImg = statsCallsPrealableChart.toDataURL("image/jpeg", 1.0);
+        let callsStatesAgenciesChartImg = callsStatesAgenciesChart.toDataURL("image1/jpeg", 1.0);
+        let callsStatesWeeksChartImg = callsStatesWeeksChart.toDataURL("image2/jpeg", 1.0);
+        let statsCallsPosChartImg = statsCallsPosChart.toDataURL("image5/jpeg", 1.0);
+        let statscallsNegChartImg = statscallsNegChart.toDataURL("image6/jpeg", 1.0);
+        //creates PDF from img
+        let doc = new jsPDF('landscape');
+        doc. text( 10 , 20, 'Résultats Appels' );
+        doc.autoTable({ html: '#statsCallsPrealable', margin: { top: 30 }, pageBreak : 'auto' });
+        doc.addPage();
+        doc. text( 10 , 20, 'la charte de Résultats Appels' );
+        doc.addImage(statsRegionsChartImg, 'JPEG', 10 , 30  , 280, 150 );
+        doc.addPage();
+        doc. text( 10 , 20, 'Résultats Appels Préalables par agence' );
+        doc.autoTable({ html: '#callsStatesAgencies', margin: { top: 30 }, pageBreak : 'auto' });
+        doc.addPage();
+        doc. text( 10 , 20, 'la charte de Résultats Appels Préalables par agence' );
+        doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.addPage();
+        doc. text( 10 , 20, 'Résultats Appels Préalables par semaine' );
+        doc.autoTable({ html: '#callsStatesWeeks', margin: { top: 30 }, pageBreak : 'auto' });
+        doc.addPage();
+        doc. text( 10 , 20, 'la charte de Résultats Appels Préalables par semaine' );
+        doc.addImage(callsStatesWeeksChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.addPage();
+        doc. text( 10 , 20, 'Code Interventions liés aux RDV Confirmés (Clients Joignables)' );
+        doc.autoTable({ html: '#statsCallsPos',margin : { top: 30 }, pageBreak : 'auto' });
+        doc.addPage();
+        doc. text( 10 , 20, 'la charte de Code Interventions liés aux RDV Confirmés (Clients Joignables)' );
+        doc.addImage(statsCallsPosChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.addPage();
+        doc. text( 10 , 20, 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)' );
+        doc.autoTable({ html: '#statsCallsNeg',margin : { top: 30 }, pageBreak : 'auto' });
+        doc.addPage();
+        doc. text( 10 , 20, 'la charte de Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)' );
+        doc.addImage(statscallsNegChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.save('canvas.pdf');
+    })
 
 });

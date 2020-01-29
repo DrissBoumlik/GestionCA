@@ -112,7 +112,7 @@
         <div class="container-fluid">
 
 
-            <div class="row">
+            <div class="row define-height">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -146,7 +146,7 @@
             <!-- /.row -->
             <hr>
 
-            <div class="row">
+            <div class="row define-height">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -180,7 +180,7 @@
             </div>
             <!-- /.row -->
             <hr>
-            <div class="row">
+            <div class="row define-height">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -216,7 +216,7 @@
 
             <!-- /.row -->
             <hr>
-            <div class="row">
+            <div class="row define-height">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -247,7 +247,7 @@
             </div>
             <!-- /.row -->
             <hr>
-            <div class="row">
+            <div class="row define-height">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">

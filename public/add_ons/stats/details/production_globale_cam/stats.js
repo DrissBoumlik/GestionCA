@@ -781,5 +781,18 @@ $(function () {
         });
     });
     //</editor-fold>
+    $("#printElement").on("click",function () {
+        let statsPerimetersChart = document.getElementById('statsPerimetersChart');
+        //creates image
+        let statsPerimetersChartImg = statsPerimetersChart.toDataURL("image/jpeg", 1.0);
+        //creates PDF from img
+        let doc = new jsPDF('landscape');
+        doc. text( 10 , 20, 'Production Globale CAM' );
+        doc.autoTable({ html: '#statsPerimeters', pageBreak : 'auto',margin : { top: 30 } });
+        doc.addPage();
+        doc. text( 10 , 20, 'la charte deProduction Globale CAM' );
+        doc.addImage(statsPerimetersChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.save('canvas.pdf');
+    })
 
 });
