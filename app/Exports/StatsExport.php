@@ -73,7 +73,15 @@ class StatsExport implements FromCollection,WithHeadings, WithMapping, ShouldAut
             'EXPORT_ALL_Date_CHARGEMENT_PDA',
             'EXPORT_ALL_Date_SOLDE',
             'EXPORT_ALL_Date_VALIDATION'
-        ]);
+        ])->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats' .
+            ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+            ' GROUP BY Id_Externe) groupedst'),
+            function ($join) {
+                $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
+                $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
+            });
+
         if ($row && $rowValue) {
             $allStats = $allStats->where($row, $rowValue);
         }
