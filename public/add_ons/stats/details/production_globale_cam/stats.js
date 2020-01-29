@@ -369,8 +369,10 @@ $(function () {
         // if (savedData !== null) {
         //     data = savedData;
         // }
-        data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
-        $.ajax({
+        if (object.filterTree.rows) {
+            data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
+        }
+            $.ajax({
             url: APP_URL + '/' + object.routeCol,
             method: 'GET',
             data: data,

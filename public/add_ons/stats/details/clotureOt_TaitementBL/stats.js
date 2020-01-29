@@ -453,8 +453,8 @@ $(function () {
         element: $('#statsColturetech'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-02',
-        filterTreeElement: undefined,
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-02', rows: ''},
         routeCol: 'appels-clture/Cloturetech/columns',
         routeData: 'appels-clture/Cloturetech',
         objChart: {
@@ -488,8 +488,8 @@ $(function () {
         element: $('#statsGlobalDelay'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-02',
-        filterTreeElement: undefined,
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-03', rows: ''},
         routeCol: 'appels-clture/GlobalDelay/columns',
         routeData: 'appels-clture/GlobalDelay',
         objChart: {
@@ -539,7 +539,9 @@ $(function () {
         // if (savedData !== null) {
         //     data = savedData;
         // }
-        data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
+        if (object.filterTree.rows) {
+            data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
+        }
         $.ajax({
             url: APP_URL + '/' + object.routeCol,
             method: 'GET',
