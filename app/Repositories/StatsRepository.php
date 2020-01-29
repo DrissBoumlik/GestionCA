@@ -298,7 +298,7 @@ class StatsRepository
         $regions = $columns = addRegionWithZero($request, $regions, $columns);
         // logger($regions);
         if (!count($regions)) {
-            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Groupement'];
+            $data = ['filter' => $filter, 'columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Groupement'];
             return $data;
         } else {
             $totalCount = Stats::count();
@@ -407,7 +407,7 @@ class StatsRepository
 
     public function GetDataRegionsByGrpCall(Request $request)
     {
-        $resultatAppel = $request->get('rowFilter');
+//        $resultatAppel = $request->get('rowFilter');
 //        $resultatAppel = $request->get('resultatAppel');
 //        $groupement = $request->get('groupement');
         $dates = $request->get('dates');
@@ -453,10 +453,10 @@ class StatsRepository
 
         $keys = ($regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get())->groupBy(['Nom_Region'])->keys();
         $rowsKeys = ($regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get())->groupBy(['Resultat_Appel'])->keys();
-        if ($resultatAppel) {
-            $resultatAppel = array_values($resultatAppel);
-            $regions = $regions->whereIn('Resultat_Appel', $resultatAppel);
-        }
+//        if ($resultatAppel) {
+//            $resultatAppel = array_values($resultatAppel);
+//            $regions = $regions->whereIn('Resultat_Appel', $resultatAppel);
+//        }
 //        if ($groupement) {
 //            $groupement = array_values($groupement);
 //            $regions = $regions->whereIn('Groupement', $groupement);
@@ -466,14 +466,14 @@ class StatsRepository
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
-        list($filter, $regions) = $this->applyFilter($request, $route, $regions, 'Resultat_Appel', $resultatAppel);
+        list($filter, $regions) = $this->applyFilter($request, $route, $regions);
 
 //        $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
 
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
         $regions = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
         if (!count($regions)) {
-            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Résultat Appel'];
+            $data = ['filter' => $filter, 'columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Résultat Appel'];
             return $data;
         } else {
             $totalCount = Stats::where('key_groupement', 'like', $key_groupement)->count();
@@ -653,7 +653,7 @@ class StatsRepository
         $regions = $regions->groupBy('Nom_Region', $callResult)->get();
         $regions = $columns = addRegionWithZero($request, $regions, $columns);
         if (!count($regions)) {
-            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Groupement'];
+            $data = ['filter' => $filter, 'columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Groupement'];
             return $data;
         } else {
             $totalCount = Stats::count();
@@ -864,7 +864,7 @@ class StatsRepository
         $regions = $columns = addRegionWithZero($request, $regions, $columns, $column);
 
         if (!count($regions)) {
-            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => ($column == 'Date_Heure_Note_Semaine' ? 'Résultats Appels Préalables par semaine' : 'Résultats Appels Préalables par agence')];
+            $data = ['filter' => $filter, 'columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => ($column == 'Date_Heure_Note_Semaine' ? 'Résultats Appels Préalables par semaine' : 'Résultats Appels Préalables par agence')];
             return $data;
         } else {
             $totalCount = Stats::count();
@@ -1111,7 +1111,7 @@ class StatsRepository
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
         $codes = $columns = addRegionWithZero($request, $codes, $columns, null, 'Gpmt_Appel_Pre', $callResult);
         if (!count($codes)) {
-            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Region'];
+            $data = ['filter' => $filter, 'columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Region'];
             return $data;
         } else {
 
@@ -1310,7 +1310,7 @@ class StatsRepository
         $regions = $columns = addRegionWithZero($request, $regions, $columns);
 
         if (!count($regions)) {
-            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys];
+            $data = ['filter' => $filter, 'columns' => [], 'data' => [], 'rows' => $rowsKeys];
             return $data;
         } else {
             $totalCount = Stats::count();
@@ -1501,7 +1501,7 @@ class StatsRepository
         $regions = $columns = addRegionWithZero($request, $regions, $columns);
 
         if (!count($regions)) {
-            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => ($intervCol == 'Code_Intervention' ? 'Code Intervention' : 'Type Intervention')];
+            $data = ['filter' => $filter, 'columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => ($intervCol == 'Code_Intervention' ? 'Code Intervention' : 'Type Intervention')];
             return $data;
         } else {
             $totalCount = Stats::count();
@@ -1716,7 +1716,7 @@ class StatsRepository
         $results = $columns = addRegionWithZero($request, $results, $columns);
 
         if (!count($results)) {
-            $data = ['columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Region'];
+            $data = ['filter' => $filter, 'columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Region'];
             return $data;
         } else {
 
