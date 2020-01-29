@@ -46,190 +46,222 @@ $(function () {
         getData['agent_name'] = agent_name;
     }
 
-    const paramFiltreList = [
-        {
-            url: 'Resultat_Appel',
-            filter: 'key_groupement=Appels-GEM',
-            elements: [
-                {
-                    id: '#stats-callResult-filter',
-                    text: 'Résultat Appels', values: (v) => {
-                        nomRegion = undefined;
-                        gpmtAppelPre = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        resultatAppel = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                        groupement = v;
-                    }, class: '.tree-callResult-view'
-                },
-                {
-                    id: '#stats-regions-filter',
-                    text: 'Groupement', values: (v) => {
-                        nomRegion = undefined;
-                        gpmtAppelPre = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        resultatAppel = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                        groupement = v;
-                    }, class: '.tree-region-view'
-                }
-            ]
-        },
-        {
-            url: 'Groupement',
-            elements: [
-                {
-                    id: '#stats-groupement-filter',
-                    text: 'Groupement', values: (v) => {
-                        nomRegion = undefined;
-                        gpmtAppelPre = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        resultatAppel = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                        groupement = v;
-                    }, class: '.tree-groupement-view'
-                },
-                {
-                    id: '#stats-regions-filter',
-                    text: 'Groupement', values: (v) => {
-                        nomRegion = undefined;
-                        gpmtAppelPre = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        resultatAppel = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                        groupement = v;
-                    }, class: '.tree-region-view'
-                }
-            ]
-        },
-        {
-            url: 'Gpmt_Appel_Pre',
-            elements: [
-                {
-                    id: '#stats-call-regions-filter', class: '.tree-call-region-view',
-                    text: 'Résultats Appels Préalables par agence', values: (v) => {
-                        nomRegion = undefined;
-                        groupement = undefined;
-                        resultatAppel = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                        gpmtAppelPre = v;
-                    }
-                },
-                {
-                    id: '#stats-weeks-regions-filter', class: '.tree-weeks-region-view',
-                    text: 'Résultats Appels Préalables par semaine', values: (v) => {
-                        nomRegion = undefined;
-                        groupement = undefined;
-                        resultatAppel = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                        gpmtAppelPre = v;
-                    }
-                }
-            ]
-        },
-        {
-            url: 'Code_Type_Intervention',
-            elements: [
-                {
-                    id: '#code-type-intervention-filter',
-                    class: '.tree-code-type-intervention-view',
-                    text: 'Type Intervention',
-                    values: (v) => {
-                        nomRegion = undefined;
-                        groupement = undefined;
-                        resultatAppel = undefined;
-                        codeTypeIntervention = v;
-                        codeIntervention = undefined;
-                        gpmtAppelPre = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                    }
-                }
-            ],
-        },
-        {
-            url: 'Code_Intervention',
-            elements: [
-                {
-                    id: '#code-intervention-filter', class: '.tree-code-intervention-view',
-                    text: 'Intervention', values: (v) => {
-                        nomRegion = undefined;
-                        groupement = undefined;
-                        resultatAppel = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = v;
-                        gpmtAppelPre = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                    }
-                }
-            ]
-        },
-        {
-            url: 'Nom_Region',
-            elements: [
-                {
-                    id: '#nom-region-filter', class: '.tree-nom-region-view',
-                    text: 'Region',
-                    values: (v) => {
-                        groupement = undefined;
-                        resultatAppel = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        gpmtAppelPre = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = undefined;
-                        nomRegion = v;
-                    }
-                },
+    // const paramFiltreList = [
+    //     {
+    //         url: 'Resultat_Appel',
+    //         filter: 'key_groupement=Appels-GEM',
+    //         elements: [
+    //             {
+    //                 id: '#stats-callResult-filter',
+    //                 text: 'Résultat Appels', values: (v) => {
+    //                     nomRegion = undefined;
+    //                     gpmtAppelPre = undefined;
+    //                     codeTypeIntervention = undefined;
+    //                     codeIntervention = undefined;
+    //                     resultatAppel = undefined;
+    //                     codeRdvInterventionConfirm = undefined;
+    //                     codeRdvIntervention = undefined;
+    //                     groupement = v;
+    //                 }, class: '.tree-callResult-view'
+    //             },
+    //             {
+    //                 id: '#stats-regions-filter',
+    //                 text: 'Groupement', values: (v) => {
+    //                     nomRegion = undefined;
+    //                     gpmtAppelPre = undefined;
+    //                     codeTypeIntervention = undefined;
+    //                     codeIntervention = undefined;
+    //                     resultatAppel = undefined;
+    //                     codeRdvInterventionConfirm = undefined;
+    //                     codeRdvIntervention = undefined;
+    //                     groupement = v;
+    //                 }, class: '.tree-region-view'
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         url: 'Groupement',
+    //         elements: [
+    //             {
+    //                 id: '#stats-groupement-filter',
+    //                 text: 'Groupement', values: (v) => {
+    //                     nomRegion = undefined;
+    //                     gpmtAppelPre = undefined;
+    //                     codeTypeIntervention = undefined;
+    //                     codeIntervention = undefined;
+    //                     resultatAppel = undefined;
+    //                     codeRdvInterventionConfirm = undefined;
+    //                     codeRdvIntervention = undefined;
+    //                     groupement = v;
+    //                 }, class: '.tree-groupement-view'
+    //             },
+    //             {
+    //                 id: '#stats-regions-filter',
+    //                 text: 'Groupement', values: (v) => {
+    //                     nomRegion = undefined;
+    //                     gpmtAppelPre = undefined;
+    //                     codeTypeIntervention = undefined;
+    //                     codeIntervention = undefined;
+    //                     resultatAppel = undefined;
+    //                     codeRdvInterventionConfirm = undefined;
+    //                     codeRdvIntervention = undefined;
+    //                     groupement = v;
+    //                 }, class: '.tree-region-view'
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         url: 'Gpmt_Appel_Pre',
+    //         elements: [
+    //             {
+    //                 id: '#stats-call-regions-filter', class: '.tree-call-region-view',
+    //                 text: 'Résultats Appels Préalables par agence', values: (v) => {
+    //                     nomRegion = undefined;
+    //                     groupement = undefined;
+    //                     resultatAppel = undefined;
+    //                     codeTypeIntervention = undefined;
+    //                     codeIntervention = undefined;
+    //                     codeRdvInterventionConfirm = undefined;
+    //                     codeRdvIntervention = undefined;
+    //                     gpmtAppelPre = v;
+    //                 }
+    //             },
+    //             {
+    //                 id: '#stats-weeks-regions-filter', class: '.tree-weeks-region-view',
+    //                 text: 'Résultats Appels Préalables par semaine', values: (v) => {
+    //                     nomRegion = undefined;
+    //                     groupement = undefined;
+    //                     resultatAppel = undefined;
+    //                     codeTypeIntervention = undefined;
+    //                     codeIntervention = undefined;
+    //                     codeRdvInterventionConfirm = undefined;
+    //                     codeRdvIntervention = undefined;
+    //                     gpmtAppelPre = v;
+    //                 }
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         url: 'Code_Type_Intervention',
+    //         elements: [
+    //             {
+    //                 id: '#code-type-intervention-filter',
+    //                 class: '.tree-code-type-intervention-view',
+    //                 text: 'Type Intervention',
+    //                 values: (v) => {
+    //                     nomRegion = undefined;
+    //                     groupement = undefined;
+    //                     resultatAppel = undefined;
+    //                     codeTypeIntervention = v;
+    //                     codeIntervention = undefined;
+    //                     gpmtAppelPre = undefined;
+    //                     codeRdvInterventionConfirm = undefined;
+    //                     codeRdvIntervention = undefined;
+    //                 }
+    //             }
+    //         ],
+    //     },
+    //     {
+    //         url: 'Code_Intervention',
+    //         elements: [
+    //             {
+    //                 id: '#code-intervention-filter', class: '.tree-code-intervention-view',
+    //                 text: 'Intervention', values: (v) => {
+    //                     nomRegion = undefined;
+    //                     groupement = undefined;
+    //                     resultatAppel = undefined;
+    //                     codeTypeIntervention = undefined;
+    //                     codeIntervention = v;
+    //                     gpmtAppelPre = undefined;
+    //                     codeRdvInterventionConfirm = undefined;
+    //                     codeRdvIntervention = undefined;
+    //                 }
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         url: 'Nom_Region',
+    //         elements: [
+    //             {
+    //                 id: '#nom-region-filter', class: '.tree-nom-region-view',
+    //                 text: 'Region',
+    //                 values: (v) => {
+    //                     groupement = undefined;
+    //                     resultatAppel = undefined;
+    //                     codeTypeIntervention = undefined;
+    //                     codeIntervention = undefined;
+    //                     gpmtAppelPre = undefined;
+    //                     codeRdvInterventionConfirm = undefined;
+    //                     codeRdvIntervention = undefined;
+    //                     nomRegion = v;
+    //                 }
+    //             },
+    //
+    //             {
+    //                 id: '#code-rdv-intervention-confirm-filter', class: '.tree-code-rdv-intervention-confirm-view',
+    //                 text: 'Region',
+    //                 values: (v) => {
+    //                     groupement = undefined;
+    //                     resultatAppel = undefined;
+    //                     codeTypeIntervention = undefined;
+    //                     codeIntervention = undefined;
+    //                     gpmtAppelPre = undefined;
+    //                     nomRegion = undefined;
+    //                     codeRdvInterventionConfirm = v;
+    //                     codeRdvIntervention = undefined;
+    //
+    //                 }
+    //             },
+    //
+    //             {
+    //                 id: '#code-rdv-intervention-filter', class: '.tree-code-rdv-intervention-view',
+    //                 text: 'Region',
+    //                 values: (v) => {
+    //                     groupement = undefined;
+    //                     resultatAppel = undefined;
+    //                     codeTypeIntervention = undefined;
+    //                     codeIntervention = undefined;
+    //                     gpmtAppelPre = undefined;
+    //                     nomRegion = undefined;
+    //                     codeRdvInterventionConfirm = undefined;
+    //                     codeRdvIntervention = v;
+    //                 }
+    //             }
+    //         ],
+    //     },
+    // ];
 
-                {
-                    id: '#code-rdv-intervention-confirm-filter', class: '.tree-code-rdv-intervention-confirm-view',
-                    text: 'Region',
-                    values: (v) => {
-                        groupement = undefined;
-                        resultatAppel = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        gpmtAppelPre = undefined;
-                        nomRegion = undefined;
-                        codeRdvInterventionConfirm = v;
-                        codeRdvIntervention = undefined;
-
-                    }
-                },
-
-                {
-                    id: '#code-rdv-intervention-filter', class: '.tree-code-rdv-intervention-view',
-                    text: 'Region',
-                    values: (v) => {
-                        groupement = undefined;
-                        resultatAppel = undefined;
-                        codeTypeIntervention = undefined;
-                        codeIntervention = undefined;
-                        gpmtAppelPre = undefined;
-                        nomRegion = undefined;
-                        codeRdvInterventionConfirm = undefined;
-                        codeRdvIntervention = v;
-                    }
-                }
-            ],
-        },
-    ];
+    // for (let p of paramFiltreList) {
+    //     $.ajax({
+    //         url: `${APP_URL}/stats/filter/${p.url}` + (p.filter !== undefined && p.filter !== null ? '/?' + p.filter : ''),
+    //         data: getData,
+    //         method: 'GET',
+    //         success: function (response) {
+    //             const data = response.data.map(function (d) {
+    //                 return {
+    //                     id: d,
+    //                     text: d
+    //                 };
+    //             });
+    //             for (let element of p.elements) {
+    //                 $(element.class).each(function (index, item) {
+    //                     new Tree(element.id, {
+    //                         data: [{id: '-1', text: element.text, children: data}],
+    //                         closeDepth: 1,
+    //                         loaded: function () {
+    //                         },
+    //                         onChange: function () {
+    //                             element.values(this.values);
+    //                         }
+    //                     });
+    //                     // $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
+    //                 });
+    //             }
+    //         },
+    //         error: function (jqXHR, textStatus, errorThrown) {
+    //         }
+    //     });
+    // }
 
     let treeData = undefined;
     let datesFilterList = [];
@@ -294,37 +326,6 @@ $(function () {
         }
     });
 
-    for (let p of paramFiltreList) {
-        $.ajax({
-            url: `${APP_URL}/stats/filter/${p.url}` + (p.filter !== undefined && p.filter !== null ? '/?' + p.filter : ''),
-            data: getData,
-            method: 'GET',
-            success: function (response) {
-                const data = response.data.map(function (d) {
-                    return {
-                        id: d,
-                        text: d
-                    };
-                });
-                for (let element of p.elements) {
-                    $(element.class).each(function (index, item) {
-                        new Tree(element.id, {
-                            data: [{id: '-1', text: element.text, children: data}],
-                            closeDepth: 1,
-                            loaded: function () {
-                            },
-                            onChange: function () {
-                                element.values(this.values);
-                            }
-                        });
-                        // $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
-                    });
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-            }
-        });
-    }
 
     const filterData = () => {
         // console.log(agence_code, agent_name);
@@ -349,7 +350,7 @@ $(function () {
         columnName: 'Nom_Region',
         rowName: 'Resultat_Appel',
         element_dt: undefined,
-        element: $('#statsCallsGem'),
+        element: 'statsCallsGem',
         columns: undefined,
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
@@ -389,7 +390,7 @@ $(function () {
         columnName: 'Nom_Region',
         rowName: 'Gpmt_Appel_Pre',
         element_dt: undefined,
-        element: $('#callsStatesAgencies'),
+        element: 'callsStatesAgencies',
         columns: undefined,
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
@@ -427,7 +428,7 @@ $(function () {
         columnName: 'Date_Heure_Note_Semaine',
         rowName: 'Gpmt_Appel_Pre',
         element_dt: undefined,
-        element: $('#callsStatesWeeks'),
+        element: 'callsStatesWeeks',
         columns: undefined,
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
@@ -537,37 +538,39 @@ $(function () {
                     // console.log(filters.date_filter);
                 }
 
+                if (response.columns.length) {
+                    let reformattedColumns = [...response.columns].map(function (column) {
 
-
-                let reformattedColumns = [...response.columns].map(function (column) {
-
-                    return {
-                        ...column,
-                        render: function (data, type, full, meta) {
-                            let newData = data;
-                            if (newData !== null) {
-                                newData = newData.toString();
-                                if (newData.indexOf('/') !== -1) {
-                                    newData = newData.split('/').join('<br/>');
-                                    // newData = newData[0] + '<br/>' + newData[1];
+                        return {
+                            ...column,
+                            render: function (data, type, full, meta) {
+                                let newData = data;
+                                if (newData !== null) {
+                                    newData = newData.toString();
+                                    if (newData.indexOf('/') !== -1) {
+                                        newData = newData.split('/').join('<br/>');
+                                        // newData = newData[0] + '<br/>' + newData[1];
+                                    }
+                                } else {
+                                    newData = '';
                                 }
-                            } else {
-                                newData = '';
+
+                                let classHasTotalCol = (params.removeTotalColumn) ? 'hasTotal' : '';
+
+                                let rowClass = full.isTotal ? '' : 'pointer detail-data';
+                                return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + newData + '<\span>';
                             }
+                        };
+                    });
 
-                            let classHasTotalCol = (params.removeTotalColumn) ? 'hasTotal' : '';
-
-                            let rowClass = full.isTotal ? '' : 'pointer detail-data';
-                            return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + newData + '<\span>';
-                        }
-                    };
-                });
-
-                // object.columns = [...response.columns];
-                object.columns = [...reformattedColumns];
+                    // object.columns = [...response.columns];
+                    object.columns = [...reformattedColumns];
+                } else {
+                    object.columns = [{title: 'Résultats'}];
+                }
                 object.data = [...response.data];
                 if (params.details) {
-                    $(object.element).find('thead tr').prepend('<th></th>');
+                    $('#' + object.element).find('thead tr').prepend('<th></th>');
                 }
                 if (data !== null && data !== undefined) {
                     try {
@@ -595,7 +598,7 @@ $(function () {
                             });
                         }
                         // CELL CLICK
-                        let tableId = '#' + object.element.attr('id');
+                        let tableId = '#' + object.element;
                         $(tableId + ' tbody').on('click', 'td', function () {
                             let agent_name = $('#agent_name').val();
                             let agence_name = $('#agence_name').val();
@@ -666,9 +669,23 @@ $(function () {
         details: false,
         pagination: false
     }) {
-        if ($.fn.DataTable.isDataTable(object.element)) {
-            object.element.off('click', 'td.details-control');
-            object.element_dt.destroy();
+        let table = $('#' + object.element);
+        if ($.fn.DataTable.isDataTable(table)) {
+            table.off('click', 'td.details-control');
+            table.DataTable().destroy();
+            let tableID = object.element;
+            let tableParent = table.parents('.card-body');
+            table.remove();
+            $('#' + tableID + '_wrapper').remove();
+            let newTable = object.columns.reduce(function (accumulator, current) {
+                return accumulator + '<th>' + current.title + '</th>';
+            }, '');
+
+            newTable = '<table id="' + tableID + '" class="table table-bordered table-striped table-valign-middle capitalize">' +
+                '<thead>' + newTable + '</thead><tbody></tbody></table>';
+            tableParent.append(newTable);
+            table = $('#' + object.element);
+            // object.element = $('#' + tableID);
         }
         if (params.details) {
             object.objDetail.columns = [...object.columns];
@@ -688,16 +705,13 @@ $(function () {
             });
         }
 
-        let table = '#' + object.element.attr('id');
-        console.log(object.columns);
-        console.log('============');
         // if(object.columns.length) {
         //     object.columns.forEach(function (column, index) {
         //         console.log(column, index);
         //     });
         // }
 
-        return object.element.DataTable({
+        return table.DataTable({
             destroy: true,
             language: frLang,
             responsive: true,
@@ -711,7 +725,7 @@ $(function () {
                 url: APP_URL + '/' + object.routeData,
                 data: data,
             },
-            columns: object.data.length ? object.columns : [{title: 'Résultats'}],
+            columns: object.columns,
             initComplete: function (settings, response) {
                 if (object.objChart !== null && object.objChart !== undefined) {
                     try {
@@ -768,6 +782,13 @@ $(function () {
             // let _dataItem = {label: item[column], backgroundColor: dynamicColors(uniqueColors), data: regions, fill: false, borderColor: dynamicColors(uniqueColors)};
             return _dataItem;
         });
+
+        let chartID = objectChart.element_id;
+        let chart = $('#' + chartID);
+        let chartParent = chart.parents('.col-12');
+        chart.remove();
+        let newChart = '<canvas id="' + chartID + '">';
+        chartParent.append(newChart);
 
         var ctx = document.getElementById(objectChart.element_id).getContext('2d');
         let ChartData = {labels, datasets};
@@ -831,8 +852,9 @@ $(function () {
 
     function elementExists(object) {
         if (object !== null && object !== undefined) {
-            if (object.element !== null && object.element !== undefined) {
-                return object.element.length;
+            let element = $('#' + object.element);
+            if (element !== null && element !== undefined) {
+                return element.length;
             } else {
                 return object.length;
             }

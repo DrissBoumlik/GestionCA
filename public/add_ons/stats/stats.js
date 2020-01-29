@@ -257,7 +257,7 @@ $(function () {
         columnName: 'Nom_Region',
         rowName: 'Groupement',
         element_dt: undefined,
-        element: $('#statsRegions'),
+        element: 'statsRegions',
         columns: undefined,
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
@@ -317,7 +317,7 @@ $(function () {
         columnName: 'Nom_Region',
         rowName: 'Groupement',
         element_dt: undefined,
-        element: $('#statsFolders'),
+        element: 'statsFolders',
         columns: undefined,
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
@@ -356,7 +356,7 @@ $(function () {
         columnName: 'Nom_Region',
         rowName: 'Gpmt_Appel_Pre',
         element_dt: undefined,
-        element: $('#callsStatesAgencies'),
+        element: 'callsStatesAgencies',
         columns: undefined,
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
@@ -394,7 +394,7 @@ $(function () {
         columnName: 'Date_Heure_Note_Semaine',
         rowName: 'Gpmt_Appel_Pre',
         element_dt: undefined,
-        element: $('#callsStatesWeeks'),
+        element: 'callsStatesWeeks',
         columns: undefined,
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
@@ -433,7 +433,7 @@ $(function () {
         columnName: 'Code_Intervention',
         rowName: 'Nom_Region',
         element_dt: undefined,
-        element: $('#statsCallsPos'),
+        element: 'statsCallsPos',
         columns: undefined,
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
@@ -470,7 +470,7 @@ $(function () {
         columnName: 'Code_Intervention',
         rowName: 'Nom_Region',
         element_dt: undefined,
-        element: $('#statsCallsNeg'),
+        element: 'statsCallsNeg',
         columns: undefined,
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
@@ -509,7 +509,7 @@ $(function () {
         columnName: 'Nom_Region',
         rowName: 'Code_Type_Intervention',
         element_dt: undefined,
-        element: $('#statsFoldersByType'),
+        element: 'statsFoldersByType',
         columns: undefined,
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
@@ -540,7 +540,7 @@ $(function () {
         columnName: 'Nom_Region',
         rowName: 'Code_Intervention',
         element_dt: undefined,
-        element: $('#statsFoldersByCode'),
+        element: 'statsFoldersByCode',
         columns: undefined,
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
@@ -573,7 +573,7 @@ $(function () {
         columnName: 'Groupement',
         rowName: 'Nom_Region',
         element_dt: undefined,
-        element: $('#statsPerimeters'),
+        element: 'statsPerimeters',
         columns: undefined,
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
@@ -641,9 +641,6 @@ $(function () {
                 if (object.filterElement) {
                     if (response.filter) {
                         object.filterTree.dates = response.filter.date_filter;
-                        if (object.objDetail && object.objDetail.filterTree) {
-                            object.objDetail.filterTree.dates = response.filter.date_filter;
-                        }
                         if (object.filterTree.datesTreeObject && object.filterTree.dates) {
                             object.filterTree.datesTreeObject.values = object.filterTree.dates;
                         }
@@ -686,37 +683,39 @@ $(function () {
                     // console.log(filters.date_filter);
                 }
 
+                if (response.columns.length) {
+                    let reformattedColumns = [...response.columns].map(function (column) {
 
-
-                let reformattedColumns = [...response.columns].map(function (column) {
-
-                    return {
-                        ...column,
-                        render: function (data, type, full, meta) {
-                            let newData = data;
-                            if (newData !== null) {
-                                newData = newData.toString();
-                                if (newData.indexOf('/') !== -1) {
-                                    newData = newData.split('/').join('<br/>');
-                                    // newData = newData[0] + '<br/>' + newData[1];
+                        return {
+                            ...column,
+                            render: function (data, type, full, meta) {
+                                let newData = data;
+                                if (newData !== null) {
+                                    newData = newData.toString();
+                                    if (newData.indexOf('/') !== -1) {
+                                        newData = newData.split('/').join('<br/>');
+                                        // newData = newData[0] + '<br/>' + newData[1];
+                                    }
+                                } else {
+                                    newData = '';
                                 }
-                            } else {
-                                newData = '';
+
+                                let classHasTotalCol = (params.removeTotalColumn) ? 'hasTotal' : '';
+
+                                let rowClass = full.isTotal ? '' : 'pointer detail-data';
+                                return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + newData + '<\span>';
                             }
+                        };
+                    });
 
-                            let classHasTotalCol = (params.removeTotalColumn) ? 'hasTotal' : '';
-
-                            let rowClass = full.isTotal ? '' : 'pointer detail-data';
-                            return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + newData + '<\span>';
-                        }
-                    };
-                });
-
-                // object.columns = [...response.columns];
-                object.columns = [...reformattedColumns];
+                    // object.columns = [...response.columns];
+                    object.columns = [...reformattedColumns];
+                } else {
+                    object.columns = [{title: 'Résultats'}];
+                }
                 object.data = [...response.data];
                 if (params.details) {
-                    $(object.element).find('thead tr').prepend('<th></th>');
+                    $('#' + object.element).find('thead tr').prepend('<th></th>');
                 }
                 if (data !== null && data !== undefined) {
                     try {
@@ -744,7 +743,7 @@ $(function () {
                             });
                         }
                         // CELL CLICK
-                        let tableId = '#' + object.element.attr('id');
+                        let tableId = '#' + object.element;
                         $(tableId + ' tbody').on('click', 'td', function () {
                             let agent_name = $('#agent_name').val();
                             let agence_name = $('#agence_name').val();
@@ -815,9 +814,23 @@ $(function () {
         details: false,
         pagination: false
     }) {
-        if ($.fn.DataTable.isDataTable(object.element)) {
-            object.element.off('click', 'td.details-control');
-            object.element_dt.destroy();
+        let table = $('#' + object.element);
+        if ($.fn.DataTable.isDataTable(table)) {
+            table.off('click', 'td.details-control');
+            table.DataTable().destroy();
+            let tableID = object.element;
+            let tableParent = table.parents('.card-body');
+            table.remove();
+            $('#' + tableID + '_wrapper').remove();
+            let newTable = object.columns.reduce(function (accumulator, current) {
+                return accumulator + '<th>' + current.title + '</th>';
+            }, '');
+
+            newTable = '<table id="' + tableID + '" class="table table-bordered table-striped table-valign-middle capitalize">' +
+                '<thead>' + newTable + '</thead><tbody></tbody></table>';
+            tableParent.append(newTable);
+            table = $('#' + object.element);
+            // object.element = $('#' + tableID);
         }
         if (params.details) {
             object.objDetail.columns = [...object.columns];
@@ -837,16 +850,13 @@ $(function () {
             });
         }
 
-        let table = '#' + object.element.attr('id');
-        console.log(object.columns);
-        console.log('============');
         // if(object.columns.length) {
         //     object.columns.forEach(function (column, index) {
         //         console.log(column, index);
         //     });
         // }
 
-        return object.element.DataTable({
+        return table.DataTable({
             destroy: true,
             language: frLang,
             responsive: true,
@@ -860,7 +870,7 @@ $(function () {
                 url: APP_URL + '/' + object.routeData,
                 data: data,
             },
-            columns: object.data.length ? object.columns : [{title: 'Résultats'}],
+            columns: object.columns,
             initComplete: function (settings, response) {
                 if (object.objChart !== null && object.objChart !== undefined) {
                     try {
@@ -917,6 +927,13 @@ $(function () {
             // let _dataItem = {label: item[column], backgroundColor: dynamicColors(uniqueColors), data: regions, fill: false, borderColor: dynamicColors(uniqueColors)};
             return _dataItem;
         });
+
+        let chartID = objectChart.element_id;
+        let chart = $('#' + chartID);
+        let chartParent = chart.parents('.col-12');
+        chart.remove();
+        let newChart = '<canvas id="' + chartID + '">';
+        chartParent.append(newChart);
 
         var ctx = document.getElementById(objectChart.element_id).getContext('2d');
         let ChartData = {labels, datasets};
@@ -980,8 +997,9 @@ $(function () {
 
     function elementExists(object) {
         if (object !== null && object !== undefined) {
-            if (object.element !== null && object.element !== undefined) {
-                return object.element.length;
+            let element = $('#' + object.element);
+            if (element !== null && element !== undefined) {
+                return element.length;
             } else {
                 return object.length;
             }
@@ -1013,21 +1031,21 @@ $(function () {
         )
     }
 
-    function createChild(row, object, data = null) {
+    function createChild(row, objectChild, data = null) {
         // This is the table we'll convert into a DataTable
-        var tableDom = '<table id="' + object.objDetail.element + '" class="table-details table table-bordered table-valign-middle capitalize"/>';
-        var canvasDom = '<div class="col-12"><canvas id="' + object.objDetail.element + '-Chart"/></div>';
-        object.objDetail.objChart.element_id = object.objDetail.element + '-Chart';
-        object.objDetail.element = $(tableDom);
+        var tableDom = '<table id="' + objectChild.element + '" class="table-details table table-bordered table-valign-middle capitalize"/>';
+        var canvasDom = '<div class="col-12"><canvas id="' + objectChild.element + '-Chart"/></div>';
+        objectChild.objChart.element_id = objectChild.element + '-Chart';
+        objectChild.element = $(tableDom);
 
         // ');
 
         let createdChild = tableDom;
         // Display it the child row
-        row.child(object.objDetail.element).show();
-        object.objDetail.element.after(canvasDom);
+        row.child(objectChild.element).show();
+        objectChild.element.after(canvasDom);
         // row.child(objectChild.element).show();
-        getColumns(object.objDetail, data, {
+        getColumns(objectChild, data, {
             removeTotal: false,
             removeTotalColumn: false,
             details: false,
