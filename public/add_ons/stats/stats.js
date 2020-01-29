@@ -276,7 +276,7 @@ $(function () {
             element_dt: undefined,
             element: undefined,
             columns: undefined,
-            filterTree: undefined,
+            filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
             filterElement: undefined,
             routeCol: 'regions/details/groupement/columns',
             routeData: 'regions/details/groupement',
@@ -630,7 +630,7 @@ $(function () {
         if (object.filterTree && object.filterTree.rows) {
             data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
         }
-        if (object.filterTree.dates) {
+        if (object.filterTree && object.filterTree.dates) {
             data = {...data, 'dates': object.filterTree.dates};
         }
         $.ajax({
@@ -641,6 +641,9 @@ $(function () {
                 if (object.filterElement) {
                     if (response.filter) {
                         object.filterTree.dates = response.filter.date_filter;
+                        if (object.objDetail && object.objDetail.filterTree) {
+                            object.objDetail.filterTree.dates = response.filter.date_filter;
+                        }
                         if (object.filterTree.datesTreeObject && object.filterTree.dates) {
                             object.filterTree.datesTreeObject.values = object.filterTree.dates;
                         }

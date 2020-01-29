@@ -484,7 +484,7 @@ $(function () {
         if (object.filterTree && object.filterTree.rows) {
             data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
         }
-        if (object.filterTree.dates) {
+        if (object.filterTree && object.filterTree.dates) {
             data = {...data, 'dates': object.filterTree.dates};
         }
         $.ajax({
