@@ -233,6 +233,21 @@ $(document).ready(function () {
                     confirmButtonText: 'Ok',
                 });
                 // tableTasks.draw(false);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+                Swal.fire({
+                    // position: 'top-end',
+                    type: 'error',
+                    title: 'Une erreur est survenue',
+                    showConfirmButton: true,
+                    customClass: {
+                        confirmButton: 'btn btn-success m-1',
+                    },
+                    confirmButtonText: 'Ok',
+                });
             }
         });
     });

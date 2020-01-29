@@ -508,6 +508,32 @@ class FilterRepository
             ->where('Key_Groupement', 'like', $radical_route)
             ->whereNotNull('Nom_Region');
 
+        if ($callResult == 'Joignable') {
+            $codes = $codes->whereIn('Resultat_Appel', [
+                'Appels préalables - RDV confirmé',
+                'Appels préalables - RDV confirmé Client non informé',
+                'Appels préalables - RDV repris et confirmé'
+            ]);
+        } else {
+            $codes = $codes->whereIn('Resultat_Appel', [
+                'Appels préalables - Annulation RDV client non informé',
+                'Appels préalables - Client sauvé',
+                'Appels préalables - Client Souhaite être rappelé plus tard',
+                'Appels préalables - Injoignable / Absence de répondeur',
+                'Appels préalables - Injoignable 2ème Tentative',
+                'Appels préalables - Injoignable 3ème Tentative',
+                'Appels préalables - Injoignable avec Répondeur',
+                'Appels préalables - Numéro erroné',
+                'Appels préalables - Numéro Inaccessible',
+                'Appels préalables - Numéro non attribué',
+                'Appels préalables - Numéro non Renseigné',
+                'Appels préalables - RDV annulé le client ne souhaite plus d’intervention',
+                'Appels préalables - RDV annulé Rétractation/Résiliation',
+                'Appels préalables - RDV planifié mais non confirmé',
+                'Appels préalables - RDV repris Mais non confirmé',
+            ]);
+        }
+
 //        $keys = $columns->groupBy(['Code_Intervention'])->keys();
         if ($agentName) {
             $codes = $codes->where('Utilisateur', $agentName);
@@ -1465,9 +1491,9 @@ class FilterRepository
 
                 $col_arr = $keys->all();
                 $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
-                    $row->Nom_region = explode('-',$call->Title)[1];
+                    $row->Nom_region = explode('-', $call->Title)[1];
                     $region_name = $call->Nom_Region;
-                    $row->$region_name = $call->count . '/' . $call->$region_name . '%' ;
+                    $row->$region_name = $call->count . '/' . $call->$region_name . '%';
                     $row->values[$region_name] = $call->count;
                     $col_arr = array_diff($col_arr, [$region_name]);
                     return $row;
@@ -1601,9 +1627,9 @@ class FilterRepository
 
                 $col_arr = $keys->all();
                 $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
-                    $row->Nom_region = explode('-',$call->Title)[1];
+                    $row->Nom_region = explode('-', $call->Title)[1];
                     $region_name = $call->Nom_Region;
-                    $row->$region_name = $call->count . '/' . $call->$region_name . '%' ;
+                    $row->$region_name = $call->count . '/' . $call->$region_name . '%';
                     $row->values[$region_name] = $call->count;
                     $col_arr = array_diff($col_arr, [$region_name]);
                     return $row;

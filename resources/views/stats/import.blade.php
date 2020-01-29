@@ -101,7 +101,7 @@
 {{--                                    accept=".xlsx, .xls, .xlsm"--}}
                                     <input type="file" class="custom-file-input" data-toggle="custom-file-input"
                                            id="file" name="file">
-                                    <label class="custom-file-label" for="file">choisir le fichier</label>
+                                    <label class="custom-file-label capitalize-first-letter" for="file">choisir le fichier</label>
                                 </div>
                             </div>
                         </form>

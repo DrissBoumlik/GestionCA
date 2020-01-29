@@ -18,5 +18,5 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
-    LimitRequestBody 20971520
+    LimitRequestBody 500971520
 </IfModule>

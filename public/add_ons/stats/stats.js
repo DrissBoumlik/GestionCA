@@ -632,30 +632,32 @@ $(function () {
             success: function (response) {
                 if (response.filter) {
                     object.filterTree.dates = response.filter.date_filter;
-                    if (object.filterTree.datesTreeObject) {
+                    if (object.filterTree.datesTreeObject && object.filterTree.dates) {
                         object.filterTree.datesTreeObject.values = object.filterTree.dates;
                     }
                 }
-                let rowsFilterData = response.rows.map(function (d, index) {
-                    return {
-                        id: d,
-                        text: d
-                    };
-                });
-                new Tree(object.filterElement.rows, {
-                    data: [{id: '-1', text: response.rowsFilterHeader, children: rowsFilterData}],
-                    closeDepth: 1,
-                    loaded: function () {
-                        if (response.filter && response.filter.rows_filter) {
-                            this.values = object.filterTree.rows = response.filter.rows_filter;
+                if (response.rows && response.rows.length) {
+                    let rowsFilterData = response.rows.map(function (d, index) {
+                        return {
+                            id: d,
+                            text: d
+                        };
+                    });
+                    new Tree(object.filterElement.rows, {
+                        data: [{id: '-1', text: response.rowsFilterHeader, children: rowsFilterData}],
+                        closeDepth: 1,
+                        loaded: function () {
+                            if (response.filter && response.filter.rows_filter) {
+                                this.values = object.filterTree.rows = response.filter.rows_filter;
+                                console.log(this.values);
+                            }
+                        },
+                        onChange: function () {
+                            object.filterTree.rows = this.values;
                             console.log(this.values);
                         }
-                    },
-                    onChange: function () {
-                        object.filterTree.rows = this.values;
-                        console.log(this.values);
-                    }
-                });
+                    });
+                }
 
                 let datesFilterValuesExist = true;
                 let filters = response.filter;
@@ -665,9 +667,9 @@ $(function () {
                     // if (datesFilterList !== null && datesFilterList !== undefined && datesFilterList.length > 0) {
                     //     datesFilterList[object.treeElement].values = datesFilterValues[object.treeElement];
                     // }
-                    if (datesFilterListExist && datesFilterValuesExist) {
-                        assignFilter(datesFilterList, datesFilterValues);
-                    }
+                    // if (datesFilterListExist && datesFilterValuesExist) {
+                    //     assignFilter(datesFilterList, datesFilterValues);
+                    // }
                 }
                 // console.log(filters.date_filter);
 
@@ -721,7 +723,7 @@ $(function () {
                                     // Open this row
                                     data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
                                     object.objDetail.element = 'details-' + $('tr').index(tr);
-                                    createChild(row, object.objDetail, data); // class is for background colour
+                                    createChild(row, object, data); // class is for background colour
                                     tr.addClass('shown');
                                 }
                             });
@@ -758,6 +760,21 @@ $(function () {
                         });
                     } catch (error) {
                         console.log(error);
+                        // swal(
+                        //     'Error!',
+                        //     "Aucun résultat n'a été trouvé",
+                        //     'error'
+                        // );
+                        Swal.fire({
+                            // position: 'top-end',
+                            type: 'error',
+                            title: "Vous devez actualiser la page",
+                            showConfirmButton: true,
+                            customClass: {
+                                confirmButton: 'btn btn-success m-1',
+                            },
+                            confirmButtonText: 'Ok',
+                        });
                     }
                 }
                 // if (object.objChart !== null && object.objChart !== undefined) {
@@ -773,7 +790,6 @@ $(function () {
                 console.log(textStatus);
                 console.log(errorThrown);
                 console.log(APP_URL + '/' + object.routeCol);
-                console.log('===========');
             }
         });
     }
@@ -784,7 +800,7 @@ $(function () {
         details: false,
         pagination: false
     }) {
-        if ($.fn.DataTable.isDataTable(object.element_dt)) {
+        if ($.fn.DataTable.isDataTable(object.element)) {
             object.element.off('click', 'td.details-control');
             object.element_dt.destroy();
         }
@@ -805,7 +821,18 @@ $(function () {
                 width: '10%'
             });
         }
+
+        let table = '#' + object.element.attr('id');
+        console.log(object.columns);
+        console.log('============');
+        // if(object.columns.length) {
+        //     object.columns.forEach(function (column, index) {
+        //         console.log(column, index);
+        //     });
+        // }
+
         return object.element.DataTable({
+            destroy: true,
             language: frLang,
             responsive: true,
             info: false,
@@ -971,21 +998,21 @@ $(function () {
         )
     }
 
-    function createChild(row, objectChild, data = null) {
+    function createChild(row, object, data = null) {
         // This is the table we'll convert into a DataTable
-        var tableDom = '<table id="' + objectChild.element + '" class="table-details table table-bordered table-valign-middle capitalize"/>';
-        var canvasDom = '<div class="col-12"><canvas id="' + objectChild.element + '-Chart"/></div>';
-        objectChild.objChart.element_id = objectChild.element + '-Chart';
-        objectChild.element = $(tableDom);
+        var tableDom = '<table id="' + object.objDetail.element + '" class="table-details table table-bordered table-valign-middle capitalize"/>';
+        var canvasDom = '<div class="col-12"><canvas id="' + object.objDetail.element + '-Chart"/></div>';
+        object.objDetail.objChart.element_id = object.objDetail.element + '-Chart';
+        object.objDetail.element = $(tableDom);
 
         // ');
 
         let createdChild = tableDom;
         // Display it the child row
-        row.child(objectChild.element).show();
-        objectChild.element.after(canvasDom);
+        row.child(object.objDetail.element).show();
+        object.objDetail.element.after(canvasDom);
         // row.child(objectChild.element).show();
-        getColumns(objectChild, data, {
+        getColumns(object.objDetail, data, {
             removeTotal: false,
             removeTotalColumn: false,
             details: false,

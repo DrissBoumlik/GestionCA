@@ -257,6 +257,17 @@ $(function () {
                         // this.disables = ['0-0-0', '0-0-1', '0-0-2']
 
                         datesFilterList[treeId] = this;
+                        let object = globalElements.filter(function (element) {
+                            return element.filterElement.dates === treeId;
+                        });
+                        if (object.length) {
+                            object = object[0];
+                            object.filterTree.datesTreeObject = this;
+                            if (object.filterTree.dates) {
+                                object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                            }
+                        }
+
                         //datesFilterList.push([treeId, this]);
                         // console.log(datesFilterList);
                     },
@@ -265,9 +276,9 @@ $(function () {
                     }
                 });
             });
-            if (datesFilterListExist && datesFilterValuesExist) {
-                assignFilter(datesFilterList, datesFilterValues);
-            }
+            // if (datesFilterListExist && datesFilterValuesExist) {
+            //     assignFilter(datesFilterList, datesFilterValues);
+            // }
             $('.treejs-node .treejs-nodes .treejs-switcher').click();
             $('.refresh-form button').removeClass('d-none');
         },
@@ -332,7 +343,8 @@ $(function () {
         element: $('#statsCallsPrealable'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-1',
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-0', rows: '#stats-callResult-filter'},
         routeCol: 'appels-pralables/regions/details/groupement/columns?key_groupement=Appels-pralables',
         routeData: 'appels-pralables/regions/details/groupement?key_groupement=Appels-pralables',
         objChart: {
@@ -370,8 +382,8 @@ $(function () {
         element: $('#callsStatesAgencies'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-2',
-        filterTreeElement: '#stats-call-regions-filter',
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-2', rows: '#stats-call-regions-filter'},
         routeCol: 'appels-pralables/regionsCallState/columns/Nom_Region',
         routeData: 'appels-pralables/regionsCallState/Nom_Region',
         objChart: {
@@ -408,8 +420,8 @@ $(function () {
         element: $('#callsStatesWeeks'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-3',
-        filterTreeElement: '#stats-weeks-regions-filter',
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-3', rows: '#stats-weeks-regions-filter'},
         routeCol: 'appels-pralables/regionsCallState/columns/Date_Heure_Note_Semaine',
         routeData: 'appels-pralables/regionsCallState/Date_Heure_Note_Semaine',
         objChart: {
@@ -447,8 +459,8 @@ $(function () {
         element: $('#statsCallsPos'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-4',
-        filterTreeElement: '#code-rdv-intervention-confirm-filter',
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-4', rows: '#code-rdv-intervention-confirm-filter'},
         routeCol: 'appels-pralables/clientsByCallState/columns/Joignable',
         routeData: 'appels-pralables/clientsByCallState/Joignable',
         objChart: {
@@ -484,8 +496,8 @@ $(function () {
         element: $('#statsCallsNeg'),
         columns: undefined,
         data: undefined,
-        treeElement: '#tree-view-5',
-        filterTreeElement: '#code-rdv-intervention-filter',
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-5', rows: '#code-rdv-intervention-filter'},
         routeCol: 'appels-pralables/clientsByCallState/columns/Injoignable',
         routeData: 'appels-pralables/clientsByCallState/Injoignable',
         objChart: {
@@ -515,6 +527,8 @@ $(function () {
     }
     //</editor-fold>
 
+    let globalElements = [statsCallsPrealable, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg];
+
     //<editor-fold desc="FUNCTIONS">
     function getColumns(object, data = null, params = {
         removeTotal: true,
@@ -533,16 +547,46 @@ $(function () {
         // if (savedData !== null) {
         //     data = savedData;
         // }
-
+        data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
         $.ajax({
             url: APP_URL + '/' + object.routeCol,
             method: 'GET',
             data: data,
             success: function (response) {
+                if (response.filter) {
+                    object.filterTree.dates = response.filter.date_filter;
+                    if (object.filterTree.datesTreeObject && object.filterTree.dates) {
+                        object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                    }
+                }
+                if (response.rows && response.rows.length) {
+                    let rowsFilterData = response.rows.map(function (d, index) {
+                        return {
+                            id: d,
+                            text: d
+                        };
+                    });
+                    new Tree(object.filterElement.rows, {
+                        data: [{id: '-1', text: response.rowsFilterHeader, children: rowsFilterData}],
+                        closeDepth: 1,
+                        loaded: function () {
+                            if (response.filter && response.filter.rows_filter) {
+                                this.values = object.filterTree.rows = response.filter.rows_filter;
+                                console.log(this.values);
+                            }
+                        },
+                        onChange: function () {
+                            object.filterTree.rows = this.values;
+                            console.log(this.values);
+                        }
+                    });
+                }
+
                 let datesFilterValuesExist = true;
                 let filters = response.filter;
                 if (filters !== null && filters !== undefined) {
-                    datesFilterValues.push([object.treeElement, filters.date_filter]);
+                    object.filterTree.dates = filters.date_filter;
+                    datesFilterValues.push([object.filterElement.dates, filters.date_filter]);
                     // if (datesFilterList !== null && datesFilterList !== undefined && datesFilterList.length > 0) {
                     //     datesFilterList[object.treeElement].values = datesFilterValues[object.treeElement];
                     // }
@@ -551,8 +595,8 @@ $(function () {
                     }
                 }
                 // console.log(filters.date_filter);
-                let reformattedColumns = [...response.columns].map(function (column) {
 
+                let reformattedColumns = [...response.columns].map(function (column) {
                     return {
                         ...column,
                         render: function (data, type, full, meta) {
@@ -568,6 +612,7 @@ $(function () {
                             }
 
                             let classHasTotalCol = (params.removeTotalColumn) ? 'hasTotal' : '';
+
                             let rowClass = full.isTotal ? '' : 'pointer detail-data';
                             return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + newData + '<\span>';
                         }
@@ -605,9 +650,11 @@ $(function () {
                                 }
                             });
                         }
-
+                        // CELL CLICK
                         let tableId = '#' + object.element.attr('id');
                         $(tableId + ' tbody').on('click', 'td', function () {
+                            let agent_name = $('#agent_name').val();
+                            let agence_name = $('#agence_name').val();
                             let col = object.element_dt.cell(this).index().column + 1;
                             let row = object.element_dt.cell(this).index().row + 1;
                             let colText = $(tableId + " thead th:nth-child(" + col + ")").text();
@@ -618,7 +665,7 @@ $(function () {
                             let lastRowIndex = object.element_dt.rows().count();
                             let lastColumnIndex = object.element_dt.columns().count();
 
-                            if (((params.details && col > 2) || col > 1)
+                            if (((params.details && col > 2) || (!params.details && col > 1))
                                 && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
                                 && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
                                 window.location = APP_URL + '/all-stats?' +
@@ -626,7 +673,10 @@ $(function () {
                                     '&rowValue=' + rowText +
                                     '&col=' + object.columnName +
                                     '&colValue=' + colText +
-                                    '&dates=' + (dates === undefined || dates === null ? '' : dates);
+                                    '&agent=' + (agent_name === undefined || agent_name === null ? '' : agent_name) +
+                                    '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) +
+                                    '&dates=' + (dates === undefined || dates === null ? '' : dates) +
+                                    (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : '');
                             }
                             // console.log(colText + ' --- ' + rowText)
                         });
@@ -647,7 +697,7 @@ $(function () {
                 console.log(textStatus);
                 console.log(errorThrown);
                 console.log(APP_URL + '/' + object.routeCol);
-                console.log('===========');
+
             }
         });
     }
@@ -679,6 +729,16 @@ $(function () {
                 width: '10%'
             });
         }
+
+        let table = '#' + object.element.attr('id');
+        console.log(object.columns);
+        console.log('============');
+        // if(object.columns.length) {
+        //     object.columns.forEach(function (column, index) {
+        //         console.log(column, index);
+        //     });
+        // }
+
         return object.element.DataTable({
             language: frLang,
             responsive: true,
@@ -692,7 +752,7 @@ $(function () {
                 url: APP_URL + '/' + object.routeData,
                 data: data,
             },
-            columns: object.columns.length ? object.columns : [{title: 'Résultats'}],
+            columns: object.data.length ? object.columns : [{title: 'Résultats'}],
             initComplete: function (settings, response) {
                 if (object.objChart !== null && object.objChart !== undefined) {
                     try {
@@ -859,7 +919,13 @@ $(function () {
         row.child(objectChild.element).show();
         objectChild.element.after(canvasDom);
         // row.child(objectChild.element).show();
-        getColumns(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
+        getColumns(objectChild, data, {
+            removeTotal: false,
+            removeTotalColumn: false,
+            details: false,
+            refreshMode: false,
+            pagination: false
+        });
         // InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
     }
 
