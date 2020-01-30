@@ -469,7 +469,7 @@ class StatsRepository
 //            $regions = $regions->whereIn('Groupement', $groupement);
 //        }
         $user = auth()->user() ?? User::find(1);
-        $_route = getRoute(Route::current());
+        $_route = $request->get('route') ?? getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 

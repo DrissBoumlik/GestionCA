@@ -270,6 +270,7 @@ $(function () {
             data: undefined,
             chartTitle: 'Résultats Appels'
         },
+        children: [],
         objDetail: {
             columnName: 'Nom_Region',
             rowName: 'Resultat_Appel',
@@ -282,7 +283,7 @@ $(function () {
             routeData: 'regions/details/groupement',
             objChart: {
                 element_chart: undefined,
-                element_id: 'statsRegionsChart',
+                element_id: undefined,
                 data: undefined,
                 chartTitle: 'Résultats Appels'
             },
@@ -763,6 +764,7 @@ $(function () {
                             if (((params.details && col > 2) || (!params.details && col > 1))
                                 && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
                                 && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
+                                let dates = object.filterTree.dates;
                                 window.location = APP_URL + '/all-stats?' +
                                     'row=' + object.rowName +
                                     '&rowValue=' + rowText +
@@ -1044,15 +1046,17 @@ $(function () {
         var canvasDom = '<div class="col-12"><canvas id="' + objectChild.element + '-Chart"/></div>';
         objectChild.objChart.element_id = objectChild.element + '-Chart';
 
-        // ');
+        let objectChildItem = {...objectChild};
+        object.children.push(objectChildItem);
 
         let createdChild = tableDom;
         // Display it the child row
         row.child($(tableDom)).show();
-        let table = $('#' + objectChild.element);
+        let table = $('#' + objectChildItem.element);
         table.after(canvasDom);
         // row.child(objectChild.element).show();
-        getColumns(objectChild, data, {
+        data = {...data, 'route': object.routeData};
+        getColumns(objectChildItem, data, {
             removeTotal: false,
             removeTotalColumn: false,
             details: false,
