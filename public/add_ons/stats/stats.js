@@ -316,7 +316,7 @@ $(function () {
     }
     let statsFolders = {
         columnName: 'Nom_Region',
-        rowName: 'Groupement',
+        rowName: 'Resultat_Appel',
         element_dt: undefined,
         element: 'statsFolders',
         columns: undefined,
