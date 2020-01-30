@@ -280,7 +280,6 @@ class StatsRepository
         if ($agenceCode) {
             $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
         }
-        $keys = ($regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get())->groupBy(['Nom_Region'])->keys();
         $rowsKeys = ($regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get())->groupBy([$callResult])->keys();
 
 //        if ($resultatAppel) {
@@ -302,6 +301,9 @@ class StatsRepository
 
         $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
         $regions = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
+
+        $keys = $regions->groupBy(['Nom_Region'])->keys();
+
         $regions = $columns = addRegionWithZero($request, $regions, $columns);
         // logger($regions);
         if (!count($regions)) {
@@ -458,7 +460,6 @@ class StatsRepository
             $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
         }
 
-        $keys = ($regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get())->groupBy(['Nom_Region'])->keys();
         $rowsKeys = ($regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get())->groupBy(['Resultat_Appel'])->keys();
 //        if ($resultatAppel) {
 //            $resultatAppel = array_values($resultatAppel);
@@ -479,6 +480,8 @@ class StatsRepository
 
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
         $regions = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
+        $keys = $regions->groupBy(['Nom_Region'])->keys();
+
         if (!count($regions)) {
             $data = ['filter' => $filter, 'columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Résultat Appel'];
             return $data;
@@ -624,8 +627,7 @@ class StatsRepository
         }
 
 //        dd($regions->groupBy('Nom_Region', $callResult)->toSql());
-        $keys = ($regions->groupBy('Nom_Region', $callResult)->get())->groupBy(['Nom_Region'])->keys();
-        $rowsKeys = ($regions->groupBy('Nom_Region', $callResult)->get())->groupBy([$callResult])->keys();
+         $rowsKeys = ($regions->groupBy('Nom_Region', $callResult)->get())->groupBy([$callResult])->keys();
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
@@ -658,6 +660,10 @@ class StatsRepository
         $columns = $regions->groupBy('Nom_Region', $callResult)->get();
 
         $regions = $regions->groupBy('Nom_Region', $callResult)->get();
+
+        $keys = $regions->groupBy(['Nom_Region'])->keys();
+
+
         $regions = $columns = addRegionWithZero($request, $regions, $columns);
         if (!count($regions)) {
             $data = ['filter' => $filter, 'columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Groupement'];
@@ -1087,7 +1093,6 @@ class StatsRepository
         if ($agenceCode) {
             $codes = $codes->where('Nom_Region', 'like', "%$agenceCode");
         }
-        $keys = ($codes->groupBy('Code_Intervention', 'Nom_Region')->get())->groupBy(['Code_Intervention'])->keys();
         $rowsKeys = ($codes->groupBy('Code_Intervention', 'Nom_Region')->get())->groupBy(['Nom_Region'])->keys();
         if ($dates) {
             $dates = array_values($dates);
@@ -1116,6 +1121,7 @@ class StatsRepository
         $columns = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
 
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
+        $keys = $codes->groupBy(['Code_Intervention'])->keys();
         $codes = $columns = addRegionWithZero($request, $codes, $columns, null, 'Gpmt_Appel_Pre', $callResult);
         if (!count($codes)) {
             $data = ['filter' => $filter, 'columns' => [], 'data' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Region'];
@@ -1473,7 +1479,6 @@ class StatsRepository
         if ($agenceCode) {
             $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
         }
-        $keys = ($regions->groupBy('Nom_Region', $intervCol, 'Resultat_Appel')->get())->groupBy(['Nom_Region'])->keys();
 
         $rowsKeys = ($regions->groupBy('Nom_Region', $intervCol, 'Resultat_Appel')->get())->groupBy([$intervCol])->keys();
 
@@ -1505,6 +1510,9 @@ class StatsRepository
 //        $regions = $regions->groupBy('Nom_Region', $intervCol)->get();
 
         $regions = $regions->groupBy('Nom_Region', $intervCol, 'Resultat_Appel')->get();
+
+        $keys = $regions->groupBy(['Nom_Region'])->keys();
+
         $regions = $columns = addRegionWithZero($request, $regions, $columns);
 
         if (!count($regions)) {
@@ -1701,7 +1709,6 @@ class StatsRepository
             $rowFilter = array_values($rowFilter);
             $results = $results->whereIn('Nom_Region', $rowFilter);
         }
-        $keys = ($results->groupBy('Groupement', 'Nom_Region')->get())->groupBy(['Groupement'])->keys();
         $rowsKeys = ($results->groupBy('Groupement', 'Nom_Region')->get())->groupBy(['Nom_Region'])->keys();
         if ($agenceCode) {
             $results = $results->where('Nom_Region', 'like', "%$agenceCode");
@@ -1720,6 +1727,9 @@ class StatsRepository
         $columns = $results->groupBy('Groupement', 'Nom_Region')->get();
 
         $results = $results->groupBy('Groupement', 'Nom_Region')->get();
+
+        $keys = $results->groupBy(['Groupement'])->keys();
+
         $results = $columns = addRegionWithZero($request, $results, $columns);
 
         if (!count($results)) {
