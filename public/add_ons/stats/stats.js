@@ -643,6 +643,9 @@ $(function () {
                         object.filterTree.dates = response.filter.date_filter;
                         if (object.filterTree.datesTreeObject && object.filterTree.dates) {
                             object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                            if(object.objDetail) {
+                                object.objDetail.filterTree.dates = object.filterTree.dates;
+                            }
                         }
                     }
                     if (response.rows && response.rows.length) {
@@ -726,7 +729,7 @@ $(function () {
                             pagination: params.pagination
                         });
                         if (params.details) {
-                            $('#'+object.element).on('click', 'td.details-control', function () {
+                            $('#' + object.element).on('click', 'td.details-control', function () {
                                 const tr = $(this).closest('tr');
                                 const row = object.element_dt.row(tr);
                                 if (row.child.isShown()) {
@@ -1031,19 +1034,20 @@ $(function () {
         )
     }
 
-    function createChild(row, objectChild, data = null) {
+    function createChild(row, object, data = null) {
         // This is the table we'll convert into a DataTable
+        let objectChild = object.objDetail;
         var tableDom = '<table id="' + objectChild.element + '" class="table-details table table-bordered table-valign-middle capitalize"/>';
         var canvasDom = '<div class="col-12"><canvas id="' + objectChild.element + '-Chart"/></div>';
         objectChild.objChart.element_id = objectChild.element + '-Chart';
-        objectChild.element = $(tableDom);
 
         // ');
 
         let createdChild = tableDom;
         // Display it the child row
-        row.child(objectChild.element).show();
-        objectChild.element.after(canvasDom);
+        row.child($(tableDom)).show();
+        let table = $('#' + objectChild.element);
+        table.after(canvasDom);
         // row.child(objectChild.element).show();
         getColumns(objectChild, data, {
             removeTotal: false,
@@ -1163,37 +1167,37 @@ $(function () {
         //creates PDF from img
         let doc = new jsPDF('landscape');
         doc.text(10, 20, 'Résultats Appels');
-        doc.autoTable({html: '#statsRegions', margin: {top: 30} , pageBreak: 'auto'});
+        doc.autoTable({html: '#statsRegions', margin: {top: 30}, pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Résultats Appels');
         doc.addImage(statsRegionsChartImg, 'JPEG', 10, 30, 280, 150);
         doc.addPage();
         doc.text(10, 20, 'Répartition des dossiers traités par périmètre');
-        doc.autoTable({html: '#statsFolders', margin: {top: 30} , pageBreak: 'auto'});
+        doc.autoTable({html: '#statsFolders', margin: {top: 30}, pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Répartition des dossiers traités par périmètre');
         doc.addImage(statsFoldersChartImg, 'JPEG', 10, 30, 280, 150);
         doc.addPage();
         doc.text(10, 20, 'Résultats Appels Préalables par agence');
-        doc.autoTable({html: '#callsStatesAgencies', margin: {top: 30} , pageBreak: 'auto'});
+        doc.autoTable({html: '#callsStatesAgencies', margin: {top: 30}, pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Résultats Appels Préalables par agence');
         doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 10, 30, 280, 100);
         doc.addPage();
         doc.text(10, 20, 'Résultats Appels Préalables par semaine');
-        doc.autoTable({html: '#callsStatesWeeks', margin: {top: 30} , pageBreak: 'auto'});
+        doc.autoTable({html: '#callsStatesWeeks', margin: {top: 30}, pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Résultats Appels Préalables par semaine');
         doc.addImage(callsStatesWeeksChartImg, 'JPEG', 10, 30, 280, 100);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Confirmés (Clients Joignables)');
-        doc.autoTable({html: '#statsCallsPos', margin: {top: 30} , pageBreak: 'auto'});
+        doc.autoTable({html: '#statsCallsPos', margin: {top: 30}, pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Code Interventions liés aux RDV Confirmés (Clients Joignables)');
         doc.addImage(statsCallsPosChartImg, 'JPEG', 10, 30, 280, 100);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)');
-        doc.autoTable({html: '#statsCallsNeg', margin: {top: 30} , pageBreak: 'auto'});
+        doc.autoTable({html: '#statsCallsNeg', margin: {top: 30}, pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)');
         doc.addImage(statscallsNegChartImg, 'JPEG', 10, 30, 280, 100);

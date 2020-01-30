@@ -498,6 +498,9 @@ $(function () {
                         object.filterTree.dates = response.filter.date_filter;
                         if (object.filterTree.datesTreeObject && object.filterTree.dates) {
                             object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                            if(object.objDetail) {
+                                object.objDetail.filterTree.dates = object.filterTree.dates;
+                            }
                         }
                     }
                     if (response.rows && response.rows.length) {
@@ -581,7 +584,7 @@ $(function () {
                             pagination: params.pagination
                         });
                         if (params.details) {
-                            $('#'+object.element).on('click', 'td.details-control', function () {
+                            $('#' + object.element).on('click', 'td.details-control', function () {
                                 const tr = $(this).closest('tr');
                                 const row = object.element_dt.row(tr);
                                 if (row.child.isShown()) {
@@ -886,19 +889,20 @@ $(function () {
         )
     }
 
-    function createChild(row, objectChild, data = null) {
+    function createChild(row, object, data = null) {
         // This is the table we'll convert into a DataTable
+        let objectChild = object.objDetail;
         var tableDom = '<table id="' + objectChild.element + '" class="table-details table table-bordered table-valign-middle capitalize"/>';
         var canvasDom = '<div class="col-12"><canvas id="' + objectChild.element + '-Chart"/></div>';
         objectChild.objChart.element_id = objectChild.element + '-Chart';
-        objectChild.element = $(tableDom);
 
         // ');
 
         let createdChild = tableDom;
         // Display it the child row
-        row.child(objectChild.element).show();
-        objectChild.element.after(canvasDom);
+        row.child($(tableDom)).show();
+        let table = $('#' + objectChild.element);
+        table.after(canvasDom);
         // row.child(objectChild.element).show();
         getColumns(objectChild, data, {
             removeTotal: false,
