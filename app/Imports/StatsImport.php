@@ -16,7 +16,7 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Importable;
 
 
-class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts, ShouldQueue //ToCollection
+class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts //ToCollection
 {
     use Importable;
 
@@ -94,8 +94,9 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
      */
     public function model($row)
     {
-        dd($row);
+        //dd($row);
         $formatted_date = $this->transformDate($row['dimension_notesdate_note']);
+
         return new Stats([
             'Type_Note' => $row['dimension_notestype_note'],
             'Utilisateur' => $row['dimension_notesutilisateur'],

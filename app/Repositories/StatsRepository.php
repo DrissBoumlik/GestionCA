@@ -1875,8 +1875,8 @@ class StatsRepository
         $file_path = $request->file('file')->getPathName();
 
         $statImport = new StatsImport($request->days);
-//        Excel::import($statImport, $request->file('file'));
-        (new StatsImport)->import($request->file('file'));
+        Excel::import($statImport, $request->file('file'));
+       // (new StatsImport)->import($request->file('file'));
         return [
             'success' => true,
             'message' => 'Le fichier a été importé avec succès'
