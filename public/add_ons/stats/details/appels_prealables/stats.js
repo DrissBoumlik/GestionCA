@@ -565,7 +565,7 @@ $(function () {
                         object.filterTree.dates = response.filter.date_filter;
                         if (object.filterTree.datesTreeObject && object.filterTree.dates) {
                             object.filterTree.datesTreeObject.values = object.filterTree.dates;
-                            if(object.objDetail) {
+                            if (object.objDetail) {
                                 object.objDetail.filterTree.dates = object.filterTree.dates;
                             }
                         }
@@ -639,9 +639,9 @@ $(function () {
                     object.columns = [{title: 'Résultats'}];
                 }
                 object.data = [...response.data];
-                if (params.details) {
-                    $('#' + object.element).find('thead tr').prepend('<th></th>');
-                }
+                // if (params.details) {
+                //     $('#' + object.element).find('thead tr').prepend('<th></th>');
+                // }
                 if (data !== null && data !== undefined) {
                     try {
                         object.element_dt = InitDataTable(object, data, {
@@ -749,7 +749,7 @@ $(function () {
             $('#' + tableID + '_wrapper').remove();
             let newTable = object.columns.reduce(function (accumulator, current) {
                 return accumulator + '<th>' + current.title + '</th>';
-            }, '');
+            }, params.details ? '<th></th>' : '');
 
             newTable = '<table id="' + tableID + '" class="table table-bordered table-striped table-valign-middle capitalize">' +
                 '<thead>' + newTable + '</thead><tbody></tbody></table>';
@@ -757,6 +757,9 @@ $(function () {
             table = $('#' + object.element);
             // object.element = $('#' + tableID);
         }
+        // if (params.details) {
+        //     $('#' + object.element).find('thead tr').prepend('<th></th>');
+        // }
         if (params.details) {
             object.objDetail.columns = [...object.columns];
             object.objDetail.columns = object.objDetail.columns.map(function (item, index) {
