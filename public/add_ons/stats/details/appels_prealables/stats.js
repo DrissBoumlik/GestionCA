@@ -648,7 +648,7 @@ $(function () {
                             pagination: params.pagination
                         });
                         if (params.details) {
-                            object.element.on('click', 'td.details-control', function () {
+                            $('#'+object.element).on('click', 'td.details-control', function () {
                                 const tr = $(this).closest('tr');
                                 const row = object.element_dt.row(tr);
                                 if (row.child.isShown()) {
