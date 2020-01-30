@@ -523,6 +523,8 @@ $(function () {
 
     let globalElements = [statsCallsCloture, statsFoldersByType, statsFoldersByCode, statsColturetech, statsGlobalDelay];
 
+    let detailClick = false;
+
     //<editor-fold desc="FUNCTIONS">
     function getColumns(object, data = null, params = {
         removeTotal: true,
@@ -547,6 +549,11 @@ $(function () {
         if (object.filterTree && object.filterTree.dates) {
             data = {...data, 'dates': object.filterTree.dates};
         }
+
+        let parent = $('#' + object.element).parents('.col-12');
+        parent.append('<div class="loader_wrapper"><div class="loader"></div></div>');
+        parent.append('<div class="loader_container"></div>');
+
         $.ajax({
             url: APP_URL + '/' + object.routeCol,
             method: 'GET',
@@ -800,6 +807,11 @@ $(function () {
                             removeTotalColumn: params.removeTotalColumn,
                             details: params.details
                         });
+                        let parent = $('#' + object.element).parents('.col-12');
+                        let children = parent.find('.loader_wrapper', '.loader_container');
+                        console.log(children);
+                        parent.find('.loader_wrapper').remove();
+                        parent.find('.loader_container').remove();
                     } catch (error) {
                         console.log(error);
                     }
@@ -851,10 +863,16 @@ $(function () {
 
         let chartID = objectChart.element_id;
         let chart = $('#' + chartID);
-        let chartParent = chart.parents('.col-12');
-        chart.remove();
-        let newChart = '<canvas id="' + chartID + '">';
-        chartParent.append(newChart);
+
+        if (!detailClick) {
+            let chartParent = chart.parents('.col-12');
+            chartParent.children('.chartjs-size-monitor').remove();
+            chart.remove();
+            let newChart = '<canvas id="' + chartID + '">';
+            chartParent.append(newChart);
+        } else {
+            detailClick = false;
+        }
 
         var ctx = document.getElementById(objectChart.element_id).getContext('2d');
         let ChartData = {labels, datasets};
@@ -953,6 +971,7 @@ $(function () {
     }
 
     function createChild(row, object, data = null) {
+        detailClick = true;
         // This is the table we'll convert into a DataTable
         let objectChild = object.objDetail;
         var tableDom = '<table id="' + objectChild.element + '" class="table-details table table-bordered table-valign-middle capitalize"/>';
