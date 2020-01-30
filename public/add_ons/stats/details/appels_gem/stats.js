@@ -277,54 +277,7 @@ $(function () {
     let filterListExist = false;
     let filterValuesExist = false;
 
-    $.ajax({
-        url: APP_URL + '/dates',
-        method: 'GET',
-        success: function (response) {
-            datesFilterListExist = true;
-            let treeData = response.dates;
-
-            $('.tree-view').each(function (index, item) {
-                let treeId = '#' + $(this).attr('id');
-                let object = globalElements.filter(function (element) {
-                    return element.filterElement.dates === treeId;
-                });
-                new Tree(treeId, {
-                    data: [{id: '-1', text: 'Dates', children: treeData}],
-                    closeDepth: 1,
-                    loaded: function () {
-                        // this.values = ['2019-12-02', '2019-12-03'];
-                        // console.log(this.selectedNodes);
-                        // console.log(this.values);
-                        // this.disables = ['0-0-0', '0-0-1', '0-0-2']
-
-                        datesFilterList[treeId] = this;
-                        if (object.length) {
-                            object = object[0];
-                            object.filterTree.datesTreeObject = this;
-                            if (object.filterTree.dates) {
-                                object.filterTree.datesTreeObject.values = object.filterTree.dates;
-                            }
-                        }
-
-                        //datesFilterList.push([treeId, this]);
-                        // console.log(datesFilterList);
-                    },
-                    onChange: function () {
-                        dates = this.values;
-                        object.filterTree.dates = this.values;
-                    }
-                });
-            });
-            // if (datesFilterListExist && datesFilterValuesExist) {
-            //     assignFilter(datesFilterList, datesFilterValues);
-            // }
-            $('.treejs-node .treejs-nodes .treejs-switcher').click();
-            $('.refresh-form button').removeClass('d-none');
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-        }
-    });
+    getDatesFilter();
 
 
     const filterData = () => {
@@ -871,6 +824,57 @@ $(function () {
         }
     }
 
+    function getDatesFilter() {
+        $.ajax({
+            url: APP_URL + '/dates',
+            method: 'GET',
+            success: function (response) {
+                datesFilterListExist = true;
+                let treeData = response.dates;
+
+                $('.tree-view').each(function (index, item) {
+                    let treeId = '#' + $(this).attr('id');
+                    let object = globalElements.filter(function (element) {
+                        return element.filterElement.dates === treeId;
+                    });
+                    new Tree(treeId, {
+                        data: [{id: '-1', text: 'Dates', children: treeData}],
+                        closeDepth: 1,
+                        loaded: function () {
+                            // this.values = ['2019-12-02', '2019-12-03'];
+                            // console.log(this.selectedNodes);
+                            // console.log(this.values);
+                            // this.disables = ['0-0-0', '0-0-1', '0-0-2']
+
+                            datesFilterList[treeId] = this;
+                            if (object.length) {
+                                object = object[0];
+                                object.filterTree.datesTreeObject = this;
+                                if (object.filterTree.dates) {
+                                    object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                                }
+                            }
+
+                            //datesFilterList.push([treeId, this]);
+                            // console.log(datesFilterList);
+                        },
+                        onChange: function () {
+                            dates = this.values;
+                            object.filterTree.dates = this.values;
+                        }
+                    });
+                });
+                // if (datesFilterListExist && datesFilterValuesExist) {
+                //     assignFilter(datesFilterList, datesFilterValues);
+                // }
+                $('.treejs-node .treejs-nodes .treejs-switcher').click();
+                $('.refresh-form button').removeClass('d-none');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS TOOLS">
@@ -984,7 +988,7 @@ $(function () {
 
     });
     //</editor-fold>
-    $("#printElement").on("click",function () {
+    $("#printElement").on("click", function () {
 
         let statsCallsGemChart = document.getElementById('statsCallsGemChart');
         let callsStatesAgenciesChart = document.getElementById('callsStatesAgenciesChart');
@@ -996,23 +1000,23 @@ $(function () {
 
         //creates PDF from img
         let doc = new jsPDF('landscape');
-        doc. text( 10 , 20, 'Résultats Appels GEM' );
-        doc.autoTable({ html: '#statsCallsGem', margin: { top: 30 }, pageBreak : 'auto' });
+        doc.text(10, 20, 'Résultats Appels GEM');
+        doc.autoTable({html: '#statsCallsGem', margin: {top: 30}, pageBreak: 'auto'});
         doc.addPage();
-        doc. text( 10 , 20, 'la charte de Résultats Appels' );
-        doc.addImage(statsCallsGemChartImg, 'JPEG', 10 , 30  , 280, 150 );
+        doc.text(10, 20, 'la charte de Résultats Appels');
+        doc.addImage(statsCallsGemChartImg, 'JPEG', 10, 30, 280, 150);
         doc.addPage();
-        doc. text( 10 , 20, 'Résultats Appels Préalables par agence' );
-        doc.autoTable({ html: '#callsStatesAgencies', margin: { top: 30 },pageBreak : 'auto' });
+        doc.text(10, 20, 'Résultats Appels Préalables par agence');
+        doc.autoTable({html: '#callsStatesAgencies', margin: {top: 30}, pageBreak: 'auto'});
         doc.addPage();
-        doc. text( 10 , 20, 'la charte de Résultats Appels Préalables par agence' );
-        doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.text(10, 20, 'la charte de Résultats Appels Préalables par agence');
+        doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 10, 30, 280, 100);
         doc.addPage();
-        doc. text( 10 , 20, 'Résultats Appels Préalables par semaine' );
-        doc.autoTable({ html: '#callsStatesWeeks', margin: { top: 30 },pageBreak : 'auto' });
+        doc.text(10, 20, 'Résultats Appels Préalables par semaine');
+        doc.autoTable({html: '#callsStatesWeeks', margin: {top: 30}, pageBreak: 'auto'});
         doc.addPage();
-        doc. text( 10 , 20, 'la charte de Résultats Appels Préalables par semaine' );
-        doc.addImage(callsStatesWeeksChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.text(10, 20, 'la charte de Résultats Appels Préalables par semaine');
+        doc.addImage(callsStatesWeeksChartImg, 'JPEG', 10, 30, 280, 100);
         doc.save('Appels Gem.pdf');
     })
 

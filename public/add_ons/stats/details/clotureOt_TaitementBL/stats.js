@@ -279,54 +279,7 @@ $(function () {
     let filterListExist = false;
     let filterValuesExist = false;
 
-    $.ajax({
-        url: APP_URL + '/dates',
-        method: 'GET',
-        success: function (response) {
-            datesFilterListExist = true;
-            let treeData = response.dates;
-
-            $('.tree-view').each(function (index, item) {
-                let treeId = '#' + $(this).attr('id');
-                let object = globalElements.filter(function (element) {
-                    return element.filterElement.dates === treeId;
-                });
-                new Tree(treeId, {
-                    data: [{id: '-1', text: 'Dates', children: treeData}],
-                    closeDepth: 1,
-                    loaded: function () {
-                        // this.values = ['2019-12-02', '2019-12-03'];
-                        // console.log(this.selectedNodes);
-                        // console.log(this.values);
-                        // this.disables = ['0-0-0', '0-0-1', '0-0-2']
-
-                        datesFilterList[treeId] = this;
-                        if (object.length) {
-                            object = object[0];
-                            object.filterTree.datesTreeObject = this;
-                            if (object.filterTree.dates) {
-                                object.filterTree.datesTreeObject.values = object.filterTree.dates;
-                            }
-                        }
-
-                        //datesFilterList.push([treeId, this]);
-                        // console.log(datesFilterList);
-                    },
-                    onChange: function () {
-                        dates = this.values;
-                        object.filterTree.dates = this.values;
-                    }
-                });
-            });
-            // if (datesFilterListExist && datesFilterValuesExist) {
-            //     assignFilter(datesFilterList, datesFilterValues);
-            // }
-            $('.treejs-node .treejs-nodes .treejs-switcher').click();
-            $('.refresh-form button').removeClass('d-none');
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-        }
-    });
+    getDatesFilter();
 
 
     const filterData = () => {
@@ -421,7 +374,7 @@ $(function () {
         columnName: 'Nom_Region',
         rowName: 'Code_Intervention',
         element_dt: undefined,
-        element: $('#statsFoldersByCode'),
+        element: 'statsFoldersByCode',
         columns: undefined,
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
@@ -928,6 +881,57 @@ $(function () {
                 datesFilterList[key].values = value;
             }
         }
+    }
+
+    function getDatesFilter() {
+        $.ajax({
+            url: APP_URL + '/dates',
+            method: 'GET',
+            success: function (response) {
+                datesFilterListExist = true;
+                let treeData = response.dates;
+
+                $('.tree-view').each(function (index, item) {
+                    let treeId = '#' + $(this).attr('id');
+                    let object = globalElements.filter(function (element) {
+                        return element.filterElement.dates === treeId;
+                    });
+                    new Tree(treeId, {
+                        data: [{id: '-1', text: 'Dates', children: treeData}],
+                        closeDepth: 1,
+                        loaded: function () {
+                            // this.values = ['2019-12-02', '2019-12-03'];
+                            // console.log(this.selectedNodes);
+                            // console.log(this.values);
+                            // this.disables = ['0-0-0', '0-0-1', '0-0-2']
+
+                            datesFilterList[treeId] = this;
+                            if (object.length) {
+                                object = object[0];
+                                object.filterTree.datesTreeObject = this;
+                                if (object.filterTree.dates) {
+                                    object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                                }
+                            }
+
+                            //datesFilterList.push([treeId, this]);
+                            // console.log(datesFilterList);
+                        },
+                        onChange: function () {
+                            dates = this.values;
+                            object.filterTree.dates = this.values;
+                        }
+                    });
+                });
+                // if (datesFilterListExist && datesFilterValuesExist) {
+                //     assignFilter(datesFilterList, datesFilterValues);
+                // }
+                $('.treejs-node .treejs-nodes .treejs-switcher').click();
+                $('.refresh-form button').removeClass('d-none');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
     }
 
     //</editor-fold>
