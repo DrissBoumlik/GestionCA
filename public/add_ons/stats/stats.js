@@ -586,9 +586,14 @@ $(function () {
         if (object.filterTree && object.filterTree.rows) {
             data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
         }
-        if (object.filterTree && object.filterTree.dates) {
+        if (object.filterTree) {
+            if (dates) {
+                object.filterTree.dates = dates;
+            }
             data = {...data, 'dates': object.filterTree.dates};
+            console.log(object.filterTree.dates);
         }
+        console.log(dates);
 
         let parent = $('#' + object.element).parents('.col-12');
         parent.append('<div class="loader_wrapper"><div class="loader"></div></div>');
@@ -622,12 +627,12 @@ $(function () {
                             loaded: function () {
                                 if (response.filter && response.filter.rows_filter) {
                                     this.values = object.filterTree.rows = response.filter.rows_filter;
-                                    console.log(this.values);
+                                    // console.log(this.values);
                                 }
                             },
                             onChange: function () {
                                 object.filterTree.rows = this.values;
-                                console.log(this.values);
+                                // console.log(this.values);
                             }
                         });
                     }
@@ -1006,7 +1011,10 @@ $(function () {
                         },
                         onChange: function () {
                             dates = this.values;
-                            object.filterTree.dates = this.values;
+                            if (object.filterTree) {
+                                object.filterTree.dates = this.values;
+                                console.log(object.filterTree.dates);
+                            }
                         }
                     });
                 });
