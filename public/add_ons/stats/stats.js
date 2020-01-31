@@ -187,6 +187,8 @@ $(function () {
 
     getDatesFilter();
 
+    getUserFilter();
+
 
     const filterData = () => {
         // console.log(agence_code, agent_name);
@@ -203,6 +205,11 @@ $(function () {
             agent_name,
             agence_code
         };
+    };
+
+    let userObject = {
+        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-01', rows: ''},
     };
 
     //<editor-fold desc="REGIONS / FOLDERS">
@@ -561,7 +568,7 @@ $(function () {
     }
     //</editor-fold>
 
-    let globalElements = [statsRegions, statsFolders, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, statsFoldersByType, statsFoldersByCode, statsPerimeters];
+    let globalElements = [userObject, statsRegions, statsFolders, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, statsFoldersByType, statsFoldersByCode, statsPerimeters];
 
     let detailClick = false;
 
@@ -1023,6 +1030,27 @@ $(function () {
                 // }
                 $('.treejs-node .treejs-nodes .treejs-switcher').click();
                 $('.refresh-form button').removeClass('d-none');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+    }
+
+    function getUserFilter() {
+        $.ajax({
+            url: APP_URL + '/user/filter',
+            method: 'GET',
+            success: function (response) {
+                console.log(response);
+                if (response.userFilter) {
+                    userObject.filterTree.dates = response.userFilter.date_filter;
+                    if (userObject.filterTree.datesTreeObject && userObject.filterTree.dates) {
+                        userObject.filterTree.datesTreeObject.values = userObject.filterTree.dates;
+                        if (userObject.objDetail) {
+                            userObject.objDetail.filterTree.dates = userObject.filterTree.dates;
+                        }
+                    }
+                }
             },
             error: function (jqXHR, textStatus, errorThrown) {
             }

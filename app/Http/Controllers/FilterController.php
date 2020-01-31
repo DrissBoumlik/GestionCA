@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Filter;
+use App\Models\User;
 use App\Repositories\FilterRepository;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -28,7 +30,7 @@ class FilterController extends Controller
 
     public function getRegionsCallStateColumn(Request $request, $column)
     {
-         return  $this->filterRepository->GetDataRegionsCallState($request, $column);
+        return $this->filterRepository->GetDataRegionsCallState($request, $column);
     }
 
     public function getRegionsCallState(Request $request, $column)
@@ -39,7 +41,7 @@ class FilterController extends Controller
 
     public function getClientsByCallStateColumn(Request $request, $callResult)
     {
-        return  $this->filterRepository->getDataClientsByCallState($request, $callResult);
+        return $this->filterRepository->getDataClientsByCallState($request, $callResult);
     }
 
     public function getClientsByCallState(Request $request, $callResult)
@@ -83,24 +85,28 @@ class FilterController extends Controller
         return DataTables::of($data['data'])->toJson();
     }
 
-    public function getCloturetech(Request $request){
+    public function getCloturetech(Request $request)
+    {
         $data = $this->filterRepository->getCloturetechCall($request);
         return DataTables::of($data['data'])->toJson();
 
     }
 
-    public function getCloturetechColumn(Request $request){
+    public function getCloturetechColumn(Request $request)
+    {
 
         return $this->filterRepository->getCloturetechCall($request);
     }
 
-    public function getGlobalDelay(Request $request){
+    public function getGlobalDelay(Request $request)
+    {
         $data = $this->filterRepository->getGlobalDelayCall($request);
         return DataTables::of($data['data'])->toJson();
 
     }
 
-    public function GlobalDelayColumn(Request $request){
+    public function GlobalDelayColumn(Request $request)
+    {
 
         return $this->filterRepository->getGlobalDelayCall($request);
     }
@@ -111,4 +117,10 @@ class FilterController extends Controller
         return view('stats.details.' . $viewName);
     }
 
+    public function getUserFilter()
+    {
+        $user = auth()->user() ?? User::find(1);
+        $globalFilter = Filter::where('user_id', $user->id)->where('isGlobal', true)->first();
+        return ['userFilter' => $globalFilter];
+    }
 }

@@ -166,6 +166,8 @@ Route::group([
     Route::get('appels-clture/GlobalDelay/columns', 'FilterController@GlobalDelayColumn');
 
     Route::get('Export/ExportXls', 'StatsController@exportXls')->name('ExportXls');
+
+    Route::get('/user/filter', 'FilterController@getUserFilter');
     //
 
 });

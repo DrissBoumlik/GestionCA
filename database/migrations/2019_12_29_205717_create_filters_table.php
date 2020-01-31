@@ -16,7 +16,7 @@ class CreateFiltersTable extends Migration
         Schema::create('filters', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->string('route');
+            $table->string('route')->nullable();
             $table->json('date_filter')->nullable();
             $table->timestamps();
             $table->softDeletes();
