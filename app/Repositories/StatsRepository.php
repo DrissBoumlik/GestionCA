@@ -25,10 +25,16 @@ class StatsRepository
 
         $agentName = $request->agent;
         $agenceCode = $request->agence;
+        $queryJoin = $request->queryJoin;
 
         $dates = $request->dates;
-
         $resultat_appel = $request->Resultat_Appel;
+        $element = $request->element;
+        $query = explode(',', $request->queryValues);
+        $sub_query = '(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats where Nom_Region is not null ' .
+            ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+            ($queryJoin ? $queryJoin : '') . ' GROUP BY Id_Externe) groupedst';
 
         $allStats = DB::table('stats as st')->select([
             'Type_Note',
@@ -65,14 +71,13 @@ class StatsRepository
             'EXPORT_ALL_Date_CHARGEMENT_PDA',
             'EXPORT_ALL_Date_SOLDE',
             'EXPORT_ALL_Date_VALIDATION'
-        ]) ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats where 1=1 ' .
-            ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
-            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
-            ' GROUP BY Id_Externe) groupedst'),
+        ])->join(\DB::raw($sub_query),
             function ($join) {
                 $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                 $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
-            });
+            })
+            ->whereNotNull('Nom_Region');
+
         if ($row && $rowValue) {
             $allStats = $allStats->where($row, $rowValue);
         }
@@ -97,6 +102,11 @@ class StatsRepository
         }
 
 
+        if ($element && $query) {
+            foreach ($query as $q) {
+                $allStats = $allStats->where($element, 'not like', $q);
+            }
+        }
         return $allStats->get();
     }
 
@@ -627,7 +637,7 @@ class StatsRepository
         }
 
 //        dd($regions->groupBy('Nom_Region', $callResult)->toSql());
-         $rowsKeys = ($regions->groupBy('Nom_Region', $callResult)->get())->groupBy([$callResult])->keys();
+        $rowsKeys = ($regions->groupBy('Nom_Region', $callResult)->get())->groupBy([$callResult])->keys();
         if ($dates) {
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);

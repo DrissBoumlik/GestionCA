@@ -215,6 +215,8 @@ $(function () {
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-0', rows: '#stats-groupement-filter'},
+        filterQuery: {queryElement:'Groupement', queryValues: ['=%','Non Renseigné','Appels post'],
+            queryJoin : ' and Groupement not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'},
         routeCol: 'regions/columns/Groupement',
         routeData: 'regions/Groupement',
         objChart: {
@@ -276,6 +278,8 @@ $(function () {
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-1', rows: '#stats-regions-filter'},
+        filterQuery: {queryElement:'Groupement', queryValues: ['=%','Non Renseigné','Appels post'],
+            queryJoin : ' and Groupement not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'},
         routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
         routeData: 'regions/details/groupement?key_groupement=Appels-clture',
         objChart: {
@@ -315,6 +319,7 @@ $(function () {
         data: undefined,
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-2', rows: '#stats-call-regions-filter'},
+        filterQuery: {},
         routeCol: 'regionsCallState/columns/Nom_Region',
         routeData: 'regionsCallState/Nom_Region',
         objChart: {
@@ -738,6 +743,9 @@ $(function () {
                                     '&agent=' + (agent_name === undefined || agent_name === null ? '' : agent_name) +
                                     '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) +
                                     '&dates=' + (dates === undefined || dates === null ? '' : dates) +
+                                    '&element=' + (object.filterQuery.queryElement === undefined || object.filterQuery.queryElement === null ? '' : object.filterQuery.queryElement) +
+                                    '&queryValues=' + (object.filterQuery.queryValues === undefined || object.filterQuery.queryValues === null ? '' : object.filterQuery.queryValues)+
+                                    '&queryJoin=' + ( object.filterQuery.queryJoin === undefined || object.filterQuery.queryJoin === null? '' : object.filterQuery.queryJoin) +
                                     (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : '');
                             }
                             // console.log(colText + ' --- ' + rowText)
