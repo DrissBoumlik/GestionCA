@@ -1069,18 +1069,11 @@ $(function () {
 
     $("#refreshAll").on('click', function () {
         userFilter();
-        getColumns(statsRegions, filterData(), {
+        getColumns(statsCallsPrealable, filterData(), {
             removeTotal: false,
             refreshMode: true,
-            details: true,
             removeTotalColumn: false,
-            pagination: false
-        });
-        getColumns(statsFolders, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
             details: false,
-            removeTotalColumn: false,
             pagination: false
         });
         getColumns(callsStatesAgencies, filterData(), {
@@ -1105,27 +1098,6 @@ $(function () {
             pagination: false
         });
         getColumns(statscallsNeg, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: false,
-            pagination: false
-        });
-        getColumns(statsFoldersByType, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: false,
-            pagination: false
-        });
-        getColumns(statsFoldersByCode, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: false,
-            pagination: false
-        });
-        getColumns(statsPerimeters, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,

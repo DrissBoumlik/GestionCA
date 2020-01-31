@@ -1060,42 +1060,14 @@ $(function () {
 
     $("#refreshAll").on('click', function () {
         userFilter();
-        getColumns(statsRegions, filterData(), {
+        getColumns(statsCallsCloture, filterData(), {
             removeTotal: false,
             refreshMode: true,
-            details: true,
             removeTotalColumn: false,
-            pagination: false
-        });
-        getColumns(statsFolders, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
             details: false,
-            removeTotalColumn: false,
             pagination: false
         });
-        getColumns(callsStatesAgencies, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: false,
-            pagination: false
-        });
-        getColumns(callsStatesWeeks, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: false,
-            pagination: false
-        });
-        getColumns(statscallsPos, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: false,
-            pagination: false
-        });
-        getColumns(statscallsNeg, filterData(), {
+        getColumns(statsFoldersByCode, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
@@ -1109,14 +1081,14 @@ $(function () {
             removeTotalColumn: false,
             pagination: false
         });
-        getColumns(statsFoldersByCode, filterData(), {
+        getColumns(statsColturetech, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
             removeTotalColumn: false,
             pagination: false
         });
-        getColumns(statsPerimeters, filterData(), {
+        getColumns(statsGlobalDelay, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
