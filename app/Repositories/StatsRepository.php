@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Carbon\Carbon;
 
 class StatsRepository
 {
@@ -110,7 +111,6 @@ class StatsRepository
                 }
             }
         }
-
         return $allStats->get();
     }
 
@@ -1693,24 +1693,30 @@ class StatsRepository
 //            ->whereNotNull('Nom_Region');
 
         $results = \DB::table('stats as st')
-            ->select('Groupement', 'Nom_Region', \DB::raw('count(Nom_Region) as total'))
-            ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
-
-             where Groupement is not null
-             and Groupement not like "Non Renseigné"
-             and Groupement not like "Appels post"
-             and Nom_Region is not null ' .
+            ->select('st.Groupement', 'st.Nom_Region', \DB::raw('count(st.Groupement) as total'))
+            ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime,
+                groupement , Resultat_Appel , Nom_Region
+            FROM stats
+             where Groupement IS NOT NULL
+             AND Nom_Region IS NOT NULL
+             AND Groupement   LIKE "%préa%"
+             AND date_heure_note_mois = MONTH(NOW())
+             AND Type_Note LIKE "CAM"'.
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
-                ' GROUP BY Id_Externe) groupedst'),
+                ' GROUP BY Id_Externe, Groupement,Resultat_Appel,Nom_Region ) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
+                    $join->on('st.Groupement', '=', 'groupedst.Groupement');
+                    $join->on('st.Resultat_Appel', '=', 'groupedst.Resultat_Appel');
+                    $join->on('st.Nom_Region', '=', 'groupedst.Nom_Region');
                 })
-            ->whereNotNull('Groupement')
-            ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'not like', 'Appels post')
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('st.Groupement')
+            ->whereNotNull('st.Nom_Region')
+            ->where('st.Groupement', 'like', '%préa%')
+            ->where('date_heure_note_mois' , '=' , Carbon::now()->month)
+            ->where('Type_Note' ,'like','CAM');
 
         if ($agentName) {
             $results = $results->where('Utilisateur', $agentName);

@@ -791,7 +791,7 @@ $(function () {
                                     '&element=' + (object.filterQuery.queryElement === undefined || object.filterQuery.queryElement === null ? '' : object.filterQuery.queryElement) +
                                     '&queryValues=' + (object.filterQuery.queryValues === undefined || object.filterQuery.queryValues === null ? '' : object.filterQuery.queryValues)+
                                     '&queryJoin=' + ( object.filterQuery.queryJoin === undefined || object.filterQuery.queryJoin === null? '' : object.filterQuery.queryJoin) +
-                                    '&IsWhereIn=' + ( object.filterQuery.IsWhereIn === undefined || object.filterQuery.IsWhereIn === null? '' : object.filterQuery.IsWhereIn)
+                                    '&IsWhereIn=' + ( object.filterQuery.IsWhereIn === undefined || object.filterQuery.IsWhereIn === null? '' : object.filterQuery.IsWhereIn) +
                                     (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : '');
                             }
                             // console.log(colText + ' --- ' + rowText)
