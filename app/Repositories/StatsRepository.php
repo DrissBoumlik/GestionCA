@@ -1699,7 +1699,8 @@ class StatsRepository
             FROM stats
              where Groupement IS NOT NULL
              AND Nom_Region IS NOT NULL
-             AND Groupement   LIKE "%préa%"
+             AND Groupement not LIKE "Non renseigné"
+             AND Groupement not LIKE "Appels post"
              AND date_heure_note_mois = MONTH(NOW())
              AND Type_Note LIKE "CAM"'.
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
@@ -1714,7 +1715,8 @@ class StatsRepository
                 })
             ->whereNotNull('st.Groupement')
             ->whereNotNull('st.Nom_Region')
-            ->where('st.Groupement', 'like', '%préa%')
+            ->where('st.Groupement', 'not like', 'Non renseigné')
+            ->where('st.Groupement', 'not like', 'Appels post')
             ->where('date_heure_note_mois' , '=' , Carbon::now()->month)
             ->where('Type_Note' ,'like','CAM');
 
