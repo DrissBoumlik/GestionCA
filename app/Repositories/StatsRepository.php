@@ -26,7 +26,7 @@ class StatsRepository
         $agentName = $request->agent;
         $agenceCode = $request->agence;
         $queryJoin = $request->queryJoin;
-
+        $IsWhereIn = $request->IsWhereIn;
         $dates = $request->dates;
         $resultat_appel = $request->Resultat_Appel;
         $element = $request->element;
@@ -101,12 +101,16 @@ class StatsRepository
             $allStats = $allStats->where('Resultat_Appel', $resultat_appel);
         }
 
-
-        if ($element && $query) {
-            foreach ($query as $q) {
-                $allStats = $allStats->where($element, 'not like', $q);
+        if($IsWhereIn){
+            $allStats = $allStats->whereIn($element,$query);
+        }else{
+            if ($element && $query) {
+                foreach ($query as $q) {
+                    $allStats = $allStats->where($element, explode('_',$q)[0], explode('_',$q)[1]);
+                }
             }
         }
+
         return $allStats->get();
     }
 
