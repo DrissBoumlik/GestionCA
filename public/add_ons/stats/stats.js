@@ -185,11 +185,6 @@ $(function () {
     let filterListExist = false;
     let filterValuesExist = false;
 
-    getDatesFilter();
-
-    getUserFilter();
-
-
     const filterData = () => {
         // console.log(agence_code, agent_name);
         return {
@@ -571,6 +566,12 @@ $(function () {
     let globalElements = [userObject, statsRegions, statsFolders, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, statsFoldersByType, statsFoldersByCode, statsPerimeters];
 
     let detailClick = false;
+
+
+    getDatesFilter();
+
+    userFilter();
+
 
     //<editor-fold desc="FUNCTIONS">
     function getColumns(object, data = null, params = {
@@ -1036,10 +1037,11 @@ $(function () {
         });
     }
 
-    function getUserFilter() {
+    function userFilter() {
         $.ajax({
             url: APP_URL + '/user/filter',
             method: 'GET',
+            data: {filter: userObject.filterTree.dates},
             success: function (response) {
                 console.log(response);
                 if (response.userFilter) {
@@ -1145,6 +1147,7 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
+        userFilter();
         getColumns(statsRegions, filterData(), {
             removeTotal: false,
             refreshMode: true,

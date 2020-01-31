@@ -277,9 +277,6 @@ $(function () {
     let filterListExist = false;
     let filterValuesExist = false;
 
-    getDatesFilter();
-
-    getUserFilter();
 
     const filterData = () => {
         // console.log(agence_code, agent_name);
@@ -423,6 +420,10 @@ $(function () {
     let globalElements = [userObject, statsCallsGem, callsStatesAgencies, callsStatesWeeks];
 
     let detailClick = false;
+
+    getDatesFilter();
+
+    userFilter();
 
     //<editor-fold desc="FUNCTIONS">
     function getColumns(object, data = null, params = {
@@ -888,10 +889,11 @@ $(function () {
         });
     }
 
-    function getUserFilter() {
+    function userFilter() {
         $.ajax({
             url: APP_URL + '/user/filter',
             method: 'GET',
+            data: {filter: userObject.filterTree.dates},
             success: function (response) {
                 console.log(response);
                 if (response.userFilter) {
@@ -997,14 +999,21 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
-        getColumns(statsCallsGem, filterData(), {
+        userFilter();
+        getColumns(statsRegions, filterData(), {
             removeTotal: false,
             refreshMode: true,
+            details: true,
             removeTotalColumn: false,
-            details: false,
             pagination: false
         });
-
+        getColumns(statsFolders, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
         getColumns(callsStatesAgencies, filterData(), {
             removeTotal: false,
             refreshMode: true,
@@ -1019,7 +1028,41 @@ $(function () {
             removeTotalColumn: false,
             pagination: false
         });
-
+        getColumns(statscallsPos, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
+        getColumns(statscallsNeg, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
+        getColumns(statsFoldersByType, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
+        getColumns(statsFoldersByCode, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
+        getColumns(statsPerimeters, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
     });
     //</editor-fold>
     $("#printElement").on("click", function () {
