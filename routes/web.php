@@ -167,7 +167,7 @@ Route::group([
 
     Route::get('Export/ExportXls', 'StatsController@exportXls')->name('ExportXls');
 
-    Route::get('/user/filter', 'FilterController@getUserFilter');
+    Route::get('/user/filter', 'FilterController@userFilter');
     //
 
 });

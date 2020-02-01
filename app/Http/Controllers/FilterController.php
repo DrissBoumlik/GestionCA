@@ -117,21 +117,8 @@ class FilterController extends Controller
         return view('stats.details.' . $viewName);
     }
 
-    public function getUserFilter(Request $request)
+    public function userFilter(Request $request)
     {
-        $user = auth()->user() ?? User::find(1);
-
-        $userFilter = $request->get('filter');
-        if ($userFilter) {
-            $globalFilter = new Filter([
-                'user_id' => $user->id,
-                'date_filter' => $userFilter,
-                'isGlobal' => true
-            ]);
-            $globalFilter->save();
-        } else {
-            $globalFilter = Filter::where('user_id', $user->id)->where('isGlobal', true)->first();
-        }
-        return ['userFilter' => $globalFilter];
+        return $this->filterRepository->userFilter($request);
     }
 }

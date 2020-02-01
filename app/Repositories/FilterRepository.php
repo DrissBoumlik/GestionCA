@@ -14,8 +14,10 @@ class FilterRepository
 {
     public function GetDataRegionsByGrpCall(Request $request, $filter = null)
     {
-        $resultatAppel = $request->get('resultatAppel');
-        $groupement = $request->get('groupement');
+        $resultatAppel = $request->get('rowFilter');
+//        $resultatAppel = $request->get('resultatAppel');
+//        $groupement = $request->get('groupement');
+        $resultatAppel = $request->get('rowFilter');
         $dates = $request->get('dates');
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
@@ -64,40 +66,15 @@ class FilterRepository
             $resultatAppel = array_values($resultatAppel);
             $regions = $regions->whereIn('Resultat_Appel', $resultatAppel);
         }
-        if ($groupement) {
-            $groupement = array_values($groupement);
-            $regions = $regions->whereIn('Groupement', $groupement);
-        }
+//        if ($groupement) {
+//            $groupement = array_values($groupement);
+//            $regions = $regions->whereIn('Groupement', $groupement);
+//        }
         $user = auth()->user() ?? User::find(1);
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-        if ($request && count($request->all())) {
-            if ($request->exists('refreshMode')) {
-                if ($dates) {
-                    $dates = array_values($dates);
-                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
-                    $filter->date_filter = $dates;
-                    $filter->save();
-                    $regions = $regions->whereIn('Date_Note', $dates);
-                } else {
-                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                    if ($filter) {
-                        $filter->forceDelete();
-                    }
-                }
-            } else {
-                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                if ($filter) {
-                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-                }
-            }
-        } else {
-            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-            if ($filter) {
-                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-            }
-        }
+        list($filter, $regions) = applyFilter($request, $route, $regions, 'Resultat_Appel', $resultatAppel);
 
 //        $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
 
@@ -208,7 +185,8 @@ class FilterRepository
 
     public function GetDataRegionsCallState(Request $request, $column, $filter = null)
     {
-        $gpmtAppelPre = $request->get('gpmtAppelPre');
+//        $gpmtAppelPre = $request->get('gpmtAppelPre');
+        $gpmtAppelPre = $request->get('rowFilter');
         $dates = $request->get('dates');
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
@@ -288,32 +266,7 @@ class FilterRepository
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
-        if ($request && count($request->all())) {
-            if ($request->exists('refreshMode')) {
-                if ($dates) {
-                    $dates = array_values($dates);
-                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
-                    $filter->date_filter = $dates;
-                    $filter->save();
-                    $regions = $regions->whereIn('Date_Note', $dates);
-                } else {
-                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                    if ($filter) {
-                        $filter->forceDelete();
-                    }
-                }
-            } else {
-                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                if ($filter) {
-                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-                }
-            }
-        } else {
-            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-            if ($filter) {
-                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-            }
-        }
+        list($filter, $regions) = applyFilter($request, $route, $regions, 'Gpmt_Appel_Pre', $gpmtAppelPre);
 
         if ($column == 'Date_Heure_Note_Semaine') {
             $columns = $regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->get();
@@ -486,12 +439,12 @@ class FilterRepository
 
     public function getDataClientsByCallState(Request $request, $callResult, $filter = null)
     {
-        $route = getRoute(Route::current());
         $dates = $request->get('dates');
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
-        $codeRdvInterventionConfirm = $request->get('codeRdvInterventionConfirm');
-        $codeRdvIntervention = $request->get('codeRdvIntervention');
+//        $codeRdvInterventionConfirm = $request->get('codeRdvInterventionConfirm');
+//        $codeRdvIntervention = $request->get('codeRdvIntervention');
+        $rowFilter = $request->get('rowFilter');
         $radical_route = $filter ?? getRadicalRoute(Route::current());
 
 //        $codes = \DB::table('stats')
@@ -550,45 +503,24 @@ class FilterRepository
             $dates = array_values($dates);
             $codes = $codes->whereIn('Date_Note', $dates);
         }
-        if ($codeRdvIntervention) {
-            $codeRdvIntervention = array_values($codeRdvIntervention);
-            $codes = $codes->whereIn('Nom_Region', $codeRdvIntervention);
-        }
-        if ($codeRdvInterventionConfirm) {
-            $codeRdvInterventionConfirm = array_values($codeRdvInterventionConfirm);
-            $codes = $codes->whereIn('Nom_Region', $codeRdvInterventionConfirm);
+//        if ($codeRdvIntervention) {
+//            $codeRdvIntervention = array_values($codeRdvIntervention);
+//            $codes = $codes->whereIn('Nom_Region', $codeRdvIntervention);
+//        }
+//        if ($codeRdvInterventionConfirm) {
+//            $codeRdvInterventionConfirm = array_values($codeRdvInterventionConfirm);
+//            $codes = $codes->whereIn('Nom_Region', $codeRdvInterventionConfirm);
+//        }
+        if ($rowFilter) {
+            $rowFilter = array_values($rowFilter);
+            $codes = $codes->whereIn('Nom_Region', $rowFilter);
         }
         $user = auth()->user() ?? User::find(1);
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
-        if ($request && count($request->all())) {
-            if ($request->exists('refreshMode')) {
-                if ($dates) {
-                    $dates = array_values($dates);
-                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
-                    $filter->date_filter = $dates;
-                    $filter->save();
-                    $codes = $codes->whereIn('Date_Note', $dates);
-                } else {
-                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                    if ($filter) {
-                        $filter->forceDelete();
-                    }
-                }
-            } else {
-                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                if ($filter) {
-                    $codes = $codes->whereIn('Date_Note', $filter->date_filter);
-                }
-            }
-        } else {
-            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-            if ($filter) {
-                $codes = $codes->whereIn('Date_Note', $filter->date_filter);
-            }
-        }
+        list($filter, $codes) = applyFilter($request, $route, $codes, 'Nom_Region', $rowFilter);
 
         $codes = $codes->where('Gpmt_Appel_Pre', $callResult);
         $columns = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
@@ -732,12 +664,12 @@ class FilterRepository
 
     public function GetDataFolders(Request $request, $callResult, $filter = null)
     {
-        $resultatAppel = $request->get('resultatAppel');
-        $groupement = $request->get('groupement');
+        $resultatAppel = $request->get('rowFilter');
+//        $resultatAppel = $request->get('resultatAppel');
+//        $groupement = $request->get('groupement');
         $dates = $request->get('dates');
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
-        $route = getRoute(Route::current());
         $radical_route = $filter ?? getRadicalRoute(Route::current());
 //        $regions = \DB::table('stats')
 //            ->select('Nom_Region', $callResult, \DB::raw('count(Nom_Region) as total'))
@@ -790,42 +722,17 @@ class FilterRepository
             $dates = array_values($dates);
             $regions = $regions->whereIn('Date_Note', $dates);
         }
-        if ($groupement) {
-            $groupement = array_values($groupement);
-            $regions = $regions->whereIn('Groupement', $groupement);
-        }
+//        if ($groupement) {
+//            $groupement = array_values($groupement);
+//            $regions = $regions->whereIn('Groupement', $groupement);
+//        }
 
         $user = auth()->user() ?? User::find(1);
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
-        if ($request && count($request->all())) {
-            if ($request->exists('refreshMode')) {
-                if ($dates) {
-                    $dates = array_values($dates);
-                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
-                    $filter->date_filter = $dates;
-                    $filter->save();
-                    $regions = $regions->whereIn('Date_Note', $dates);
-                } else {
-                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                    if ($filter) {
-                        $filter->forceDelete();
-                    }
-                }
-            } else {
-                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                if ($filter) {
-                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-                }
-            }
-        } else {
-            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-            if ($filter) {
-                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-            }
-        }
+        list($filter, $regions) = applyFilter($request, $route, $regions, 'Resultat_Appel', $resultatAppel);
 
 
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
@@ -1158,8 +1065,9 @@ class FilterRepository
     {
         $dates = $request->get('dates');
         $agentName = $request->get('agent_name');
-        $codeTypeIntervention = $request->get('codeTypeIntervention');
-        $codeIntervention = $request->get('codeIntervention');
+//        $codeTypeIntervention = $request->get('codeTypeIntervention');
+//        $codeIntervention = $request->get('codeIntervention');
+        $rowFilter = $request->get('rowFilter');
         $agenceCode = $request->get('agence_code');
         $radical_route = $filter ?? getRadicalRoute(Route::current());
 
@@ -1195,13 +1103,17 @@ class FilterRepository
 
         $rowsKeys = ($regions->groupBy('Nom_Region', $intervCol, 'Resultat_Appel')->get())->groupBy([$intervCol])->keys();
 
-        if ($codeTypeIntervention) {
-            $codeTypeIntervention = array_values($codeTypeIntervention);
-            $regions = $regions->whereIn('Code_Type_Intervention', $codeTypeIntervention);
-        }
-        if ($codeIntervention) {
-            $codeIntervention = array_values($codeIntervention);
-            $regions = $regions->whereIn('Code_Intervention', $codeIntervention);
+//        if ($codeTypeIntervention) {
+//            $codeTypeIntervention = array_values($codeTypeIntervention);
+//            $regions = $regions->whereIn('Code_Type_Intervention', $codeTypeIntervention);
+//        }
+//        if ($codeIntervention) {
+//            $codeIntervention = array_values($codeIntervention);
+//            $regions = $regions->whereIn('Code_Intervention', $codeIntervention);
+//        }
+        if ($rowFilter) {
+            $rowFilter = array_values($rowFilter);
+            $regions = $regions->whereIn($intervCol, $rowFilter);
         }
         if ($dates) {
             $dates = array_values($dates);
@@ -1213,32 +1125,7 @@ class FilterRepository
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
-        if ($request && count($request->all())) {
-            if ($request->exists('refreshMode')) {
-                if ($dates) {
-                    $dates = array_values($dates);
-                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
-                    $filter->date_filter = $dates;
-                    $filter->save();
-                    $regions = $regions->whereIn('Date_Note', $dates);
-                } else {
-                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                    if ($filter) {
-                        $filter->forceDelete();
-                    }
-                }
-            } else {
-                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                if ($filter) {
-                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-                }
-            }
-        } else {
-            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-            if ($filter) {
-                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-            }
-        }
+        list($filter, $regions) = applyFilter($request, $route, $regions, $intervCol, $rowFilter);
 
         $columns = $regions->groupBy('Nom_Region', $intervCol, 'Resultat_Appel')->get();
 //        $regions = $regions->groupBy('Nom_Region', $intervCol)->get();
@@ -1661,4 +1548,23 @@ class FilterRepository
         }
     }
 
+    public function userFilter(Request $request)
+    {
+        $user = auth()->user() ?? User::find(1);
+
+        $userFilter = $request->get('filter');
+        if ($userFilter) {
+            $globalFilter = Filter::firstOrNew([
+                'user_id' => $user->id,
+                'isGlobal' => true
+            ]);
+            $globalFilter->date_filter = $userFilter;
+            $globalFilter->save();
+
+            Filter::where('user_id', $user->id)->update(['date_filter' => $userFilter]);
+        } else {
+            $globalFilter = Filter::where('user_id', $user->id)->where('isGlobal', true)->first();
+        }
+        return ['userFilter' => $globalFilter];
+    }
 }
