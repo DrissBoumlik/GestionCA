@@ -102,12 +102,12 @@ class StatsRepository
             $allStats = $allStats->where('Resultat_Appel', $resultat_appel);
         }
 
-        if($IsWhereIn){
-            $allStats = $allStats->whereIn($element,$query);
-        }else{
+        if ($IsWhereIn) {
+            $allStats = $allStats->whereIn($element, $query);
+        } else {
             if ($element && $query) {
                 foreach ($query as $q) {
-                    $allStats = $allStats->where($element, explode('_',$q)[0], explode('_',$q)[1]);
+                    $allStats = $allStats->where($element, explode('_', $q)[0], explode('_', $q)[1]);
                 }
             }
         }
@@ -258,7 +258,6 @@ class StatsRepository
         $groupement = $request->get('rowFilter');
 //        $resultatAppel = $request->get('resultatAppel');
 //        $groupement = $request->get('groupement');
-        $dates = $request->get('dates');
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
 
@@ -269,12 +268,19 @@ class StatsRepository
 //            ->where($callResult, 'not like', '=%')
 //            ->where('Groupement', 'not like', 'Non Renseigné')
 //            ->where('Groupement', 'not like', 'Appels post');
+
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route, 'Groupement', $groupement);
+
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(Nom_Region) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Nom_Region is not null ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+                ' and ' . $queryFilters .
                 ' and Groupement not like "=%"
             and Groupement not like "Non Renseigné"
             and Groupement not like "Appels post"
@@ -287,6 +293,7 @@ class StatsRepository
             ->where('Groupement', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post');
+        $regions = applyFilter($regions, $filter, 'Groupement');
 
         if ($agentName) {
             $regions = $regions->where('Utilisateur', $agentName);
@@ -300,18 +307,11 @@ class StatsRepository
 //            $resultatAppel = array_values($resultatAppel);
 //            $regions = $regions->whereIn('Resultat_Appel', $resultatAppel);
 //        }
-        if ($groupement) {
-            $groupement = array_values($groupement);
-            $regions = $regions->whereIn('Groupement', $groupement);
-        }
+//        if ($groupement) {
+//            $groupement = array_values($groupement);
+//            $regions = $regions->whereIn('Groupement', $groupement);
+//        }
 //        $route = getRoute(Route::current());
-        $user = auth()->user() ?? User::find(1);
-
-        $_route = getRoute(Route::current());
-        $route = str_replace('/columns', '', $_route);
-        $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-
-        list($filter, $regions) = applyFilter($request, $route, $regions, 'Groupement', $groupement);
 
         $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
         $regions = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
@@ -430,7 +430,7 @@ class StatsRepository
 
     public function GetDataRegionsByGrpCall(Request $request)
     {
-//        $resultatAppel = $request->get('rowFilter');
+        $resultatAppel = $request->get('rowFilter');
 //        $resultatAppel = $request->get('resultatAppel');
 //        $groupement = $request->get('groupement');
         $dates = $request->get('dates');
@@ -488,7 +488,7 @@ class StatsRepository
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
 
-        list($filter, $regions) = applyFilter($request, $route, $regions);
+        list($filter, $regions) = applyFilter($request, $route, $regions,'Resultat_Appel', $resultatAppel);
 
 //        $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
 
@@ -1701,7 +1701,7 @@ class StatsRepository
              AND Groupement not LIKE "Non renseigné"
              AND Groupement not LIKE "Appels post"
              AND date_heure_note_mois = MONTH(NOW())
-             AND Type_Note LIKE "CAM"'.
+             AND Type_Note LIKE "CAM"' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
                 ' GROUP BY Id_Externe, Groupement,Resultat_Appel,Nom_Region ) groupedst'),
@@ -1716,8 +1716,8 @@ class StatsRepository
             ->whereNotNull('st.Nom_Region')
             ->where('st.Groupement', 'not like', 'Non renseigné')
             ->where('st.Groupement', 'not like', 'Appels post')
-            ->where('date_heure_note_mois' , '=' , Carbon::now()->month)
-            ->where('Type_Note' ,'like','CAM');
+            ->where('date_heure_note_mois', '=', Carbon::now()->month)
+            ->where('Type_Note', 'like', 'CAM');
 
         if ($agentName) {
             $results = $results->where('Utilisateur', $agentName);

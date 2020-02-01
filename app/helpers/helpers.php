@@ -5,52 +5,101 @@ use App\Models\Stats;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-if(!function_exists('')){
-    function applyFilter(Request $request, $route, $results, $column = null, $rowsFilter = null)
+if (!function_exists('')) {
+    function makeFilterSubQuery(Request $request, $route, $column = null, $rowsFilter = null)
     {
         $user = auth()->user() ?? User::find(1);
-        $filters = ['route' => $route, 'user_id' => $user->id, 'agence_name' => null, 'agent_name' => null];
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
-        if ($agentName) {
-            $filters['agent_name'] = $agentName;
-        }
-        if ($agenceCode) {
-            $filters['agence_name'] = $agenceCode;
-        }
+//        if ($agentName) {
+//            $filters['agent_name'] = $agentName;
+//        }
+//        if ($agenceCode) {
+//            $filters['agence_name'] = $agenceCode;
+//        }
+        $filters = ['route' => $route, 'user_id' => $user->id, 'agence_name' => $agenceCode, 'agent_name' => $agentName, 'isGlobal' => null];
+
+
         $dates = $request->get('dates');
+        $currentMonth = '2020-01%'; //date('Y-m') . '%';
+        $filter = Filter::firstOrNew($filters);
+        $queryFilters = null;
+
         if ($request->exists('refreshMode')) {
-            if ($dates || $rowsFilter) {
-                $dates = $dates ? array_values($dates) : $dates;
-                $filter = Filter::firstOrNew($filters);
-                $filter->date_filter = $dates;
-                $filter->rows_filter = $rowsFilter;
+            $dates = $dates ? array_values($dates) : null;
+            $filter->date_filter = $dates;
+            $filter->rows_filter = $rowsFilter;
+            if($dates || $rowsFilter) {
                 $filter->save();
-                if ($dates) {
-                    $results = $results->whereIn('Date_Note', $dates);
-                }
-                if ($column && $rowsFilter) {
-                    $results = $results->whereIn($column, $rowsFilter);
-                }
             } else {
-                $filter = Filter::where($filters)->first();
-                if ($filter) {
-                    $filter->forceDelete();
-                }
-            }
-        } else {
-            $filter = Filter::where($filters)->first();
-            if ($filter) {
-                if ($filter->date_filter) {
-                    $results = $results->whereIn('Date_Note', $filter->date_filter);
-                }
-                if ($column && $filter->rows_filter) {
-                    $results = $results->whereIn($column, $filter->rows_filter);
-                }
+                $filter->forceDelete();
             }
         }
-        return [$filter, $results];
+        if ($filter->date_filter) {
+            $queryFilters[] = 'Date_Note in ("' . join('","', $filter->date_filter) . '")';
+        } else {
+            $queryFilters[] = 'Date_Note like "' . $currentMonth . '"';
+        }
+        if ($column && $filter->rows_filter) {
+            $queryFilters[] = $column . ' in ("' . join('","', $filter->rows_filter) . '")';
+        }
+        $queryFilters = join(' and ', $queryFilters);
+        return [$filter, $queryFilters];
     }
+
+    function applyFilter($results, $filter, $column)
+    {
+        $currentMonth = '2020-01%'; // date('Y-m') . '%';
+        if ($filter && $filter->rows_filter) {
+            $results = $results->whereIn($column, $filter->rows_filter);
+        }
+        if ($filter && $filter->date_filter) {
+            $results = $results->whereIn('Date_Note', $filter->date_filter);
+        } else {
+            $results = $results->where('Date_Note', 'like', $currentMonth);
+        }
+        return $results;
+    }
+
+//    function applyFilter(Request $request, $route, $results, $column = null, $rowsFilter = null)
+//    {
+////        dump($results->groupBy('Nom_Region', 'Groupement', 'Key_Groupement')->count());
+//        $user = auth()->user() ?? User::find(1);
+//        $filters = ['route' => $route, 'user_id' => $user->id, 'agence_name' => null, 'agent_name' => null, 'isGlobal' => false];
+//        $agenceCode = $request->get('agence_code');
+//        $agentName = $request->get('agent_name');
+//        if ($agentName) {
+//            $filters['agent_name'] = $agentName;
+//        }
+//        if ($agenceCode) {
+//            $filters['agence_name'] = $agenceCode;
+//        }
+//
+//        $dates = $request->get('dates');
+//        $currentMonth = '2020-01%'; //date('Y-m') . '%';
+//        $filter = Filter::firstOrNew($filters);
+//
+//        if ($dates) {
+//            $dates = array_values($dates);
+//            $filter->date_filter = $dates;
+//        }
+//        if ($column && $rowsFilter) {
+//            $filter->rows_filter = $rowsFilter;
+//        }
+//
+//        if ($filter->date_filter) {
+//            $results = $results->whereIn('Date_Note', $filter->date_filter);
+//        } else {
+//            $results = $results->where('Date_Note', 'like', $currentMonth);
+//        }
+//        if ($filter->rows_filter) {
+//            $results = $results->whereIn($column, $filter->rows_filter);
+//        }
+////        dd($currentMonth);
+////        dd($results->groupBy('Nom_Region', 'Groupement', 'Key_Groupement')->toSql());
+//
+//        return [$filter, $results];
+//    }
 }
 
 if (!function_exists('addRegionWithZero')) {
@@ -265,7 +314,7 @@ if (!function_exists('getRadicalRoute')) {
     function getRadicalRoute($route)
     {
         $radicalRoute = explode('/', getRoute($route));
-        if(count($radicalRoute)) {
+        if (count($radicalRoute)) {
             return $radicalRoute[0];
         } else {
             return null;

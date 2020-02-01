@@ -17,7 +17,6 @@ class FilterRepository
         $resultatAppel = $request->get('rowFilter');
 //        $resultatAppel = $request->get('resultatAppel');
 //        $groupement = $request->get('groupement');
-        $resultatAppel = $request->get('rowFilter');
         $dates = $request->get('dates');
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
