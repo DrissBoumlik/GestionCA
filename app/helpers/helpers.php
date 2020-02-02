@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 
 if (!function_exists('makeFilterSubQuery')) {
-    function makeFilterSubQuery(Request $request, $route, $column = null, $rowsFilter = null)
+    function makeFilterSubQuery(Request $request, $route, $column = null)
     {
         $user = auth()->user() ?? User::find(1);
         $agenceCode = $request->get('agence_code');
@@ -21,12 +21,14 @@ if (!function_exists('makeFilterSubQuery')) {
 
 
         $dates = $request->get('dates');
-        $currentMonth = '2020-01%'; //date('Y-m') . '%';
+        $rowsFilter = $request->get('rowFilter');
+        $currentMonth = date('Y-m') . '%';
         $filter = Filter::firstOrNew($filters);
         $queryFilters = null;
         $filterSaved = false;
         if ($request->exists('refreshMode')) {
             $dates = $dates ? array_values($dates) : null;
+            $rowsFilter = $rowsFilter ? array_values($rowsFilter) : null;
             $filter->date_filter = $dates;
             $filter->rows_filter = $rowsFilter;
             if ($dates || $rowsFilter) {
@@ -34,19 +36,20 @@ if (!function_exists('makeFilterSubQuery')) {
                 $filter->save();
             } else {
                 $filter->forceDelete();
+                $filter = null;
             }
         }
-        if ($filter->date_filter) {
+        if ($filter && $filter->date_filter) {
             $queryFilters[] = 'Date_Note in ("' . join('","', $filter->date_filter) . '")';
         } else {
             $queryFilters[] = 'Date_Note like "' . $currentMonth . '"';
         }
-        if ($column && $filter->rows_filter) {
+        if ($column && $filter && $filter->rows_filter) {
             $queryFilters[] = $column . ' in ("' . join('","', $filter->rows_filter) . '")';
         }
         $queryFilters = join(' and ', $queryFilters);
 
-        if (!$filterSaved) {
+        if ($filter && !$filter->exists && !$filterSaved) {
             $filter = null;
         }
         return [$filter, $queryFilters];
@@ -56,14 +59,14 @@ if (!function_exists('makeFilterSubQuery')) {
 if (!function_exists('applyFilter')) {
     function applyFilter($results, $filter, $column)
     {
-        $currentMonth = '2020-01%'; // date('Y-m') . '%';
+        $currentMonth = date('Y-m') . '%';
         if ($filter && $filter->rows_filter) {
-            $results = $results->whereIn($column, $filter->rows_filter);
+            $results = $results->whereIn('st.' . $column, $filter->rows_filter);
         }
         if ($filter && $filter->date_filter) {
-            $results = $results->whereIn('Date_Note', $filter->date_filter);
+            $results = $results->whereIn('st.Date_Note', $filter->date_filter);
         } else {
-            $results = $results->where('Date_Note', 'like', $currentMonth);
+            $results = $results->where('st.Date_Note', 'like', $currentMonth);
         }
         return $results;
     }

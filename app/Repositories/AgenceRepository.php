@@ -258,7 +258,7 @@ class AgenceRepository
         $codeTypeIntervention = $request->get('codeTypeIntervention');
         $codeIntervention = $request->get('codeIntervention');
         $regions = \DB::table('stats')
-            ->select('Nom_Region', $intervCol, \DB::raw('count(Nom_Region) as total'))
+            ->select('Nom_Region', $intervCol, \DB::raw('count(st.Id_Externe) as total'))
             ->whereNotNull($intervCol);
         if ($agenceCode) {
             $regions->where('Nom_Region', 'like', "%$agenceCode");
