@@ -5,7 +5,7 @@ use App\Models\Stats;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-if (!function_exists('')) {
+if (!function_exists('makeFilterSubQuery')) {
     function makeFilterSubQuery(Request $request, $route, $column = null, $rowsFilter = null)
     {
         $user = auth()->user() ?? User::find(1);
@@ -24,12 +24,13 @@ if (!function_exists('')) {
         $currentMonth = '2020-01%'; //date('Y-m') . '%';
         $filter = Filter::firstOrNew($filters);
         $queryFilters = null;
-
+        $filterSaved = false;
         if ($request->exists('refreshMode')) {
             $dates = $dates ? array_values($dates) : null;
             $filter->date_filter = $dates;
             $filter->rows_filter = $rowsFilter;
-            if($dates || $rowsFilter) {
+            if ($dates || $rowsFilter) {
+                $filterSaved = true;
                 $filter->save();
             } else {
                 $filter->forceDelete();
@@ -44,9 +45,15 @@ if (!function_exists('')) {
             $queryFilters[] = $column . ' in ("' . join('","', $filter->rows_filter) . '")';
         }
         $queryFilters = join(' and ', $queryFilters);
+
+        if (!$filterSaved) {
+            $filter = null;
+        }
         return [$filter, $queryFilters];
     }
+}
 
+if (!function_exists('applyFilter')) {
     function applyFilter($results, $filter, $column)
     {
         $currentMonth = '2020-01%'; // date('Y-m') . '%';
