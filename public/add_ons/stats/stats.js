@@ -294,7 +294,7 @@ $(function () {
     if (elementExists(statsFolders)) {
         getColumns(statsFolders, filterData(), {
             removeTotalColumn: true,
-            removeTotal: true,
+            removeTotal: false,
             refreshMode: false,
             details: false,
             pagination: false
