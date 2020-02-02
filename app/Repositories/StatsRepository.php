@@ -32,51 +32,23 @@ class StatsRepository
         $resultat_appel = $request->Resultat_Appel;
         $element = $request->element;
         $query = explode(',', $request->queryValues);
-        $sub_query = '(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats where Nom_Region is not null ' .
-            ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
-            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+        $sub_query = '(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
+        where Nom_Region is not null ' .
+            ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
+            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
+            ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
+            ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
+            ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
+
             ($queryJoin ? $queryJoin : '') . ' GROUP BY Id_Externe) groupedst';
 
-        $allStats = DB::table('stats as st')->select([
-            'Type_Note',
-            'Utilisateur',
-            'Resultat_Appel',
-            'Date_Nveau_RDV',
-            'Heure_Nveau_RDV',
-            'Marge_Nveau_RDV',
-            'st.Id_Externe',
-            'Date_Creation',
-            'Code_Postal_Site',
-            'Drapeaux',
-            'Code_Type_Intervention',
-            'Date_Rdv',
-            'Nom_Societe',
-            'Nom_Region',
-            'Nom_Domaine',
-            'Nom_Agence',
-            'Nom_Activite',
-            'Date_Heure_Note',
-            'Date_Heure_Note_Annee',
-            'Date_Heure_Note_Mois',
-            'Date_Heure_Note_Semaine',
-            'Date_Note',
-            'Groupement',
-            'key_Groupement',
-            'Gpmt_Appel_Pre',
-            'Code_Intervention',
-            'EXPORT_ALL_Nom_SITE',
-            'EXPORT_ALL_Nom_TECHNICIEN',
-            'EXPORT_ALL_PRENom_TECHNICIEN',
-            'EXPORT_ALL_Nom_EQUIPEMENT',
-            'EXPORT_ALL_EXTRACT_CUI',
-            'EXPORT_ALL_Date_CHARGEMENT_PDA',
-            'EXPORT_ALL_Date_SOLDE',
-            'EXPORT_ALL_Date_VALIDATION'
-        ])->join(\DB::raw($sub_query),
-            function ($join) {
-                $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
-                $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
-            })
+        $allStats = DB::table('stats as st')
+            ->select(['*'])
+            ->join(\DB::raw($sub_query),
+                function ($join) {
+                    $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
+                    $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
+                })
             ->whereNotNull('Nom_Region');
 
         if ($row && $rowValue) {
@@ -85,17 +57,16 @@ class StatsRepository
         if ($col && $colValue) {
             $allStats = $allStats->where($col, $colValue);
         }
+        if ($dates) {
+            $dates = explode(',', $request->dates);
+            $allStats = $allStats->whereIn('Date_Note', $dates);
+        }
 
         if ($agentName) {
             $allStats = $allStats->where('Utilisateur', $agentName);
         }
         if ($agenceCode) {
             $allStats = $allStats->where('Nom_Region', 'like', "%$agenceCode");
-        }
-
-        if ($dates) {
-            $dates = explode(',', $request->dates);
-            $allStats = $allStats->whereIn('Date_Note', $dates);
         }
 
         if ($resultat_appel) {
