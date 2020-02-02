@@ -20,7 +20,7 @@ class DemoRepository
 
 
 //        $regions = \DB::table('stats')
-//            ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(st.Id_Externe) as total'))
+//            ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(distinct st.Id_Externe) as total'))
 //            ->whereNotNull('Nom_Region')
 //            ->where($callResult, 'not like', '=%')
 //            ->where('Groupement', 'not like', 'Non Renseigné')
@@ -32,7 +32,7 @@ class DemoRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route, 'Groupement', $groupement);
 
         $regions = \DB::table('stats as st')
-            ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(st.Id_Externe) as total'))
+            ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(distinct st.Id_Externe) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Nom_Region is not null ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
@@ -207,7 +207,7 @@ class DemoRepository
 //            ->whereNotNull('Nom_Region');
 
         $regions = \DB::table('stats as st')
-            ->select('Nom_Region', $intervCol, \DB::raw('count(st.Id_Externe) as total'))
+            ->select('Nom_Region', $intervCol, \DB::raw('count(distinct st.Id_Externe) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Nom_Region is not null
             and Groupement like "Appels clôture" ' .
@@ -394,7 +394,7 @@ class DemoRepository
 //            ->whereNotNull('Nom_Region');
 
         $regions = \DB::table('stats as st')
-            ->select('Nom_Region', $intervCol, \DB::raw('count(st.Id_Externe) as total'))
+            ->select('Nom_Region', $intervCol, \DB::raw('count(distinct st.Id_Externe) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Nom_Region is not null
             and key_Groupement like "' . $radical_route . '"

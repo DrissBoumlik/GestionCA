@@ -234,7 +234,7 @@ class StatsRepository
 
 
 //        $regions = \DB::table('stats')
-//            ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(st.Id_Externe) as total'))
+//            ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(distinct st.Id_Externe) as total'))
 //            ->whereNotNull('Nom_Region')
 //            ->where($callResult, 'not like', '=%')
 //            ->where('Groupement', 'not like', 'Non Renseigné')
@@ -246,7 +246,7 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route, 'Groupement');
 
         $regions = \DB::table('stats as st')
-            ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(st.Id_Externe) as total'))
+            ->select('Nom_Region', $callResult, 'Key_Groupement', \DB::raw('count(distinct st.Id_Externe) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Nom_Region is not null ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
@@ -589,14 +589,14 @@ class StatsRepository
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
 //        $regions = \DB::table('stats')
-//            ->select('Nom_Region', $callResult, \DB::raw('count(st.Id_Externe) as total'))
+//            ->select('Nom_Region', $callResult, \DB::raw('count(distinct st.Id_Externe) as total'))
 //            ->where($callResult, 'not like', '=%')
 //            ->where('Groupement', 'not like', 'Non Renseigné')
 //            ->where('Groupement', 'not like', 'Appels post')
 //            ->whereNotNull('Nom_Region');
 
         $regions = \DB::table('stats as st')
-            ->select('Nom_Region', $callResult, \DB::raw('count(st.Id_Externe) as total'))
+            ->select('Nom_Region', $callResult, \DB::raw('count(distinct st.Id_Externe) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
 
              where Groupement not like "=%"
@@ -790,7 +790,7 @@ class StatsRepository
 
         $regions = \DB::table('stats as st');
         if ($column == 'Date_Heure_Note_Semaine') {
-            $regions = $regions->select($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee', \DB::raw('count(st.Id_Externe) as total'))
+            $regions = $regions->select($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee', \DB::raw('count(distinct st.Id_Externe) as total'))
                 ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Groupement not like "Non Renseigné"
             and Groupement like "Appels préalables"
@@ -805,7 +805,7 @@ class StatsRepository
                         $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                     });
         } else {
-            $regions = $regions->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(st.Id_Externe) as total'))
+            $regions = $regions->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(distinct st.Id_Externe) as total'))
                 ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Groupement not like "Non Renseigné"
             and Groupement like "Appels préalables"
@@ -1041,7 +1041,7 @@ class StatsRepository
 //        $rowFilter = $request->get('rowFilter');
 
 //        $codes = \DB::table('stats')
-//            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(st.Id_Externe) as total'))
+//            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(distinct st.Id_Externe) as total'))
 //            ->whereNotNull('Nom_Region');
 
         $_route = getRoute(Route::current());
@@ -1049,7 +1049,7 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route, 'Nom_Region');
 
         $codes = \DB::table('stats as st')
-            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(st.Id_Externe) as total'))
+            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(distinct st.Id_Externe) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
              where Nom_Region is not null ' .
                 ' and ' . $queryFilters .
@@ -1300,7 +1300,7 @@ class StatsRepository
 
 
         $regions = \DB::table('stats as st')
-            ->select('Nom_Region', $intervCol, 'Resultat_Appel', \DB::raw('count(st.Id_Externe) as total'))
+            ->select('Nom_Region', $intervCol, 'Resultat_Appel', \DB::raw('count(distinct st.Id_Externe) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Nom_Region is not null
             and Groupement like "Appels clôture" ' .
