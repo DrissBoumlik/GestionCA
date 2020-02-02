@@ -507,7 +507,7 @@ $(function () {
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-6', rows: '#code-type-intervention-filter'},
         filterQuery: {queryElement:'Groupement', queryValues: ['like_Appels clôture'],
-            queryJoin : ' and Groupement like "Appels clôture'},
+            queryJoin : ' and Groupement like "Appels clôture"'},
         routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention',
         routeData: 'nonValidatedFolders/Code_Type_Intervention',
         objChart: {
@@ -540,7 +540,7 @@ $(function () {
         filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-7', rows: '#code-intervention-filter'},
         filterQuery: {queryElement:'Groupement', queryValues: ['like_Appels clôture'],
-            queryJoin : ' and Groupement like "Appels clôture'},
+            queryJoin : ' and Groupement like "Appels clôture"'},
         routeCol: 'nonValidatedFolders/columns/Code_Intervention',
         routeData: 'nonValidatedFolders/Code_Intervention',
         objChart: {
