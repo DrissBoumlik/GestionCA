@@ -38,7 +38,7 @@ class DemoRepository
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
                 ' and ' . $queryFilters .
-                ' and Groupement not like "=%"
+                ' and Resultat_Appel not like "=%"
             and Groupement not like "Non Renseigné"
             and Groupement not like "Appels post"
             GROUP BY Id_Externe) groupedst'),
@@ -47,7 +47,7 @@ class DemoRepository
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
             ->whereNotNull('Nom_Region')
-            ->where('Groupement', 'not like', '=%')
+            ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post');
         $regions = applyFilter($regions, $filter, 'Groupement');
@@ -61,7 +61,7 @@ class DemoRepository
         $rowsKeys = \DB::table('stats as st')
             ->select($callResult)
             ->whereNotNull('Nom_Region')
-            ->where('Groupement', 'not like', '=%')
+            ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
             ->groupBy($callResult)->pluck($callResult);

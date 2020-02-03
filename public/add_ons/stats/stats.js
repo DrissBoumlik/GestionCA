@@ -219,7 +219,7 @@ $(function () {
         filterElement: {dates: '#tree-view-0', rows: '#stats-groupement-filter'},
         filterQuery: {
             queryElement: 'Groupement', queryValues: ['not like_=%', 'not like_Non Renseigné', 'not like_Appels post'],
-            queryJoin: ' and Groupement not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'
+            queryJoin: ' and Resultat_Appel not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'
         },
         routeCol: 'regions/columns/Groupement',
         routeData: 'regions/Groupement',
@@ -284,7 +284,7 @@ $(function () {
         filterElement: {dates: '#tree-view-1', rows: '#stats-regions-filter'},
         filterQuery: {
             queryElement: 'Groupement', queryValues: ['not like_=%', 'not like_Non Renseigné', 'not like_Appels post'],
-            queryJoin: ' and Groupement not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'
+            queryJoin: ' and Resultat_Appel not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'
         },
         routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
         routeData: 'regions/details/groupement?key_groupement=Appels-clture',

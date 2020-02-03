@@ -722,7 +722,7 @@ class FilterRepository
             ->select('Nom_Region', $callResult, \DB::raw('count(distinct st.Id_Externe) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
 
-             where Groupement not like "=%"
+             where Resultat_Appel not like "=%"
              and  Groupement not like "Non Renseigné"
              and  Groupement not like "Appels post"
              and key_Groupement like "' . $radical_route . '"
@@ -733,7 +733,7 @@ class FilterRepository
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
-            ->where($callResult, 'not like', '=%')
+            ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
             ->where('key_Groupement', 'like', $radical_route)

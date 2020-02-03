@@ -252,7 +252,7 @@ class StatsRepository
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
                 ' and ' . $queryFilters .
-                ' and Groupement not like "=%"
+                ' and Resultat_Appel not like "=%"
             and Groupement not like "Non Renseigné"
             and Groupement not like "Appels post"
             GROUP BY Id_Externe, Nom_Region, ' . $callResult . ', Key_Groupement) groupedst'),
@@ -261,7 +261,7 @@ class StatsRepository
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
             ->whereNotNull('Nom_Region')
-            ->where('Groupement', 'not like', '=%')
+            ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post');
         $regions = applyFilter($regions, $filter, 'Groupement');
@@ -275,7 +275,7 @@ class StatsRepository
         $rowsKeys = \DB::table('stats as st')
             ->select($callResult)
             ->whereNotNull('Nom_Region')
-            ->where('Groupement', 'not like', '=%')
+            ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
             ->groupBy($callResult)->pluck($callResult);
@@ -599,7 +599,7 @@ class StatsRepository
             ->select('Nom_Region', $callResult, \DB::raw('count(distinct st.Id_Externe) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
 
-             where Groupement not like "=%"
+             where Resultat_Appel not like "=%"
              and  Groupement not like "Non Renseigné"
              and  Groupement not like "Appels post"
              and  Nom_Region is not null ' .
@@ -610,7 +610,7 @@ class StatsRepository
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
-            ->where($callResult, 'not like', '=%')
+            ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
             ->whereNotNull('Nom_Region');
