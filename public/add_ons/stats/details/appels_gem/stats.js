@@ -296,7 +296,7 @@ $(function () {
     };
 
     let userObject = {
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-01', rows: ''},
     };
 
@@ -308,7 +308,7 @@ $(function () {
         element: 'statsCallsGem',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-0', rows: '#stats-callResult-filter'},
         routeCol: 'appels-gem/regions/details/groupement/columns?key_groupement=Appels-GEM',
         routeData: 'appels-gem/regions/details/groupement?key_groupement=Appels-GEM',
@@ -348,7 +348,7 @@ $(function () {
         element: 'callsStatesAgencies',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-2', rows: '#stats-call-regions-filter'},
         routeCol: 'appels-gem/regionsCallState/columns/Nom_Region',
         routeData: 'appels-gem/regionsCallState/Nom_Region',
@@ -386,7 +386,7 @@ $(function () {
         element: 'callsStatesWeeks',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-3', rows: '#stats-weeks-regions-filter'},
         routeCol: 'appels-gem/regionsCallState/columns/Date_Heure_Note_Semaine',
         routeData: 'appels-gem/regionsCallState/Date_Heure_Note_Semaine',
@@ -465,15 +465,15 @@ $(function () {
             data: data,
             success: function (response) {
                 if (object.filterElement) {
-                    if (response.filter) {
-                        object.filterTree.dates = response.filter.date_filter;
-                        if (object.filterTree.datesTreeObject && object.filterTree.dates) {
-                            object.filterTree.datesTreeObject.values = object.filterTree.dates;
-                            if (object.objDetail) {
-                                object.objDetail.filterTree.dates = object.filterTree.dates;
-                            }
+                    // if (response.filter) {
+                    object.filterTree.dates = response.filter ? response.filter.date_filter : [];
+                    if (object.filterTree.datesTreeObject && object.filterTree.dates) {
+                        object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                        if (object.objDetail) {
+                            object.objDetail.filterTree.dates = object.filterTree.dates;
                         }
                     }
+                    // }
                     if (response.rows && response.rows.length) {
                         let rowsFilterData = response.rows.map(function (d, index) {
                             return {
@@ -598,6 +598,10 @@ $(function () {
                                     '&agent=' + (agent_name === undefined || agent_name === null ? '' : agent_name) +
                                     '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) +
                                     '&dates=' + (dates === undefined || dates === null ? '' : dates) +
+                                    '&element=' + (object.filterQuery.queryElement === undefined || object.filterQuery.queryElement === null ? '' : object.filterQuery.queryElement) +
+                                    '&queryValues=' + (object.filterQuery.queryValues === undefined || object.filterQuery.queryValues === null ? '' : object.filterQuery.queryValues) +
+                                    '&queryJoin=' + (object.filterQuery.queryJoin === undefined || object.filterQuery.queryJoin === null ? '' : object.filterQuery.queryJoin) +
+                                    '&IsWhereIn=' + (object.filterQuery.IsWhereIn === undefined || object.filterQuery.IsWhereIn === null ? '' : object.filterQuery.IsWhereIn) +
                                     (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : '');
                             }
                             // console.log(colText + ' --- ' + rowText)
@@ -889,10 +893,10 @@ $(function () {
         });
     }
 
-    function userFilter() {
+    function userFilter(isPost = false) {
         $.ajax({
             url: APP_URL + '/user/filter',
-            method: 'GET',
+            method: isPost ? 'POST' : 'GET',
             data: {filter: userObject.filterTree.dates},
             success: function (response) {
                 console.log(response);

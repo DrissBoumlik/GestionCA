@@ -298,7 +298,7 @@ $(function () {
     };
 
     let userObject = {
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-01', rows: ''},
     };
 
@@ -310,7 +310,7 @@ $(function () {
         element: 'statsCallsCloture',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-1', rows: '#stats-callResult-filter'},
         routeCol: 'appels-clture/regions/details/groupement/columns?key_groupement=Appels-clture',
         routeData: 'appels-clture/regions/details/groupement?key_groupement=Appels-clture',
@@ -349,7 +349,7 @@ $(function () {
         element: 'statsFoldersByType',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-6', rows: '#code-type-intervention-filter'},
         routeCol: 'appels-clture/nonValidatedFolders/columns/Code_Type_Intervention',
         routeData: 'appels-clture/nonValidatedFolders/Code_Type_Intervention',
@@ -380,7 +380,7 @@ $(function () {
         element: 'statsFoldersByCode',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-7', rows: '#code-intervention-filter'},
         routeCol: 'appels-clture/nonValidatedFolders/columns/Code_Intervention',
         routeData: 'appels-clture/nonValidatedFolders/Code_Intervention',
@@ -411,7 +411,7 @@ $(function () {
         element: 'statsColturetech',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-02', rows: ''},
         routeCol: 'appels-clture/Cloturetech/columns',
         routeData: 'appels-clture/Cloturetech',
@@ -446,7 +446,7 @@ $(function () {
         element: 'statsGlobalDelay',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-03', rows: ''},
         routeCol: 'appels-clture/GlobalDelay/columns',
         routeData: 'appels-clture/GlobalDelay',
@@ -525,15 +525,15 @@ $(function () {
             data: data,
             success: function (response) {
                 if (object.filterElement) {
-                    if (response.filter) {
-                        object.filterTree.dates = response.filter.date_filter;
-                        if (object.filterTree.datesTreeObject && object.filterTree.dates) {
-                            object.filterTree.datesTreeObject.values = object.filterTree.dates;
-                            if (object.objDetail) {
-                                object.objDetail.filterTree.dates = object.filterTree.dates;
-                            }
+                    // if (response.filter) {
+                    object.filterTree.dates = response.filter ? response.filter.date_filter : [];
+                    if (object.filterTree.datesTreeObject && object.filterTree.dates) {
+                        object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                        if (object.objDetail) {
+                            object.objDetail.filterTree.dates = object.filterTree.dates;
                         }
                     }
+                    // }
                     if (response.rows && response.rows.length) {
                         let rowsFilterData = response.rows.map(function (d, index) {
                             return {
@@ -658,6 +658,10 @@ $(function () {
                                     '&agent=' + (agent_name === undefined || agent_name === null ? '' : agent_name) +
                                     '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) +
                                     '&dates=' + (dates === undefined || dates === null ? '' : dates) +
+                                    '&element=' + (object.filterQuery.queryElement === undefined || object.filterQuery.queryElement === null ? '' : object.filterQuery.queryElement) +
+                                    '&queryValues=' + (object.filterQuery.queryValues === undefined || object.filterQuery.queryValues === null ? '' : object.filterQuery.queryValues) +
+                                    '&queryJoin=' + (object.filterQuery.queryJoin === undefined || object.filterQuery.queryJoin === null ? '' : object.filterQuery.queryJoin) +
+                                    '&IsWhereIn=' + (object.filterQuery.IsWhereIn === undefined || object.filterQuery.IsWhereIn === null ? '' : object.filterQuery.IsWhereIn) +
                                     (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : '');
                             }
                             // console.log(colText + ' --- ' + rowText)
@@ -949,10 +953,10 @@ $(function () {
         });
     }
 
-    function userFilter() {
+    function userFilter(isPost = false) {
         $.ajax({
             url: APP_URL + '/user/filter',
-            method: 'GET',
+            method: isPost ? 'POST' : 'GET',
             data: {filter: userObject.filterTree.dates},
             success: function (response) {
                 console.log(response);

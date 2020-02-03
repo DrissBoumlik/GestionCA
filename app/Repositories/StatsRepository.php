@@ -1581,10 +1581,10 @@ class StatsRepository
 
 //            ($results->groupBy('Groupement', 'Nom_Region')->get())->groupBy(['Nom_Region'])->keys();
 
-        $columns = $results->groupBy('Groupement', 'Nom_Region')->get();
+        $columns = $results->groupBy('Groupement', 'st.Nom_Region')->get();
 
 
-        $results = $results->groupBy('Groupement', 'Nom_Region')->get();
+        $results = $results->groupBy('Groupement', 'st.Nom_Region')->get();
 
         $keys = $results->groupBy(['Groupement'])->keys();
 

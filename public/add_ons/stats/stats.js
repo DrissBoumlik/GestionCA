@@ -203,7 +203,7 @@ $(function () {
     };
 
     let userObject = {
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-01', rows: ''},
     };
 
@@ -215,10 +215,12 @@ $(function () {
         element: 'statsRegions',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-0', rows: '#stats-groupement-filter'},
-        filterQuery: {queryElement:'Groupement', queryValues: ['not like_=%','not like_Non Renseigné','not like_Appels post'],
-            queryJoin : ' and Groupement not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'},
+        filterQuery: {
+            queryElement: 'Groupement', queryValues: ['not like_=%', 'not like_Non Renseigné', 'not like_Appels post'],
+            queryJoin: ' and Groupement not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'
+        },
         routeCol: 'regions/columns/Groupement',
         routeData: 'regions/Groupement',
         objChart: {
@@ -234,7 +236,7 @@ $(function () {
             element_dt: undefined,
             element: undefined,
             columns: undefined,
-            filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+            filterTree: {dates: [], rows: [], datesTreeObject: undefined},
             filterElement: undefined,
             routeCol: 'regions/details/groupement/columns',
             routeData: 'regions/details/groupement',
@@ -278,10 +280,12 @@ $(function () {
         element: 'statsFolders',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-1', rows: '#stats-regions-filter'},
-        filterQuery: {queryElement:'Groupement', queryValues: ['not like_=%','not like_Non Renseigné','not like_Appels post'],
-            queryJoin : ' and Groupement not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'},
+        filterQuery: {
+            queryElement: 'Groupement', queryValues: ['not like_=%', 'not like_Non Renseigné', 'not like_Appels post'],
+            queryJoin: ' and Groupement not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'
+        },
         routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
         routeData: 'regions/details/groupement?key_groupement=Appels-clture',
         objChart: {
@@ -319,10 +323,13 @@ $(function () {
         element: 'callsStatesAgencies',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-2', rows: '#stats-call-regions-filter'},
-        filterQuery: {queryElement:'Groupement', queryValues: ['not like_Non Renseigné','like_Appels préalables','not like_Hors Périmètre'],
-            queryJoin : ' and Groupement not like "Non Renseigné" and Groupement like "Appels préalables" and Gpmt_Appel_Pre not like "Hors Périmètre"'},
+        filterQuery: {
+            queryElement: 'Groupement',
+            queryValues: ['not like_Non Renseigné', 'like_Appels préalables', 'not like_Hors Périmètre'],
+            queryJoin: ' and Groupement not like "Non Renseigné" and Groupement like "Appels préalables" and Gpmt_Appel_Pre not like "Hors Périmètre"'
+        },
         routeCol: 'regionsCallState/columns/Nom_Region',
         routeData: 'regionsCallState/Nom_Region',
         objChart: {
@@ -359,10 +366,13 @@ $(function () {
         element: 'callsStatesWeeks',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-3', rows: '#stats-weeks-regions-filter'},
-        filterQuery: {queryElement:'Groupement', queryValues: ['not like_Non Renseigné','like_Appels préalables','not like_Hors Périmètre'],
-            queryJoin : ' and Groupement not like "Non Renseigné" and Groupement like "Appels préalables" and Gpmt_Appel_Pre not like "Hors Périmètre"'},
+        filterQuery: {
+            queryElement: 'Groupement',
+            queryValues: ['not like_Non Renseigné', 'like_Appels préalables', 'not like_Hors Périmètre'],
+            queryJoin: ' and Groupement not like "Non Renseigné" and Groupement like "Appels préalables" and Gpmt_Appel_Pre not like "Hors Périmètre"'
+        },
         routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine',
         routeData: 'regionsCallState/Date_Heure_Note_Semaine',
         objChart: {
@@ -400,15 +410,16 @@ $(function () {
         element: 'statsCallsPos',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-4', rows: '#code-rdv-intervention-confirm-filter'},
-        filterQuery: {queryElement:'Resultat_Appel',
-                queryValues: [
-                    'Appels préalables - RDV confirmé',
-                    'Appels préalables - RDV confirmé Client non informé' ,
-                    'Appels préalables - RDV repris et confirmé'
-                ],
-                IsWhereIn : true
+        filterQuery: {
+            queryElement: 'Resultat_Appel',
+            queryValues: [
+                'Appels préalables - RDV confirmé',
+                'Appels préalables - RDV confirmé Client non informé',
+                'Appels préalables - RDV repris et confirmé'
+            ],
+            IsWhereIn: true
         },
         routeCol: 'clientsByCallState/columns/Joignable',
         routeData: 'clientsByCallState/Joignable',
@@ -445,11 +456,12 @@ $(function () {
         element: 'statsCallsNeg',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-5', rows: '#code-rdv-intervention-filter'},
         routeCol: 'clientsByCallState/columns/Injoignable',
         routeData: 'clientsByCallState/Injoignable',
-        filterQuery: {queryElement:'Resultat_Appel',
+        filterQuery: {
+            queryElement: 'Resultat_Appel',
             queryValues: [
                 'Appels préalables - Annulation RDV client non informé',
                 'Appels préalables - Client sauvé',
@@ -467,7 +479,7 @@ $(function () {
                 'Appels préalables - RDV planifié mais non confirmé',
                 'Appels préalables - RDV repris Mais non confirmé',
             ],
-            IsWhereIn : true
+            IsWhereIn: true
         },
         objChart: {
             element_chart: undefined,
@@ -504,10 +516,12 @@ $(function () {
         element: 'statsFoldersByType',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-6', rows: '#code-type-intervention-filter'},
-        filterQuery: {queryElement:'Groupement', queryValues: ['like_Appels clôture'],
-            queryJoin : ' and Groupement like "Appels clôture"'},
+        filterQuery: {
+            queryElement: 'Groupement', queryValues: ['like_Appels clôture'],
+            queryJoin: ' and Groupement like "Appels clôture"'
+        },
         routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention',
         routeData: 'nonValidatedFolders/Code_Type_Intervention',
         objChart: {
@@ -537,10 +551,12 @@ $(function () {
         element: 'statsFoldersByCode',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-7', rows: '#code-intervention-filter'},
-        filterQuery: {queryElement:'Groupement', queryValues: ['like_Appels clôture'],
-            queryJoin : ' and Groupement like "Appels clôture"'},
+        filterQuery: {
+            queryElement: 'Groupement', queryValues: ['like_Appels clôture'],
+            queryJoin: ' and Groupement like "Appels clôture"'
+        },
         routeCol: 'nonValidatedFolders/columns/Code_Intervention',
         routeData: 'nonValidatedFolders/Code_Intervention',
         objChart: {
@@ -572,10 +588,12 @@ $(function () {
         element: 'statsPerimeters',
         columns: undefined,
         data: undefined,
-        filterTree: {dates: undefined, rows: undefined, datesTreeObject: undefined},
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-8', rows: '#nom-region-filter'},
-        filterQuery: {queryElement:'Groupement', queryValues: ['not like_Non Renseigné','not like_Appels post'],
-            queryJoin : ' and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'},
+        filterQuery: {
+            queryElement: 'Groupement', queryValues: ['not like_Non Renseigné', 'not like_Appels post'],
+            queryJoin: ' and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'
+        },
         routeCol: 'clientsByPerimeter/columns',
         routeData: 'clientsByPerimeter',
         objChart: {
@@ -655,15 +673,15 @@ $(function () {
             data: data,
             success: function (response) {
                 if (object.filterElement) {
-                    if (response.filter) {
-                        object.filterTree.dates = response.filter.date_filter;
-                        if (object.filterTree.datesTreeObject && object.filterTree.dates) {
-                            object.filterTree.datesTreeObject.values = object.filterTree.dates;
-                            if (object.objDetail) {
-                                object.objDetail.filterTree.dates = object.filterTree.dates;
-                            }
+                    // if (response.filter) {
+                    object.filterTree.dates = response.filter ? response.filter.date_filter : [];
+                    if (object.filterTree.datesTreeObject && object.filterTree.dates) {
+                        object.filterTree.datesTreeObject.values = object.filterTree.dates;
+                        if (object.objDetail) {
+                            object.objDetail.filterTree.dates = object.filterTree.dates;
                         }
                     }
+                    // }
                     if (response.rows && response.rows.length) {
                         let rowsFilterData = response.rows.map(function (d, index) {
                             return {
@@ -789,9 +807,9 @@ $(function () {
                                     '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) +
                                     '&dates=' + (dates === undefined || dates === null ? '' : dates) +
                                     '&element=' + (object.filterQuery.queryElement === undefined || object.filterQuery.queryElement === null ? '' : object.filterQuery.queryElement) +
-                                    '&queryValues=' + (object.filterQuery.queryValues === undefined || object.filterQuery.queryValues === null ? '' : object.filterQuery.queryValues)+
-                                    '&queryJoin=' + ( object.filterQuery.queryJoin === undefined || object.filterQuery.queryJoin === null? '' : object.filterQuery.queryJoin) +
-                                    '&IsWhereIn=' + ( object.filterQuery.IsWhereIn === undefined || object.filterQuery.IsWhereIn === null? '' : object.filterQuery.IsWhereIn) +
+                                    '&queryValues=' + (object.filterQuery.queryValues === undefined || object.filterQuery.queryValues === null ? '' : object.filterQuery.queryValues) +
+                                    '&queryJoin=' + (object.filterQuery.queryJoin === undefined || object.filterQuery.queryJoin === null ? '' : object.filterQuery.queryJoin) +
+                                    '&IsWhereIn=' + (object.filterQuery.IsWhereIn === undefined || object.filterQuery.IsWhereIn === null ? '' : object.filterQuery.IsWhereIn) +
                                     (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : '');
                             }
                             // console.log(colText + ' --- ' + rowText)
@@ -1083,10 +1101,10 @@ $(function () {
         });
     }
 
-    function userFilter() {
+    function userFilter(isPost = false) {
         $.ajax({
             url: APP_URL + '/user/filter',
-            method: 'GET',
+            method: isPost ? 'POST' : 'GET',
             data: {filter: userObject.filterTree.dates},
             success: function (response) {
                 console.log(response);
@@ -1193,7 +1211,7 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
-        userFilter();
+        userFilter(true);
         getColumns(statsRegions, filterData(), {
             removeTotal: false,
             refreshMode: true,

@@ -1382,22 +1382,27 @@ class FilterRepository
         }
     }
 
-    public function userFilter(Request $request)
+    public function getUserFilter(Request $request)
+    {
+        $user = auth()->user() ?? User::find(1);
+        $globalFilter = Filter::where(['user_id' => $user->id, 'isGlobal' => true])->first();
+        return ['userFilter' => $globalFilter];
+    }
+
+    public function saveUserFilter(Request $request)
     {
         $user = auth()->user() ?? User::find(1);
 
         $userFilter = $request->get('filter');
+        $globalFilter = Filter::firstOrNew(['user_id' => $user->id, 'isGlobal' => true]);
         if ($userFilter) {
-            $globalFilter = Filter::firstOrNew([
-                'user_id' => $user->id,
-                'isGlobal' => true
-            ]);
             $globalFilter->date_filter = $userFilter;
             $globalFilter->save();
-
             Filter::where('user_id', $user->id)->update(['date_filter' => $userFilter]);
         } else {
-            $globalFilter = Filter::where('user_id', $user->id)->where('isGlobal', true)->first();
+            $globalFilter->forceDelete();
+            Filter::where('user_id', $user->id)->forceDelete();
+            $globalFilter = null;
         }
         return ['userFilter' => $globalFilter];
     }

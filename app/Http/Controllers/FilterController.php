@@ -106,8 +106,13 @@ class FilterController extends Controller
         return view('stats.details.' . $viewName);
     }
 
-    public function userFilter(Request $request)
+    public function getUserFilter(Request $request)
     {
-        return $this->filterRepository->userFilter($request);
+        return $this->filterRepository->getUserFilter($request);
+    }
+
+    public function saveUserFilter(Request $request)
+    {
+        return $this->filterRepository->saveUserFilter($request);
     }
 }
