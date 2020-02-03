@@ -199,7 +199,7 @@ class AgentRepository
         $dates = $request->get('dates');
         $agentName = $request->get('agent_name');
         $regions = \DB::table('stats')
-            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(Gpmt_Appel_Pre) as total'))
+            ->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(distinct st.Id_Externe) as total'))
             ->whereNotNull('Gpmt_Appel_Pre')
             ->whereNotNull($column);
         if ($agentName) {
@@ -394,7 +394,7 @@ class AgentRepository
         $dates = $request->get('dates');
         $agentName = $request->get('agent_name');
         $codes = \DB::table('stats')
-            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(*) as total'))
+            ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(distinct st.Id_Externe) as total'))
             ->whereNotNull('Code_Intervention')
             ->where('Gpmt_Appel_Pre', $callResult);
 

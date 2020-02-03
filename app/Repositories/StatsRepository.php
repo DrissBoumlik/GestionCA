@@ -421,7 +421,7 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route, 'Resultat_Appel');
 
         $regions = \DB::table('stats as st')
-            ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(Resultat_Appel) as total'))
+            ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(distinct st.Id_Externe) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Resultat_Appel not like "=%"
             and Nom_Region is not null
@@ -1523,7 +1523,7 @@ class StatsRepository
 
 
         $results = \DB::table('stats as st')
-            ->select('st.Groupement', 'st.Nom_Region', \DB::raw('count(st.Groupement) as total'))
+            ->select('st.Groupement', 'st.Nom_Region', \DB::raw('count(distinct st.Id_Externe) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime,
                 groupement , Resultat_Appel , Nom_Region
             FROM stats
