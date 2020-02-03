@@ -11,7 +11,7 @@ class ToolRepository
 {
     public function applyFilter(Request $request, $route, $results, $column = null, $rowsFilter = null)
     {
-        $user = auth()->user() ?? User::find(1);
+        $user = getAuthUser();
         $filters = ['route' => $route, 'user_id' => $user->id, 'agence_name' => null, 'agent_name' => null];
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');

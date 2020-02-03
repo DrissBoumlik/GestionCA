@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 if (!function_exists('makeFilterSubQuery')) {
     function makeFilterSubQuery(Request $request, $route, $column = null)
     {
-        $user = auth()->user() ?? User::find(1);
+        $user = getAuthUser();
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
 //        if ($agentName) {
@@ -81,7 +81,7 @@ if (!function_exists('applyFilter')) {
 //    function applyFilter(Request $request, $route, $results, $column = null, $rowsFilter = null)
 //    {
 ////        dump($results->groupBy('Nom_Region', 'Groupement', 'Key_Groupement')->count());
-//        $user = auth()->user() ?? User::find(1);
+//        $user = getAuthUser();
 //        $filters = ['route' => $route, 'user_id' => $user->id, 'agence_name' => null, 'agent_name' => null, 'isGlobal' => false];
 //        $agenceCode = $request->get('agence_code');
 //        $agentName = $request->get('agent_name');
@@ -577,5 +577,12 @@ if (!function_exists('clean')) {
         $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
 
         return preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+    }
+}
+
+if(!function_exists('getAuthUser')){
+    function getAuthUser()
+    {
+        return auth()->user() ?? User::find(1);
     }
 }

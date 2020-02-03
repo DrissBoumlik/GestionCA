@@ -243,7 +243,7 @@ class DemoRepository
             $regions = $regions->whereIn('Date_Note', $dates);
         }
 
-        $user = auth()->user() ?? User::find(1);
+        $user = getAuthUser();
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
@@ -428,7 +428,7 @@ class DemoRepository
             $regions = $regions->whereIn('Date_Note', $dates);
         }
 
-        $user = auth()->user() ?? User::find(1);
+        $user = getAuthUser();
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();

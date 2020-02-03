@@ -767,7 +767,7 @@ class FilterRepository
 //            $regions = $regions->whereIn('Groupement', $groupement);
 //        }
 
-        $user = auth()->user() ?? User::find(1);
+        $user = getAuthUser();
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
@@ -1344,14 +1344,14 @@ class FilterRepository
 
     public function getUserFilter(Request $request)
     {
-        $user = auth()->user() ?? User::find(1);
+        $user = getAuthUser();
         $globalFilter = Filter::where(['user_id' => $user->id, 'isGlobal' => true])->first();
         return ['userFilter' => $globalFilter];
     }
 
     public function saveUserFilter(Request $request)
     {
-        $user = auth()->user() ?? User::find(1);
+        $user = getAuthUser();
 
         $userFilter = $request->get('filter');
         $globalFilter = Filter::firstOrNew(['user_id' => $user->id, 'isGlobal' => true]);
