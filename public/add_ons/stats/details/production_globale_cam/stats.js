@@ -894,7 +894,7 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
-        userFilter();
+        userFilter(true);
         getColumns(statsPerimeters, filterData(), {
             removeTotal: false,
             refreshMode: true,

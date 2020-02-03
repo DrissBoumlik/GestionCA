@@ -1003,7 +1003,7 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
-        userFilter();
+        userFilter(true);
         getColumns(statsCallsGem, filterData(), {
             removeTotal: false,
             refreshMode: true,

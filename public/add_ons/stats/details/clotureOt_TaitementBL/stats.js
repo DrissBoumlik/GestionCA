@@ -1063,7 +1063,7 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
-        userFilter();
+        userFilter(true);
         getColumns(statsCallsCloture, filterData(), {
             removeTotal: false,
             refreshMode: true,
