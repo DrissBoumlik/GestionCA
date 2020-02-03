@@ -460,7 +460,7 @@ $(function () {
     if (elementExists(statsGlobalDelay)) {
         getColumns(statsGlobalDelay, filterData(), {
             removeTotal: false,
-            refreshMode: true,
+            refreshMode: false,
             details: false,
             removeTotalColumn: false,
             pagination: false
