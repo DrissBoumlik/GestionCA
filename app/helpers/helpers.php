@@ -64,10 +64,10 @@ if (!function_exists('makeFilterSubQuery')) {
 }
 
 if (!function_exists('applyFilter')) {
-    function applyFilter($results, $filter, $column)
+    function applyFilter($results, $filter, $column = null)
     {
         $currentMonth = date('Y-m') . '%';
-        if ($filter && $filter->rows_filter) {
+        if ($column && $filter && $filter->rows_filter) {
             $results = $results->whereIn('st.' . $column, $filter->rows_filter);
         }
         if ($filter && $filter->date_filter) {

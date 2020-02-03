@@ -1122,6 +1122,10 @@ class FilterRepository
         $agenceCode = $request->get('agence_code');
         $radical_route = $filter ?? getRadicalRoute(Route::current());
 
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', \DB::raw('count(1) as count'), \DB::raw('CASE
                     WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440 THEN "4-superieur d\'un jour"
@@ -1131,48 +1135,22 @@ class FilterRepository
                     END as Title')
             )->whereNotNull('EXPORT_ALL_Date_VALIDATION')
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
-            ->whereNotNull('Nom_Region')
-            ->orderBy('Title');
+            ->whereNotNull('Nom_Region');
+
+        $regions = applyFilter($regions, $filter);
+
+        $regions = $regions->orderBy('Title');
         $keys = ($regions->groupBy('Nom_Region', 'Title')->get())->groupBy(['Nom_Region'])->keys();
         $regions = $regions->groupBy(['Title']);
 
-        $user = auth()->user() ?? User::find(1);
-        $_route = getRoute(Route::current());
-        $route = str_replace('/columns', '', $_route);
-        $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-        if ($request && count($request->all())) {
-            if ($request->exists('refreshMode')) {
-                if ($dates) {
-                    $dates = array_values($dates);
-                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
-                    $filter->date_filter = $dates;
-                    $filter->save();
-                    $regions = $regions->whereIn('Date_Note', $dates);
-                } else {
-                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                    if ($filter) {
-                        $filter->forceDelete();
-                    }
-                }
-            } else {
-                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                if ($filter) {
-                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-                }
-            }
-        } else {
-            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-            if ($filter) {
-                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-            }
-        }
 
         $columns = $regions->groupBy('Nom_Region', 'Title')->get();
         $regions = $regions->groupBy('Nom_Region', 'Title')->get();
         $regions = $columns = addRegionWithZero($request, $regions, $columns);
 
         if (!count($regions)) {
-            $data = ['columns' => [], 'data' => []];
+//            $data = ['columns' => [], 'data' => []];
+            $data = ['filter' => $filter, 'columns' => [], 'data' => [], 'rows' => [], 'rowsFilterHeader' => ''];
             return $data;
         } else {
 
@@ -1244,7 +1222,8 @@ class FilterRepository
             });
             $regions = $regions->values();
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => '', 'data' => $regions];
+//            return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
         }
 
 
@@ -1259,6 +1238,10 @@ class FilterRepository
         $agenceCode = $request->get('agence_code');
         $radical_route = $filter ?? getRadicalRoute(Route::current());
 
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', \DB::raw('count(1) as count'), \DB::raw('CASE
                         WHEN TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) > 15 THEN "3-Superieur 15 Jours"
@@ -1268,45 +1251,21 @@ class FilterRepository
             )->whereNotNull('EXPORT_ALL_Date_VALIDATION')
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
             ->whereNotNull('Nom_Region');
+
+        $regions = applyFilter($regions, $filter);
+
+        $regions = $regions->orderBy('Title');
+
         $keys = ($regions->groupBy('Nom_Region', 'Title')->get())->groupBy(['Nom_Region'])->keys();
         $regions = $regions->groupBy(['Title']);
 
-        $user = auth()->user() ?? User::find(1);
-        $_route = getRoute(Route::current());
-        $route = str_replace('/columns', '', $_route);
-        $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-        if ($request && count($request->all())) {
-            if ($request->exists('refreshMode')) {
-                if ($dates) {
-                    $dates = array_values($dates);
-                    $filter = Filter::firstOrNew(['route' => $route, 'user_id' => $user->id]);
-                    $filter->date_filter = $dates;
-                    $filter->save();
-                    $regions = $regions->whereIn('Date_Note', $dates);
-                } else {
-                    $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                    if ($filter) {
-                        $filter->forceDelete();
-                    }
-                }
-            } else {
-                $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-                if ($filter) {
-                    $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-                }
-            }
-        } else {
-            $filter = Filter::where(['route' => $route, 'user_id' => $user->id])->first();
-            if ($filter) {
-                $regions = $regions->whereIn('Date_Note', $filter->date_filter);
-            }
-        }
         $columns = $regions->groupBy('Nom_Region', 'Title')->get();
         $regions = $regions->groupBy('Nom_Region', 'Title')->get();
         $regions = $columns = addRegionWithZero($request, $regions, $columns);
 
         if (!count($regions)) {
-            $data = ['columns' => [], 'data' => []];
+//            $data = ['columns' => [], 'data' => []];
+            $data = ['filter' => $filter, 'columns' => [], 'data' => [], 'rows' => [], 'rowsFilterHeader' => ''];
             return $data;
         } else {
 
@@ -1378,7 +1337,8 @@ class FilterRepository
             });
             $regions = $regions->values();
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => '', 'data' => $regions];
+//            return ['filter' => $filter, 'columns' => $regions_names, 'data' => $regions];
         }
     }
 
