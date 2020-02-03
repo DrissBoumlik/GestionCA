@@ -123,7 +123,7 @@ class StatsRepository
             $term = trim(strtolower($request->get('name')));
             $stats = $stats->whereRaw('LOWER(Utilisateur) LIKE ?', ["%$term%"]);
         }
-        $stats = $stats->distinct('Utilisateur')->limit(10)->get()->map(function ($s) {
+        $stats = $stats->distinct('Utilisateur')->get()->map(function ($s) {
             return [
                 'name' => trim($s->Utilisateur),
                 'code' => trim($s->Utilisateur)
@@ -1720,11 +1720,11 @@ class StatsRepository
 
     public function importStats($request)
     {
-        try {
+        /*try {
             $fileName = $request->file('file')->getClientOriginalName();
             $request->file('file')->storeAs('data_source', $fileName);
             $statImport = new StatsImport($request->days);
-            Excel::import($statImport, $request->file('file'));
+            Excel::queueImport($statImport, $request->file('file'));
 //            Stats::insert($statImport->data);
             return [
                 'success' => true,
@@ -1736,7 +1736,19 @@ class StatsRepository
 //                'success' => false,
 //                'message' => 'Une erreur est survenue'
 //            ];
-        }
+        }*/
+
+        $fileName = $request->file('file')->getClientOriginalName();
+        $request->file('file')->storeAs('data_source', $fileName);
+        $file_path = $request->file('file')->getPathName();
+
+        $statImport = new StatsImport($request->days);
+        Excel::import($statImport, $request->file('file'));
+       // (new StatsImport)->import($request->file('file'));
+        return [
+            'success' => true,
+            'message' => 'Le fichier a été importé avec succès'
+        ];
     }
 
     public function exportXlsCall(Request $request)
