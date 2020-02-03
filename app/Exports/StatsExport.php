@@ -90,10 +90,10 @@ class StatsExport implements FromCollection,WithHeadings, WithMapping, ShouldAut
         }
 
         if ($agentName) {
-            $allStats = $allStats->where('Utilisateur', $agentName);
+            $allStats = $allStats->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $allStats = $allStats->where('Nom_Region', 'like', "%$agenceCode");
+            $allStats = $allStats->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
         if ($dates) {

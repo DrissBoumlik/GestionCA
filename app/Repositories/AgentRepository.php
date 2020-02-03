@@ -119,7 +119,7 @@ class AgentRepository
             ->where($callResult, 'not like', '=%')
             ->whereNotNull($callResult);
         if ($agentName) {
-            $regions = $regions->where('Utilisateur', $agentName);
+            $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($resultatAppel) {
             $resultatAppel = array_values($resultatAppel);
@@ -127,7 +127,7 @@ class AgentRepository
         }
         if ($dates) {
             $dates = array_values($dates);
-            $regions = $regions->whereIn('Date_Note', $dates);
+            $regions = $regions->whereIn('st.Date_Note', $dates);
         }
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
 
@@ -203,7 +203,7 @@ class AgentRepository
             ->whereNotNull('Gpmt_Appel_Pre')
             ->whereNotNull($column);
         if ($agentName) {
-            $regions = $regions->where('Utilisateur', $agentName);
+            $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($gpmtAppelPre) {
             $gpmtAppelPre = array_values($gpmtAppelPre);
@@ -211,7 +211,7 @@ class AgentRepository
         }
         if ($dates) {
             $dates = array_values($dates);
-            $regions = $regions->whereIn('Date_Note', $dates);
+            $regions = $regions->whereIn('st.Date_Note', $dates);
         }
 //        $regions = ($dates ? $regions->whereIn('Date_Note', $dates)->get() : $regions)->get();
 
@@ -288,7 +288,7 @@ class AgentRepository
             ->select('Nom_Region', $intervCol, \DB::raw("count($intervCol) as total"))
             ->whereNotNull($intervCol);
         if ($agentName) {
-            $regions = $regions->where('Utilisateur', $agentName);
+            $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($codeTypeIntervention) {
             $codeTypeIntervention = array_values($codeTypeIntervention);
@@ -300,7 +300,7 @@ class AgentRepository
         }
         if ($dates) {
             $dates = array_values($dates);
-            $regions = $regions->whereIn('Date_Note', $dates);
+            $regions = $regions->whereIn('st.Date_Note', $dates);
         }
 
         $columns = $regions->groupBy('Nom_Region', $intervCol)->get();
@@ -399,11 +399,11 @@ class AgentRepository
             ->where('Gpmt_Appel_Pre', $callResult);
 
         if ($agentName) {
-            $codes = $codes->where('Utilisateur', $agentName);
+            $codes = $codes->where('st.Utilisateur', $agentName);
         }
         if ($dates) {
             $dates = array_values($dates);
-            $codes = $codes->whereIn('Date_Note', $dates);
+            $codes = $codes->whereIn('st.Date_Note', $dates);
         }
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
         $totalCount = Stats::count();

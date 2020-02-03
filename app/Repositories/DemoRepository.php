@@ -222,10 +222,10 @@ class DemoRepository
             ->where('Groupement', 'Appels clôture');
 
         if ($agentName) {
-            $regions = $regions->where('Utilisateur', $agentName);
+            $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
         $keys = ($regions->groupBy('Nom_Region', $intervCol)->get())->groupBy(['Nom_Region'])->keys();
         $rowsKeys = ($regions->groupBy('Nom_Region', $intervCol)->get())->groupBy([$intervCol])->keys();

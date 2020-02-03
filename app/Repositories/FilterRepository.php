@@ -58,10 +58,10 @@ class FilterRepository
 //        $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
         // BUILDING THE USER FILTER
         if ($agentName) {
-            $regions = $regions->where('Utilisateur', $agentName);
+            $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
 
@@ -246,10 +246,10 @@ class FilterRepository
         $regions = applyFilter($regions, $filter, 'Gpmt_Appel_Pre');
 
         if ($agentName) {
-            $regions = $regions->where('Utilisateur', $agentName);
+            $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
         if ($column == 'Date_Heure_Note_Semaine') {
@@ -532,10 +532,10 @@ class FilterRepository
 
 //        $keys = $columns->groupBy(['Code_Intervention'])->keys();
         if ($agentName) {
-            $codes = $codes->where('Utilisateur', $agentName);
+            $codes = $codes->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $codes = $codes->where('Nom_Region', 'like', "%$agenceCode");
+            $codes = $codes->where('st.Nom_Region', 'like', "%$agenceCode");
         }
         $rowsKeys = \DB::table('stats as st')
             ->select('Nom_Region')
@@ -740,10 +740,10 @@ class FilterRepository
             ->whereNotNull('Nom_Region');
 
         if ($agentName) {
-            $regions = $regions->where('Utilisateur', $agentName);
+            $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
         $keys = ($regions->groupBy('Nom_Region', $callResult)->get())->groupBy(['Nom_Region'])->keys();
         $rowsKeys = ($regions->groupBy('Nom_Region', $callResult)->get())->groupBy([$callResult])->keys();
@@ -928,10 +928,10 @@ class FilterRepository
             ->where('Groupement', 'Appels clôture');
         $regions = applyFilter($regions, $filter, $intervCol);
         if ($agentName) {
-            $regions = $regions->where('Utilisateur', $agentName);
+            $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
         $rowsKeys = \DB::table('stats as st')

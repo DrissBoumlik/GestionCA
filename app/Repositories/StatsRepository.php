@@ -63,10 +63,10 @@ class StatsRepository
         }
 
         if ($agentName) {
-            $allStats = $allStats->where('Utilisateur', $agentName);
+            $allStats = $allStats->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $allStats = $allStats->where('Nom_Region', 'like', "%$agenceCode");
+            $allStats = $allStats->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
         if ($resultat_appel) {
@@ -158,13 +158,13 @@ class StatsRepository
 //            $stats = $stats->where('Groupement', 'not like', 'Non Renseigné');
 //        }
         if ($agentName) {
-            $stats = $stats->where('Utilisateur', $agentName);
+            $stats = $stats->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $stats = $stats->where('Nom_Region', 'like', "%$agenceCode");
+            $stats = $stats->where('st.Nom_Region', 'like', "%$agenceCode");
         }
         if ($key_groupement) {
-            $stats = $stats->where('key_groupement', 'like', $key_groupement);
+            $stats = $stats->where('st.key_groupement', 'like', $key_groupement);
         }
         $stats = $stats->orderBy($column)->get();
         return $stats->map(function ($s) use ($column) {
@@ -267,10 +267,10 @@ class StatsRepository
         $regions = applyFilter($regions, $filter, 'Groupement');
 
         if ($agentName) {
-            $regions = $regions->where('Utilisateur', $agentName);
+            $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
         $rowsKeys = \DB::table('stats as st')
             ->select($callResult)
@@ -448,10 +448,10 @@ class StatsRepository
 //        $columns = $regions->groupBy('Nom_Region', $callResult, 'Key_Groupement')->get();
         // BUILDING THE USER FILTER
         if ($agentName) {
-            $regions = $regions->where('Utilisateur', $agentName);
+            $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
         $rowsKeys = \DB::table('stats as st')
@@ -615,10 +615,10 @@ class StatsRepository
             ->where('Groupement', 'not like', 'Appels post')
             ->whereNotNull('Nom_Region');
         if ($agentName) {
-            $regions = $regions->where('Utilisateur', $agentName);
+            $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
 //        dd($regions->groupBy('Nom_Region', $callResult)->toSql());
@@ -828,10 +828,10 @@ class StatsRepository
         $regions = applyFilter($regions, $filter, 'Gpmt_Appel_Pre');
 
         if ($agentName) {
-            $regions = $regions->where('Utilisateur', $agentName);
+            $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
 //        dd($regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->toSql());
@@ -1112,10 +1112,10 @@ class StatsRepository
 
 //        $keys = $columns->groupBy(['Code_Intervention'])->keys();
         if ($agentName) {
-            $codes = $codes->where('Utilisateur', $agentName);
+            $codes = $codes->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $codes = $codes->where('Nom_Region', 'like', "%$agenceCode");
+            $codes = $codes->where('st.Nom_Region', 'like', "%$agenceCode");
         }
         $rowsKeys = \DB::table('stats as st')
             ->select('Nom_Region')
@@ -1316,10 +1316,10 @@ class StatsRepository
             ->where('Groupement', 'Appels clôture');
         $regions = applyFilter($regions, $filter, $intervCol);
         if ($agentName) {
-            $regions = $regions->where('Utilisateur', $agentName);
+            $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('Nom_Region', 'like', "%$agenceCode");
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
         $rowsKeys = \DB::table('stats as st')
@@ -1552,7 +1552,7 @@ class StatsRepository
         $results = applyFilter($results, $filter, 'Nom_Region');
 
         if ($agentName) {
-            $results = $results->where('Utilisateur', $agentName);
+            $results = $results->where('st.Utilisateur', $agentName);
         }
 //        if ($nomRegion) {
 //            $nomRegion = array_values($nomRegion);
@@ -1563,7 +1563,7 @@ class StatsRepository
 //            $results = $results->whereIn('Nom_Region', $rowFilter);
 //        }
         if ($agenceCode) {
-            $results = $results->where('Nom_Region', 'like', "%$agenceCode");
+            $results = $results->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 //        if ($dates) {
 //            $dates = array_values($dates);
@@ -1581,10 +1581,10 @@ class StatsRepository
 
 //            ($results->groupBy('Groupement', 'Nom_Region')->get())->groupBy(['Nom_Region'])->keys();
 
-        $columns = $results->groupBy('Groupement', 'st.Nom_Region')->get();
+        $columns = $results->groupBy('Groupement', 'Nom_Region')->get();
 
 
-        $results = $results->groupBy('Groupement', 'st.Nom_Region')->get();
+        $results = $results->groupBy('Groupement', 'Nom_Region')->get();
 
         $keys = $results->groupBy(['Groupement'])->keys();
 
