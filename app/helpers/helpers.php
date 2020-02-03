@@ -40,9 +40,11 @@ if (!function_exists('makeFilterSubQuery')) {
             }
         } else {
             $globalFilter = Filter::where(['user_id' => $user->id, 'isGlobal' => true])->first();
-            $filter->date_filter = $globalFilter->date_filter;
-            $filter->save();
-            $filterSaved = true;
+            if ($globalFilter) {
+                $filter->date_filter = $globalFilter->date_filter;
+                $filter->save();
+                $filterSaved = true;
+            }
         }
         if ($filter && $filter->date_filter) {
             $queryFilters[] = 'Date_Note in ("' . join('","', $filter->date_filter) . '")';
