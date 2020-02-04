@@ -416,9 +416,10 @@ class StatsRepository
 //            ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(Resultat_Appel) as total'))
 //            ->where('Resultat_Appel', 'not like', '=%')
 //            ->whereNotNull('Nom_Region');
-        $_route = $request->get('route') ?? getRoute(Route::current());
+        $route_request = $request->get('route');
+        $_route = $route_request ?? getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
-        list($filter, $queryFilters) = makeFilterSubQuery($request, $route, 'Resultat_Appel');
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route, $route_request ? null : 'Resultat_Appel');
 
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(distinct st.Id_Externe) as total'))
@@ -440,7 +441,7 @@ class StatsRepository
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post');
 
-        $regions = applyFilter($regions, $filter, 'Resultat_Appel');
+        $regions = applyFilter($regions, $filter, $route_request ? null : 'Resultat_Appel');
 
         $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
         $key_groupement = clean($key_groupement);
