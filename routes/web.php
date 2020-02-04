@@ -22,7 +22,7 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Auth::routes();
 
 Route::group([
-//   'middleware' => ['auth'],
+   'middleware' => ['auth'],
 ], function () {
     //Route::get('/', 'HomeController@dashboard')->name('home');
 //Route::get('/_dashboard', 'HomeController@dashboard')->name('home');
@@ -140,6 +140,10 @@ Route::group([
     Route::get('appels-pralables/regionsCallState/columns/{column}', 'FilterController@getRegionsCallStateColumn');
     Route::get('appels-pralables/clientsByCallState/{callResult}', 'FilterController@getClientsByCallState'); // value = Injoignable / Joignable         // PERCENT
     Route::get('appels-pralables/clientsByCallState/columns/{callResult}', 'FilterController@getClientsByCallStateColumn');
+
+    Route::get('appels-pralables/clientsWithCallStates', 'FilterController@getClientsWithCallStates'); // value = Injoignable + Joignable  => Appel Prealable
+    Route::get('appels-pralables/clientsWithCallStates/columns', 'FilterController@getClientsWithCallStatesColumn');
+
 
     // "Appels Gem" Filters
 

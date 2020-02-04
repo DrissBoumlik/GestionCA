@@ -214,8 +214,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Confirmés (Clients
-                                Joignables)</h3>
+                            <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Confirmés (Clients Joignables)</h3>
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-4" class="tree-view d-inline-flex"></div>
@@ -248,8 +247,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Non Confirmés (Clients
-                                Injoignables)</h3>
+                            <h3 class="card-title d-inline-block">Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)</h3>
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-5" class="tree-view d-inline-flex"></div>
@@ -273,6 +271,39 @@
                 <!-- /.col -->
                 <div class="col-12">
                     <canvas id="statscallsNegChart" class=""></canvas>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <hr>
+            <div class="row ">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Global Résultat Appels Préalables</h3>
+                            <hr>
+                            <div class="refresh-form">
+                                <div id="tree-view-6" class="tree-view d-inline-flex"></div>
+                                <div id="CallResultPrealable-filter"
+                                     class="CallResultPrealable-filter d-inline-flex"></div>
+                                <button type="button" id="refreshCallResultPrealable" class="btn btn-primary float-right d-none">
+                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="CallResultPrealable"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="CallResultPrealableChart" class=""></canvas>
                 </div>
                 <!-- /.col -->
             </div>

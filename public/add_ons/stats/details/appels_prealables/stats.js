@@ -487,7 +487,46 @@ $(function () {
     }
     //</editor-fold>
 
-    let globalElements = [userObject, statsCallsPrealable, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg];
+    //<editor-fold desc="CALL STATS Joignables + Injoignable = Appel Prealables">
+    let CallResultPrealable = {
+        columnName: 'Code_Intervention',
+        rowName: 'Nom_Region',
+        element_dt: undefined,
+        element: 'CallResultPrealable',
+        columns: undefined,
+        data: undefined,
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-6', rows: '#CallResultPrealable-filter'},
+        routeCol: 'appels-pralables/clientsWithCallStates/columns',
+        routeData: 'appels-pralables/clientsWithCallStates',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'CallResultPrealableChart',
+            data: undefined,
+            chartTitle: 'Global Résultat Appels Préalables'
+        }
+    };
+    if (elementExists(CallResultPrealable)) {
+        getColumns(CallResultPrealable, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            removeTotalColumn: true,
+            details: false,
+            pagination: false
+        });
+        $('#refreshCallResultPrealable').on('click', function () {
+            getColumns(CallResultPrealable, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: true,
+                pagination: false
+            });
+        });
+    }
+    //</editor-fold>
+
+    let globalElements = [userObject, statsCallsPrealable, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, CallResultPrealable];
 
     let detailClick = false;
 
@@ -1121,6 +1160,14 @@ $(function () {
             pagination: false
         });
         getColumns(statscallsNeg, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: true,
+            pagination: false
+        });
+
+        getColumns(CallResultPrealable, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
