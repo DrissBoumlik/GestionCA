@@ -265,6 +265,7 @@ $(function () {
             pagination: false
         });
         $('#refreshRegions').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statsRegions, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -305,6 +306,7 @@ $(function () {
             pagination: false
         });
         $('#refreshFolders').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statsFolders, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -349,6 +351,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallStatesAgencies').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(callsStatesAgencies, filterData(), {
                 removeTotal: true,
                 refreshMode: true,
@@ -392,6 +395,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallStatesWeeks').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(callsStatesWeeks, filterData(), {
                 removeTotal: true,
                 refreshMode: true,
@@ -440,6 +444,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallResultPos').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statscallsPos, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -498,6 +503,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallResultNeg').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statscallsNeg, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -535,6 +541,7 @@ $(function () {
     if (elementExists(statsFoldersByType)) {
         getColumns(statsFoldersByType, filterData());
         $('#refreshFoldersByType').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statsFoldersByType, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -570,6 +577,7 @@ $(function () {
     if (elementExists(statsFoldersByCode)) {
         getColumns(statsFoldersByCode, filterData());
         $('#refreshFoldersByCode').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statsFoldersByCode, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -613,6 +621,7 @@ $(function () {
             pagination: false
         });
         $('#refreshPerimeters').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statsPerimeters, filterData(), {
                 removeTotal: true,
                 refreshMode: true,

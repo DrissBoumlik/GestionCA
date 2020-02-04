@@ -297,6 +297,7 @@ $(function () {
             pagination: false
         });
         $('#refreshPerimeters').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statsPerimeters, filterData(), {
                 removeTotal: true,
                 refreshMode: true,

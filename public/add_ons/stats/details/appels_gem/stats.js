@@ -329,6 +329,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallsGem').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statsCallsGem, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -369,6 +370,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallStatesAgencies').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(callsStatesAgencies, filterData(), {
                 removeTotal: true,
                 refreshMode: true,
@@ -407,6 +409,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallStatesWeeks').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(callsStatesWeeks, filterData(), {
                 removeTotal: true,
                 refreshMode: true,

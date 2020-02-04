@@ -323,6 +323,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallsPrealable').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statsCallsPrealable, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -362,6 +363,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallStatesAgencies').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(callsStatesAgencies, filterData(), {
                 removeTotal: true,
                 refreshMode: true,
@@ -400,6 +402,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallStatesWeeks').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(callsStatesWeeks, filterData(), {
                 removeTotal: true,
                 refreshMode: true,
@@ -439,6 +442,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallResultPos').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statscallsPos, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -476,6 +480,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallResultNeg').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statscallsNeg, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -515,6 +520,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallResultPrealable').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(CallResultPrealable, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
