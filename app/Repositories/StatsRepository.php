@@ -1056,7 +1056,7 @@ class StatsRepository
                 ' and ' . $queryFilters .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
-
+                'Gpmt_Appel_Pre like ' . $callResult .
                 ($callResult == 'Joignable' ? ' and Resultat_Appel in ("Appels préalables - RDV confirmé",
                                                     "Appels préalables - RDV confirmé Client non informé",
                                                     "Appels préalables - RDV repris et confirmé")'
@@ -1141,7 +1141,7 @@ class StatsRepository
 //        }
 
 
-        $codes = $codes->where('Gpmt_Appel_Pre', $callResult);
+        $codes = $codes->where('Gpmt_Appel_Pre', 'like', $callResult);
         $columns = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
 
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
@@ -1745,7 +1745,7 @@ class StatsRepository
 
         $statImport = new StatsImport($request->days);
         Excel::import($statImport, $request->file('file'));
-       // (new StatsImport)->import($request->file('file'));
+        // (new StatsImport)->import($request->file('file'));
         return [
             'success' => true,
             'message' => 'Le fichier a été importé avec succès'

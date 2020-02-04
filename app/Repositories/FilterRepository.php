@@ -474,10 +474,10 @@ class FilterRepository
              where Nom_Region is not null ' .
                 ' and ' . $queryFilters .
                 'and Key_Groupement like "' . $radical_route . '"' .
-
-                ($callResult == 'Joignable' ? ' and Resultat_Appel in ("Appels préalables - RDV confirmé",
-                                                    "Appels préalables - RDV confirmé Client non informé",
-                                                    "Appels préalables - RDV repris et confirmé")'
+                'and Gpmt_Appel_Pre like "' . $callResult . '"' .
+                ($callResult == 'Joignable' ? 'and Resultat_Appel in ("Appels préalables - RDV confirmé",
+                                                                        "Appels préalables - RDV confirmé Client non informé",
+                                                                        "Appels préalables - RDV repris et confirmé")'
                     : 'and Resultat_Appel in ("Appels préalables - Annulation RDV client non informé",
                                                 "Appels préalables - Client sauvé",
                                                 "Appels préalables - Client Souhaite être rappelé plus tard",
@@ -561,7 +561,7 @@ class FilterRepository
 //        }
 
 
-        $codes = $codes->where('Gpmt_Appel_Pre', $callResult);
+        $codes = $codes->where('Gpmt_Appel_Pre', 'like', $callResult);
         $columns = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
 
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
@@ -727,7 +727,11 @@ class FilterRepository
              where Nom_Region is not null ' .
                 ' and ' . $queryFilters .
                 'and Key_Groupement like "' . $radical_route . '"' .
-                ' and Resultat_Appel in ("Appels préalables - RDV confirmé",
+
+                ' and ((Gpmt_Appel_Pre like "Joignable" and Resultat_Appel in ("Appels préalables - RDV confirmé",
+                                                                                    "Appels préalables - RDV confirmé Client non informé",
+                                                                                    "Appels préalables - RDV repris et confirmé"))' .
+                ' or (Gpmt_Appel_Pre like "Injoignable" and Resultat_Appel in ("Appels préalables - RDV confirmé",
                                         "Appels préalables - RDV confirmé Client non informé",
                                         "Appels préalables - RDV repris et confirmé",
                                         "Appels préalables - Annulation RDV client non informé",
@@ -744,7 +748,8 @@ class FilterRepository
                                         "Appels préalables - RDV annulé le client ne souhaite plus d’intervention",
                                         "Appels préalables - RDV annulé Rétractation/Résiliation",
                                         "Appels préalables - RDV planifié mais non confirmé",
-                                        "Appels préalables - RDV repris Mais non confirmé")' .
+                                        "Appels préalables - RDV repris Mais non confirmé")))' .
+
                 ' GROUP BY Id_Externe, Code_Intervention, Nom_Region) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
@@ -755,6 +760,7 @@ class FilterRepository
 
         $codes = applyFilter($codes, $filter, 'Nom_Region');
 
+        $codes = $codes->whereIn('Gpmt_Appel_Pre', ["Joignable", "Injoignable"]);
 
         $codes = $codes->whereIn('Resultat_Appel', [
             'Appels préalables - RDV confirmé',
