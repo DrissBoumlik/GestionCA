@@ -345,7 +345,6 @@ $(function () {
             //     object.filterTree.dates = dates;
             // }
             data = {...data, 'dates': object.filterTree.dates};
-            console.log(object.filterTree.dates);
         }
         // console.log(dates);
 
@@ -602,7 +601,6 @@ $(function () {
             columns: object.columns,
             initComplete: function (settings, response) {
                 ajaxRequests--;
-                console.log(ajaxRequests);
                 if (ajaxRequests === 0) {
                     toggleLoader($('#refreshAll').parents('.col-12'), true);
                 }
@@ -771,7 +769,6 @@ $(function () {
                             dates = this.values;
                             if (object.filterTree) {
                                 object.filterTree.dates = this.values;
-                                console.log(object.filterTree.dates);
                             }
                         }
                     });
