@@ -10,6 +10,7 @@ $(function () {
     let codeRdvIntervention = undefined;
     let agent_name = '';
     let agence_code = '';
+    let ajaxRequests = 0;
 
 
     const agence_name_element = $('#agence_name');
@@ -641,6 +642,7 @@ $(function () {
         removeTotalColumn: false,
         pagination: false
     }) {
+        ajaxRequests++;
         // if refreshmode is enabled then store the new filter in local storage
         if (params.refreshMode) {
             // localStorage.setItem(object.filterTreeElement, JSON.stringify(data));
@@ -663,9 +665,7 @@ $(function () {
         }
         // console.log(dates);
 
-        let parent = $('#' + object.element).parents('.col-12');
-        parent.append('<div class="loader_wrapper"><div class="loader"></div></div>');
-        parent.append('<div class="loader_container"></div>');
+        toggleLoader($('#' + object.element).parents('.col-12'));
 
         $.ajax({
             url: APP_URL + '/' + object.routeCol,
@@ -917,6 +917,11 @@ $(function () {
             },
             columns: object.columns,
             initComplete: function (settings, response) {
+                ajaxRequests--;
+                console.log(ajaxRequests);
+                if (ajaxRequests === 0) {
+                    toggleLoader($('#refreshAll').parents('.col-12'), true);
+                }
                 if (object.objChart !== null && object.objChart !== undefined) {
                     try {
                         InitChart(object.objChart, object.columns, response.data, {
@@ -925,10 +930,7 @@ $(function () {
                             details: params.details
                         });
                         let parent = $('#' + object.element).parents('.col-12');
-                        let children = parent.find('.loader_wrapper', '.loader_container');
-                        console.log(children);
-                        parent.find('.loader_wrapper').remove();
-                        parent.find('.loader_container').remove();
+                        toggleLoader(parent, true);
                     } catch (error) {
                         console.log(error);
                     }
@@ -1200,6 +1202,16 @@ $(function () {
         row.child.hide();
     }
 
+    function toggleLoader(parent, remove = false) {
+        if (remove) {
+            parent.find('.loader_wrapper').remove();
+            parent.find('.loader_container').remove();
+        } else {
+            parent.append('<div class="loader_wrapper"><div class="loader"></div></div>');
+            parent.append('<div class="loader_container"></div>');
+        }
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="GLOBAL FILTER">
@@ -1211,6 +1223,9 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
+
+        toggleLoader($(this).parents('.col-12'));
+
         globalElements.map(function (element) {
             element.filterTree.dates = userObject.filterTree.dates;
             element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
