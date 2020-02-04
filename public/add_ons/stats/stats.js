@@ -298,7 +298,7 @@ $(function () {
     };
     if (elementExists(statsFolders)) {
         getColumns(statsFolders, filterData(), {
-            removeTotalColumn: true,
+            removeTotalColumn: false,
             removeTotal: false,
             refreshMode: false,
             details: false,
@@ -308,7 +308,7 @@ $(function () {
             getColumns(statsFolders, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
-                removeTotalColumn: true,
+                removeTotalColumn: false,
                 details: false,
                 pagination: false
             });
@@ -736,8 +736,8 @@ $(function () {
                                 } else {
                                     newData = '';
                                 }
-
-                                let classHasTotalCol = (params.removeTotalColumn) ? 'hasTotal' : '';
+                                console.log(params.removeTotalColumn, object.routeData);
+                                let classHasTotalCol = params.removeTotalColumn ? 'hasTotal' : '';
 
                                 let rowClass = full.isTotal ? '' : 'pointer detail-data';
                                 return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + newData + '<\span>';
@@ -1249,28 +1249,28 @@ $(function () {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: false,
+            removeTotalColumn: true,
             pagination: false
         });
         getColumns(callsStatesWeeks, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: false,
+            removeTotalColumn: true,
             pagination: false
         });
         getColumns(statscallsPos, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: false,
+            removeTotalColumn: true,
             pagination: false
         });
         getColumns(statscallsNeg, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: false,
+            removeTotalColumn: true,
             pagination: false
         });
         getColumns(statsFoldersByType, filterData(), {

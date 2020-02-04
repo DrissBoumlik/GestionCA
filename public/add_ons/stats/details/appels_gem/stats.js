@@ -1034,14 +1034,14 @@ $(function () {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: false,
+            removeTotalColumn: true,
             pagination: false
         });
         getColumns(callsStatesWeeks, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: false,
+            removeTotalColumn: true,
             pagination: false
         });
     });
