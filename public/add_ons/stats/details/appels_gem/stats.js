@@ -1005,6 +1005,7 @@ $(function () {
     $("#refreshAll").on('click', function () {
         globalElements.map(function (element) {
             element.filterTree.dates = userObject.filterTree.dates;
+            element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
         });
         userFilter(true);
         getColumns(statsCallsGem, filterData(), {
