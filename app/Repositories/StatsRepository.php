@@ -203,14 +203,14 @@ class StatsRepository
                 $_year->children[] = $_month;
                 $month->map(function ($week, $index) use (&$_year, &$_month) {
                     $_week = new \stdClass();
-                    $_week->id = $index; // week name
-                    $_week->text = $index; // week name
+                    $_week->id = $_month->text . '-' . $index; // week name
+                    $_week->text = $_month->text . '-' . $index; // week name
                     $_week->children = []; // days
                     $_month->children[] = $_week;
                     $week->map(function ($day, $index) use (&$_week) {
                         $_day = new \stdClass();
-                        $_day->id = collect($index)->implode('-'); // day name
-                        $_day->text = collect($index)->implode('-'); // day name
+                        $_day->id = $index; //collect($index)->implode('-'); // day name
+                        $_day->text = $index; //collect($index)->implode('-'); // day name
                         $_week->children[] = $_day; // collect($day)->implode('-');
                         return $_week;
                     });
