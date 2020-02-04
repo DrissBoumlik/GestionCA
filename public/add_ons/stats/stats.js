@@ -655,13 +655,13 @@ $(function () {
             data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
         }
         if (object.filterTree) {
-            if (dates) {
-                object.filterTree.dates = dates;
-            }
+            // if (dates) {
+            //     object.filterTree.dates = dates;
+            // }
             data = {...data, 'dates': object.filterTree.dates};
             console.log(object.filterTree.dates);
         }
-        console.log(dates);
+        // console.log(dates);
 
         let parent = $('#' + object.element).parents('.col-12');
         parent.append('<div class="loader_wrapper"><div class="loader"></div></div>');
@@ -1211,6 +1211,9 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
+        globalElements.map(function (element) {
+            element.filterTree.dates = userObject.filterTree.dates;
+        });
         userFilter(true);
         getColumns(statsRegions, filterData(), {
             removeTotal: false,
