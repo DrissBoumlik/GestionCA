@@ -31,22 +31,22 @@ class StatsRepository
         $subGroupBy = $request->subGroupBy;
         $queryGroupBy = $request->queryGroupBy;
 
-        $allStats = DB::select('SELECT * FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null '.
+        $allStats = DB::select('SELECT * FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
             ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
             ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
             ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
             ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
             ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
-            ($queryJoin ? $queryJoin : '' ).' '. ($subGroupBy ? $subGroupBy : ' GROUP BY Id_Externe ) groupedst' )
-            .' on st.Id_Externe = groupedst.Id_Externe and st.Date_Heure_Note = groupedst.MaxDateTime where Nom_Region is not null ' .
+            ($queryJoin ?? '') . ' ' . ($subGroupBy ?? ' GROUP BY Id_Externe ) groupedst')
+            . ' on st.Id_Externe = groupedst.Id_Externe and st.Date_Heure_Note = groupedst.MaxDateTime where Nom_Region is not null ' .
             ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
             ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
             ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
             ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
             ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
-            ($queryJoin ? $queryJoin : '') .' '.($queryGroupBy ? $queryGroupBy : ' ')
+            ($queryJoin ?? '') . ' ' . ($queryGroupBy ?? ' ')
         );
-            return $allStats;
+        return $allStats;
 
     }
 
@@ -1021,7 +1021,7 @@ class StatsRepository
                 ' and ' . $queryFilters .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
-                'Gpmt_Appel_Pre like ' . $callResult .
+                'and Gpmt_Appel_Pre like "' . $callResult . '"' .
                 ($callResult == 'Joignable' ? ' and Resultat_Appel in ("Appels préalables - RDV confirmé",
                                                     "Appels préalables - RDV confirmé Client non informé",
                                                     "Appels préalables - RDV repris et confirmé")'
