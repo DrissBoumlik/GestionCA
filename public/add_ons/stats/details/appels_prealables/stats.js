@@ -10,6 +10,7 @@ $(function () {
     let codeRdvIntervention = undefined;
     let agent_name = '';
     let agence_code = '';
+    let ajaxRequests = 0;
 
 
     const agence_name_element = $('#agence_name');
@@ -322,6 +323,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallsPrealable').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statsCallsPrealable, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -361,6 +363,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallStatesAgencies').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(callsStatesAgencies, filterData(), {
                 removeTotal: true,
                 refreshMode: true,
@@ -399,6 +402,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallStatesWeeks').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(callsStatesWeeks, filterData(), {
                 removeTotal: true,
                 refreshMode: true,
@@ -438,6 +442,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallResultPos').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statscallsPos, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -475,6 +480,7 @@ $(function () {
             pagination: false
         });
         $('#refreshCallResultNeg').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statscallsNeg, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -486,7 +492,47 @@ $(function () {
     }
     //</editor-fold>
 
-    let globalElements = [userObject, statsCallsPrealable, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg];
+    //<editor-fold desc="CALL STATS Joignables + Injoignable = Appel Prealables">
+    let CallResultPrealable = {
+        columnName: 'Code_Intervention',
+        rowName: 'Nom_Region',
+        element_dt: undefined,
+        element: 'CallResultPrealable',
+        columns: undefined,
+        data: undefined,
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-6', rows: '#CallResultPrealable-filter'},
+        routeCol: 'appels-pralables/clientsWithCallStates/columns',
+        routeData: 'appels-pralables/clientsWithCallStates',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'CallResultPrealableChart',
+            data: undefined,
+            chartTitle: 'Global Résultat Appels Préalables'
+        }
+    };
+    if (elementExists(CallResultPrealable)) {
+        getColumns(CallResultPrealable, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            removeTotalColumn: true,
+            details: false,
+            pagination: false
+        });
+        $('#refreshCallResultPrealable').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
+            getColumns(CallResultPrealable, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: true,
+                pagination: false
+            });
+        });
+    }
+    //</editor-fold>
+
+    let globalElements = [userObject, statsCallsPrealable, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, CallResultPrealable];
 
     let detailClick = false;
 
@@ -502,6 +548,7 @@ $(function () {
         removeTotalColumn: false,
         pagination: false
     }) {
+        ajaxRequests++;
         // if refreshmode is enabled then store the new filter in local storage
         if (params.refreshMode) {
             // localStorage.setItem(object.filterTreeElement, JSON.stringify(data));
@@ -516,17 +563,14 @@ $(function () {
             data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
         }
         if (object.filterTree) {
-            if (dates) {
-                object.filterTree.dates = dates;
-            }
+            // if (dates) {
+            //     object.filterTree.dates = dates;
+            // }
             data = {...data, 'dates': object.filterTree.dates};
-            console.log(object.filterTree.dates);
         }
-        console.log(dates);
+        // console.log(dates);
 
-        let parent = $('#' + object.element).parents('.col-12');
-        parent.append('<div class="loader_wrapper"><div class="loader"></div></div>');
-        parent.append('<div class="loader_container"></div>');
+        toggleLoader($('#' + object.element).parents('.col-12'));
 
         $.ajax({
             url: APP_URL + '/' + object.routeCol,
@@ -778,6 +822,10 @@ $(function () {
             },
             columns: object.columns,
             initComplete: function (settings, response) {
+                ajaxRequests--;
+                if (ajaxRequests === 0) {
+                    toggleLoader($('#refreshAll').parents('.col-12'), true);
+                }
                 if (object.objChart !== null && object.objChart !== undefined) {
                     try {
                         InitChart(object.objChart, object.columns, response.data, {
@@ -786,10 +834,7 @@ $(function () {
                             details: params.details
                         });
                         let parent = $('#' + object.element).parents('.col-12');
-                        let children = parent.find('.loader_wrapper', '.loader_container');
-                        console.log(children);
-                        parent.find('.loader_wrapper').remove();
-                        parent.find('.loader_container').remove();
+                        toggleLoader(parent, true);
                     } catch (error) {
                         console.log(error);
                     }
@@ -946,7 +991,6 @@ $(function () {
                             dates = this.values;
                             if (object.filterTree) {
                                 object.filterTree.dates = this.values;
-                                console.log(object.filterTree.dates);
                             }
                         }
                     });
@@ -1061,6 +1105,16 @@ $(function () {
         row.child.hide();
     }
 
+    function toggleLoader(parent, remove = false) {
+        if (remove) {
+            parent.find('.loader_wrapper').remove();
+            parent.find('.loader_container').remove();
+        } else {
+            parent.append('<div class="loader_wrapper"><div class="loader"></div></div>');
+            parent.append('<div class="loader_container"></div>');
+        }
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="GLOBAL FILTER">
@@ -1072,6 +1126,13 @@ $(function () {
     });
 
     $("#refreshAll").on('click', function () {
+
+        toggleLoader($(this).parents('.col-12'));
+
+        globalElements.map(function (element) {
+            element.filterTree.dates = userObject.filterTree.dates;
+            element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
+        });
         userFilter(true);
         getColumns(statsCallsPrealable, filterData(), {
             removeTotal: false,
@@ -1084,28 +1145,36 @@ $(function () {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: false,
+            removeTotalColumn: true,
             pagination: false
         });
         getColumns(callsStatesWeeks, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: false,
+            removeTotalColumn: true,
             pagination: false
         });
         getColumns(statscallsPos, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: false,
+            removeTotalColumn: true,
             pagination: false
         });
         getColumns(statscallsNeg, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
-            removeTotalColumn: false,
+            removeTotalColumn: true,
+            pagination: false
+        });
+
+        getColumns(CallResultPrealable, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: true,
             pagination: false
         });
     });

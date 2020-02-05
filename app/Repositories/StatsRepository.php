@@ -163,19 +163,19 @@ class StatsRepository
             $year->map(function ($month, $index) use (&$_year) {
                 $_month = new \stdClass();
                 $_month->id = $_year->text . '-' . $index; // month name
-                $_month->text = $_year->text . '-' . $index; // month name
+                $_month->text = $index; // month name
                 $_month->children = []; // months
                 $_year->children[] = $_month;
                 $month->map(function ($week, $index) use (&$_year, &$_month) {
                     $_week = new \stdClass();
-                    $_week->id = $index; // week name
+                    $_week->id = $_year->id . '-' . $index; // week name
                     $_week->text = $index; // week name
                     $_week->children = []; // days
                     $_month->children[] = $_week;
                     $week->map(function ($day, $index) use (&$_week) {
                         $_day = new \stdClass();
-                        $_day->id = collect($index)->implode('-'); // day name
-                        $_day->text = collect($index)->implode('-'); // day name
+                        $_day->id = $index; //collect($index)->implode('-'); // day name
+                        $_day->text = $index; //collect($index)->implode('-'); // day name
                         $_week->children[] = $_day; // collect($day)->implode('-');
                         return $_week;
                     });
@@ -381,9 +381,10 @@ class StatsRepository
 //            ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(Resultat_Appel) as total'))
 //            ->where('Resultat_Appel', 'not like', '=%')
 //            ->whereNotNull('Nom_Region');
-        $_route = $request->get('route') ?? getRoute(Route::current());
+        $route_request = $request->get('route');
+        $_route = $route_request ?? getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
-        list($filter, $queryFilters) = makeFilterSubQuery($request, $route, 'Resultat_Appel');
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route, $route_request ? null : 'Resultat_Appel');
 
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(distinct st.Id_Externe) as total'))
@@ -405,7 +406,7 @@ class StatsRepository
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post');
 
-        $regions = applyFilter($regions, $filter, 'Resultat_Appel');
+        $regions = applyFilter($regions, $filter, $route_request ? null : 'Resultat_Appel');
 
         $columns = $regions->groupBy('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel')->get();
         $key_groupement = clean($key_groupement);
@@ -1020,7 +1021,7 @@ class StatsRepository
                 ' and ' . $queryFilters .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
-
+                'Gpmt_Appel_Pre like ' . $callResult .
                 ($callResult == 'Joignable' ? ' and Resultat_Appel in ("Appels préalables - RDV confirmé",
                                                     "Appels préalables - RDV confirmé Client non informé",
                                                     "Appels préalables - RDV repris et confirmé")'
@@ -1105,7 +1106,7 @@ class StatsRepository
 //        }
 
 
-        $codes = $codes->where('Gpmt_Appel_Pre', $callResult);
+        $codes = $codes->where('Gpmt_Appel_Pre', 'like', $callResult);
         $columns = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
         $keys = $codes->groupBy(['Code_Intervention'])->keys();
@@ -1706,7 +1707,7 @@ class StatsRepository
 
         $statImport = new StatsImport($request->days);
         Excel::import($statImport, $request->file('file'));
-       // (new StatsImport)->import($request->file('file'));
+        // (new StatsImport)->import($request->file('file'));
         return [
             'success' => true,
             'message' => 'Le fichier a été importé avec succès'

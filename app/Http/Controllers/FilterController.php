@@ -50,6 +50,17 @@ class FilterController extends Controller
         return DataTables::of($data['data'])->toJson();
     }
 
+    public function getClientsWithCallStatesColumn(Request $request)
+    {
+        return $this->filterRepository->getDataClientsWithCallStates($request);
+    }
+
+    public function getClientsWithCallStates(Request $request)
+    {
+        $data = $this->filterRepository->getDataClientsWithCallStates($request);
+        return DataTables::of($data['data'])->toJson();
+    }
+
     public function getFoldersColumn(Request $request, $callResult)
     {
         $data = $this->filterRepository->GetDataFolders($request, $callResult);
