@@ -218,8 +218,9 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-0', rows: '#stats-groupement-filter'},
         filterQuery: {
-            queryElement: 'Groupement', queryValues: ['not like_=%', 'not like_Non Renseigné', 'not like_Appels post'],
-            queryJoin: ' and Resultat_Appel not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'
+            queryJoin: ' and Resultat_Appel not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"',
+            subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement) groupedst',
+            queryGroupBy: ' GROUP BY st.Id_Externe, Nom_Region, Groupement, Key_Groupement'
         },
         routeCol: 'regions/columns/Groupement',
         routeData: 'regions/Groupement',
@@ -283,8 +284,9 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-1', rows: '#stats-regions-filter'},
         filterQuery: {
-            queryElement: 'Groupement', queryValues: ['not like_=%', 'not like_Non Renseigné', 'not like_Appels post'],
-            queryJoin: ' and Resultat_Appel not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'
+            queryJoin: ' and Resultat_Appel not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"',
+            subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel) groupedst ',
+            queryGroupBy: 'group by st.Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel'
         },
         routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
         routeData: 'regions/details/groupement?key_groupement=Appels-clture',
@@ -326,9 +328,9 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-2', rows: '#stats-call-regions-filter'},
         filterQuery: {
-            queryElement: 'Groupement',
-            queryValues: ['not like_Non Renseigné', 'like_Appels préalables', 'not like_Hors Périmètre'],
-            queryJoin: ' and Groupement not like "Non Renseigné" and Groupement like "Appels préalables" and Gpmt_Appel_Pre not like "Hors Périmètre"'
+            queryJoin: ' and Groupement not like "Non Renseigné" and Groupement like "Appels préalables" and Gpmt_Appel_Pre not like "Hors Périmètre"',
+            subGroupBy: ' GROUP BY Id_Externe, Nom_region , Gpmt_Appel_Pre) groupedst',
+            queryGroupBy: 'group by st.Id_Externe, Nom_region , Gpmt_Appel_Pre'
         },
         routeCol: 'regionsCallState/columns/Nom_Region',
         routeData: 'regionsCallState/Nom_Region',
@@ -369,9 +371,9 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-3', rows: '#stats-weeks-regions-filter'},
         filterQuery: {
-            queryElement: 'Groupement',
-            queryValues: ['not like_Non Renseigné', 'like_Appels préalables', 'not like_Hors Périmètre'],
-            queryJoin: ' and Groupement not like "Non Renseigné" and Groupement like "Appels préalables" and Gpmt_Appel_Pre not like "Hors Périmètre"'
+            queryJoin: ' and Groupement not like "Non Renseigné" and Groupement like "Appels préalables" and Gpmt_Appel_Pre not like "Hors Périmètre"',
+            subGroupBy: ' GROUP BY Id_Externe, Date_Heure_Note_Semaine , Gpmt_Appel_Pre, Date_Heure_Note_Annee) groupedst ',
+            queryGroupBy: 'group by st.Id_Externe, Date_Heure_Note_Semaine , Gpmt_Appel_Pre, Date_Heure_Note_Annee'
         },
         routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine',
         routeData: 'regionsCallState/Date_Heure_Note_Semaine',
@@ -413,13 +415,11 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-4', rows: '#code-rdv-intervention-confirm-filter'},
         filterQuery: {
-            queryElement: 'Resultat_Appel',
-            queryValues: [
-                'Appels préalables - RDV confirmé',
-                'Appels préalables - RDV confirmé Client non informé',
-                'Appels préalables - RDV repris et confirmé'
-            ],
-            IsWhereIn: true
+
+            queryJoin: ' and Resultat_Appel in ("Appels préalables - RDV confirmé","Appels préalables - RDV confirmé Client non informé","Appels préalables - RDV repris et confirmé")' +
+                ' and Gpmt_Appel_Pre = "Joignable" ',
+            subGroupBy: ' GROUP BY Id_Externe, Code_Intervention, Nom_Region) groupedst ',
+            queryGroupBy: 'group by st.Id_Externe, Code_Intervention, Nom_Region'
         },
         routeCol: 'clientsByCallState/columns/Joignable',
         routeData: 'clientsByCallState/Joignable',
@@ -461,25 +461,10 @@ $(function () {
         routeCol: 'clientsByCallState/columns/Injoignable',
         routeData: 'clientsByCallState/Injoignable',
         filterQuery: {
-            queryElement: 'Resultat_Appel',
-            queryValues: [
-                'Appels préalables - Annulation RDV client non informé',
-                'Appels préalables - Client sauvé',
-                'Appels préalables - Client Souhaite être rappelé plus tard',
-                'Appels préalables - Injoignable / Absence de répondeur',
-                'Appels préalables - Injoignable 2ème Tentative',
-                'Appels préalables - Injoignable 3ème Tentative',
-                'Appels préalables - Injoignable avec Répondeur',
-                'Appels préalables - Numéro erroné',
-                'Appels préalables - Numéro Inaccessible',
-                'Appels préalables - Numéro non attribué',
-                'Appels préalables - Numéro non Renseigné',
-                'Appels préalables - RDV annulé le client ne souhaite plus d’intervention',
-                'Appels préalables - RDV annulé Rétractation/Résiliation',
-                'Appels préalables - RDV planifié mais non confirmé',
-                'Appels préalables - RDV repris Mais non confirmé',
-            ],
-            IsWhereIn: true
+            queryJoin: ' and Resultat_Appel in ("Appels préalables - Annulation RDV client non informé", "Appels préalables - Client sauvé","Appels préalables - Client Souhaite être rappelé plus tard","Appels préalables - Injoignable / Absence de répondeur","Appels préalables - Injoignable 2ème Tentative","Appels préalables - Injoignable 3ème Tentative","Appels préalables - Injoignable avec Répondeur","Appels préalables - Numéro erroné","Appels préalables - Numéro Inaccessible","Appels préalables - Numéro non attribué","Appels préalables - Numéro non Renseigné","Appels préalables - RDV annulé le client ne souhaite plus d’intervention","Appels préalables - RDV annulé Rétractation/Résiliation","Appels préalables - RDV planifié mais non confirmé","Appels préalables - RDV repris Mais non confirmé" ) ' +
+                ' and Gpmt_Appel_Pre = "Injoignable" ',
+            subGroupBy: ' GROUP BY Id_Externe, Code_Intervention, Nom_Region) groupedst ',
+            queryGroupBy: 'group by st.Id_Externe, Code_Intervention, Nom_Region'
         },
         objChart: {
             element_chart: undefined,
@@ -519,8 +504,9 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-6', rows: '#code-type-intervention-filter'},
         filterQuery: {
-            queryElement: 'Groupement', queryValues: ['like_Appels clôture'],
-            queryJoin: ' and Groupement like "Appels clôture"'
+            queryJoin: ' and Groupement like "Appels clôture" ',
+            subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Code_Type_Intervention , Resultat_Appel) groupedst ',
+            queryGroupBy: ' GROUP BY st.Id_Externe,Nom_Region, Code_Type_Intervention , Resultat_Appel'
         },
         routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention',
         routeData: 'nonValidatedFolders/Code_Type_Intervention',
@@ -554,8 +540,9 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-7', rows: '#code-intervention-filter'},
         filterQuery: {
-            queryElement: 'Groupement', queryValues: ['like_Appels clôture'],
-            queryJoin: ' and Groupement like "Appels clôture"'
+            queryJoin: ' and Groupement like "Appels clôture" ',
+            subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Code_Intervention , Resultat_Appel) groupedst ',
+            queryGroupBy: ' GROUP BY st.Id_Externe,Nom_Region, Code_Intervention , Resultat_Appel'
         },
         routeCol: 'nonValidatedFolders/columns/Code_Intervention',
         routeData: 'nonValidatedFolders/Code_Intervention',
@@ -591,8 +578,9 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-8', rows: '#nom-region-filter'},
         filterQuery: {
-            queryElement: 'Groupement', queryValues: ['not like_Non Renseigné', 'not like_Appels post'],
-            queryJoin: ' and Groupement not like "Non Renseigné" and Groupement not like "Appels post"'
+            queryJoin: ' AND Nom_Region IS NOT NULL AND Groupement not LIKE "Non renseigné" AND Groupement not LIKE "Appels post" AND Type_Note LIKE "CAM" ',
+            subGroupBy: ' GROUP BY Id_Externe, Groupement, Resultat_Appel, Nom_Region ) groupedst ',
+            queryGroupBy: 'group by st.Id_Externe, Groupement, Resultat_Appel, Nom_Region'
         },
         routeCol: 'clientsByPerimeter/columns',
         routeData: 'clientsByPerimeter',
@@ -806,10 +794,9 @@ $(function () {
                                     '&agent=' + (agent_name === undefined || agent_name === null ? '' : agent_name) +
                                     '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) +
                                     '&dates=' + (dates === undefined || dates === null ? '' : dates) +
-                                    '&element=' + (object.filterQuery.queryElement === undefined || object.filterQuery.queryElement === null ? '' : object.filterQuery.queryElement) +
-                                    '&queryValues=' + (object.filterQuery.queryValues === undefined || object.filterQuery.queryValues === null ? '' : object.filterQuery.queryValues) +
                                     '&queryJoin=' + (object.filterQuery.queryJoin === undefined || object.filterQuery.queryJoin === null ? '' : object.filterQuery.queryJoin) +
-                                    '&IsWhereIn=' + (object.filterQuery.IsWhereIn === undefined || object.filterQuery.IsWhereIn === null ? '' : object.filterQuery.IsWhereIn) +
+                                    '&subGroupBy=' + (object.filterQuery.subGroupBy === undefined || object.filterQuery.subGroupBy === null ? '' : object.filterQuery.subGroupBy) +
+                                    '&queryGroupBy=' + (object.filterQuery.queryGroupBy === undefined || object.filterQuery.queryGroupBy === null ? '' : object.filterQuery.queryGroupBy) +
                                     (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : '');
                             }
                             // console.log(colText + ' --- ' + rowText)

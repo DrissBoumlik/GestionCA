@@ -23,66 +23,31 @@ class StatsRepository
         $rowValue = $request->rowValue;
         $col = $request->col;
         $colValue = $request->colValue;
-
         $agentName = $request->agent;
         $agenceCode = $request->agence;
         $queryJoin = $request->queryJoin;
-        $IsWhereIn = $request->IsWhereIn;
         $dates = $request->dates;
         $resultat_appel = $request->Resultat_Appel;
-        $element = $request->element;
-        $query = explode(',', $request->queryValues);
-        $sub_query = '(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats 
-        where Nom_Region is not null ' .
+        $subGroupBy = $request->subGroupBy;
+        $queryGroupBy = $request->queryGroupBy;
+
+        $allStats = DB::select('SELECT * FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null '.
             ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
             ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
             ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
             ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
             ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
+            ($queryJoin ? $queryJoin : '' ).' '. ($subGroupBy ? $subGroupBy : ' GROUP BY Id_Externe ) groupedst' )
+            .' on st.Id_Externe = groupedst.Id_Externe and st.Date_Heure_Note = groupedst.MaxDateTime where Nom_Region is not null ' .
+            ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
+            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
+            ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
+            ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
+            ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
+            ($queryJoin ? $queryJoin : '') .' '.($queryGroupBy ? $queryGroupBy : ' ')
+        );
+            return $allStats;
 
-            ($queryJoin ? $queryJoin : '') . ' GROUP BY Id_Externe) groupedst';
-
-        $allStats = DB::table('stats as st')
-            ->select(['*'])
-            ->join(\DB::raw($sub_query),
-                function ($join) {
-                    $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
-                    $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
-                })
-            ->whereNotNull('Nom_Region');
-
-        if ($row && $rowValue) {
-            $allStats = $allStats->where($row, $rowValue);
-        }
-        if ($col && $colValue) {
-            $allStats = $allStats->where($col, $colValue);
-        }
-        if ($dates) {
-            $dates = explode(',', $request->dates);
-            $allStats = $allStats->whereIn('Date_Note', $dates);
-        }
-
-        if ($agentName) {
-            $allStats = $allStats->where('st.Utilisateur', $agentName);
-        }
-        if ($agenceCode) {
-            $allStats = $allStats->where('st.Nom_Region', 'like', "%$agenceCode");
-        }
-
-        if ($resultat_appel) {
-            $allStats = $allStats->where('Resultat_Appel', $resultat_appel);
-        }
-
-        if ($IsWhereIn) {
-            $allStats = $allStats->whereIn($element, $query);
-        } else {
-            if ($element && $query) {
-                foreach ($query as $q) {
-                    $allStats = $allStats->where($element, explode('_', $q)[0], explode('_', $q)[1]);
-                }
-            }
-        }
-        return $allStats->get();
     }
 
     public function getAgencies(Request $request)
@@ -1142,7 +1107,6 @@ class StatsRepository
 
         $codes = $codes->where('Gpmt_Appel_Pre', $callResult);
         $columns = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
-
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
         $keys = $codes->groupBy(['Code_Intervention'])->keys();
         $codes = $columns = addRegionWithZero($request, $codes, $columns, null, 'Gpmt_Appel_Pre', $callResult);
@@ -1349,7 +1313,6 @@ class StatsRepository
 
         $columns = $regions->groupBy('Nom_Region', $intervCol, 'Resultat_Appel')->get();
 //        $regions = $regions->groupBy('Nom_Region', $intervCol)->get();
-
         $regions = $regions->groupBy('Nom_Region', $intervCol, 'Resultat_Appel')->get();
 
         $keys = $regions->groupBy(['Nom_Region'])->keys();
@@ -1531,7 +1494,6 @@ class StatsRepository
              AND Nom_Region IS NOT NULL
              AND Groupement not LIKE "Non renseigné"
              AND Groupement not LIKE "Appels post"
-             
              AND Type_Note LIKE "CAM"' .
                 ' and ' . $queryFilters .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
