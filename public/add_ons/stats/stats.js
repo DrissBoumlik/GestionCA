@@ -420,7 +420,6 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-4', rows: '#code-rdv-intervention-confirm-filter'},
         filterQuery: {
-
             queryJoin: ' and Resultat_Appel in ("Appels préalables - RDV confirmé","Appels préalables - RDV confirmé Client non informé","Appels préalables - RDV repris et confirmé")' +
                 ' and Gpmt_Appel_Pre = "Joignable" ',
             subGroupBy: ' GROUP BY Id_Externe, Code_Intervention, Nom_Region) groupedst ',
@@ -587,9 +586,9 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-8', rows: '#nom-region-filter'},
         filterQuery: {
-            queryJoin: ' AND Nom_Region IS NOT NULL AND Groupement not LIKE "Non renseigné" AND Groupement not LIKE "Appels post" AND Type_Note LIKE "CAM" ',
+            queryJoin: ' AND Groupement IS NOT NULL AND Groupement not LIKE "Non renseigné" AND Groupement not LIKE "Appels post" AND Type_Note LIKE "CAM" ',
             subGroupBy: ' GROUP BY Id_Externe, Groupement, Resultat_Appel, Nom_Region ) groupedst ',
-            queryGroupBy: 'group by st.Id_Externe, Groupement, Resultat_Appel, Nom_Region'
+            queryGroupBy: 'group by st.Id_Externe, Groupement, Nom_Region'
         },
         routeCol: 'clientsByPerimeter/columns',
         routeData: 'clientsByPerimeter',
