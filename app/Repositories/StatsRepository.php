@@ -168,7 +168,7 @@ class StatsRepository
                 $_year->children[] = $_month;
                 $month->map(function ($week, $index) use (&$_year, &$_month) {
                     $_week = new \stdClass();
-                    $_week->id = $_year->id . '-' . $index; // week name
+                    $_week->id = $_year->id . '-' . $_month->id . '-' . $index; // week name
                     $_week->text = $index; // week name
                     $_week->children = []; // days
                     $_month->children[] = $_week;
