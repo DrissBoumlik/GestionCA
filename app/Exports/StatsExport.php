@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use function Maatwebsite\Excel\Facades\Excel;
 
-class StatsExport implements FromCollection,WithHeadings, WithMapping, ShouldAutoSize
+class StatsExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
 {
     public $request;
 
@@ -26,6 +26,9 @@ class StatsExport implements FromCollection,WithHeadings, WithMapping, ShouldAut
      */
     public function collection()
     {
+        // CASE : Appel préalable
+        $callType = $this->request->callType;
+
         $row = $this->request->row;
         $rowValue = $this->request->rowValue;
         $col = $this->request->col;
@@ -72,20 +75,24 @@ class StatsExport implements FromCollection,WithHeadings, WithMapping, ShouldAut
             st.EXPORT_ALL_Date_CHARGEMENT_PDA,
             st.EXPORT_ALL_Date_SOLDE,
             st.EXPORT_ALL_Date_VALIDATION'
-            .' FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
+            . ' FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
             ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
             ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
             ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
             ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
             ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
-            ($queryJoin ?? '') . ' ' . ($subGroupBy ?? ' GROUP BY Id_Externe ) groupedst')
+            ($queryJoin ?? '') . ' ' .
+            ($callType ? 'and Groupement like "' . $callType . '"' : ' ')
+            . ($subGroupBy ?? ' GROUP BY Id_Externe ) groupedst')
             . ' on st.Id_Externe = groupedst.Id_Externe and st.Date_Heure_Note = groupedst.MaxDateTime where Nom_Region is not null ' .
             ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
             ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
             ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
             ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
             ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
-            ($queryJoin ?? '') . ' ' . ($queryGroupBy ?? ' ')
+            ($queryJoin ?? '') . ' ' .
+            ($callType ? 'and Groupement like "' . $callType . '"' : ' ')
+            . ($queryGroupBy ?? ' ')
         );
 
 
@@ -137,7 +144,7 @@ class StatsExport implements FromCollection,WithHeadings, WithMapping, ShouldAut
      */
     public function map($row): array
     {
-        return[
+        return [
             $row->Type_Note,
             $row->Utilisateur,
             $row->Resultat_Appel,
