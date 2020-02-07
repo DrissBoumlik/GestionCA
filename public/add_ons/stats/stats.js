@@ -1311,7 +1311,7 @@ $(function () {
         let doc = new jsPDF('p', 'pt', 'a4');
         doc.text(10, 20, 'Résultats Appels');
         doc.autoTable({html: '#statsRegions',margin: {left : 0, top: 30}, pageBreak: 'auto',tableWidth: 595 });
-        doc.addImage(statsRegionsChartImg, 'JPEG', 0, ($('#statsRegions').height()/1.328147) + 30 , 500 , 350);
+        doc.addImage(statsRegionsChartImg, 'JPEG', 30, ($('#statsRegions').height()/1.328147) + 30 , 500 , 350);
         doc.addPage();
         doc.text(10, 20, 'Répartition des dossiers traités par périmètre');
         doc.autoTable({html: '#statsFolders', margin: {left : 0, top: 30}, pageBreak: 'auto',tableWidth: 595});
@@ -1326,13 +1326,13 @@ $(function () {
         doc.addImage(callsStatesWeeksChartImg, 'JPEG', 30 , ($('#callsStatesWeeks').height()/1.328147) + 30  , 500 , 350);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Confirmés (Clients Joignables)');
-        doc.autoTable({html: '#statsCallsPos', margin: {left : 0, top: 30}, pageBreak: 'auto',tableWidth: 595 });
+        doc.autoTable({html: '#statsCallsPos', margin: {left : 0, top: 30}, pageBreak: 'auto',tableWidth: 595, styles: {cellPadding: {top: 2, right: 0, bottom: 2, left: 0}},  columnStyles: { 0: { cellWidth : 60 }} });
         doc.addPage();
         doc.text(10, 20, 'la charte de Code Interventions liés aux RDV Confirmés (Clients Joignables)');
         doc.addImage(statsCallsPosChartImg, 'JPEG',30 , 30  , 500 , 500);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)');
-        doc.autoTable({html: '#statsCallsNeg', margin: {left : 0, top: 30}, pageBreak: 'auto',tableWidth: 595 });
+        doc.autoTable({html: '#statsCallsNeg', margin: {left : 0, top: 30}, pageBreak: 'auto',tableWidth: 595, styles: {cellPadding: {top: 2, right: 0, bottom: 2, left: 0}},  columnStyles: { 0: { cellWidth : 60 }} });
         doc.addImage(statscallsNegChartImg, 'JPEG',30,($('#statsCallsNeg').height()/1.328147) + 30  , 500 , 350);
         doc.addPage();
         doc.text(10, 20, 'Répartition des dossiers non validés par Code Type intervention');
