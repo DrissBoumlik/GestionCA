@@ -5,6 +5,27 @@ use App\Models\Stats;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+if (!function_exists('getMonthName')) {
+    function getMonthName($index)
+    {
+        $Months = [
+            1 => 'janvier',
+            2 => 'février',
+            3 => 'mars',
+            4 => 'avril',
+            5 => 'mai',
+            6 => 'juin',
+            7 => 'juillet',
+            8 => 'août',
+            9 => 'septembre',
+            10 => 'octobre',
+            11 => 'novembre',
+            12 => 'décembre'
+        ];
+        return $Months[$index];
+    }
+}
+
 if (!function_exists('makeFilterSubQuery')) {
     function makeFilterSubQuery(Request $request, $route, $column = null)
     {
@@ -580,7 +601,7 @@ if (!function_exists('clean')) {
     }
 }
 
-if(!function_exists('getAuthUser')){
+if (!function_exists('getAuthUser')) {
     function getAuthUser()
     {
         return auth()->user() ?? User::find(1);

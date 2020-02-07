@@ -163,7 +163,7 @@ class StatsRepository
             $year->map(function ($month, $index) use (&$_year) {
                 $_month = new \stdClass();
                 $_month->id = $_year->text . '-' . $index; // month name
-                $_month->text = $index; // month name
+                $_month->text = getMonthName((int)$index); // month name
                 $_month->children = []; // months
                 $_year->children[] = $_month;
                 $month->map(function ($week, $index) use (&$_year, &$_month) {
