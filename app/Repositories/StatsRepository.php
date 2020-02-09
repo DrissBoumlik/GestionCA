@@ -202,6 +202,7 @@ class StatsRepository
 
         $results = \DB::table('stats as st')
             ->select('Nom_Region')
+            ->distinct()
             ->whereNotNull('Nom_Region')
             ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
@@ -1230,6 +1231,7 @@ class StatsRepository
 
         $results = \DB::table('stats as st')
             ->select('st.Groupement')
+            ->distinct()
             ->whereNotNull('st.Groupement')
             ->whereNotNull('st.Nom_Region')
             ->where('st.Groupement', 'not like', 'Non renseigné')
