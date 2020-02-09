@@ -873,7 +873,6 @@ $(function () {
             method: isPost ? 'POST' : 'GET',
             data: {filter: userObject.filterTree.dates},
             success: function (response) {
-                console.log(response);
                 if (response.userFilter) {
                     userObject.filterTree.dates = response.userFilter.date_filter;
                     if (userObject.filterTree.datesTreeObject && userObject.filterTree.dates) {
