@@ -31,14 +31,6 @@ $(function () {
         }
     }
 
-    const getData = {};
-    if (agence_code) {
-        getData['agence_code'] = agence_code;
-    }
-    if (agent_name) {
-        getData['agent_name'] = agent_name;
-    }
-
     const filterData = () => {
         return {
             agent_name,

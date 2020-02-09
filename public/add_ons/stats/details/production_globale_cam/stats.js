@@ -1,13 +1,5 @@
 $(function () {
     let dates = undefined;
-    let resultatAppel = undefined;
-    let groupement = undefined;
-    let gpmtAppelPre = undefined;
-    let codeTypeIntervention = undefined;
-    let codeIntervention = undefined;
-    let nomRegion = undefined;
-    let codeRdvInterventionConfirm = undefined;
-    let codeRdvIntervention = undefined;
     let agent_name = '';
     let agence_code = '';
     let ajaxRequests = 0;
@@ -38,214 +30,6 @@ $(function () {
             }
         }
     }
-
-    const getData = {};
-    if (agence_code) {
-        getData['agence_code'] = agence_code;
-    }
-    if (agent_name) {
-        getData['agent_name'] = agent_name;
-    }
-
-    // const paramFiltreList = [
-    //     {
-    //         url: 'Groupement',
-    //         elements: [
-    //             {
-    //                 id: '#stats-groupement-filter',
-    //                 text: 'Groupement', values: (v) => {
-    //                     nomRegion = undefined;
-    //                     gpmtAppelPre = undefined;
-    //                     codeTypeIntervention = undefined;
-    //                     codeIntervention = undefined;
-    //                     resultatAppel = undefined;
-    //                     codeRdvInterventionConfirm = undefined;
-    //                     codeRdvIntervention = undefined;
-    //                     groupement = v;
-    //                 }, class: '.tree-groupement-view'
-    //             },
-    //             {
-    //                 id: '#stats-regions-filter',
-    //                 text: 'Groupement', values: (v) => {
-    //                     nomRegion = undefined;
-    //                     gpmtAppelPre = undefined;
-    //                     codeTypeIntervention = undefined;
-    //                     codeIntervention = undefined;
-    //                     resultatAppel = undefined;
-    //                     codeRdvInterventionConfirm = undefined;
-    //                     codeRdvIntervention = undefined;
-    //                     groupement = v;
-    //                 }, class: '.tree-region-view'
-    //             }
-    //         ]
-    //     },
-    //     {
-    //         url: 'Gpmt_Appel_Pre',
-    //         elements: [
-    //             {
-    //                 id: '#stats-call-regions-filter', class: '.tree-call-region-view',
-    //                 text: 'Résultats Appels Préalables par agence', values: (v) => {
-    //                     nomRegion = undefined;
-    //                     groupement = undefined;
-    //                     resultatAppel = undefined;
-    //                     codeTypeIntervention = undefined;
-    //                     codeIntervention = undefined;
-    //                     codeRdvInterventionConfirm = undefined;
-    //                     codeRdvIntervention = undefined;
-    //                     gpmtAppelPre = v;
-    //                 }
-    //             },
-    //             {
-    //                 id: '#stats-weeks-regions-filter', class: '.tree-weeks-region-view',
-    //                 text: 'Résultats Appels Préalables par semaine', values: (v) => {
-    //                     nomRegion = undefined;
-    //                     groupement = undefined;
-    //                     resultatAppel = undefined;
-    //                     codeTypeIntervention = undefined;
-    //                     codeIntervention = undefined;
-    //                     codeRdvInterventionConfirm = undefined;
-    //                     codeRdvIntervention = undefined;
-    //                     gpmtAppelPre = v;
-    //                 }
-    //             }
-    //         ]
-    //     },
-    //     {
-    //         url: 'Code_Type_Intervention',
-    //         elements: [
-    //             {
-    //                 id: '#code-type-intervention-filter',
-    //                 class: '.tree-code-type-intervention-view',
-    //                 text: 'Type Intervention',
-    //                 values: (v) => {
-    //                     nomRegion = undefined;
-    //                     groupement = undefined;
-    //                     resultatAppel = undefined;
-    //                     codeTypeIntervention = v;
-    //                     codeIntervention = undefined;
-    //                     gpmtAppelPre = undefined;
-    //                     codeRdvInterventionConfirm = undefined;
-    //                     codeRdvIntervention = undefined;
-    //                 }
-    //             }
-    //         ],
-    //     },
-    //     {
-    //         url: 'Code_Intervention',
-    //         elements: [
-    //             {
-    //                 id: '#code-intervention-filter', class: '.tree-code-intervention-view',
-    //                 text: 'Intervention', values: (v) => {
-    //                     nomRegion = undefined;
-    //                     groupement = undefined;
-    //                     resultatAppel = undefined;
-    //                     codeTypeIntervention = undefined;
-    //                     codeIntervention = v;
-    //                     gpmtAppelPre = undefined;
-    //                     codeRdvInterventionConfirm = undefined;
-    //                     codeRdvIntervention = undefined;
-    //                 }
-    //             }
-    //         ]
-    //     },
-    //     {
-    //         url: 'Nom_Region',
-    //         elements: [
-    //             {
-    //                 id: '#nom-region-filter', class: '.tree-nom-region-view',
-    //                 text: 'Region',
-    //                 values: (v) => {
-    //                     groupement = undefined;
-    //                     resultatAppel = undefined;
-    //                     codeTypeIntervention = undefined;
-    //                     codeIntervention = undefined;
-    //                     gpmtAppelPre = undefined;
-    //                     codeRdvInterventionConfirm = undefined;
-    //                     codeRdvIntervention = undefined;
-    //                     nomRegion = v;
-    //                 }
-    //             },
-    //
-    //             {
-    //                 id: '#code-rdv-intervention-confirm-filter', class: '.tree-code-rdv-intervention-confirm-view',
-    //                 text: 'Region',
-    //                 values: (v) => {
-    //                     groupement = undefined;
-    //                     resultatAppel = undefined;
-    //                     codeTypeIntervention = undefined;
-    //                     codeIntervention = undefined;
-    //                     gpmtAppelPre = undefined;
-    //                     nomRegion = undefined;
-    //                     codeRdvInterventionConfirm = v;
-    //                     codeRdvIntervention = undefined;
-    //
-    //                 }
-    //             },
-    //
-    //             {
-    //                 id: '#code-rdv-intervention-filter', class: '.tree-code-rdv-intervention-view',
-    //                 text: 'Region',
-    //                 values: (v) => {
-    //                     groupement = undefined;
-    //                     resultatAppel = undefined;
-    //                     codeTypeIntervention = undefined;
-    //                     codeIntervention = undefined;
-    //                     gpmtAppelPre = undefined;
-    //                     nomRegion = undefined;
-    //                     codeRdvInterventionConfirm = undefined;
-    //                     codeRdvIntervention = v;
-    //                 }
-    //             }
-    //         ],
-    //     },
-    // ];
-
-    // for (let p of paramFiltreList) {
-    //     $.ajax({
-    //         url: `${APP_URL}/stats/filter/${p.url}`,
-    //         data: getData,
-    //         method: 'GET',
-    //         success: function (response) {
-    //             const data = response.data.map(function (d) {
-    //                 return {
-    //                     id: d,
-    //                     text: d
-    //                 };
-    //             });
-    //             for (let element of p.elements) {
-    //                 $(element.class).each(function (index, item) {
-    //                     new Tree(element.id, {
-    //                         data: [{id: '-1', text: element.text, children: data}],
-    //                         closeDepth: 1,
-    //                         loaded: function () {
-    //                         },
-    //                         onChange: function () {
-    //                             element.values(this.values);
-    //                         }
-    //                     });
-    //                     // $(this).find('.treejs-switcher').first().parent().first().addClass('treejs-node__close')
-    //                 });
-    //             }
-    //         },
-    //         error: function (jqXHR, textStatus, errorThrown) {
-    //         }
-    //     });
-    // }
-
-    let treeData = undefined;
-    let datesFilterList = [];
-    let datesFilterValues = [];
-
-    let datesFilterListExist = false;
-    let datesFilterValuesExist = false;
-
-
-    let filterList = [];
-    let filterValues = [];
-
-    let filterListExist = false;
-    let filterValuesExist = false;
-
 
     const filterData = () => {
         // console.log(agence_code, agent_name);
@@ -332,26 +116,15 @@ $(function () {
         pagination: false
     }) {
         ajaxRequests++;
-        // if refreshmode is enabled then store the new filter in local storage
         if (params.refreshMode) {
-            // localStorage.setItem(object.filterTreeElement, JSON.stringify(data));
-            data = {...data, refreshMode: true}; //{dates: data, refreshMode: true};
+            data = {...data, refreshMode: true};
         }
-        // Search if filter stored in local storage
-        // let savedData = JSON.parse(localStorage.getItem(object.filterTreeElement));
-        // if (savedData !== null) {
-        //     data = savedData;
-        // }
         if (object.filterTree && object.filterTree.rows) {
-            data = {...data, 'rowFilter': object.filterTree.rows}; //object.filterTree.rows
+            data = {...data, 'rowFilter': object.filterTree.rows};
         }
         if (object.filterTree) {
-            // if (dates) {
-            //     object.filterTree.dates = dates;
-            // }
             data = {...data, 'dates': object.filterTree.dates};
         }
-        // console.log(dates);
 
         toggleLoader($('#' + object.element).parents('.col-12'));
 
@@ -361,7 +134,6 @@ $(function () {
             data: data,
             success: function (response) {
                 if (object.filterElement) {
-                    // if (response.filter) {
                     object.filterTree.dates = response.filter ? response.filter.date_filter : [];
                     if (object.filterTree.datesTreeObject && object.filterTree.dates) {
                         object.filterTree.datesTreeObject.values = object.filterTree.dates;
@@ -369,7 +141,6 @@ $(function () {
                             object.objDetail.filterTree.dates = object.filterTree.dates;
                         }
                     }
-                    // }
                     if (response.rows && response.rows.length) {
                         let rowsFilterData = response.rows.map(function (d, index) {
                             return {
@@ -393,19 +164,10 @@ $(function () {
                         });
                     }
 
-                    let datesFilterValuesExist = true;
                     let filters = response.filter;
                     if (filters !== null && filters !== undefined) {
                         object.filterTree.dates = filters.date_filter;
-                        datesFilterValues.push([object.filterElement.dates, filters.date_filter]);
-                        // if (datesFilterList !== null && datesFilterList !== undefined && datesFilterList.length > 0) {
-                        //     datesFilterList[object.treeElement].values = datesFilterValues[object.treeElement];
-                        // }
-                        // if (datesFilterListExist && datesFilterValuesExist) {
-                        //     assignFilter(datesFilterList, datesFilterValues);
-                        // }
                     }
-                    // console.log(filters.date_filter);
                 }
 
                 if (response.columns.length) {
@@ -424,8 +186,7 @@ $(function () {
                                 } else {
                                     newData = '';
                                 }
-
-                                let classHasTotalCol = (params.removeTotalColumn) ? 'hasTotal' : '';
+                                let classHasTotalCol = params.removeTotalColumn ? 'hasTotal' : '';
 
                                 let rowClass = full.isTotal ? '' : 'pointer detail-data';
                                 return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + newData + '<\span>';
@@ -438,10 +199,7 @@ $(function () {
                 } else {
                     object.columns = [{title: 'Résultats'}];
                 }
-                object.data = [...response.data];
-                // if (params.details) {
-                //     $('#' + object.element).find('thead tr').prepend('<th></th>');
-                // }
+
                 if (data !== null && data !== undefined) {
                     try {
                         object.element_dt = InitDataTable(object, data, {
@@ -520,13 +278,6 @@ $(function () {
                         });
                     }
                 }
-                // if (object.objChart !== null && object.objChart !== undefined) {
-                //     try {
-                //         InitChart(object.objChart, response.columns, response.data, removeTotal, removeTotalColumn);
-                //     } catch (error) {
-                //         console.log(error);
-                //     }
-                // }
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR);
@@ -559,11 +310,8 @@ $(function () {
                 '<thead>' + newTable + '</thead><tbody></tbody></table>';
             tableParent.append(newTable);
             table = $('#' + object.element);
-            // object.element = $('#' + tableID);
         }
-        // if (params.details) {
-        //     $('#' + object.element).find('thead tr').prepend('<th></th>');
-        // }
+
         if (params.details) {
             object.objDetail.columns = [...object.columns];
             object.objDetail.columns = object.objDetail.columns.map(function (item, index) {
@@ -582,12 +330,6 @@ $(function () {
             });
         }
 
-        // if(object.columns.length) {
-        //     object.columns.forEach(function (column, index) {
-        //         console.log(column, index);
-        //     });
-        // }
-
         return table.DataTable({
             destroy: true,
             language: frLang,
@@ -605,6 +347,7 @@ $(function () {
             columns: object.columns,
             initComplete: function (settings, response) {
                 ajaxRequests--;
+                object.data = [...response.data];
                 if (ajaxRequests === 0) {
                     toggleLoader($('#refreshAll').parents('.col-12'), true);
                 }
@@ -623,14 +366,6 @@ $(function () {
                 }
             }
         });
-
-        // if (object.objChart !== null && object.objChart !== undefined) {
-        //     try {
-        //         InitChart(object.objChart, object.columns, object.data, removeTotal, removeTotalColumn);
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-        // }
     }
 
     function InitChart(objectChart, columns, data, params = {
@@ -727,20 +462,11 @@ $(function () {
         });
     }
 
-    function assignFilter(datesFilterList, datesFilterValues) {
-        for (let [key, value] of datesFilterValues) {
-            if (key in datesFilterList) {
-                datesFilterList[key].values = value;
-            }
-        }
-    }
-
     function getDatesFilter() {
         $.ajax({
             url: APP_URL + '/dates',
             method: 'GET',
             success: function (response) {
-                datesFilterListExist = true;
                 let treeData = response.dates;
 
                 $('.tree-view').each(function (index, item) {
@@ -757,7 +483,6 @@ $(function () {
                             // console.log(this.values);
                             // this.disables = ['0-0-0', '0-0-1', '0-0-2']
 
-                            datesFilterList[treeId] = this;
                             if (object.length) {
                                 object = object[0];
                                 object.filterTree.datesTreeObject = this;
@@ -765,9 +490,6 @@ $(function () {
                                     object.filterTree.datesTreeObject.values = object.filterTree.dates;
                                 }
                             }
-
-                            //datesFilterList.push([treeId, this]);
-                            // console.log(datesFilterList);
                         },
                         onChange: function () {
                             dates = this.values;
