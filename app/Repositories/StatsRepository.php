@@ -139,52 +139,45 @@ class StatsRepository
 
     public function getDateNotes(Request $request)
     {
-        $agenceCode = $request->get('agence_code');
-        $agentName = $request->get('agent_name');
-
-        $dates = Stats::select('Date_Heure_Note_Annee', 'Date_Heure_Note_Mois', 'Date_Heure_Note_Semaine', 'Date_Note')
+        $dates = \DB::table('stats as st')
+            ->select('Date_Heure_Note_Annee', 'Date_Heure_Note_Mois', 'Date_Heure_Note_Semaine', 'Date_Note')
+            ->distinct()
             ->orderBy('Date_Heure_Note_Annee')
             ->orderBy('Date_Heure_Note_Mois')
             ->orderBy('Date_Heure_Note_Semaine')
-            ->orderBy('Date_Note');
-//        if ($agentName) {
-//            $dates = $dates->where('Utilisateur', $agentName);
-//        }
-//        if ($agenceCode) {
-//            $dates = $dates->where('Nom_Region', 'like', "%$agenceCode");
-//        }
-        $dates = $dates->get()->groupBy(['Date_Heure_Note_Annee', 'Date_Heure_Note_Mois', 'Date_Heure_Note_Semaine', 'Date_Note']);
-
-        $dates = $dates->map(function ($year, $index) {
-            $_year = new \stdClass();
-            $_year->id = $index; // year name
-            $_year->text = $index; // year name
-            $_year->children = []; // months
-            $year->map(function ($month, $index) use (&$_year) {
-                $_month = new \stdClass();
-                $_month->id = $_year->text . '-' . $index; // month name
-                $_month->text = getMonthName((int)$index); // month name
-                $_month->children = []; // months
-                $_year->children[] = $_month;
-                $month->map(function ($week, $index) use (&$_year, &$_month) {
-                    $_week = new \stdClass();
-                    $_week->id = $_year->id . '-' . $_month->id . '-' . $index; // week name
-                    $_week->text = $index; // week name
-                    $_week->children = []; // days
-                    $_month->children[] = $_week;
-                    $week->map(function ($day, $index) use (&$_week) {
-                        $_day = new \stdClass();
-                        $_day->id = $index; //collect($index)->implode('-'); // day name
-                        $_day->text = $index; //collect($index)->implode('-'); // day name
-                        $_week->children[] = $_day; // collect($day)->implode('-');
-                        return $_week;
+            ->orderBy('Date_Note')
+            ->get()
+            ->groupBy(['Date_Heure_Note_Annee', 'Date_Heure_Note_Mois', 'Date_Heure_Note_Semaine', 'Date_Note'])
+            ->map(function ($year, $index) {
+                $_year = new \stdClass();
+                $_year->id = $index; // year name
+                $_year->text = $index; // year name
+                $_year->children = []; // months
+                $year->map(function ($month, $index) use (&$_year) {
+                    $_month = new \stdClass();
+                    $_month->id = $_year->text . '-' . $index; // month name
+                    $_month->text = getMonthName((int)$index); // month name
+                    $_month->children = []; // months
+                    $_year->children[] = $_month;
+                    $month->map(function ($week, $index) use (&$_year, &$_month) {
+                        $_week = new \stdClass();
+                        $_week->id = $_year->id . '-' . $_month->id . '-' . $index; // week name
+                        $_week->text = $index; // week name
+                        $_week->children = []; // days
+                        $_month->children[] = $_week;
+                        $week->map(function ($day, $index) use (&$_week) {
+                            $_day = new \stdClass();
+                            $_day->id = $index; //collect($index)->implode('-'); // day name
+                            $_day->text = $index; //collect($index)->implode('-'); // day name
+                            $_week->children[] = $_day; // collect($day)->implode('-');
+                            return $_week;
+                        });
+                        return $_month;
                     });
-                    return $_month;
+                    return $_year;
                 });
                 return $_year;
             });
-            return $_year;
-        });
 
         return $dates->values();
     }
