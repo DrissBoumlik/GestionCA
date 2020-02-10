@@ -32,6 +32,7 @@ class StatsController extends Controller
         return DataTables::of($stats)->toJson();
     }
 
+    //region Agencies / Agents
     public function getAgencies(Request $request)
     {
         return $this->statsRepository->getAgencies($request);
@@ -49,7 +50,7 @@ class StatsController extends Controller
             'data' => $stats
         ];
     }
-
+    //endregion
 
     public function dashboard(Request $request)
     {
@@ -65,11 +66,11 @@ class StatsController extends Controller
         return ['dates' => $dates];
     }
 
-    #region Regions / Folders =====================================================
+    #region Regions / Folders
 
     public function getRegionsColumn(Request $request, $callResult)
     {
-        $data = $this->statsRepository->GetDataRegions($request, $callResult);
+        $data = $this->statsRepository->GetColumnsRegions($request, $callResult);
         return $data;
     }
 
@@ -81,7 +82,7 @@ class StatsController extends Controller
 
     public function getRegionsByGrpCallColumns(Request $request)
     {
-        $data = $this->statsRepository->GetDataRegionsByGrpCall($request);
+        $data = $this->statsRepository->GetColumnsRegionsByGrpCall($request);
         return $data;
     }
 
@@ -91,25 +92,13 @@ class StatsController extends Controller
         return DataTables::of($data['data'])->toJson();
     }
 
-    public function getFoldersColumn(Request $request, $callResult)
-    {
-        $data = $this->statsRepository->GetDataFolders($request, $callResult);
-        return $data;
-    }
-
-    public function getFolders(Request $request, $callResult)
-    {
-        $data = $this->statsRepository->GetDataFolders($request, $callResult);
-        return DataTables::of($data['data'])->toJson();
-    }
-
     #endregion
 
-    #region Call Stats ======================================================
+    #region Call Stats
 
     public function getRegionsCallStateColumn(Request $request, $column)
     {
-        $data = $this->statsRepository->GetDataRegionsCallState($request, $column);
+        $data = $this->statsRepository->GetColumnsRegionsCallState($request, $column);
         return $data;
     }
 
@@ -121,11 +110,11 @@ class StatsController extends Controller
 
     #endregion
 
-    #region NonValidatedFolders =====================================================
+    #region NonValidatedFolders
 
     public function getNonValidatedFoldersColumn(Request $request, $column)
     {
-        $data = $this->statsRepository->getDataNonValidatedFolders($request, $column);
+        $data = $this->statsRepository->getColumnsNonValidatedFolders($request, $column);
         return $data;
     }
 
@@ -137,11 +126,11 @@ class StatsController extends Controller
 
     #endregion
 
-    #region ClientsByCallState =====================================================
+    #region ClientsByCallState
 
     public function getClientsByCallStateColumn(Request $request, $callResult)
     {
-        $data = $this->statsRepository->getDataClientsByCallState($request, $callResult);
+        $data = $this->statsRepository->getColumnsClientsByCallState($request, $callResult);
         return $data;
     }
 
@@ -153,11 +142,11 @@ class StatsController extends Controller
 
     #endregion
 
-    #region ClientsByPerimeter =====================================================
+    #region ClientsByPerimeter
 
     public function getClientsByPerimeterColumn(Request $request)
     {
-        $data = $this->statsRepository->getDataClientsByPerimeter($request);
+        $data = $this->statsRepository->getColumnsClientsByPerimeter($request);
         return $data;
     }
 
@@ -169,6 +158,7 @@ class StatsController extends Controller
 
     #endregion
 
+    //region Import / Export
     public function import()
     {
         // Authorization
@@ -196,4 +186,5 @@ class StatsController extends Controller
     {
         return $this->statsRepository->exportXlsCall($request);
     }
+    //endregion
 }

@@ -101,9 +101,18 @@
     <div class="content content-narrow">
         <!-- Filter -->
         <div class="container-fluid">
-            <a href="javascript:void(0)"  id="printElement"
-               class="btn btn-primary mb-3 capitalize-first-letter w-100">
-                exporter des données au format PDF </a>
+            <div class="row">
+                <div class="col-6">
+                    <a href="javascript:void(0)"  id="printElement"
+                       class="btn btn-primary mb-3 capitalize-first-letter w-100">
+                        exporter des données au format PDF </a>
+                </div>
+                <div class="col-6">
+                    <a href="{{ URL::route('ExportXls', array('callType' => "Appels préalables")) }}"
+                       class="btn btn-primary mb-3 capitalize-first-letter bg-green">
+                        exporter des données au format Excel </a>
+                </div>
+            </div>
             @include('stats.layouts.filter_menu')
             <hr>
             @include('stats.layouts.global_date_filter')
