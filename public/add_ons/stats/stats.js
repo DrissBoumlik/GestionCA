@@ -1098,11 +1098,11 @@ $(function () {
         doc.addImage(callsStatesWeeksChartImg, 'JPEG', 150 , ($('#callsStatesWeeks').height()/1.328147) + 30  , 500 , 350);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Confirmés (Clients Joignables)');
-        doc.autoTable({html: '#statsCallsPos', margin: {left: 0, top: 30}, pageBreak: 'auto', tableWidth :841.89, columnStyles: { 0: {styles: {cellPadding: {right: 0, left: 0}} }}});
+        doc.autoTable({html: '#statsCallsPos', margin: {left: 0, top: 30}, pageBreak: 'auto', tableWidth :841.89, columnStyles: { 0: {cellWidth: 60 } }});
         doc.addImage(statsCallsPosChartImg, 'JPEG',150 , ($('#statsCallsPos').height()/1.328147) + 50  , 500 , 300);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)');
-        doc.autoTable({html: '#statsCallsNeg', margin: {left: 0, top: 30}, pageBreak: 'auto',tableWidth :841.89, columnStyles: { 0: {styles: {cellPadding: {right: 0, left: 0}} }}});
+        doc.autoTable({html: '#statsCallsNeg', margin: {left: 0, top: 30}, pageBreak: 'auto',tableWidth :841.89, columnStyles: { 0: {cellWidth: 60 }}});
         doc.addImage(statscallsNegChartImg, 'JPEG',150,($('#statsCallsNeg').height()/1.328147) + 50  , 500 , 250);
         doc.addPage();
         doc.text(10, 20, 'Répartition des dossiers non validés par Code Type intervention');
