@@ -1080,7 +1080,7 @@ $(function () {
         let statsFoldersByCodeChartImg = statsFoldersByCodeChart.toDataURL("image8/png", 1.0);
         let statsPerimetersChartImg = statsPerimetersChart.toDataURL("image9/png", 1.0);
         //creates PDF from img
-        let doc = new jsPDF('p', 'pt', [ 841.89,  841.89]);
+        let doc = new jsPDF('p', 'pt', [ 842,  842]);
         doc.text(10, 20, 'Résultats Appels');
         doc.autoTable({html: '#statsRegions', margin: {top: 30}, pageBreak: 'auto'});
         doc.addImage(statsRegionsChartImg, 'JPEG', 150, ($('#statsRegions').height()/1.328147) + 30 , 500 , 350);
@@ -1098,11 +1098,11 @@ $(function () {
         doc.addImage(callsStatesWeeksChartImg, 'JPEG', 150 , ($('#callsStatesWeeks').height()/1.328147) + 30  , 500 , 350);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Confirmés (Clients Joignables)');
-        doc.autoTable({html: '#statsCallsPos', margin: {left: 0, top: 30}, pageBreak: 'auto', tableWidth :841.89, columnStyles: { 0: {cellWidth: 40 } }});
+        doc.autoTable({html: '#statsCallsPos', margin: {left: 0, top: 30}, pageBreak: 'auto', tableWidth :842, columnStyles: { 0: {cellWidth: 50 } , 25: {cellWidth: 40 } }});
         doc.addImage(statsCallsPosChartImg, 'JPEG',150 , ($('#statsCallsPos').height()/1.328147) + 50  , 500 , 300);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)');
-        doc.autoTable({html: '#statsCallsNeg', margin: {left: 0, top: 30}, pageBreak: 'auto',tableWidth :841.89, columnStyles: { 0: {cellWidth: 40 }}});
+        doc.autoTable({html: '#statsCallsNeg', margin: {left: 0, top: 30}, pageBreak: 'auto',tableWidth :842, columnStyles: { 0: {cellWidth: 50 } , 27: {cellWidth: 50 } }});
         doc.addImage(statscallsNegChartImg, 'JPEG',150,($('#statsCallsNeg').height()/1.328147) + 50  , 500 , 250);
         doc.addPage();
         doc.text(10, 20, 'Répartition des dossiers non validés par Code Type intervention');
