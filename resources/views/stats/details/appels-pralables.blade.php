@@ -109,7 +109,7 @@
                 </div>
                 <div class="col-6">
                     <a href="{{ URL::route('ExportXls', array('callType' => "Appels préalables")) }}"
-                       class="btn btn-primary mb-3 capitalize-first-letter bg-green">
+                       class="btn btn-primary mb-3 capitalize-first-letter bg-green w-100">
                         exporter des données au format Excel </a>
                 </div>
             </div>
