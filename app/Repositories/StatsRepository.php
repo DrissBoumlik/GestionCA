@@ -435,6 +435,8 @@ class StatsRepository
         $agentName = $request->get('agent_name');
 
         $key_groupement = $request->get('key_groupement');
+        $key_groupement = $key_groupement ? clean($key_groupement) : null;
+
         $route_request = $request->get('route');
         $_route = $route_request ?? getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
@@ -450,6 +452,7 @@ class StatsRepository
                 ' and ' . $queryFilters .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+                ($key_groupement ? 'and key_groupement like "' . $key_groupement . '"' : '') .
                 ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
@@ -462,7 +465,6 @@ class StatsRepository
 
         $regions = applyFilter($regions, $filter, $route_request ? null : 'Resultat_Appel');
 
-        $key_groupement = clean($key_groupement);
         $regions = $regions->where('key_groupement', 'like', $key_groupement);
 
         if ($agentName) {
@@ -691,9 +693,9 @@ class StatsRepository
         if ($column == 'Date_Heure_Note_Semaine') {
             $regions = $regions->groupBy($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee')->get();
             $keys = $regions->map(function ($item) {
-                    $item->key = $item->Date_Heure_Note_Semaine . '_' . $item->Date_Heure_Note_Annee;
-                    return $item;
-                })
+                $item->key = $item->Date_Heure_Note_Semaine . '_' . $item->Date_Heure_Note_Annee;
+                return $item;
+            })
                 ->groupBy(['key'])->keys();
         } else {
             $regions = $regions->groupBy($column, 'Gpmt_Appel_Pre')->get();
@@ -1406,8 +1408,6 @@ class StatsRepository
             return $data;
         }
     }
-
-
 
 
     public function importStats($request)
