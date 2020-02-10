@@ -401,7 +401,6 @@ class StatsRepository
             ->whereNotNull('Nom_Region')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
-            ->where('key_groupement', 'like', $key_groupement)
             ->pluck('Resultat_Appel');
 
         $keys = $results->pluck('Nom_Region');
@@ -1518,7 +1517,6 @@ class StatsRepository
         $rowsKeys = \DB::table('stats as st')
             ->select('Nom_Region')
             ->distinct()
-            ->where('key_groupement', 'like', $key_groupement)
             ->whereNotNull('Nom_Region')
             ->pluck('Nom_Region');
 
@@ -1535,11 +1533,7 @@ class StatsRepository
                 $codes_names[$index + 1]->title =
                 $codes_names[$index + 1]->text =
                 $codes_names[$index + 1]->data =
-                $codes_names[$index + 1]->name = $key;
-//            $_value = new \stdClass();
-//            $_value->data = $key;
-//            $_value->name = $key;
-//            return $_value;
+                $codes_names[$index + 1]->name = $key ?? '';
             });
             usort($codes_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
@@ -1646,20 +1640,14 @@ class StatsRepository
         if ($agenceCode) {
             $codes = $codes->where('st.Nom_Region', 'like', "%$agenceCode");
         }
-        $rowsKeys = \DB::table('stats as st')
-            ->select('Nom_Region')
-            ->distinct()
-            ->whereNotNull('Nom_Region')
-            ->pluck('Nom_Region');
 
-
+        $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
         $keys = $codes->pluck('Code_Intervention');
 
-        if (!count($keys)) {
+        if (!count($codes)) {
             $data = ['data' => []];
             return $data;
         } else {
-
             $temp = $codes->groupBy(['Nom_Region']);
             $temp = $temp->map(function ($calls, $index) {
                 $totalZone = $calls->reduce(function ($carry, $call) {
@@ -1759,7 +1747,6 @@ class StatsRepository
             return $data;
         } else {
             $regions_names = [];
-            $columns = $columns->groupBy('Title');
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
                 $regions_names[$index + 1]->data = $key;
@@ -1857,6 +1844,52 @@ class StatsRepository
     }
 
 
+    public function getColumnsGlobalDelayCall(Request $request, $filter = null)
+    {
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+
+        $columns = \DB::table('stats as st')
+            ->select('Nom_Region')
+            ->distinct()
+            ->whereNotNull('EXPORT_ALL_Date_VALIDATION')
+            ->whereNotNull('EXPORT_ALL_Date_SOLDE')
+            ->whereNotNull('Nom_Region');
+
+        $columns = applyFilter($columns, $filter);
+
+        $keys = $columns->pluck('Nom_Region');
+
+
+
+        if (!count($keys)) {
+            $data = ['filter' => $filter, 'columns' => [], 'rows' => [], 'rowsFilterHeader' => ''];
+            return $data;
+        } else {
+            $regions_names = [];
+            $keys->map(function ($key, $index) use (&$regions_names) {
+                $regions_names[$index + 1] = new \stdClass();
+                $regions_names[$index + 1]->data = $key;
+                $regions_names[$index + 1]->name = $key;
+                $regions_names[$index + 1]->text = $key;
+                $regions_names[$index + 1]->title = $key;
+            });
+            usort($regions_names, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
+            $first = new \stdClass();
+            $first->title = 'Nom_region';
+            $first->name = 'Nom_region';
+            $first->data = 'Nom_region';
+            $first->orderable = false;
+            array_unshift($regions_names, $first);
+
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
+        }
+    }
+
     public function getGlobalDelayCall(Request $request, $filter = null)
     {
         $_route = getRoute(Route::current());
@@ -1876,19 +1909,16 @@ class StatsRepository
         $regions = applyFilter($regions, $filter);
 
         $regions = $regions->orderBy('Title');
-
-        $keys = ($regions->groupBy('Nom_Region', 'Title')->get())->groupBy(['Nom_Region'])->keys();
-        $regions = $regions->groupBy(['Title']);
-
         $regions = $regions->groupBy('Nom_Region', 'Title')->get();
+        $keys = $regions->groupBy(['Nom_Region'])->keys();
+
+
 
         if (!count($regions)) {
-            $data = ['filter' => $filter, 'columns' => [], 'data' => [], 'rows' => [], 'rowsFilterHeader' => ''];
+            $data = ['data' => []];
             return $data;
         } else {
-
             $temp = $regions->groupBy(['Nom_Region']);
-
             $temp = $temp->map(function ($calls, $index) {
                 $totalZone = $calls->reduce(function ($carry, $call) {
                     return $carry + $call->count;
@@ -1898,29 +1928,9 @@ class StatsRepository
                     return $call;
                 });
             });
-
             $regions = $temp->flatten();
 
-            $regions_names = [];
             $regions = $regions->groupBy('Title');
-            $keys->map(function ($key, $index) use (&$regions_names) {
-                $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->data = $key;
-                $regions_names[$index + 1]->name = $key;
-                $regions_names[$index + 1]->text = $key;
-                $regions_names[$index + 1]->title = $key;
-            });
-            usort($regions_names, function ($item1, $item2) {
-                return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
-            });
-            $first = new \stdClass();
-            $first->title = 'Nom_region';
-            $first->name = 'Nom_region';
-            $first->data = 'Nom_region';
-            $first->orderable = false;
-            array_unshift($regions_names, $first);
-
             $regions = $regions->map(function ($region) use ($keys) {
                 $row = new \stdClass();
                 $row->values = [];
@@ -1951,7 +1961,7 @@ class StatsRepository
             });
             $regions = $regions->values();
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => '', 'data' => $regions];
+            return ['data' => $regions];
         }
     }
 

@@ -182,7 +182,7 @@ class StatsController extends Controller
 
     public function getGlobalDelayColumn(Request $request)
     {
-        return $this->statsRepository->getGlobalDelayCall($request);
+        return $this->statsRepository->getColumnsGlobalDelayCall($request);
     }
 
     public function getGlobalDelay(Request $request)
