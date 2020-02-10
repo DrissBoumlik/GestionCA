@@ -68,8 +68,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel'
         },
-        routeCol: 'appels-clture/regions/details/groupement/columns?key_groupement=Appels-clture',
-        routeData: 'appels-clture/regions/details/groupement?key_groupement=Appels-clture',
+        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
+        routeData: 'regions/details/groupement?key_groupement=Appels-clture',
         objChart: {
             element_chart: undefined,
             element_id: 'statsCallsClotureChart',
@@ -113,8 +113,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Code_Type_Intervention , Resultat_Appel) groupedst ',
             queryGroupBy: ' GROUP BY st.Id_Externe,Nom_Region, Code_Type_Intervention , Resultat_Appel'
         },
-        routeCol: 'appels-clture/nonValidatedFolders/columns/Code_Type_Intervention',
-        routeData: 'appels-clture/nonValidatedFolders/Code_Type_Intervention',
+        routeCol: 'nonValidatedFolders/columns/Code_Type_Intervention',
+        routeData: 'nonValidatedFolders/Code_Type_Intervention',
         objChart: {
             element_chart: undefined,
             element_id: 'statsFoldersByTypeChart',
@@ -150,8 +150,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Code_Intervention , Resultat_Appel) groupedst ',
             queryGroupBy: ' GROUP BY st.Id_Externe,Nom_Region, Code_Intervention , Resultat_Appel'
         },
-        routeCol: 'appels-clture/nonValidatedFolders/columns/Code_Intervention',
-        routeData: 'appels-clture/nonValidatedFolders/Code_Intervention',
+        routeCol: 'nonValidatedFolders/columns/Code_Intervention?key_groupement=Appels-clture',
+        routeData: 'nonValidatedFolders/Code_Intervention?key_groupement=Appels-clture',
         objChart: {
             element_chart: undefined,
             element_id: 'statsFoldersByCodeChart',
@@ -182,8 +182,8 @@ $(function () {
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-02', rows: ''},
-        routeCol: 'appels-clture/Cloturetech/columns',
-        routeData: 'appels-clture/Cloturetech',
+        routeCol: 'Cloturetech/columns?key_groupement=Appels-clture',
+        routeData: 'Cloturetech?key_groupement=Appels-clture',
         objChart: {
             element_chart: undefined,
             element_id: 'statsColturetechChart',
@@ -218,8 +218,8 @@ $(function () {
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-03', rows: ''},
-        routeCol: 'appels-clture/GlobalDelay/columns',
-        routeData: 'appels-clture/GlobalDelay',
+        routeCol: 'GlobalDelay/columns?key_groupement=Appels-clture',
+        routeData: 'GlobalDelay?key_groupement=Appels-clture',
         objChart: {
             element_chart: undefined,
             element_id: 'statsGlobalDelayChart',

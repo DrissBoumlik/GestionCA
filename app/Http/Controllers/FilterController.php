@@ -94,7 +94,6 @@ class FilterController extends Controller
 
     public function getCloturetechColumn(Request $request)
     {
-
         return $this->filterRepository->getCloturetechCall($request);
     }
 

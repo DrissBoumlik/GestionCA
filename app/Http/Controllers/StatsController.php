@@ -140,6 +140,16 @@ class StatsController extends Controller
         return DataTables::of($data['data'])->toJson();
     }
 
+    public function getClientsWithCallStatesColumn(Request $request)
+    {
+        return $this->statsRepository->getColumnsClientsWithCallStates($request);
+    }
+
+    public function getClientsWithCallStates(Request $request)
+    {
+        $data = $this->statsRepository->getDataClientsWithCallStates($request);
+        return DataTables::of($data['data'])->toJson();
+    }
     #endregion
 
     #region ClientsByPerimeter
@@ -157,6 +167,31 @@ class StatsController extends Controller
     }
 
     #endregion
+
+    //region Global Stats
+    public function getCloturetechColumn(Request $request)
+    {
+        return $this->statsRepository->getColumnsCloturetechCall($request);
+    }
+
+    public function getCloturetech(Request $request)
+    {
+        $data = $this->statsRepository->getCloturetechCall($request);
+        return DataTables::of($data['data'])->toJson();
+    }
+
+    public function getGlobalDelayColumn(Request $request)
+    {
+        return $this->statsRepository->getGlobalDelayCall($request);
+    }
+
+    public function getGlobalDelay(Request $request)
+    {
+        $data = $this->statsRepository->getGlobalDelayCall($request);
+        return DataTables::of($data['data'])->toJson();
+    }
+    //endregion
+
 
     //region Import / Export
     public function import()

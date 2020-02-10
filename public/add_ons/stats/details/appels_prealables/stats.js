@@ -76,8 +76,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel'
         },
-        routeCol: 'appels-pralables/regions/details/groupement/columns?key_groupement=Appels-pralables',
-        routeData: 'appels-pralables/regions/details/groupement?key_groupement=Appels-pralables',
+        routeCol: 'regions/details/groupement/columns?key_groupement=appels-pralables',
+        routeData: 'regions/details/groupement?key_groupement=appels-pralables',
         objChart: {
             element_chart: undefined,
             element_id: 'statsCallsPrealableChart',
@@ -121,8 +121,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Nom_region , Gpmt_Appel_Pre) groupedst',
             queryGroupBy: 'group by st.Id_Externe, Nom_region , Gpmt_Appel_Pre'
         },
-        routeCol: 'appels-pralables/regionsCallState/columns/Nom_Region',
-        routeData: 'appels-pralables/regionsCallState/Nom_Region',
+        routeCol: 'regionsCallState/columns/Nom_Region?key_groupement=appels-pralables',
+        routeData: 'regionsCallState/Nom_Region?key_groupement=appels-pralables',
         objChart: {
             element_chart: undefined,
             element_id: 'callsStatesAgenciesChart',
@@ -165,8 +165,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Date_Heure_Note_Semaine , Gpmt_Appel_Pre, Date_Heure_Note_Annee) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Date_Heure_Note_Semaine , Gpmt_Appel_Pre, Date_Heure_Note_Annee'
         },
-        routeCol: 'appels-pralables/regionsCallState/columns/Date_Heure_Note_Semaine',
-        routeData: 'appels-pralables/regionsCallState/Date_Heure_Note_Semaine',
+        routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine?key_groupement=appels-pralables',
+        routeData: 'regionsCallState/Date_Heure_Note_Semaine?key_groupement=appels-pralables',
         objChart: {
             element_chart: undefined,
             element_id: 'callsStatesWeeksChart',
@@ -211,8 +211,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Code_Intervention, Nom_Region) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Code_Intervention, Nom_Region'
         },
-        routeCol: 'appels-pralables/clientsByCallState/columns/Joignable',
-        routeData: 'appels-pralables/clientsByCallState/Joignable',
+        routeCol: 'clientsByCallState/columns/Joignable?key_groupement=appels-pralables',
+        routeData: 'clientsByCallState/Joignable?key_groupement=appels-pralables',
         objChart: {
             element_chart: undefined,
             element_id: 'statsCallsPosChart',
@@ -255,8 +255,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Code_Intervention, Nom_Region) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Code_Intervention, Nom_Region'
         },
-        routeCol: 'appels-pralables/clientsByCallState/columns/Injoignable',
-        routeData: 'appels-pralables/clientsByCallState/Injoignable',
+        routeCol: 'clientsByCallState/columns/Injoignable?key_groupement=appels-pralables',
+        routeData: 'clientsByCallState/Injoignable?key_groupement=appels-pralables',
         objChart: {
             element_chart: undefined,
             element_id: 'statscallsNegChart',
@@ -301,8 +301,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Code_Intervention, Nom_Region) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Code_Intervention, Nom_Region'
         },
-        routeCol: 'appels-pralables/clientsWithCallStates/columns',
-        routeData: 'appels-pralables/clientsWithCallStates',
+        routeCol: 'clientsWithCallStates/columns?key_groupement=appels-pralables',
+        routeData: 'clientsWithCallStates?key_groupement=appels-pralables',
         objChart: {
             element_chart: undefined,
             element_id: 'CallResultPrealableChart',
