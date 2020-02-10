@@ -854,9 +854,9 @@ $(function () {
 
     //<editor-fold desc="GLOBAL FILTER">
     $('#filterDashboard').on('change', function () {
-        let url = $(this).val();
-        if (url) {
-            window.location = APP_URL + '/' + url;
+        let url = APP_URL + '/' + $(this).val();
+        if ($('#filterDashboard').prop('selectedIndex') && url !== window.location.href) {
+            window.location = url;
         }
     });
 
