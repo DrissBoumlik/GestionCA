@@ -861,7 +861,7 @@ $(function () {
         doc.addPage();
         doc.text(10, 20, 'Délai global de traitement OT');
         doc.autoTable({html: '#statsGlobalDelay', margin: {top: 30} , pageBreak: 'auto'});
-        doc.addImage(statsGlobalDelayChartImg, 'JPEG', ($('#statsGlobalDelay').height()/1.328147) + 30 , 500 , 350);
+        doc.addImage(statsGlobalDelayChartImg, 'JPEG',150 ,($('#statsGlobalDelay').height()/1.328147) + 30 , 500 , 350);
         doc.save('Appels Clôture.pdf');
     })
 });
