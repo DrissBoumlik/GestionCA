@@ -939,7 +939,7 @@ $(function () {
         doc.addPage();
         doc.text(10, 20, 'Résultats Appels Préalables par agence');
         doc.autoTable({html: '#callsStatesAgencies', margin: {top: 30}, pageBreak: 'auto'});
-        doc.addImage(callsStatesAgenciesChartImg, 'JPEG',  150 , ($('#callsStatesAgencies').height()/1.328147) + 30 , 500 , 35);
+        doc.addImage(callsStatesAgenciesChartImg, 'JPEG',  150 , ($('#callsStatesAgencies').height()/1.328147) + 30 , 500 , 350);
         doc.addPage();
         doc.text(10, 20, 'Résultats Appels Préalables par semaine');
         doc.autoTable({html: '#callsStatesWeeks', margin: {top: 30}, pageBreak: 'auto'});
