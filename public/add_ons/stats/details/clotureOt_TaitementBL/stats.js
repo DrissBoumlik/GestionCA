@@ -838,36 +838,30 @@ $(function () {
         let statsGlobalDelayChartImg = statsGlobalDelayChart.toDataURL("image4/png", 1.0);
 
         //creates PDF from img
-        let doc = new jsPDF('landscape');
+        let doc = new jsPDF('p', 'pt', [ 842,  842]);
         doc.text(10, 20, 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement');
         doc.autoTable({html: '#statsCallsCloture', margin: {top: 30}, pageBreak: 'auto' });
-        doc.addPage();
-        doc.text(10, 20, 'la charte de Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement');
-        doc.addImage(statsCallsClotureChartImg, 'JPEG', 10, 30, 280, 150);
+        doc.addImage(statsCallsClotureChartImg, 'JPEG',150 , ($('#statsCallsCloture').height()/1.328147) + 30 , 500 , 350);
         doc.addPage();
         doc.text(10, 20, 'Répartition des dossiers non validés par Code Type intervention');
         doc.autoTable({html: '#statsFoldersByType', margin: {top: 30} , pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Répartition des dossiers non validés par Code Type intervention');
-        doc.addImage(statsFoldersByTypeChartImg, 'JPEG', 10, 30, 280, 150);
+        doc.addImage(statsFoldersByTypeChartImg, 'JPEG', 150, 30, 500, 500);
         doc.addPage();
         doc.text(10, 20, 'Répartition des dossiers non validés par code intervention');
         doc.autoTable({html: '#statsFoldersByCode', margin: {top: 30} , pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Répartition des dossiers non validés par code intervention');
-        doc.addImage(statsFoldersByCodeChartImg, 'JPEG', 10, 30, 280, 100);
+        doc.addImage(statsFoldersByCodeChartImg, 'JPEG', 150, 30, 500, 500);
         doc.addPage();
         doc.text(10, 20, 'Délai de validation post solde');
         doc.autoTable({html: '#statsColturetech', margin: {top: 30} , pageBreak: 'auto'});
-        doc.addPage();
-        doc.text(10, 20, 'la charte de Délai de validation post solde');
-        doc.addImage(statsColturetechChartImg, 'JPEG', 10, 30, 280, 100);
+        doc.addImage(statsColturetechChartImg, 'JPEG',150, ($('#statsColturetech').height()/1.328147) + 30 , 500 , 350);
         doc.addPage();
         doc.text(10, 20, 'Délai global de traitement OT');
         doc.autoTable({html: '#statsGlobalDelay', margin: {top: 30} , pageBreak: 'auto'});
-        doc.addPage();
-        doc.text(10, 20, 'la charte de Délai global de traitement OT');
-        doc.addImage(statsGlobalDelayChartImg, 'JPEG', 10, 30, 280, 100);
+        doc.addImage(statsGlobalDelayChartImg, 'JPEG',150 ,($('#statsGlobalDelay').height()/1.328147) + 30 , 500 , 350);
         doc.save('Appels Clôture.pdf');
     })
 });

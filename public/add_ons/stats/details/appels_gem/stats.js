@@ -760,24 +760,18 @@ $(function () {
         let callsStatesWeeksChartImg = callsStatesWeeksChart.toDataURL("image3/png", 1.0);
 
         //creates PDF from img
-        let doc = new jsPDF('landscape');
+        let doc = new jsPDF('p', 'pt', [ 842,  842]);
         doc.text(10, 20, 'Résultats Appels GEM');
         doc.autoTable({html: '#statsCallsGem', margin: {top: 30}, pageBreak: 'auto'});
-        doc.addPage();
-        doc.text(10, 20, 'la charte de Résultats Appels');
-        doc.addImage(statsCallsGemChartImg, 'JPEG', 10, 30, 280, 150);
+        doc.addImage(statsCallsGemChartImg, 'JPEG',  150 , ($('#statsCallsGem').height()/1.328147) + 30  , 500 , 350);
         doc.addPage();
         doc.text(10, 20, 'Résultats Appels Préalables par agence');
         doc.autoTable({html: '#callsStatesAgencies', margin: {top: 30}, pageBreak: 'auto'});
-        doc.addPage();
-        doc.text(10, 20, 'la charte de Résultats Appels Préalables par agence');
-        doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 10, 30, 280, 100);
+        doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 150 , ($('#callsStatesAgencies').height()/1.328147) + 30  , 500 , 350);
         doc.addPage();
         doc.text(10, 20, 'Résultats Appels Préalables par semaine');
         doc.autoTable({html: '#callsStatesWeeks', margin: {top: 30}, pageBreak: 'auto'});
-        doc.addPage();
-        doc.text(10, 20, 'la charte de Résultats Appels Préalables par semaine');
-        doc.addImage(callsStatesWeeksChartImg, 'JPEG', 10, 30, 280, 100);
+        doc.addImage(callsStatesWeeksChartImg, 'JPEG', 150 , ($('#callsStatesWeeks').height()/1.328147) + 30  , 500 , 350);
         doc.save('Appels Gem.pdf');
     })
 

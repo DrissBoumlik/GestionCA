@@ -651,12 +651,10 @@ $(function () {
         //creates image
         let statsPerimetersChartImg = statsPerimetersChart.toDataURL("image/png", 1.0);
         //creates PDF from img
-        let doc = new jsPDF('landscape');
+        let doc = new jsPDF('p', 'pt', [ 842,  842]);
         doc. text( 10 , 20, 'Production Globale CAM' );
         doc.autoTable({ html: '#statsPerimeters', pageBreak : 'auto',margin : { top: 30 } });
-        doc.addPage();
-        doc. text( 10 , 20, 'la charte deProduction Globale CAM' );
-        doc.addImage(statsPerimetersChartImg, 'JPEG', 10 , 30 , 280, 100 );
+        doc.addImage(statsPerimetersChartImg, 'JPEG',  150 , ($('#statsPerimeters').height()/1.328147) + 30 , 500 , 350);
         doc.save('Appels cam.pdf');
     })
 
