@@ -654,7 +654,7 @@ $(function () {
         let doc = new jsPDF('p', 'pt', [ 842,  842]);
         doc. text( 10 , 20, 'Production Globale CAM' );
         doc.autoTable({ html: '#statsPerimeters', pageBreak : 'auto',margin : { top: 30 } });
-        doc.addImage(statsPerimetersChartImg, 'JPEG',  150 , ($('#statsPerimeters').height()/1.328147) + 30 , 500 , 350)
+        doc.addImage(statsPerimetersChartImg, 'JPEG',  150 , ($('#statsPerimeters').height()/1.328147) + 30 , 500 , 350);
         doc.save('Appels cam.pdf');
     })
 
