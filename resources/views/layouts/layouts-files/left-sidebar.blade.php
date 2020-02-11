@@ -11,10 +11,6 @@
         <div>
             <!-- Color Variations -->
             <div class="dropdown d-inline-block ml-3">
-                <a class="text-dual font-size-sm" id="sidebar-themes-dropdown" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false" href="#">
-                    <i class="si si-drop"></i>
-                </a>
                 <div class="dropdown-menu dropdown-menu-right font-size-sm smini-hide border-0"
                      aria-labelledby="sidebar-themes-dropdown">
                     <!-- Color Themes -->
