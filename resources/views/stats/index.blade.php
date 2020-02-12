@@ -46,7 +46,7 @@
 @section('content-header')
     <!-- Hero -->
     @if (request()->has('agence_code'))
-        {{ $agence = $data['agence'] }}
+        <?php $agence = $data['agence'] ?>
         <input type="hidden" name="agence_name" id="agence_name" value="{{$agence ?? ''}}">
     @endif
     <div class="bg-image overflow-hidden"
