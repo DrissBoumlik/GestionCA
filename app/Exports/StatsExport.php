@@ -75,7 +75,7 @@ class StatsExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
                         st.EXPORT_ALL_EXTRACT_CUI,
                         st.EXPORT_ALL_Date_CHARGEMENT_PDA,
                         st.EXPORT_ALL_Date_SOLDE,
-                        st.EXPORT_ALL_Date_VALIDATION'
+                        st.EXPORT_ALL_Date_VALIDATION '
             .'FROM stats AS st WHERE Nom_Region is not null and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE is not null '.
                 ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
