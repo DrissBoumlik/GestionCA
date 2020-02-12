@@ -180,13 +180,14 @@ $(function () {
     let statsColturetech = {
         element_dt: undefined,
         element: 'statsColturetech',
+        columnName: 'Nom_Region',
+        rowName: '',
         columns: undefined,
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-02', rows: ''},
         filterQuery: {
-            queryJoin: ' and EXPORT_ALL_Date_VALIDATION IS NOT NULL and EXPORT_ALL_Date_SOLDE IS NOT NULL',
-            queryGroupBy: ' GROUP BY st.Id_Externe'
+            appCltquery: true,
         },
         routeCol: 'Cloturetech/columns?key_groupement=Appels-clture',
         routeData: 'Cloturetech?key_groupement=Appels-clture',
@@ -220,12 +221,14 @@ $(function () {
     let statsGlobalDelay = {
         element_dt: undefined,
         element: 'statsGlobalDelay',
+        columnName: 'Nom_Region',
+        rowName: '',
         columns: undefined,
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-03', rows: ''},
         filterQuery: {
-            queryJoin: ' and EXPORT_ALL_Date_VALIDATION IS NOT NULL and EXPORT_ALL_Date_SOLDE IS NOT NULL',
+            queryJoin: '',
             queryGroupBy: ' GROUP BY st.Id_Externe'
         },
         routeCol: 'GlobalDelay/columns?key_groupement=Appels-clture',
@@ -393,6 +396,14 @@ $(function () {
                             let row = object.element_dt.cell(this).index().row + 1;
                             let colText = $(tableId + " thead th:nth-child(" + col + ")").text();
                             let rowText = $(tableId + " tbody tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
+                            if(object.element === 'statsColturetech'){
+                                switch (rowText) {
+                                    case 'superieur d\'un jour': rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440'; break;
+                                    case 'Entre 1H et 6h' : rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) between 60 and 360 '; break;
+                                    case 'Entre 30min et 1H': rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) BETWEEN 30 and 60'; break;
+                                    default: rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 60';
+                                }
+                            }
                             if (object.columnName === 'Date_Heure_Note_Semaine') {
                                 colText = colText.split('_')[0];
                             }
@@ -414,6 +425,7 @@ $(function () {
                                     '&queryJoin=' + (object.filterQuery.queryJoin === undefined || object.filterQuery.queryJoin === null ? '' : object.filterQuery.queryJoin) +
                                     '&subGroupBy=' + (object.filterQuery.subGroupBy === undefined || object.filterQuery.subGroupBy === null ? '' : object.filterQuery.subGroupBy) +
                                     '&queryGroupBy=' + (object.filterQuery.queryGroupBy === undefined || object.filterQuery.queryGroupBy === null ? '' : object.filterQuery.queryGroupBy) +
+                                    '&appCltquery' + (object.filterQuery.appCltquery === undefined || object.filterQuery.appCltquery === null ? '' : object.filterQuery.appCltquery) +
                                     (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : '');
                             }
                             // console.log(colText + ' --- ' + rowText)
