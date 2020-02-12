@@ -182,6 +182,10 @@ $(function () {
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-02', rows: ''},
+        filterQuery: {
+            queryJoin: ' and EXPORT_ALL_Date_VALIDATION IS NOT NULL and EXPORT_ALL_Date_SOLDE IS NOT NULL',
+            queryGroupBy: ' GROUP BY st.Id_Externe'
+        },
         routeCol: 'Cloturetech/columns?key_groupement=Appels-clture',
         routeData: 'Cloturetech?key_groupement=Appels-clture',
         objChart: {
@@ -218,6 +222,10 @@ $(function () {
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-03', rows: ''},
+        filterQuery: {
+            queryJoin: ' and EXPORT_ALL_Date_VALIDATION IS NOT NULL and EXPORT_ALL_Date_SOLDE IS NOT NULL',
+            queryGroupBy: ' GROUP BY st.Id_Externe'
+        },
         routeCol: 'GlobalDelay/columns?key_groupement=Appels-clture',
         routeData: 'GlobalDelay?key_groupement=Appels-clture',
         objChart: {
