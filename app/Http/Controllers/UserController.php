@@ -199,7 +199,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         // Authorization
-        $this->authorize('view', auth()->user());
+//        $this->authorize('view', auth()->user());
 
         $roles = Role::all();
         return view('users.show')->with(['user' => $user, 'roles' => $roles]);

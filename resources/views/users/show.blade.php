@@ -153,84 +153,88 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <label for="role">Rôle</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <select name="role" id="role"
-                                                    class="form-control capitalize form-field @error('role') is-invalid @enderror">
-                                                @foreach($roles as $role)
-                                                    <option class="capitalize"
-                                                            value="{{ $role->id }}" {{ $user->role->name == $role->name ? 'selected' : '' }}>
-                                                        {{ $role->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group" id="agence_name" @if ($user->role->id !== 2) style="display: none" @endif>
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <label for="role">Agence</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <select name="agence_name" id="agence_name"
-                                                    class="form-control capitalize form-field @error('agence_name') is-invalid @enderror">
-                                                <option value=""></option>
-                                                @foreach(agencesList() as $agence)
-                                                    <option class="capitalize"
-                                                            value="{{ $agence['name'] }}" {{ $user->agence_name == $agence['name'] ? 'selected' : '' }}>
-                                                        {{ $agence['name'] }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                @if(isAdmin())
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label for="role">Rôle</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <select name="role" id="role"
+                                                        class="form-control capitalize form-field @error('role') is-invalid @enderror">
+                                                    @foreach($roles as $role)
+                                                        <option class="capitalize"
+                                                                value="{{ $role->id }}" {{ $user->role->name == $role->name ? 'selected' : '' }}>
+                                                            {{ $role->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group" id="agent_name" @if ($user->role->id !== 3) style="display: none" @endif>
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <label for="role">Agent</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <select name="agent_name" id="agent_name"
-                                                    class="form-control capitalize form-field @error('agent_name') is-invalid @enderror">
-                                                <option value=""></option>
-                                                @foreach(agentsList() as $agent)
-                                                    <option class="capitalize"
-                                                            value="{{ $agent['name'] }}" {{ $user->agent_name == $agent['name'] ? 'selected' : '' }}>
-                                                        {{ $agent['name'] }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <label for="status">Etat</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <label for="status-{{ $user->id }}">
-                                                <input class='data-status d-none' id="status-{{ $user->id }}"
-                                                       type='checkbox'
-                                                       {{ ($user->status ? 'checked' : '') }}
-                                                       name='status'>
-                                                <span class='status pointer'></span>
-                                            </label>
+                                    <div class="form-group" id="agence_name">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label for="role">Agence</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <select name="agence_name" id="agence_name"
+                                                        class="form-control capitalize form-field @error('agence_name') is-invalid @enderror">
+                                                    <option value=""></option>
+                                                    @foreach(agencesList() as $agence)
+                                                        <option class="capitalize"
+                                                                value="{{ $agence['name'] }}" {{ $user->agence_name == $agence['name'] ? 'selected' : '' }}>
+                                                            {{ $agence['name'] }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="form-group" id="agent_name">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label for="role">Agent</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <select name="agent_name" id="agent_name"
+                                                        class="form-control capitalize form-field @error('agent_name') is-invalid @enderror">
+                                                    <option value=""></option>
+                                                    @foreach(agentsList() as $agent)
+                                                        <option class="capitalize"
+                                                                value="{{ $agent['name'] }}" {{ $user->agent_name == $agent['name'] ? 'selected' : '' }}>
+                                                            {{ $agent['name'] }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label for="status">Etat</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <label for="status-{{ $user->id }}">
+                                                    <input class='data-status d-none' id="status-{{ $user->id }}"
+                                                           type='checkbox'
+                                                           {{ ($user->status ? 'checked' : '') }}
+                                                           name='status'>
+                                                    <span class='status pointer'></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="row update-btn mt-lg-5 mt-sm-0">
                                     <div class="col-md-3 mt-3">
                                         <button type="submit" class="btn btn-primary full-w">
-                                            <span class="btn-field font-weight-normal fa-edit pr-4 position-relative">Modifié</span>
+                                                <span
+                                                    class="btn-field font-weight-normal fa-edit pr-4 position-relative">Editer</span>
                                         </button>
                                     </div>
+                                    @if(isAdmin())
                                     <div class="col-md-3 mt-3">
                                         <button class="btn btn-danger full-w delete-user"
                                                 data-user="{{ $user->id }}">
@@ -238,11 +242,12 @@
                                                 class="btn-field font-weight-bold fa-trash-alt pr-3 position-relative">Supprimer</span>
                                         </button>
                                     </div>
+                                    @endif
                                     <div class="col-md-6 mt-3">
                                         <button class="btn btn-warning full-w" data-toggle="modal" type="button"
                                                 data-target="#resetPassModal">
                                             <span
-                                                class="btn-field font-weight-bold fa-exclamation-triangle pr-3 position-relative">Modifié le mot de passe</span>
+                                                class="btn-field font-weight-bold fa-exclamation-triangle pr-3 position-relative">Changer le mot de passe</span>
                                         </button>
                                         <!-- RESET PASSWORD Modal -->
                                         <!-- Modal -->
@@ -265,7 +270,8 @@
                                                                     <label for="password">Mot de passe</label>
                                                                 </div>
                                                                 <div class="col-8">
-                                                                    <input type="password" class="form-control form-field"
+                                                                    <input type="password"
+                                                                           class="form-control form-field"
                                                                            name="password"
                                                                            id="password" placeholder="Password">
                                                                 </div>
