@@ -1799,7 +1799,7 @@ class StatsRepository
             ->whereNotNull('EXPORT_ALL_Date_VALIDATION')
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
             ->whereNotNull('Nom_Region')
-            ->whereNotBetween('TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION)',[360,1440]);
+            ->whereRaw('TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION not between 360 and 1440)');
 
         $regions = applyFilter($regions, $filter);
 
