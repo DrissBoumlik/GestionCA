@@ -1912,7 +1912,7 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
 
         $regions = \DB::table('stats as st')
-            ->select('Nom_Region', \DB::raw('count(1) as count'), \DB::raw('CASE
+            ->select('Nom_Region', \DB::raw('count(DISTINCT Id_Externe) as count'), \DB::raw('CASE
                         WHEN TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) > 15 THEN "3-Superieur 15 Jours"
                         WHEN TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) between 7 and 15   then "2-Entre une semaine et 15 jours"
                         ELSE "1-Moins d\'une semaine"

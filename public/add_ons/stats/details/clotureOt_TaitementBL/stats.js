@@ -407,7 +407,7 @@ $(function () {
                                 switch (rowText) {
                                     case 'Superieur 15 Jours': rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) > 15'; break;
                                     case 'Entre une semaine et 15 jours' : rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) between 7 and 15 '; break;
-                                    default: rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) < 7';
+                                    default: rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) < 7';
                                 }
                             }
                             if (object.columnName === 'Date_Heure_Note_Semaine') {
