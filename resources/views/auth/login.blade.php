@@ -30,7 +30,7 @@
                                             <div class="form-group">
                                                 <input type="text"
                                                        class="form-control form-control-alt form-control-lg @error('email') is-invalid @enderror"
-                                                       id="email" name="email" value="{{ old('email') ?? 'a@a.a' }}"
+                                                       id="email" name="email" value="{{ old('email') }}"
                                                        required autocomplete="email" autofocus placeholder="Email">
                                                 @error('email')
                                                 <span class="invalid-feedback" role="alert">
@@ -41,7 +41,7 @@
                                             <div class="form-group">
                                                 <input type="password"
                                                        class="form-control form-control-alt form-control-lg @error('password') is-invalid @enderror"
-                                                       id="password" name="password" value="password"
+                                                       id="password" name="password" value=""
                                                        required autocomplete="current-password" placeholder="Password">
                                                 @error('password')
                                                 <span class="invalid-feedback" role="alert">

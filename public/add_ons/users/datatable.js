@@ -20,7 +20,7 @@ $(function () {
             {
                 data: 'id', name: 'id',
                 render: function (data, type, full, meta) {
-                    return "<a href='" + APP_URL + "/users/" + data + "' class='align-center blue d-block'><i class='far fa-eye big-icon-fz'></i></a>";
+                    return "<a href='" + APP_URL + "/users/" + data + "' class='align-center blue d-block'><i class='far edit big-icon-fz'></i></a>";
                 }
             },
             {
