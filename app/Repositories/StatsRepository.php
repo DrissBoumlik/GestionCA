@@ -34,13 +34,14 @@ class StatsRepository
         $allStats = null;
 
         if($appCltquery){
-            $allStats = DB::select('SELECT * FROM stats AS st WHERE Nom_Region is not null '.
+            $allStats = DB::select('SELECT * FROM stats AS st WHERE Nom_Region is not null and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE '.
                     ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                     ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                     ( $rowValue ??  '') .
                     ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
                     ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ').
                     ' group by Id_Externe'
+
                 );
         }else{
             $allStats =   DB::select('SELECT * FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
