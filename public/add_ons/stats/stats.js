@@ -1,4 +1,6 @@
 $(function () {
+    $('#page-container').addClass('sidebar-mini');
+
     let dates = undefined;
     let agent_name = '';
     let agence_code = '';

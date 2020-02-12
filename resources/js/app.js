@@ -49,8 +49,6 @@ frLang = {
 };
 
 (($) => {
-    $('#page-container').addClass('sidebar-mini');
-
     // Default Ajax Configuration
     $.ajaxSetup({
         headers: {
