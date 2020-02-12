@@ -31,7 +31,7 @@ class StatsRepository
         $subGroupBy = $request->subGroupBy;
         $queryGroupBy = $request->queryGroupBy;
         $appCltquery = $request->appCltquery;
-        $allStats = '';
+        $allStats = array();
 
         if($appCltquery){
             $allStats =  $allStats . DB::select('SELECT * FROM stats AS st WHERE Nom_Region is not null '.
