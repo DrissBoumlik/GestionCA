@@ -607,3 +607,10 @@ if (!function_exists('getAuthUser')) {
         return auth()->user() ?? User::find(1);
     }
 }
+
+if (!function_exists('isAdmin')) {
+    function isAdmin($user = null)
+    {
+        return ($user ?? auth()->user())->role->name == 'admin';
+    }
+}
