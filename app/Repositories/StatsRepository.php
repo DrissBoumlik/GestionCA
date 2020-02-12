@@ -34,7 +34,7 @@ class StatsRepository
         $allStats = null;
 
         if($appCltquery){
-            $allStats = DB::select('SELECT * FROM stats AS st WHERE Nom_Region is not null and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE '.
+            $allStats = DB::select('SELECT * FROM stats AS st WHERE Nom_Region is not null and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE is not null '.
                     ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                     ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                     ( $rowValue ??  '') .
