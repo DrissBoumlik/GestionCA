@@ -39,7 +39,8 @@ class StatsRepository
                     ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                     ( $rowValue ??  '') .
                     ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
-                    ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ')
+                    ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ').
+                    ' group by Id_Externe'
                 );
         }else{
             $allStats =   DB::select('SELECT * FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
@@ -58,7 +59,6 @@ class StatsRepository
                 ($queryJoin ?? '') . ' ' . ($queryGroupBy ?? ' ')
             );
         }
-
         return $allStats;
 
     }
@@ -1789,7 +1789,7 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
 
         $regions = \DB::table('stats as st')
-            ->select('Nom_Region', \DB::raw('count(1) as count'), \DB::raw('CASE
+            ->select('Nom_Region', \DB::raw('count(distinct st.Id_Externe) as count'), \DB::raw('CASE
                     WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440 THEN "4-superieur d\'un jour"
                     WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) between 60 and 360   then "3-Entre 1H et 6h"
                     WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) BETWEEN 30 and 60 then "2-Entre 30min et 1H"
