@@ -129,45 +129,17 @@ Route::group([
     Route::get('/clientsByPerimeter', 'StatsController@getClientsByPerimeter');                                                          // SUM
     Route::get('/clientsByPerimeter/columns', 'StatsController@getClientsByPerimeterColumn');
 
+    Route::get('clientsWithCallStates', 'StatsController@getClientsWithCallStates'); // value = Injoignable + Joignable  => Appel Prealable
+    Route::get('clientsWithCallStates/columns', 'StatsController@getClientsWithCallStatesColumn');
+
 
 //    FILTERS
     Route::get('/dashboard/{filter}', 'FilterController@dashboard_filter');
 
-    //"Appels Prealable " Filters
-    Route::get('appels-pralables/regions/details/groupement', 'FilterController@getRegionsByGrpCall'); // column = key_groupement value // // PERCENT
-    Route::get('appels-pralables/regions/details/groupement/columns', 'FilterController@getRegionsByGrpCallColumns'); // column = key_groupement value // // PERCENT
-    Route::get('appels-pralables/regionsCallState/{column}', 'FilterController@getRegionsCallState'); // column = Nom_Region / Date_Heure_Note_Semaine   // SUM
-    Route::get('appels-pralables/regionsCallState/columns/{column}', 'FilterController@getRegionsCallStateColumn');
-    Route::get('appels-pralables/clientsByCallState/{callResult}', 'FilterController@getClientsByCallState'); // value = Injoignable / Joignable         // PERCENT
-    Route::get('appels-pralables/clientsByCallState/columns/{callResult}', 'FilterController@getClientsByCallStateColumn');
-
-    Route::get('appels-pralables/clientsWithCallStates', 'FilterController@getClientsWithCallStates'); // value = Injoignable + Joignable  => Appel Prealable
-    Route::get('appels-pralables/clientsWithCallStates/columns', 'FilterController@getClientsWithCallStatesColumn');
-
-
-    // "Appels Gem" Filters
-
-    Route::get('appels-gem/regions/details/groupement', 'FilterController@getRegionsByGrpCall'); // column = key_groupement value // // PERCENT
-    Route::get('appels-gem/regions/details/groupement/columns', 'FilterController@getRegionsByGrpCallColumns'); // column = key_groupement value // // PERCENT
-    Route::get('appels-gem/regionsCallState/{column}', 'FilterController@getRegionsCallState'); // column = Nom_Region / Date_Heure_Note_Semaine   // SUM
-    Route::get('appels-gem/regionsCallState/columns/{column}', 'FilterController@getRegionsCallStateColumn');
-
-    // "production_globale_cam" Filters
-//    Route::get('production_globale_cam/clientsByPerimeter', 'StatsController@getClientsByPerimeter');                                                          // SUM
-//    Route::get('production_globale_cam/clientsByPerimeter/columns', 'StatsController@getClientsByPerimeterColumn');
-
-    // "clotureOt_TaitementBL" Filters
-
-    Route::get('appels-clture/regions/details/groupement', 'FilterController@getRegionsByGrpCall'); // column = key_groupement value // // PERCENT
-    Route::get('appels-clture/regions/details/groupement/columns', 'FilterController@getRegionsByGrpCallColumns'); // column = key_groupement value // // PERCENT
-    Route::get('appels-clture/folders/{callResult}', 'FilterController@getFolders'); // column = Resultat_Appel                                       // SUM
-    Route::get('appels-clture/folders/columns/{callResult}', 'FilterController@getFoldersColumn');
-    Route::get('appels-clture/nonValidatedFolders/{column}', 'FilterController@getNonValidatedFolders'); // column = Code_Intervention / Code_Type_Intervention   // PERCENT
-    Route::get('appels-clture/nonValidatedFolders/columns/{column}', 'FilterController@getNonValidatedFoldersColumn');
-    Route::get('appels-clture/Cloturetech', 'FilterController@getCloturetech');
-    Route::get('appels-clture/Cloturetech/columns', 'FilterController@getCloturetechColumn');
-    Route::get('appels-clture/GlobalDelay', 'FilterController@getGlobalDelay');
-    Route::get('appels-clture/GlobalDelay/columns', 'FilterController@GlobalDelayColumn');
+    Route::get('Cloturetech', 'StatsController@getCloturetech');
+    Route::get('Cloturetech/columns', 'StatsController@getCloturetechColumn');
+    Route::get('GlobalDelay', 'StatsController@getGlobalDelay');
+    Route::get('GlobalDelay/columns', 'StatsController@getGlobalDelayColumn');
 
     Route::get('Export/ExportXls', 'StatsController@exportXls')->name('ExportXls');
 
