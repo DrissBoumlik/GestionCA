@@ -182,6 +182,10 @@ $(function () {
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-02', rows: ''},
+        filterQuery: {
+            queryJoin: ' and EXPORT_ALL_Date_VALIDATION IS NOT NULL and EXPORT_ALL_Date_SOLDE IS NOT NULL',
+            queryGroupBy: ' GROUP BY st.Id_Externe'
+        },
         routeCol: 'Cloturetech/columns?key_groupement=Appels-clture',
         routeData: 'Cloturetech?key_groupement=Appels-clture',
         objChart: {
@@ -218,6 +222,10 @@ $(function () {
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-03', rows: ''},
+        filterQuery: {
+            queryJoin: ' and EXPORT_ALL_Date_VALIDATION IS NOT NULL and EXPORT_ALL_Date_SOLDE IS NOT NULL',
+            queryGroupBy: ' GROUP BY st.Id_Externe'
+        },
         routeCol: 'GlobalDelay/columns?key_groupement=Appels-clture',
         routeData: 'GlobalDelay?key_groupement=Appels-clture',
         objChart: {
@@ -394,9 +402,9 @@ $(function () {
                                 && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
                                 let dates = object.filterTree.dates;
                                 window.location = APP_URL + '/all-stats?' +
-                                    'row=' + object.rowName +
+                                    'row=' + (object.rowName === undefined || object.rowName === null ? '' : object.rowName) +
                                     '&rowValue=' + rowText +
-                                    '&col=' + object.columnName +
+                                    '&col=' + (object.columnName === undefined || object.columnName === null ? '' : object.columnName)+
                                     '&colValue=' + colText +
                                     '&agent=' + (agent_name === undefined || agent_name === null ? '' : agent_name) +
                                     '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) +
