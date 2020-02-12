@@ -28,7 +28,6 @@ class StatsExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
     {
         // CASE : Appel préalable
         $callType = $this->request->callType;
-
         $row = $this->request->row;
         $rowValue = $this->request->rowValue;
         $col = $this->request->col;
@@ -40,8 +39,55 @@ class StatsExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
         $resultat_appel = $this->request->Resultat_Appel;
         $subGroupBy = $this->request->subGroupBy;
         $queryGroupBy = $this->request->queryGroupBy;
+        $appCltquery = $this->request->appCltquery;
+        $allStats = null;
 
-        $allStats = DB::select('SELECT st.Type_Note,
+        if($appCltquery){
+            $allStats = DB::select('SELECT st.Type_Note,
+            st.Utilisateur,
+            st.Resultat_Appel,
+            st.Date_Nveau_RDV,
+            st.Heure_Nveau_RDV,
+            st.Marge_Nveau_RDV,
+            st.Id_Externe,
+            st.Date_Creation,
+            st.Code_Postal_Site,
+            st.Drapeaux,
+            st.Code_Type_Intervention,
+            st.Date_Rdv,
+            st.Nom_Societe,
+            st.Nom_Region,
+            st.Nom_Domaine,
+            st.Nom_Agence,
+            st.Nom_Activite,
+            st.Date_Heure_Note,
+            st.Date_Heure_Note_Annee,
+            st.Date_Heure_Note_Mois,
+            st.Date_Heure_Note_Semaine,
+            st.Date_Note,
+            st.Groupement,
+            st.key_Groupement,
+            st.Gpmt_Appel_Pre,
+            st.Code_Intervention,
+            st.EXPORT_ALL_Nom_SITE,
+            st.EXPORT_ALL_Nom_TECHNICIEN,
+            st.EXPORT_ALL_PRENom_TECHNICIEN,
+            st.EXPORT_ALL_Nom_EQUIPEMENT,
+            st.EXPORT_ALL_EXTRACT_CUI,
+            st.EXPORT_ALL_Date_CHARGEMENT_PDA,
+            st.EXPORT_ALL_Date_SOLDE,
+            st.EXPORT_ALL_Date_VALIDATION '
+            .'FROM stats AS st WHERE Nom_Region is not null and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE is not null '.
+                ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
+                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
+                ( $rowValue ??  '') .
+                ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
+                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ').
+                ' group by Id_Externe'
+
+            );
+        }else{
+            $allStats = DB::select('SELECT st.Type_Note,
             st.Utilisateur,
             st.Resultat_Appel,
             st.Date_Nveau_RDV,
@@ -75,27 +121,26 @@ class StatsExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
             st.EXPORT_ALL_Date_CHARGEMENT_PDA,
             st.EXPORT_ALL_Date_SOLDE,
             st.EXPORT_ALL_Date_VALIDATION'
-            . ' FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
-            ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
-            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
-            ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
-            ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
-            ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
-            ($queryJoin ?? '') . ' ' .
-            ($callType ? 'and Groupement like "' . $callType . '"' : ' ')
-            . ($subGroupBy ?? ' GROUP BY Id_Externe ) groupedst')
-            . ' on st.Id_Externe = groupedst.Id_Externe and st.Date_Heure_Note = groupedst.MaxDateTime where Nom_Region is not null ' .
-            ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
-            ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
-            ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
-            ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
-            ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
-            ($queryJoin ?? '') . ' ' .
-            ($callType ? 'and Groupement like "' . $callType . '"' : ' ')
-            . ($queryGroupBy ?? ' ')
-        );
-
-
+                . ' FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
+                ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
+                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
+                ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
+                ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
+                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
+                ($queryJoin ?? '') . ' ' .
+                ($callType ? 'and Groupement like "' . $callType . '"' : ' ')
+                . ($subGroupBy ?? ' GROUP BY Id_Externe ) groupedst')
+                . ' on st.Id_Externe = groupedst.Id_Externe and st.Date_Heure_Note = groupedst.MaxDateTime where Nom_Region is not null ' .
+                ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
+                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
+                ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
+                ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
+                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
+                ($queryJoin ?? '') . ' ' .
+                ($callType ? 'and Groupement like "' . $callType . '"' : ' ')
+                . ($queryGroupBy ?? ' ')
+            );
+        }
         return collect($allStats);
     }
 
