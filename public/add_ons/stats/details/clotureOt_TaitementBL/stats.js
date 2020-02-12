@@ -402,9 +402,9 @@ $(function () {
                                 && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
                                 let dates = object.filterTree.dates;
                                 window.location = APP_URL + '/all-stats?' +
-                                    'row=' + (object.rowName === undefined || object.rowName === null ? '' : object.filterQuery.queryJoin)+
+                                    'row=' + (object.rowName === undefined || object.rowName === null ? '' : object.rowName) +
                                     '&rowValue=' + rowText +
-                                    '&col=' + object.columnName +
+                                    '&col=' + (object.columnName === undefined || object.columnName === null ? '' : object.columnName)+
                                     '&colValue=' + colText +
                                     '&agent=' + (agent_name === undefined || agent_name === null ? '' : agent_name) +
                                     '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) +
