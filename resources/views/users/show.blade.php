@@ -56,6 +56,7 @@
 @endsection
 @section('content')
     <div class="user-profile profile">
+        {{ $isAdmin = isAdmin() }}
         <form method="POST" action="{{ route('users.update', $user->id) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
@@ -153,7 +154,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if(isAdmin())
+                                @if($isAdmin)
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-4">
@@ -228,20 +229,20 @@
                                     </div>
                                 @endif
                                 <div class="row update-btn mt-lg-5 mt-sm-0">
-                                    <div class="col-md-3 mt-3">
+                                    <div class="{{ $isAdmin ? 'col-md-3' : 'col-md-6' }} mt-3">
                                         <button type="submit" class="btn btn-primary full-w">
                                                 <span
                                                     class="btn-field font-weight-normal fa-edit pr-4 position-relative">Editer</span>
                                         </button>
                                     </div>
-                                    @if(isAdmin())
-                                    <div class="col-md-3 mt-3">
-                                        <button class="btn btn-danger full-w delete-user"
-                                                data-user="{{ $user->id }}">
+                                    @if($isAdmin)
+                                        <div class="col-md-3 mt-3">
+                                            <button class="btn btn-danger full-w delete-user"
+                                                    data-user="{{ $user->id }}">
                                             <span
                                                 class="btn-field font-weight-bold fa-trash-alt pr-3 position-relative">Supprimer</span>
-                                        </button>
-                                    </div>
+                                            </button>
+                                        </div>
                                     @endif
                                     <div class="col-md-6 mt-3">
                                         <button class="btn btn-warning full-w" data-toggle="modal" type="button"

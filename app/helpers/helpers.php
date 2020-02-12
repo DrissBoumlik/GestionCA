@@ -609,8 +609,8 @@ if (!function_exists('getAuthUser')) {
 }
 
 if (!function_exists('isAdmin')) {
-    function isAdmin()
+    function isAdmin($user = null)
     {
-        return auth()->user()->role->name == 'admin';
+        return ($user ?? auth()->user())->role->name == 'admin';
     }
 }
