@@ -664,6 +664,7 @@ $(function () {
                     intersect: true
                 },
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     xAxes: [{
                         stacked: false,
