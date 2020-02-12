@@ -89,7 +89,7 @@
         <div class="container-fluid">
             <a href="{{ URL::route('ExportXls', array('row' => request('row'), 'rowValue' => request('rowValue'),'col' => request('col') , 'colValue' => request('colValue'),'agent' => request('agent') ,
                                     'agence' => request('agence') , 'dates' => request('dates'), 'Resultat_Appel' => request('Resultat_Appel') , 'queryJoin' => request('queryJoin'),
-                                    'subGroupBy'=> request('subGroupBy') , 'queryGroupBy' => request('queryGroupBy')  )) }}"
+                                    'subGroupBy'=> request('subGroupBy') , 'queryGroupBy' => request('queryGroupBy'),'appCltquery' => request('appCltquery')  )) }}"
                class="btn btn-primary mb-3 capitalize-first-letter bg-green">
                 exporter des données au format Excel </a>
             <div class="row">
