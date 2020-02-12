@@ -402,7 +402,7 @@ $(function () {
                                 && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
                                 let dates = object.filterTree.dates;
                                 window.location = APP_URL + '/all-stats?' +
-                                    'row=' + object.rowName +
+                                    'row=' + (object.rowName === undefined || object.rowName === null ? '' : object.filterQuery.queryJoin)+
                                     '&rowValue=' + rowText +
                                     '&col=' + object.columnName +
                                     '&colValue=' + colText +
