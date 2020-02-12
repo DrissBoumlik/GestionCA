@@ -31,10 +31,10 @@ class StatsRepository
         $subGroupBy = $request->subGroupBy;
         $queryGroupBy = $request->queryGroupBy;
         $appCltquery = $request->appCltquery;
-        $allStats = array();
+        $allStats = null;
 
         if($appCltquery){
-            $allStats =  $allStats . DB::select('SELECT * FROM stats AS st WHERE Nom_Region is not null '.
+            $allStats = DB::select('SELECT * FROM stats AS st WHERE Nom_Region is not null '.
                     ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                     ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                     ( $rowValue ??  '') .
@@ -42,7 +42,7 @@ class StatsRepository
                     ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ')
                 );
         }else{
-            $allStats = $allStats .  DB::select('SELECT * FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
+            $allStats =   DB::select('SELECT * FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                 ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
