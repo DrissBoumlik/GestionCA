@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-if(!function_exists('getStats')) {
+if (!function_exists('getStats')) {
     function getStats(Request $request)
     {
         $callType = $request->callType;
@@ -15,7 +15,7 @@ if(!function_exists('getStats')) {
         $col = $request->col;
         $colValue = $request->colValue;
         $agentName = $request->agent;
-        $agenceCode = $request->agence;
+        $agenceCode = $request->agence ?? $request->agence_code;
         $queryJoin = $request->queryJoin;
         $dates = $request->dates;
         $resultat_appel = $request->Resultat_Appel;
@@ -24,76 +24,35 @@ if(!function_exists('getStats')) {
         $appCltquery = $request->appCltquery;
         $allStats = null;
 
-        $columns = 'SELECT st.Type_Note,
-            st.Utilisateur,
-            st.Resultat_Appel,
-            st.Date_Nveau_RDV,
-            st.Heure_Nveau_RDV,
-            st.Marge_Nveau_RDV,
-            st.Id_Externe,
-            st.Date_Creation,
-            st.Code_Postal_Site,
-            st.Drapeaux,
-            st.Code_Type_Intervention,
-            st.Date_Rdv,
-            st.Nom_Societe,
-            st.Nom_Region,
-            st.Nom_Domaine,
-            st.Nom_Agence,
-            st.Nom_Activite,
-            st.Date_Heure_Note,
-            st.Date_Heure_Note_Annee,
-            st.Date_Heure_Note_Mois,
-            st.Date_Heure_Note_Semaine,
-            st.Date_Note,
-            st.Groupement,
-            st.key_Groupement,
-            st.Gpmt_Appel_Pre,
-            st.Code_Intervention,
-            st.EXPORT_ALL_Nom_SITE,
-            st.EXPORT_ALL_Nom_TECHNICIEN,
-            st.EXPORT_ALL_PRENom_TECHNICIEN,
-            st.EXPORT_ALL_Nom_EQUIPEMENT,
-            st.EXPORT_ALL_EXTRACT_CUI,
-            st.EXPORT_ALL_Date_CHARGEMENT_PDA,
-            st.EXPORT_ALL_Date_SOLDE,
-            st.EXPORT_ALL_Date_VALIDATION';
 
         if ($appCltquery) {
-            $allStats = DB::select($columns
-                . ' FROM stats AS st WHERE Nom_Region is not null and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE is not null ' .
+            $allStats = DB::select('SELECT * FROM stats AS st WHERE Nom_Region is not null and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE is not null ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                 ($rowValue ?? '') .
                 ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
-                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW()) ') .
-                ' and Resultat_Appel not like "=%" group by Id_Externe'
+                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
+                ' group by Id_Externe'
 
             );
         } else {
-            $allStats = DB::select($columns
-                . ' FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
+            $allStats = DB::select('SELECT * FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                 ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
                 ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
-                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
-                ($queryJoin ?? '') . ' ' .
-                ($callType ? 'and Groupement like "' . $callType . '"' : ' ') .
-                ' and Resultat_Appel not like "=%" '
-                . ($subGroupBy ?? ' GROUP BY Id_Externe ) groupedst')
+                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
+                ($queryJoin ?? '') . ' ' . ($subGroupBy ?? ' GROUP BY Id_Externe ) groupedst')
                 . ' on st.Id_Externe = groupedst.Id_Externe and st.Date_Heure_Note = groupedst.MaxDateTime where Nom_Region is not null ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                 ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
                 ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
                 ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
-                ($queryJoin ?? '') . ' ' .
-                ($callType ? 'and Groupement like "' . $callType . '"' : ' ') .
-                ' and Resultat_Appel not like "=%" '
-                . ($queryGroupBy ?? ' ')
+                ($queryJoin ?? '') . ' ' . ($queryGroupBy ?? ' ')
             );
         }
+
         return $allStats;
     }
 }
@@ -125,12 +84,6 @@ if (!function_exists('makeFilterSubQuery')) {
         $user = getAuthUser();
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
-//        if ($agentName) {
-//            $filters['agent_name'] = $agentName;
-//        }
-//        if ($agenceCode) {
-//            $filters['agence_name'] = $agenceCode;
-//        }
         $filters = ['route' => $route, 'user_id' => $user->id, 'agence_name' => $agenceCode, 'agent_name' => $agentName, 'isGlobal' => null];
 
 
@@ -191,46 +144,6 @@ if (!function_exists('applyFilter')) {
         }
         return $results;
     }
-
-//    function applyFilter(Request $request, $route, $results, $column = null, $rowsFilter = null)
-//    {
-////        dump($results->groupBy('Nom_Region', 'Groupement', 'Key_Groupement')->count());
-//        $user = getAuthUser();
-//        $filters = ['route' => $route, 'user_id' => $user->id, 'agence_name' => null, 'agent_name' => null, 'isGlobal' => false];
-//        $agenceCode = $request->get('agence_code');
-//        $agentName = $request->get('agent_name');
-//        if ($agentName) {
-//            $filters['agent_name'] = $agentName;
-//        }
-//        if ($agenceCode) {
-//            $filters['agence_name'] = $agenceCode;
-//        }
-//
-//        $dates = $request->get('dates');
-//        $currentMonth = '2020-01%'; //date('Y-m') . '%';
-//        $filter = Filter::firstOrNew($filters);
-//
-//        if ($dates) {
-//            $dates = array_values($dates);
-//            $filter->date_filter = $dates;
-//        }
-//        if ($column && $rowsFilter) {
-//            $filter->rows_filter = $rowsFilter;
-//        }
-//
-//        if ($filter->date_filter) {
-//            $results = $results->whereIn('Date_Note', $filter->date_filter);
-//        } else {
-//            $results = $results->where('Date_Note', 'like', $currentMonth);
-//        }
-//        if ($filter->rows_filter) {
-//            $results = $results->whereIn($column, $filter->rows_filter);
-//        }
-////        dd($currentMonth);
-////        dd($results->groupBy('Nom_Region', 'Groupement', 'Key_Groupement')->toSql());
-//
-//        return [$filter, $results];
-//    }
 }
 
 if (!function_exists('addRegionWithZero')) {
