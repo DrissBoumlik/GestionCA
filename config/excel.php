@@ -22,8 +22,8 @@ return [
         | Pre-calculate formulas during export
         |--------------------------------------------------------------------------
         */
-        'calculate'              => false,
-        'pre_calculate_formulas' => false,
+        'calculate'              => true,
+        'pre_calculate_formulas' => true,
 
         /*
         |--------------------------------------------------------------------------
