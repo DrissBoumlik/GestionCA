@@ -414,7 +414,7 @@ $(function () {
                                 if (newData !== null) {
                                     newData = newData.toString();
                                     if (newData.indexOf('/') !== -1) {
-                                        newData = newData.split('/').join('<br/>');
+                                        newData = newData.split('|').join('<br/>');
                                         // newData = newData[0] + '<br/>' + newData[1];
                                     }
                                 } else {

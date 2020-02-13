@@ -305,7 +305,7 @@ class StatsRepository
                     $col_arr = array_diff($col_arr, [$nom_region]);
 
                     $row->values[$nom_region] = $call->$nom_region;
-                    $row->$nom_region = $call->total . ' / ' . $call->$nom_region . '%';
+                    $row->$nom_region = $call->total . '|' . $call->$nom_region . '%';
 //                    $row->$nom_region = $call->$nom_region . '%';
 //                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
 //                    $row->_total = $call->total;
@@ -488,7 +488,7 @@ class StatsRepository
 
                     $col_arr = array_diff($col_arr, [$nom_region]);
                     $row->values[$nom_region] = $call->$nom_region;
-                    $row->$nom_region = $call->total . ' / ' . $call->$nom_region . '%';
+                    $row->$nom_region = $call->total . '|' . $call->$nom_region . '%';
 //                    $row->$nom_region = $call->$nom_region . '%';
 //                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
 //                    $row->_total = $call->total;
@@ -723,14 +723,14 @@ class StatsRepository
                     if ($column == 'Date_Heure_Note_Semaine') {
                         $column_week = $call->Date_Heure_Note_Semaine;
                         $column_name = $call->Date_Heure_Note_Semaine . '_' . $call->Date_Heure_Note_Annee;
-                        $row->$column_name = $call->total . ' / ' . $call->$column_week . ' %';
+                        $row->$column_name = $call->total . '|' . $call->$column_week . ' %';
                         $col_arr = array_diff($col_arr, [$column_name]);
                         $row->values[$column_name] = $call->total;
                     } else {
                         $column_name = $call->$column;
                         $col_arr = array_diff($col_arr, [$column_name]);
                         $row->values[$column_name] = $call->total;
-                        $row->$column_name = $call->total . ' / ' . $call->$column_name . ' %';
+                        $row->$column_name = $call->total . '|' . $call->$column_name . ' %';
                     }
                     $row->Gpmt_Appel_Pre = $call->Gpmt_Appel_Pre;
                     $row->column = $call->Gpmt_Appel_Pre;
@@ -992,7 +992,7 @@ class StatsRepository
                     $code_intervention = $call->Code_Intervention;
                     $col_arr = array_diff($col_arr, [$code_intervention]);
                     $row->values[$code_intervention ?? ''] = $call->$code_intervention;
-                    $row->$code_intervention = $call->total . ' / ' . $call->$code_intervention . '%';
+                    $row->$code_intervention = $call->total . '|' . $call->$code_intervention . '%';
                     $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
                     return $row;
                 });
@@ -1197,8 +1197,8 @@ class StatsRepository
                     $col_arr = array_diff($col_arr, [$nom_region]);
 
                     $row->values[$nom_region] = $call->$nom_region;
-                    $row->$nom_region = $call->total . ' / ' . (isset($call->itemTotal) ? $call->itemTotal : 0) . ' / ' . (isset($call->$index) ? $call->$index : 0) . '%';
-//                    $row->$nom_region = $call->total . ' / ' . $call->$nom_region . '%';
+                    $row->$nom_region = $call->total . '|' . (isset($call->itemTotal) ? $call->itemTotal : 0) . '|' . (isset($call->$index) ? $call->$index : 0) . '%';
+//                    $row->$nom_region = $call->total . '|' . $call->$nom_region . '%';
                     $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
 //                    $row->total = round(array_sum($row->values), 2); //round(array_sum($row->values) / count($row->values), 2) . '%';
                     return $row;
@@ -1407,7 +1407,7 @@ class StatsRepository
                     $column_name = $call->Groupement;
                     $col_arr = array_diff($col_arr, [$column_name]);
                     $row->values[$column_name] = $call->total;
-                    $row->$column_name = $call->total . ' / ' . $call->$column_name . '%';
+                    $row->$column_name = $call->total . '|' . $call->$column_name . '%';
                     $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
                     return $row;
                 });
@@ -1653,7 +1653,7 @@ class StatsRepository
 //                    dd($call);
 //                    dd($code_intervention, $call->Code_Intervention);
                     $row->values[$code_intervention ?? ''] = $call->$code_intervention;
-                    $row->$code_intervention = $call->total . ' / ' . $call->$code_intervention . '%';
+                    $row->$code_intervention = $call->total . '|' . $call->$code_intervention . '%';
 //                $row->$code_intervention = $call->$code_intervention;
 //                    $row->total = ceil(round(array_sum($row->values), 2)) . '%'; // round(array_sum($row->values) / count($row->values), 2) . '%';
                     $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
@@ -1807,7 +1807,7 @@ class StatsRepository
                 $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
                     $row->Nom_region = explode('-', $call->Title)[1];
                     $region_name = $call->Nom_Region;
-                    $row->$region_name = $call->count . '/' . $call->$region_name . '%';
+                    $row->$region_name = $call->count . '|' . $call->$region_name . '%';
                     $row->values[$region_name] = $call->count;
                     $col_arr = array_diff($col_arr, [$region_name]);
                     return $row;
@@ -1945,7 +1945,7 @@ class StatsRepository
                 $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
                     $row->Nom_region = explode('-', $call->Title)[1];
                     $region_name = $call->Nom_Region;
-                    $row->$region_name = $call->count . '/' . $call->$region_name . '%';
+                    $row->$region_name = $call->count . '|' . $call->$region_name . '%';
                     $row->values[$region_name] = $call->count;
                     $col_arr = array_diff($col_arr, [$region_name]);
                     return $row;
