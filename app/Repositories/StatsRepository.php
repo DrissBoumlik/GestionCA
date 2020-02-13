@@ -1785,10 +1785,11 @@ class StatsRepository
 
     public function getCloturetechCall(Request $request, $filter = null)
     {
+        $agentName = $request->get('agent_name');
+        $agenceCode = $request->get('agence_code');
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
-
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', \DB::raw('count(distinct st.Id_Externe) as count'), \DB::raw('CASE
                     WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440 THEN "4-superieur d\'un jour"
@@ -1800,6 +1801,12 @@ class StatsRepository
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
             ->whereNotNull('Nom_Region')
             ->whereRaw('TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) not between 360 and 1440');
+        if ($agentName) {
+            $regions = $regions->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
 
         $regions = applyFilter($regions, $filter);
 
@@ -1861,6 +1868,7 @@ class StatsRepository
 
     public function getColumnsGlobalDelayCall(Request $request, $filter = null)
     {
+
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
@@ -1907,6 +1915,8 @@ class StatsRepository
 
     public function getGlobalDelayCall(Request $request, $filter = null)
     {
+        $agentName = $request->get('agent_name');
+        $agenceCode = $request->get('agence_code');
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
@@ -1922,6 +1932,12 @@ class StatsRepository
             ->whereNotNull('Nom_Region');
 
         $regions = applyFilter($regions, $filter);
+        if ($agentName) {
+            $regions = $regions->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
 
         $regions = $regions->orderBy('Title');
         $regions = $regions->groupBy('Nom_Region', 'Title')->get();
