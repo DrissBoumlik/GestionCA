@@ -46,7 +46,7 @@
 @section('content-header')
     <!-- Hero -->
     @if (request()->has('agence_code'))
-        <?php $agence = $data['agence'] ?>
+        <?php $agence = isset($data['agence']) ? $data['agence'] : request()->get('agence_code') ?>
         <input type="hidden" name="agence_name" id="agence_name" value="{{$agence ?? ''}}">
     @endif
     <div class="bg-image overflow-hidden"
@@ -69,14 +69,15 @@
                         <h2 class="h4 font-w400 text-white-75 mb-0 invisible" data-toggle="appear" data-timeout="250">
                             Welcome {{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</h2>
                     </div>
-                    <div class="flex-sm-00-auto mt-3 mt-sm-0 ml-sm-3">
+                    @if (isAdmin())
+                        <div class="flex-sm-00-auto mt-3 mt-sm-0 ml-sm-3">
                         <span class="d-inline-block invisible" data-toggle="appear" data-timeout="350">
-                            <a class="btn btn-primary px-4 py-2" data-toggle="click-ripple"
-                               href="stats">
+                            <a class="btn btn-primary px-4 py-2" data-toggle="click-ripple" href="stats">
                                 <i class="fa fa-plus mr-1"></i> New Import
                             </a>
                         </span>
-                    </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -106,42 +107,42 @@
                                 <table id="stats"
                                        class="table table-bordered table-striped table-valign-middle capitalize">
                                     <thead>
-                                        <tr>
-                                            <th>Type Note</th>
-                                            <th>Utilisateur</th>
-                                            <th width="200px">Resultat Appel</th>
-                                            <th>Date Nveau RDV</th>
-                                            <th>Heure Nveau RDV</th>
-                                            <th>Marge Nveau RDV</th>
-                                            <th>Id Externe</th>
-                                            <th>Date Creation</th>
-                                            <th>Code Postal Site</th>
-                                            <th>Drapeaux</th>
-                                            <th>Code Type Intervention</th>
-                                            <th>Date Rdv</th>
-                                            <th>Nom Societe</th>
-                                            <th>Nom Region</th>
-                                            <th>Nom Domaine</th>
-                                            <th>Nom Agence</th>
-                                            <th>Nom Activite</th>
-                                            <th>Date Heure Note</th>
-                                            <th>Date Heure Note Annee</th>
-                                            <th>Date Heure Note Mois</th>
-                                            <th>Date Heure Note Semaine</th>
-                                            <th>Date Note</th>
-                                            <th>Groupement</th>
-                                            <th>key Groupement</th>
-                                            <th>Gpmt Appel Pre</th>
-                                            <th>Code Intervention</th>
-                                            <th>EXPORT ALL Nom SITE</th>
-                                            <th>EXPORT ALL Nom TECHNICIEN</th>
-                                            <th>EXPORT ALL PRENom TECHNICIEN</th>
-                                            <th>EXPORT ALL Nom EQUIPEMENT</th>
-                                            <th>EXPORT ALLEXTRACT CUI</th>
-                                            <th>EXPORT ALL Date CHARGEMENT PDA</th>
-                                            <th>EXPORT ALL Date SOLDE</th>
-                                            <th>EXPORT ALL Date VALIDATION</th>
-                                        </tr>
+                                    <tr>
+                                        <th>Type Note</th>
+                                        <th>Utilisateur</th>
+                                        <th width="200px">Resultat Appel</th>
+                                        <th>Date Nveau RDV</th>
+                                        <th>Heure Nveau RDV</th>
+                                        <th>Marge Nveau RDV</th>
+                                        <th>Id Externe</th>
+                                        <th>Date Creation</th>
+                                        <th>Code Postal Site</th>
+                                        <th>Drapeaux</th>
+                                        <th>Code Type Intervention</th>
+                                        <th>Date Rdv</th>
+                                        <th>Nom Societe</th>
+                                        <th>Nom Region</th>
+                                        <th>Nom Domaine</th>
+                                        <th>Nom Agence</th>
+                                        <th>Nom Activite</th>
+                                        <th>Date Heure Note</th>
+                                        <th>Date Heure Note Annee</th>
+                                        <th>Date Heure Note Mois</th>
+                                        <th>Date Heure Note Semaine</th>
+                                        <th>Date Note</th>
+                                        <th>Groupement</th>
+                                        <th>key Groupement</th>
+                                        <th>Gpmt Appel Pre</th>
+                                        <th>Code Intervention</th>
+                                        <th>EXPORT ALL Nom SITE</th>
+                                        <th>EXPORT ALL Nom TECHNICIEN</th>
+                                        <th>EXPORT ALL PRENom TECHNICIEN</th>
+                                        <th>EXPORT ALL Nom EQUIPEMENT</th>
+                                        <th>EXPORT ALLEXTRACT CUI</th>
+                                        <th>EXPORT ALL Date CHARGEMENT PDA</th>
+                                        <th>EXPORT ALL Date SOLDE</th>
+                                        <th>EXPORT ALL Date VALIDATION</th>
+                                    </tr>
                                     </thead>
                                 </table>
                                 <div id="data-request" data-request="{{ json_encode($data) }}" class="d-none"></div>
