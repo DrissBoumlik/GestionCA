@@ -19,47 +19,7 @@ class StatsRepository
 {
     public function getStats(Request $request)
     {
-        $row = $request->row;
-        $rowValue = $request->rowValue;
-        $col = $request->col;
-        $colValue = $request->colValue;
-        $agentName = $request->agent;
-        $agenceCode = $request->agence;
-        $queryJoin = $request->queryJoin;
-        $dates = $request->dates;
-        $resultat_appel = $request->Resultat_Appel;
-        $subGroupBy = $request->subGroupBy;
-        $queryGroupBy = $request->queryGroupBy;
-        $appCltquery = $request->appCltquery;
-        $allStats = null;
-
-        if($appCltquery){
-            $allStats = DB::select('SELECT * FROM stats AS st WHERE Nom_Region is not null and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE is not null '.
-                    ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
-                    ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
-                    ( $rowValue ??  '') .
-                    ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
-                    ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())').
-                    ' group by Id_Externe'
-
-                );
-        }else{
-            $allStats =   DB::select('SELECT * FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
-                ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
-                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
-                ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
-                ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
-                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
-                ($queryJoin ?? '') . ' ' . ($subGroupBy ?? ' GROUP BY Id_Externe ) groupedst')
-                . ' on st.Id_Externe = groupedst.Id_Externe and st.Date_Heure_Note = groupedst.MaxDateTime where Nom_Region is not null ' .
-                ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
-                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
-                ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
-                ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
-                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
-                ($queryJoin ?? '') . ' ' . ($queryGroupBy ?? ' ')
-            );
-        }
+        $allStats = getStats($request);
         return $allStats;
 
     }
