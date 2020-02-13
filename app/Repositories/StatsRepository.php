@@ -1740,6 +1740,8 @@ class StatsRepository
 
     public function getColumnsCloturetechCall(Request $request, $filter = null)
     {
+        $agentName = $request->get('agent_name');
+        $agenceCode = $request->get('agence_code');
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
@@ -1752,6 +1754,12 @@ class StatsRepository
             ->whereNotNull('Nom_Region');
 
         $columns = applyFilter($columns, $filter);
+        if ($agentName) {
+            $columns = $columns->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $columns = $columns->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
 
         $keys = $columns->pluck('Nom_Region');
 
@@ -1868,7 +1876,8 @@ class StatsRepository
 
     public function getColumnsGlobalDelayCall(Request $request, $filter = null)
     {
-
+        $agentName = $request->get('agent_name');
+        $agenceCode = $request->get('agence_code');
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
@@ -1881,6 +1890,12 @@ class StatsRepository
             ->whereNotNull('Nom_Region');
 
         $columns = applyFilter($columns, $filter);
+        if ($agentName) {
+            $columns = $columns->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $columns = $columns->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
 
         $keys = $columns->pluck('Nom_Region');
 
