@@ -1157,6 +1157,20 @@ $(function () {
             removeTotalColumn: false,
             pagination: false
         });
+        getColumns(statsColturetech, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
+        getColumns(statsGlobalDelay, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
     });
     //</editor-fold>
     $("#printElement").on("click", function () {
