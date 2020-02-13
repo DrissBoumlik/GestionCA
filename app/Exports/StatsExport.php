@@ -42,8 +42,7 @@ class StatsExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
         $appCltquery = $this->request->appCltquery;
         $allStats = null;
 
-        if ($appCltquery) {
-            $allStats = DB::select('SELECT st.Type_Note,
+        $columns = 'SELECT st.Type_Note,
             st.Utilisateur,
             st.Resultat_Appel,
             st.Date_Nveau_RDV,
@@ -76,7 +75,10 @@ class StatsExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
             st.EXPORT_ALL_EXTRACT_CUI,
             st.EXPORT_ALL_Date_CHARGEMENT_PDA,
             st.EXPORT_ALL_Date_SOLDE,
-            st.EXPORT_ALL_Date_VALIDATION'
+            st.EXPORT_ALL_Date_VALIDATION';
+
+        if ($appCltquery) {
+            $allStats = DB::select($columns
                 . ' FROM stats AS st WHERE Nom_Region is not null and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE is not null ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
@@ -87,40 +89,7 @@ class StatsExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
 
             );
         } else {
-            $allStats = DB::select('SELECT st.Type_Note,
-            st.Utilisateur,
-            st.Resultat_Appel,
-            st.Date_Nveau_RDV,
-            st.Heure_Nveau_RDV,
-            st.Marge_Nveau_RDV,
-            st.Id_Externe,
-            st.Date_Creation,
-            st.Code_Postal_Site,
-            st.Drapeaux,
-            st.Code_Type_Intervention,
-            st.Date_Rdv,
-            st.Nom_Societe,
-            st.Nom_Region,
-            st.Nom_Domaine,
-            st.Nom_Agence,
-            st.Nom_Activite,
-            st.Date_Heure_Note,
-            st.Date_Heure_Note_Annee,
-            st.Date_Heure_Note_Mois,
-            st.Date_Heure_Note_Semaine,
-            st.Date_Note,
-            st.Groupement,
-            st.key_Groupement,
-            st.Gpmt_Appel_Pre,
-            st.Code_Intervention,
-            st.EXPORT_ALL_Nom_SITE,
-            st.EXPORT_ALL_Nom_TECHNICIEN,
-            st.EXPORT_ALL_PRENom_TECHNICIEN,
-            st.EXPORT_ALL_Nom_EQUIPEMENT,
-            st.EXPORT_ALL_EXTRACT_CUI,
-            st.EXPORT_ALL_Date_CHARGEMENT_PDA,
-            st.EXPORT_ALL_Date_SOLDE,
-            st.EXPORT_ALL_Date_VALIDATION'
+            $allStats = DB::select($columns
                 . ' FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
