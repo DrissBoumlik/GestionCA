@@ -82,7 +82,7 @@
                         <h2 class="h4 font-w400 text-white-75 mb-0 invisible" data-toggle="appear" data-timeout="250">
                             Bonjour {{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</h2>
                     </div>
-                    @if (Auth::user()->role->id === 1)
+                    @if (isAdmin())
                         <div class="flex-sm-00-auto mt-3 mt-sm-0 ml-sm-3">
                         <span class="d-inline-block invisible" data-toggle="appear" data-timeout="350">
                             <a class="btn btn-primary px-4 py-2" data-toggle="click-ripple"
@@ -106,9 +106,18 @@
         <!-- Global date filter-->
         <div class="container-fluid">
             @if(!$agent)
-                <a href="javascript:void(0)"  id="printElement"
-                   class="btn btn-primary mb-3 capitalize-first-letter w-100">
-                    exporter des données au format PDF </a>
+                <div class="row">
+                    <div class="col-6">
+                        <a href="javascript:void(0)"  id="printElement"
+                           class="btn btn-primary mb-3 capitalize-first-letter w-100">
+                            exporter des données au format PDF</a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{{ URL::route('ExportXls', array('agence' => $agence)) }}"  id="printElement"
+                           class="btn btn-primary mb-3 capitalize-first-letter bg-green w-100">
+                            exporter des données au format Excel</a>
+                    </div>
+                </div>
             @endif
             @if(!$agence && !$agent)
                 @include('stats.layouts.filter_menu')
