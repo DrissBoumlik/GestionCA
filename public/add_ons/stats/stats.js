@@ -455,9 +455,90 @@ $(function () {
             });
         });
     }
+    let statsColturetech = {
+        element_dt: undefined,
+        element: 'statsColturetech',
+        columnName: 'Nom_Region',
+        rowName: '',
+        columns: undefined,
+        data: undefined,
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-02', rows: ''},
+        filterQuery: {
+            appCltquery: true,
+        },
+        routeCol: 'Cloturetech/columns?key_groupement=Appels-clture',
+        routeData: 'Cloturetech?key_groupement=Appels-clture',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsColturetechChart',
+            data: undefined,
+            chartTitle: 'Délai de validation post solde'
+        }
+    };
+    if (elementExists(statsColturetech)) {
+        getColumns(statsColturetech, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
+        $('#refreshColturetech').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
+            getColumns(statsColturetech, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: false,
+                pagination: false
+            });
+        });
+    }
+
+    let statsGlobalDelay = {
+        element_dt: undefined,
+        element: 'statsGlobalDelay',
+        columnName: 'Nom_Region',
+        rowName: '',
+        columns: undefined,
+        data: undefined,
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-03', rows: ''},
+        filterQuery: {
+            appCltquery: true,
+        },
+        routeCol: 'GlobalDelay/columns?key_groupement=Appels-clture',
+        routeData: 'GlobalDelay?key_groupement=Appels-clture',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsGlobalDelayChart',
+            data: undefined,
+            chartTitle: 'Délai global de traitement OT'
+        }
+    };
+    if (elementExists(statsGlobalDelay)) {
+        getColumns(statsGlobalDelay, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false
+        });
+        $('#refreshGlobalDelay').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
+            getColumns(statsGlobalDelay, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: false,
+                pagination: false
+            });
+        });
+    }
     //</editor-fold>
 
-    let globalElements = [userObject, statsRegions, statsFolders, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, statsFoldersByType, statsFoldersByCode, statsPerimeters];
+    let globalElements = [userObject, statsRegions, statsFolders, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, statsFoldersByType, statsFoldersByCode, statsPerimeters,statsColturetech,statsGlobalDelay];
 
     let detailClick = false;
 
