@@ -424,6 +424,68 @@
                 <!-- /.col -->
             </div>
             <!-- /.row -->
+            <hr>
+            <div class="row ">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Délai de validation post solde</h3>
+                            <hr>
+                            <div class="refresh-form">
+                                <div id="tree-view-02" class="tree-view d-inline-flex"></div>
+                                <button type="button" id="refreshColturetech" class="btn btn-primary float-right d-none">
+                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="statsColturetech"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="statsColturetechChart" class=""></canvas>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <hr>
+            <div class="row ">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Délai global de traitement OT</h3>
+                            <hr>
+                            <div class="refresh-form">
+                                <div id="tree-view-03" class="tree-view d-inline-flex"></div>
+                                <button type="button" id="refreshGlobalDelay" class="btn btn-primary float-right d-none">
+                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="statsGlobalDelay"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="statsGlobalDelayChart" class=""></canvas>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
         </div>
         <!-- END Stats -->
     </div>
