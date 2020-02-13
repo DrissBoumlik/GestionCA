@@ -46,7 +46,8 @@
 @section('content-header')
     <!-- Hero -->
     @if (request()->has('agence_code'))
-        <input type="hidden" name="agence_name" id="agence_name" value="{{$agence}}">
+        <?php $agence = $data['agence'] ?>
+        <input type="hidden" name="agence_name" id="agence_name" value="{{$agence ?? ''}}">
     @endif
     <div class="bg-image overflow-hidden"
          style="background-image: url('{{ asset('/media/backgrounds/photo3@2x.jpg') }}');">
@@ -57,8 +58,9 @@
                     <div class="flex-sm-fill">
                         @if (request()->has('agence_code'))
                             <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard
-                                Agence {{$agence}}</h1>
+                                Agence {{$agence ?? ''}}</h1>
                         @elseif(request()->has('agent_name'))
+                            {{ $agent = $data['agent'] }}
                             <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard
                                 Agent {{strtoupper($agent)}}</h1>
                         @else

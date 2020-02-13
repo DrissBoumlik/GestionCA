@@ -53,7 +53,7 @@ $(function () {
                 }
             },
         ],
-        order: [[ 0, "desc" ]]
+        order: [[0, "desc"]]
     });
     let element;
     $('#users-data').on('click', '.delete-user', function () {
@@ -78,10 +78,9 @@ $(function () {
     });
 
     function sendRequest(_this, method, route, data = null, toggleCheck = false, reload = false) {
-        var baseUrl = APP_URL;
         $.ajax({
             method: method,
-            url: baseUrl + route,
+            url: route,
             data: data,
             success: function (response) {
                 feedBack(response.message, 'success');
@@ -90,6 +89,10 @@ $(function () {
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
+                console.log(route);
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
                 if (jqXHR.status === 401 || jqXHR.status === 422) {
                     feedBack(jqXHR.responseJSON.message, 'error');
                 }
