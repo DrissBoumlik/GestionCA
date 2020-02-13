@@ -84,7 +84,7 @@ class StatsExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                 ($rowValue ?? '') .
                 ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
-                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
+                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW()) ') .
                 ' and Resultat_Appel not like "=%" group by Id_Externe'
 
             );
@@ -105,7 +105,7 @@ class StatsExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                 ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
                 ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
-                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
+                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
                 ($queryJoin ?? '') . ' ' .
                 ($callType ? 'and Groupement like "' . $callType . '"' : ' ') .
                 ' and Resultat_Appel not like "=%" '

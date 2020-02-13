@@ -39,7 +39,7 @@ class StatsRepository
                     ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                     ( $rowValue ??  '') .
                     ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
-                    ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ').
+                    ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())').
                     ' group by Id_Externe'
 
                 );
@@ -56,7 +56,7 @@ class StatsRepository
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                 ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
                 ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
-                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
+                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
                 ($queryJoin ?? '') . ' ' . ($queryGroupBy ?? ' ')
             );
         }
@@ -1800,7 +1800,7 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
         $regions = \DB::table('stats as st')
             ->select('Nom_Region', \DB::raw('count(distinct st.Id_Externe) as count'), \DB::raw('CASE
-                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440 THEN "4-superieur d\'un jour"
+                    WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440 THEN "4-superieur un jour"
                     WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) between 60 and 360   then "3-Entre 1H et 6h"
                     WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) BETWEEN 30 and 60 then "2-Entre 30min et 1H"
                     WHEN TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) < 30 then  "1-Entre 0 et 30min"
@@ -1940,7 +1940,7 @@ class StatsRepository
             ->select('Nom_Region', \DB::raw('count(DISTINCT Id_Externe) as count'), \DB::raw('CASE
                         WHEN TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) > 15 THEN "3-Superieur 15 Jours"
                         WHEN TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) between 7 and 15   then "2-Entre une semaine et 15 jours"
-                        ELSE "1-Moins d\'une semaine"
+                        ELSE "1-Moins une semaine"
                     END as Title')
             )->whereNotNull('EXPORT_ALL_Date_VALIDATION')
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
