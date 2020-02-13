@@ -31,8 +31,11 @@ class StatsRepository
         $subGroupBy = $request->subGroupBy;
         $queryGroupBy = $request->queryGroupBy;
         $appCltquery = $request->appCltquery;
+        $key_groupement = $request->get('key_groupement');
+        $key_groupement = $key_groupement ? clean($key_groupement) : null;
         $allStats = null;
 
+        DB::enableQueryLog();
         if($appCltquery){
             $allStats = DB::select('SELECT * FROM stats AS st WHERE Nom_Region is not null and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE is not null '.
                     ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
@@ -40,6 +43,7 @@ class StatsRepository
                     ( $rowValue ??  '') .
                     ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
                     ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())').
+                    ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
                     ' group by Id_Externe'
 
                 );
@@ -50,6 +54,7 @@ class StatsRepository
                 ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
                 ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
                 ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' ') .
+                ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
                 ($queryJoin ?? '') . ' ' . ($subGroupBy ?? ' GROUP BY Id_Externe ) groupedst')
                 . ' on st.Id_Externe = groupedst.Id_Externe and st.Date_Heure_Note = groupedst.MaxDateTime where Nom_Region is not null ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
@@ -57,9 +62,11 @@ class StatsRepository
                 ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
                 ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
                 ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
+                ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
                 ($queryJoin ?? '') . ' ' . ($queryGroupBy ?? ' ')
             );
         }
+        dd(DB::getQueryLog());
         return $allStats;
 
     }
