@@ -105,10 +105,12 @@
         <!-- Filters -->
         <!-- Global date filter-->
         <div class="container-fluid">
-            @if(!$agence && !$agent)
+            @if(!$agent)
                 <a href="javascript:void(0)"  id="printElement"
                    class="btn btn-primary mb-3 capitalize-first-letter w-100">
                     exporter des données au format PDF </a>
+            @endif
+            @if(!$agence && !$agent)
                 @include('stats.layouts.filter_menu')
                 <hr class="separator">
             @endif
