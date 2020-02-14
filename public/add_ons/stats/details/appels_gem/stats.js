@@ -268,7 +268,7 @@ $(function () {
                             ...column,
                             render: function (data, type, full, meta) {
                                 let newData = data;
-                                if (newData !== null) {
+                                if (newData !== null && newData !== undefined) {
                                     newData = newData.toString();
                                     if (newData.indexOf('|') !== -1) {
                                         newData = newData.split('|').join('<br/>');

@@ -298,8 +298,29 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-6', rows: '#CallResultPrealable-filter'},
         filterQuery: {
-            queryJoin: ' and ((Gpmt_Appel_Pre like "Joignable" and Resultat_Appel in ("Appels préalables - RDV confirmé", "Appels préalables - RDV confirmé Client non informé","Appels préalables - RDV repris et confirmé")) ' +
-                ' or (Gpmt_Appel_Pre like "Injoignable" and Resultat_Appel in ("Appels préalables - RDV confirmé","Appels préalables - RDV confirmé Client non informé","Appels préalables - RDV repris et confirmé","Appels préalables - Annulation RDV client non informé","Appels préalables - Client sauvé","Appels préalables - Client Souhaite être rappelé plus tard","Appels préalables - Injoignable / Absence de répondeur","Appels préalables - Injoignable 2ème Tentative","Appels préalables - Injoignable 3ème Tentative","Appels préalables - Injoignable avec Répondeur","Appels préalables - Numéro erroné","Appels préalables - Numéro Inaccessible","Appels préalables - Numéro non attribué","Appels préalables - Numéro non Renseigné","Appels préalables - RDV annulé le client ne souhaite plus d’intervention","Appels préalables - RDV annulé Rétractation/Résiliation","Appels préalables - RDV planifié mais non confirmé","Appels préalables - RDV repris Mais non confirmé"))) ',
+            queryJoin: ' and Gpmt_Appel_Pre in ("Joignable", "Injoignable")' +
+                ' and Resultat_Appel in ("Appels préalables - RDV confirmé",' +
+                '"Appels préalables - RDV confirmé Client non informé",' +
+                '"Appels préalables - RDV repris et confirmé",' +
+                '"Appels préalables - RDV confirmé",' +
+                '"Appels préalables - RDV confirmé Client non informé",' +
+                '"Appels préalables - RDV repris et confirmé",' +
+                '"Appels préalables - Annulation RDV client non informé",' +
+                '"Appels préalables - Client sauvé",' +
+                '"Appels préalables - Client Souhaite être rappelé plus tard",' +
+                '"Appels préalables - Injoignable / Absence de répondeur",' +
+                '"Appels préalables - Injoignable 2ème Tentative",' +
+                '"Appels préalables - Injoignable 3ème Tentative",' +
+                '"Appels préalables - Injoignable avec Répondeur",' +
+                '"Appels préalables - Numéro erroné",' +
+                '"Appels préalables - Numéro Inaccessible",' +
+                '"Appels préalables - Numéro non attribué",' +
+                '"Appels préalables - Numéro non Renseigné",' +
+                '"Appels préalables - RDV annulé le client ne souhaite plus d’intervention",' +
+                '"Appels préalables - RDV annulé Rétractation/Résiliation",' +
+                '"Appels préalables - RDV planifié mais non confirmé",' +
+                '"Appels préalables - RDV repris Mais non confirmé") '
+            ,
             subGroupBy: ' GROUP BY Id_Externe, Code_Intervention, Nom_Region) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Code_Intervention, Nom_Region'
         },
@@ -410,7 +431,6 @@ $(function () {
                         return {
                             ...column,
                             render: function (data, type, full, meta) {
-                                console.log(data, object.element);
                                 let newData = data;
                                 if (newData !== null && newData !== undefined) {
                                     newData = newData.toString();
@@ -924,7 +944,7 @@ $(function () {
         let callsStatesWeeksChart = document.getElementById('callsStatesWeeksChart');
         let statsCallsPosChart = document.getElementById('statsCallsPosChart');
         let statscallsNegChart = document.getElementById('statscallsNegChart');
-        let CallResultPrealableChart =  document.getElementById('CallResultPrealableChart');
+        let CallResultPrealableChart = document.getElementById('CallResultPrealableChart');
 
         //creates image
         let statsRegionsChartImg = statsCallsPrealableChart.toDataURL("image/png", 1.0);
@@ -934,32 +954,50 @@ $(function () {
         let statscallsNegChartImg = statscallsNegChart.toDataURL("image6/png", 1.0);
         let CallResultPrealableChartImg = statscallsNegChart.toDataURL("image7/png", 1.0);
         //creates PDF from img
-        let doc = new jsPDF('p', 'pt', [ 842,  842]);
+        let doc = new jsPDF('p', 'pt', [842, 842]);
         doc.text(10, 20, 'Résultats Appels');
         doc.autoTable({html: '#statsCallsPrealable', margin: {top: 30}, pageBreak: 'auto'});
         doc.addPage();
         doc.text(10, 20, 'la charte de Résultats Appels');
-        doc.addImage(statsRegionsChartImg, 'JPEG',150, 30, 500, 500);
+        doc.addImage(statsRegionsChartImg, 'JPEG', 150, 30, 500, 500);
         doc.addPage();
         doc.text(10, 20, 'Résultats Appels Préalables par agence');
         doc.autoTable({html: '#callsStatesAgencies', margin: {top: 30}, pageBreak: 'auto'});
-        doc.addImage(callsStatesAgenciesChartImg, 'JPEG',  150 , ($('#callsStatesAgencies').height()/1.328147) + 30 , 500 , 350);
+        doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 150, ($('#callsStatesAgencies').height() / 1.328147) + 30, 500, 350);
         doc.addPage();
         doc.text(10, 20, 'Résultats Appels Préalables par semaine');
         doc.autoTable({html: '#callsStatesWeeks', margin: {top: 30}, pageBreak: 'auto'});
-        doc.addImage(callsStatesWeeksChartImg, 'JPEG', 150 , ($('#callsStatesWeeks').height()/1.328147) + 30  , 500 , 350);
+        doc.addImage(callsStatesWeeksChartImg, 'JPEG', 150, ($('#callsStatesWeeks').height() / 1.328147) + 30, 500, 350);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Confirmés (Clients Joignables)');
-        doc.autoTable({html: '#statsCallsPos', margin: {left: 0, top: 30}, pageBreak: 'auto', tableWidth :842, columnStyles: { 0: {cellWidth: 50 } , 25: {cellWidth: 40 } }});
-        doc.addImage(statsCallsPosChartImg, 'JPEG',150 , ($('#statsCallsPos').height()/1.328147) + 50  , 500 , 300);
+        doc.autoTable({
+            html: '#statsCallsPos',
+            margin: {left: 0, top: 30},
+            pageBreak: 'auto',
+            tableWidth: 842,
+            columnStyles: {0: {cellWidth: 50}, 25: {cellWidth: 40}}
+        });
+        doc.addImage(statsCallsPosChartImg, 'JPEG', 150, ($('#statsCallsPos').height() / 1.328147) + 50, 500, 300);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)');
-        doc.autoTable({html: '#statsCallsNeg', margin: {left: 0, top: 30}, pageBreak: 'auto',tableWidth :842, columnStyles: { 0: {cellWidth: 50 } , 27: {cellWidth: 50 } }});
-        doc.addImage(statscallsNegChartImg, 'JPEG',150,($('#statsCallsNeg').height()/1.328147) + 50  , 500 , 250);
+        doc.autoTable({
+            html: '#statsCallsNeg',
+            margin: {left: 0, top: 30},
+            pageBreak: 'auto',
+            tableWidth: 842,
+            columnStyles: {0: {cellWidth: 50}, 27: {cellWidth: 50}}
+        });
+        doc.addImage(statscallsNegChartImg, 'JPEG', 150, ($('#statsCallsNeg').height() / 1.328147) + 50, 500, 250);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)');
-        doc.autoTable({html: '#CallResultPrealable', margin: {left: 0, top: 30}, pageBreak: 'auto',tableWidth :842, columnStyles: { 0: {cellWidth: 50 } , 29: {cellWidth: 50 } }});
-        doc.addImage(CallResultPrealableChartImg, 'JPEG',150,($('#CallResultPrealable').height()/1.328147) + 50  , 500 , 250);
+        doc.autoTable({
+            html: '#CallResultPrealable',
+            margin: {left: 0, top: 30},
+            pageBreak: 'auto',
+            tableWidth: 842,
+            columnStyles: {0: {cellWidth: 50}, 29: {cellWidth: 50}}
+        });
+        doc.addImage(CallResultPrealableChartImg, 'JPEG', 150, ($('#CallResultPrealable').height() / 1.328147) + 50, 500, 250);
         doc.save('Appels Préalables.pdf');
     })
 
