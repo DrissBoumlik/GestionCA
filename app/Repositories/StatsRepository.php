@@ -1551,10 +1551,12 @@ class StatsRepository
                 ' and ' . $queryFilters .
                 ($key_groupement ? 'and key_groupement like "' . $key_groupement . '"' : '') .
 
-                ' and ((Gpmt_Appel_Pre like "Joignable" and Resultat_Appel in ("Appels préalables - RDV confirmé",
-                                                                                    "Appels préalables - RDV confirmé Client non informé",
-                                                                                    "Appels préalables - RDV repris et confirmé"))' .
-                ' or (Gpmt_Appel_Pre like "Injoignable" and Resultat_Appel in ("Appels préalables - RDV confirmé",
+                ' and Gpmt_Appel_Pre in ("Joignable", "Injoignable")' .
+                ' and Resultat_Appel in ("Appels préalables - RDV confirmé",
+                                        "Appels préalables - RDV confirmé Client non informé",
+                                        "Appels préalables - RDV repris et confirmé"
+                                        
+                                        "Appels préalables - RDV confirmé",
                                         "Appels préalables - RDV confirmé Client non informé",
                                         "Appels préalables - RDV repris et confirmé",
                                         "Appels préalables - Annulation RDV client non informé",
@@ -1571,7 +1573,7 @@ class StatsRepository
                                         "Appels préalables - RDV annulé le client ne souhaite plus d’intervention",
                                         "Appels préalables - RDV annulé Rétractation/Résiliation",
                                         "Appels préalables - RDV planifié mais non confirmé",
-                                        "Appels préalables - RDV repris Mais non confirmé")))' .
+                                        "Appels préalables - RDV repris Mais non confirmé")' .
 
                 ' GROUP BY Id_Externe, Code_Intervention, Nom_Region) groupedst'),
                 function ($join) {
@@ -1588,6 +1590,7 @@ class StatsRepository
             'Appels préalables - RDV confirmé',
             'Appels préalables - RDV confirmé Client non informé',
             'Appels préalables - RDV repris et confirmé',
+
             'Appels préalables - Annulation RDV client non informé',
             'Appels préalables - Client sauvé',
             'Appels préalables - Client Souhaite être rappelé plus tard',
