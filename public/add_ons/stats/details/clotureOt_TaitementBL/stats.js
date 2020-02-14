@@ -393,8 +393,8 @@ $(function () {
                             let agence_name = $('#agence_name').val();
                             let col = object.element_dt.cell(this).index().column + 1;
                             let row = object.element_dt.cell(this).index().row + 1;
-                            let colText = $(tableId + " thead th:nth-child(" + col + ")").text();
-                            let rowText = $(tableId + " tbody tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
+                            let colText = $(tableId + " > thead > tr > th:nth-child(" + col + ")").text();
+                            let rowText = $(tableId + " > tbody > tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
                             if(object.element === 'statsColturetech'){
                                 switch (rowText) {
                                     case 'superieur d\'un jour': rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440'; break;
