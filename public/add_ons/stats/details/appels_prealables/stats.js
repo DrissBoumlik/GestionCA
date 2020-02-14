@@ -410,6 +410,7 @@ $(function () {
                         return {
                             ...column,
                             render: function (data, type, full, meta) {
+                                console.log(data);
                                 let newData = data;
                                 if (newData !== null) {
                                     newData = newData.toString();
