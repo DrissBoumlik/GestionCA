@@ -1550,11 +1550,12 @@ class StatsRepository
              where Nom_Region is not null ' .
                 ' and ' . $queryFilters .
                 ($key_groupement ? 'and key_groupement like "' . $key_groupement . '"' : '') .
-
+                ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
                 ' and Gpmt_Appel_Pre in ("Joignable", "Injoignable")' .
                 ' and Resultat_Appel in ("Appels préalables - RDV confirmé",
                                         "Appels préalables - RDV confirmé Client non informé",
-                                        "Appels préalables - RDV repris et confirmé"
+                                        "Appels préalables - RDV repris et confirmé",
                                         
                                         "Appels préalables - RDV confirmé",
                                         "Appels préalables - RDV confirmé Client non informé",
@@ -1617,7 +1618,6 @@ class StatsRepository
         if ($agenceCode) {
             $codes = $codes->where('st.Nom_Region', 'like', "%$agenceCode");
         }
-
         $codes = $codes->groupBy('Code_Intervention', 'Nom_Region')->get();
         $keys = $codes->pluck('Code_Intervention');
 

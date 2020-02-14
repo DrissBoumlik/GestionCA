@@ -44,7 +44,7 @@ if (!function_exists('getStats')) {
                 ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                 ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
-                ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
+                ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ($col ? ' and ' . $col . ' is null ' : ' ')) .
                 ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
                 ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
                 ($queryJoin ?? '') . ' ' . ($subGroupBy ?? ' GROUP BY Id_Externe ) groupedst')
@@ -52,7 +52,7 @@ if (!function_exists('getStats')) {
                 ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                 ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
-                ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
+                ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ($col ? ' and ' . $col . ' is null ' : ' ')) .
                 ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
                 ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
                 ($queryJoin ?? '') . ' ' . ($queryGroupBy ?? ' ')
