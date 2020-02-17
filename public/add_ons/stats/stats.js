@@ -1238,10 +1238,10 @@ $(function () {
         doc.autoTable({html: '#statsPerimeters', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520});
         doc.addImage(statsPerimetersChartImg, 'JPEG',532 , 30 , 350 , 300);
         doc.addPage();
-        doc.text(10, 390, 'Délai de validation post solde');
+        doc.text(10, 20 , 'Délai de validation post solde');
         doc.autoTable({html: '#statsColturetech', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520 });
         doc.addImage(statsColturetechChartImg, 'JPEG',532, 30 , 500 , 350);
-        doc.text(10, 20, 'Délai global de traitement OT');
+        doc.text(10, 390 , 'Délai global de traitement OT');
         doc.autoTable({html: '#statsGlobalDelay',pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0} });
         doc.addImage(statsGlobalDelayChartImg, 'JPEG',532 , 400 , 350 , 350);
         doc.save('dashboard.pdf');
