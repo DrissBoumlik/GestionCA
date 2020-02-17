@@ -79,7 +79,7 @@
                                 <div class="profile-wrapper align-center">
                                     <div class="profile-header clearfix">
                                         <div class="user-picture">
-                                            <img src="{{ getPicture(Auth::user()) }}" id="user-picture" alt=""
+                                            <img src="{{ getPicture() }}" id="user-picture" alt=""
                                                  class="round auth-w">
                                             <label for="picture" class="pointer">
                                                 <input type="file" class="custom-file-input d-none" id="picture"

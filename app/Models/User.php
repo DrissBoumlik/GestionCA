@@ -46,12 +46,12 @@ class User extends Authenticatable
 
     public function isAgency()
     {
-        return $this->role->name == 'Agence';
+        return $this->role->name == 'agence';
     }
 
     public function isAgent()
     {
-        return $this->role->name == 'Agent';
+        return $this->role->name == 'agent';
     }
 
     public function role()

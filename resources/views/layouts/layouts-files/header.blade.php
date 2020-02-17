@@ -57,7 +57,7 @@
             <div class="dropdown d-inline-block ml-2">
                 <button type="button" class="btn btn-sm btn-dual" id="page-header-user-dropdown" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded" src="//images2.imgbox.com/7f/13/gFRcrjpl_o.png"
+                    <img class="rounded" src="{{ getPicture() }}"
                          alt="Header Avatar"
                          style="width: 18px;">
                     <span class="d-none d-sm-inline-block ml-1">{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</span>
@@ -66,7 +66,7 @@
                 <div class="dropdown-menu dropdown-menu-right p-0 border-0 font-size-sm"
                      aria-labelledby="page-header-user-dropdown">
                     <div class="p-3 text-center bg-primary">
-                        <img class="img-avatar img-avatar48 img-avatar-thumb" src="//images2.imgbox.com/7f/13/gFRcrjpl_o.png" alt="">
+                        <img class="img-avatar img-avatar48 img-avatar-thumb" src="{{ getPicture() }}" alt="">
                     </div>
                     <div class="p-2">
                         <h5 class="dropdown-header text-uppercase">Utilisateur</h5>
