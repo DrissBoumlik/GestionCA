@@ -1187,6 +1187,9 @@ $(function () {
         let statsFoldersByTypeChart = document.getElementById('statsFoldersByTypeChart');
         let statsFoldersByCodeChart = document.getElementById('statsFoldersByCodeChart');
         let statsPerimetersChart = document.getElementById('statsPerimetersChart');
+        let statsColturetechChart = document.getElementById('statsColturetechChart');
+        let statsGlobalDelayChart = document.getElementById('statsGlobalDelayChart');
+
         //creates image
         let statsRegionsChartImg = statsRegionsChart.toDataURL("image/png", 1.0);
         let statsFoldersChartImg = statsFoldersChart.toDataURL("image2/png", 1.0);
@@ -1197,6 +1200,8 @@ $(function () {
         let statsFoldersByTypeChartImg = statsFoldersByTypeChart.toDataURL("image7/png", 1.0);
         let statsFoldersByCodeChartImg = statsFoldersByCodeChart.toDataURL("image8/png", 1.0);
         let statsPerimetersChartImg = statsPerimetersChart.toDataURL("image9/png", 1.0);
+        let statsColturetechChartImg = statsColturetechChart.toDataURL("image10/png", 1.0);
+        let statsGlobalDelayChartImg = statsGlobalDelayChart.toDataURL("image11/png", 1.0);
         //creates PDF from img
         let doc = new jsPDF('p', 'pt', [ 842,  842]);
         doc.text(10, 20, 'Résultats Appels');
@@ -1211,7 +1216,7 @@ $(function () {
         doc.addImage(callsStatesAgenciesChartImg, 'JPEG',  532 , 30 , 350 , 300);
         doc.text(10, 390, 'Résultats Appels Préalables par semaine');
         doc.autoTable({html: '#callsStatesWeeks', pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0}});
-        doc.addImage(callsStatesWeeksChartImg, 'JPEG',532, 400  , 350 , 350);
+        doc.addImage(callsStatesWeeksChartImg, 'JPEG',532, 400  , 350 , 300);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Confirmés (Clients Joignables)');
         doc.autoTable({html: '#statsCallsPos', margin: {left: 0, top: 30}, pageBreak: 'auto', tableWidth :842, columnStyles: { 0: {cellWidth: 50 } , 25: {cellWidth: 50 } }});
@@ -1232,6 +1237,13 @@ $(function () {
         doc.text(10, 20, 'Production Globale CAM');
         doc.autoTable({html: '#statsPerimeters', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520});
         doc.addImage(statsPerimetersChartImg, 'JPEG',532 , 30 , 350 , 300);
+        doc.addPage();
+        doc.text(10, 20 , 'Délai de validation post solde');
+        doc.autoTable({html: '#statsColturetech', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520 });
+        doc.addImage(statsColturetechChartImg, 'JPEG',532, 30 , 350 , 300);
+        doc.text(10, 390 , 'Délai global de traitement OT');
+        doc.autoTable({html: '#statsGlobalDelay',pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0} });
+        doc.addImage(statsGlobalDelayChartImg, 'JPEG',532 , 400 , 350 , 300);
         doc.save('dashboard.pdf');
     })
 });
