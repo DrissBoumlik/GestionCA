@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 if (!function_exists('getStats')) {
     function getStats(Request $request)
     {
+        $globalFilter = Filter::where(['user_id' => getAuthUser()->id, 'isGlobal' => true])->first();
         $callType = $request->callType;
         $row = $request->row;
         $rowValue = $request->rowValue;
@@ -17,7 +18,7 @@ if (!function_exists('getStats')) {
         $agentName = $request->agent;
         $agenceCode = $request->agence ?? $request->agence_code;
         $queryJoin = $request->queryJoin;
-        $dates = $request->dates;
+        $dates = $request->dates ?? ($globalFilter ? join(",", $globalFilter->date_filter) : null);
         $resultat_appel = $request->Resultat_Appel;
         $subGroupBy = $request->subGroupBy;
         $queryGroupBy = $request->queryGroupBy;
@@ -36,8 +37,8 @@ if (!function_exists('getStats')) {
                 ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
                 ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
                 ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
+                ' and Resultat_Appel not like "=%"' .
                 ' group by Id_Externe'
-
             );
         } else {
             $allStats = DB::select('SELECT * FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
@@ -47,6 +48,7 @@ if (!function_exists('getStats')) {
                 ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ($col ? ' and ' . $col . ' is null ' : ' ')) .
                 ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
                 ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
+                ' and Resultat_Appel not like "=%" ' .
                 ($queryJoin ?? '') . ' ' . ($subGroupBy ?? ' GROUP BY Id_Externe ) groupedst')
                 . ' on st.Id_Externe = groupedst.Id_Externe and st.Date_Heure_Note = groupedst.MaxDateTime where Nom_Region is not null ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
@@ -55,6 +57,7 @@ if (!function_exists('getStats')) {
                 ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ($col ? ' and ' . $col . ' is null ' : ' ')) .
                 ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
                 ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
+                ' and Resultat_Appel not like "=%" ' .
                 ($queryJoin ?? '') . ' ' . ($queryGroupBy ?? ' ')
             );
         }
