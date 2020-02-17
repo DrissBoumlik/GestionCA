@@ -956,18 +956,15 @@ $(function () {
         //creates PDF from img
         let doc = new jsPDF('p', 'pt', [842, 842]);
         doc.text(10, 20, 'Résultats Appels');
-        doc.autoTable({html: '#statsCallsPrealable', margin: {top: 30}, pageBreak: 'auto'});
-        doc.addPage();
-        doc.text(10, 20, 'la charte de Résultats Appels');
-        doc.addImage(statsRegionsChartImg, 'JPEG', 150, 30, 500, 500);
+        doc.autoTable({html: '#statsCallsPrealable', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520});
+        doc.addImage(statsRegionsChartImg, 'JPEG',  532 , 30 , 350 , 300);
         doc.addPage();
         doc.text(10, 20, 'Résultats Appels Préalables par agence');
-        doc.autoTable({html: '#callsStatesAgencies', margin: {top: 30}, pageBreak: 'auto'});
-        doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 150, ($('#callsStatesAgencies').height() / 1.328147) + 30, 500, 350);
-        doc.addPage();
-        doc.text(10, 20, 'Résultats Appels Préalables par semaine');
-        doc.autoTable({html: '#callsStatesWeeks', margin: {top: 30}, pageBreak: 'auto'});
-        doc.addImage(callsStatesWeeksChartImg, 'JPEG', 150, ($('#callsStatesWeeks').height() / 1.328147) + 30, 500, 350);
+        doc.autoTable({html: '#callsStatesAgencies', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520 ,columnStyles: { 9: {cellWidth: 50 } , 5: {cellWidth: 40 },styles: {cellPadding: {top: 10, bottom: 10,right : 0}} }});
+        doc.addImage(callsStatesAgenciesChartImg, 'JPEG',  532 , 30 , 350 , 300);
+        doc.text(10, 390, 'Résultats Appels Préalables par semaine');
+        doc.autoTable({html: '#callsStatesWeeks', pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0}});
+        doc.addImage(callsStatesWeeksChartImg, 'JPEG',532, 400  , 350 , 350);
         doc.addPage();
         doc.text(10, 20, 'Code Interventions liés aux RDV Confirmés (Clients Joignables)');
         doc.autoTable({
@@ -989,7 +986,7 @@ $(function () {
         });
         doc.addImage(statscallsNegChartImg, 'JPEG', 150, ($('#statsCallsNeg').height() / 1.328147) + 50, 500, 250);
         doc.addPage();
-        doc.text(10, 20, 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)');
+        doc.text(10, 20, 'Global Résultat Appels Préalables');
         doc.autoTable({
             html: '#CallResultPrealable',
             margin: {left: 0, top: 30},
