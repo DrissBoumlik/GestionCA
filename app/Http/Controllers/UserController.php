@@ -88,7 +88,7 @@ class UserController extends Controller
     public function changeStatus(Request $request, User $user)
     {
         // Authorization
-        if(!auth()->user()->isAdmin()) {
+        if (!auth()->user()->isAdmin()) {
             return response()->json(['message' => 'You are not authorized'], 401);
         }
 
@@ -116,14 +116,14 @@ class UserController extends Controller
 //            $picture = $picture->storeAs('public/users/user_' . $user->id . '/images', 'profile.' . $picture->extension());
 //            $picture = str_replace('public', '/storage', $picture);
             list($type, $picture) = explode(';', $picture);
-            list(, $picture)      = explode(',', $picture);
+            list(, $picture) = explode(',', $picture);
             $picture = base64_decode($picture);
-            $image_name= 'profile.png';
+            $image_name = 'profile.png';
             if (!is_dir('storage/users/user-' . $user->id)) {
                 mkdir('storage/users/user-' . $user->id . '/images', 0777, true);
             }
             File::delete('storage/users/user-' . $user->id . '/images/' . $image_name);
-            $path = public_path('storage/users/user-' . $user->id . '/images/' .$image_name);
+            $path = public_path('storage/users/user-' . $user->id . '/images/' . $image_name);
             $result = file_put_contents($path, $picture);
             $picture = '/storage/users/user-' . $user->id . '/images/' . $image_name;
         }
@@ -155,8 +155,9 @@ class UserController extends Controller
             'password' => ['nullable', 'string', 'min:8'],
             'role' => ['nullable', 'exists:roles,id']
         ];
-        if($user->isAdmin()) {
+        if ($user->isAgency()) {
             $validation_rules['agence_name'] = ['present', 'max:20'];
+        } elseif ($user->isAgent()) {
             $validation_rules['agent_name'] = ['present', 'max:20'];
         }
         $validation = $request->validate($validation_rules);
@@ -167,15 +168,17 @@ class UserController extends Controller
 //            $picture = $picture->storeAs('public/users/user_' . $user->id . '/images', 'profile.' . $picture->extension());
 //            $picture = str_replace('public', '/storage', $picture);
             list($type, $picture) = explode(';', $picture);
-            list(, $picture)      = explode(',', $picture);
+            list(, $picture) = explode(',', $picture);
+            $picture = str_replace(' ', '+', $picture);
             $picture = base64_decode($picture);
-            $image_name= 'profile.png';
-            if (!is_dir('storage/users/user-' . $user->id)) {
-                mkdir('storage/users/user-' . $user->id . '/images', 0777, true);
+            $image_name = 'profile.png';
+            $path = 'storage/users/user-' . $user->id;
+            if (!is_dir($path)) {
+                mkdir($path . '/images', 0777, true);
             }
-            $path = public_path('storage/users/user-' . $user->id . '/images/' .$image_name);
-            $result = file_put_contents($path, $picture);
-            $picture = '/storage/users/user-' . $user->id . '/images/' . $image_name;
+            $imagePath = public_path($path . '/images/' . $image_name);
+            $result = file_put_contents($imagePath, $picture);
+            $picture = '/' . $path . '/images/' . $image_name;
         }
         $user->firstname = $request->firstname ?? $user->firstname;
         $user->lastname = $request->lastname ?? $user->lastname;

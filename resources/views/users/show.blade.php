@@ -56,7 +56,7 @@
 @endsection
 @section('content')
     <div class="user-profile profile">
-        {{ $isAdmin = isAdmin() }}
+        @php $isAdmin = isAdmin() @endphp
         <form method="POST" action="{{ route('users.update', $user->id) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
