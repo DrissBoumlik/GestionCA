@@ -68,7 +68,7 @@
                                 <div class="profile-header clearfix">
                                     <div class="user-picture">
                                         <img
-                                            src="{{ $user->picture ?? '//images2.imgbox.com/75/b0/NyZk9Glf_o.png' }}"
+                                            src="{{ getPicture($user) ?? '//images2.imgbox.com/75/b0/NyZk9Glf_o.png' }}"
                                             id="user-picture" alt=""
                                             class="round auth-w">
                                         <label for="picture" class="pointer">

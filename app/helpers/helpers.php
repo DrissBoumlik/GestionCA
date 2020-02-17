@@ -376,7 +376,8 @@ if (!function_exists('getPicture')) {
     function getPicture($user = null)
     {
         $user = $user ?? auth()->user();
-        return $user->picture ?? ($user->gender == 'male' ? 'https://images2.imgbox.com/ce/b9/IolVNBVh_o.png' : 'https://images2.imgbox.com/23/de/asREdFuf_o.png');
+        $picturePath = URL::to('/') . $user->picture;
+        return $user->picture ? $picturePath : ($user->gender == 'male' ? 'https://images2.imgbox.com/ce/b9/IolVNBVh_o.png' : 'https://images2.imgbox.com/23/de/asREdFuf_o.png');
     }
 }
 
