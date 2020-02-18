@@ -178,7 +178,7 @@ class StatsRepository
             ->where('Groupement', 'not like', 'Appels post');
         $results = applyFilter($results, $filter, 'Groupement');
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $results = $results->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -258,7 +258,7 @@ class StatsRepository
             ->where('Groupement', 'not like', 'Appels post');
         $regions = applyFilter($regions, $filter, 'Groupement');
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $regions = $regions->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -357,7 +357,7 @@ class StatsRepository
 
         $results = applyFilter($results, $filter, $route_request ? null : 'Resultat_Appel');
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $results = $results->where('key_groupement', 'like', $key_groupement);
         }
 
@@ -443,7 +443,7 @@ class StatsRepository
 
         $regions = applyFilter($regions, $filter, $route_request ? null : 'Resultat_Appel');
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $regions = $regions->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -540,7 +540,7 @@ class StatsRepository
 
         $columns = applyFilter($columns, $filter, 'Gpmt_Appel_Pre');
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $columns = $columns->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -672,7 +672,7 @@ class StatsRepository
         $regions = applyFilter($regions, $filter, 'Gpmt_Appel_Pre');
 
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $regions = $regions->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -816,7 +816,7 @@ class StatsRepository
             ]);
         }
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $columns = $columns->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -945,7 +945,7 @@ class StatsRepository
             ]);
         }
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $codes = $codes->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -1045,7 +1045,7 @@ class StatsRepository
             ->where('Groupement', 'Appels clôture');
         $columns = applyFilter($columns, $filter, $intervCol);
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $columns = $columns->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -1122,7 +1122,7 @@ class StatsRepository
             ->where('Groupement', 'Appels clôture');
         $regions = applyFilter($regions, $filter, $intervCol);
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $regions = $regions->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -1260,7 +1260,7 @@ class StatsRepository
             ->where('Type_Note', 'like', 'CAM');
         $results = applyFilter($results, $filter, 'Nom_Region');
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $results = $results->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -1479,7 +1479,7 @@ class StatsRepository
             'Appels préalables - RDV repris Mais non confirmé',
         ]);
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $codes = $codes->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -1609,7 +1609,7 @@ class StatsRepository
             'Appels préalables - RDV repris Mais non confirmé',
         ]);
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $codes = $codes->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -1863,7 +1863,6 @@ class StatsRepository
         $keys = $columns->pluck('Nom_Region');
 
 
-
         if (!count($keys)) {
             $data = ['filter' => $filter, 'columns' => [], 'rows' => [], 'rowsFilterHeader' => ''];
             return $data;
@@ -1922,7 +1921,6 @@ class StatsRepository
         $keys = $regions->groupBy(['Nom_Region'])->keys();
 
 
-
         if (!count($regions)) {
             $data = ['data' => []];
             return $data;
@@ -1978,10 +1976,25 @@ class StatsRepository
     public function importStats($request)
     {
         $fileName = $request->file('file')->getClientOriginalName();
-        $request->file('file')->storeAs('data_source', $fileName);
+        $filePath = $request->file('file')->storeAs('data_source', $fileName);
 
-        $statImport = new StatsImport($request->days);
-        Excel::import($statImport, $request->file('file'));
+        #region TEST
+        $reader = ReaderEntityFactory::createReaderFromFile('/path/to/file.ext');
+
+        $reader->open($filePath);
+
+        foreach ($reader->getSheetIterator() as $sheet) {
+            foreach ($sheet->getRowIterator() as $row) {
+                // do stuff with the row
+                $cells = $row->getCells();
+            }
+        }
+
+        $reader->close();
+        #endregion
+
+//        $statImport = new StatsImport($request->days);
+//        Excel::import($statImport, $request->file('file'));
         return [
             'success' => true,
             'message' => 'Le fichier a été importé avec succès'
