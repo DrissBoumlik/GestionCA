@@ -765,16 +765,15 @@ $(function () {
         //creates PDF from img
         let doc = new jsPDF('p', 'pt', [ 842,  842]);
         doc.text(10, 20, 'Résultats Appels GEM');
-        doc.autoTable({html: '#statsCallsGem', margin: {top: 30}, pageBreak: 'auto'});
-        doc.addImage(statsCallsGemChartImg, 'JPEG',  150 , ($('#statsCallsGem').height()/1.328147) + 30  , 500 , 350);
-        doc.addPage();
-        doc.text(10, 20, 'Résultats Appels Préalables par agence');
-        doc.autoTable({html: '#callsStatesAgencies', margin: {top: 30}, pageBreak: 'auto'});
-        doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 150 , ($('#callsStatesAgencies').height()/1.328147) + 30  , 500 , 350);
+        doc.autoTable({html: '#statsCallsGem', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520 });
+        doc.addImage(statsCallsGemChartImg, 'JPEG',  532 , 30 , 350 , 300);
+        doc.text(10, 390, 'Résultats Appels Préalables par agence');
+        doc.autoTable({html: '#callsStatesAgencies',  pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0},columnStyles: { 9: {cellWidth: 50 },5: {cellWidth: 50 } }});
+        doc.addImage(callsStatesAgenciesChartImg, 'JPEG',532, 400  , 350 , 350 );
         doc.addPage();
         doc.text(10, 20, 'Résultats Appels Préalables par semaine');
-        doc.autoTable({html: '#callsStatesWeeks', margin: {top: 30}, pageBreak: 'auto'});
-        doc.addImage(callsStatesWeeksChartImg, 'JPEG', 150 , ($('#callsStatesWeeks').height()/1.328147) + 30  , 500 , 350);
+        doc.autoTable({html: '#callsStatesWeeks', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520 });
+        doc.addImage(callsStatesWeeksChartImg, 'JPEG', 532 , 30 , 350 , 300 );
         doc.save('Appels Gem.pdf');
     })
 
