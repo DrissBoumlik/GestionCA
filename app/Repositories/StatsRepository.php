@@ -11,9 +11,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Carbon\Carbon;
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 
 class StatsRepository
 {
@@ -1975,26 +1977,13 @@ class StatsRepository
 
     public function importStats($request)
     {
-        $fileName = $request->file('file')->getClientOriginalName();
-        $filePath = $request->file('file')->storeAs('data_source', $fileName);
+        $file = $request->file('file');
+        $fileName = $file->getClientOriginalName();
+//        $filePath = $file->storeAs('data_source', $fileName);
+        $stored = Storage::disk('public')->put('storage/data_source/' . $fileName, file_get_contents($file));
 
-        #region TEST
-        $reader = ReaderEntityFactory::createReaderFromFile('/path/to/file.ext');
-
-        $reader->open($filePath);
-
-        foreach ($reader->getSheetIterator() as $sheet) {
-            foreach ($sheet->getRowIterator() as $row) {
-                // do stuff with the row
-                $cells = $row->getCells();
-            }
-        }
-
-        $reader->close();
-        #endregion
-
-//        $statImport = new StatsImport($request->days);
-//        Excel::import($statImport, $request->file('file'));
+        $statImport = new StatsImport($request->days);
+        Excel::import($statImport, $request->file('file'));
         return [
             'success' => true,
             'message' => 'Le fichier a été importé avec succès'
