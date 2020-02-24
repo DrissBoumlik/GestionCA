@@ -1236,7 +1236,7 @@ $(function () {
         doc.addPage();
         doc.text(10, 20, 'Répartition des dossiers non validés par code intervention');
         doc.addImage(statsFoldersByCodeChartImg, 'JPEG', 532 , 30 , 350 , 300);
-        doc.autoTable({html: '#statsFoldersByCode', margin: {left: 0 , top: 30}, pageBreak: 'auto',tableWidth: 525,styles: {fontSize: 7} });
+        doc.autoTable({html: '#statsFoldersByCode', margin: {left: 0 , top: 30}, pageBreak: 'auto',tableWidth: 525,styles: {fontSize: 7,cellPadding: {top: 0, bottom: 0}} });
         doc.addPage();
         doc.text(10, 20, 'Production Globale CAM');
         doc.autoTable({html: '#statsPerimeters', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520,styles: {fontSize: 7}});
