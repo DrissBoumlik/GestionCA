@@ -651,11 +651,11 @@ $(function () {
             let callsStatesAgenciesChartImg = callsStatesAgenciesChart.toDataURL("image2/png", 1.0);
             let callsStatesWeeksChartImg = callsStatesWeeksChart.toDataURL("image3/png", 1.0);
 
-            //creates PDF from img
+         //creates PDF from img
             let doc = new jsPDF('p', 'pt', [ 842,  842]);
             doc.addImage(logo, 'jpeg', 371, 10, 100,30);
-            doc.text(10, 20, 'Résultats Appels GEM');
-            doc.autoTable({html: '#statsCallsGem', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520,styles: {fontSize: 7} });
+            doc.text(10 , 40, 'Résultats Appels GEM');
+            doc.autoTable({html: '#statsCallsGem', margin: {left: 0 , top: 50}, pageBreak: 'auto', tableWidth: 520,styles: {fontSize: 7} });
             doc.addImage(statsCallsGemChartImg, 'JPEG',  532 , 30 , 350 , 300);
             doc.text(10, 390, 'Résultats Appels Préalables par agence');
             doc.autoTable({html: '#callsStatesAgencies',  pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0} ,styles: {fontSize: 7} });
