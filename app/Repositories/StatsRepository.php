@@ -342,7 +342,7 @@ class StatsRepository
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
         $key_groupement = $request->get('key_groupement');
-        $key_groupement = $key_groupement ? clean($key_groupement) : null;
+//        $key_groupement = $key_groupement ? clean($key_groupement) : null;
 
         $route_request = $request->get('route');
         $_route = $route_request ?? getRoute(Route::current());
@@ -360,7 +360,7 @@ class StatsRepository
         $results = applyFilter($results, $filter, $route_request ? null : 'Resultat_Appel');
 
         if ($key_groupement) {
-            $results = $results->where('key_groupement', 'like', $key_groupement);
+            $results = $results->where('Groupement', 'like', $key_groupement);
         }
 
         if ($agentName) {
@@ -401,8 +401,8 @@ class StatsRepository
             $first = new \stdClass();
             $first->name = 'Resultat_Appel';
             $first->data = 'Resultat_Appel';
-            $first->text = 'Résultats Appels Préalables';
-            $first->title = 'Résultats Appels Préalables';
+            $first->text = $key_groupement;
+            $first->title = $key_groupement;
             $first->orderable = false;
             array_unshift($columns, $first);
 
