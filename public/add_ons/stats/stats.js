@@ -134,8 +134,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel'
         },
-        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
-        routeData: 'regions/details/groupement?key_groupement=Appels-clture',
+        routeCol: 'regions/details/groupement/columns?key_groupement=Appels clôture',
+        routeData: 'regions/details/groupement?key_groupement=Appels clôture',
         objChart: {
             element_chart: undefined,
             element_id: 'statsFoldersChart',
@@ -474,8 +474,8 @@ $(function () {
         filterQuery: {
             appCltquery: true,
         },
-        routeCol: 'Cloturetech/columns?key_groupement=Appels-clture',
-        routeData: 'Cloturetech?key_groupement=Appels-clture',
+        routeCol: 'Cloturetech/columns?key_groupement=Appels clôture',
+        routeData: 'Cloturetech?key_groupement=Appels clôture',
         objChart: {
             element_chart: undefined,
             element_id: 'statsColturetechChart',
@@ -515,8 +515,8 @@ $(function () {
         filterQuery: {
             appCltquery: true,
         },
-        routeCol: 'GlobalDelay/columns?key_groupement=Appels-clture',
-        routeData: 'GlobalDelay?key_groupement=Appels-clture',
+        routeCol: 'GlobalDelay/columns?key_groupement=Appels clôture',
+        routeData: 'GlobalDelay?key_groupement=Appels clôture',
         objChart: {
             element_chart: undefined,
             element_id: 'statsGlobalDelayChart',

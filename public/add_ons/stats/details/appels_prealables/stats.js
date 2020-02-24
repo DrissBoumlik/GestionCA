@@ -78,8 +78,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel'
         },
-        routeCol: 'regions/details/groupement/columns?key_groupement=appels-pralables',
-        routeData: 'regions/details/groupement?key_groupement=appels-pralables',
+        routeCol: 'regions/details/groupement/columns?key_groupement=Appels préalables',
+        routeData: 'regions/details/groupement?key_groupement=Appels préalables',
         objChart: {
             element_chart: undefined,
             element_id: 'statsCallsPrealableChart',
@@ -123,8 +123,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Nom_region , Gpmt_Appel_Pre) groupedst',
             queryGroupBy: 'group by st.Id_Externe, Nom_region , Gpmt_Appel_Pre'
         },
-        routeCol: 'regionsCallState/columns/Nom_Region?key_groupement=appels-pralables',
-        routeData: 'regionsCallState/Nom_Region?key_groupement=appels-pralables',
+        routeCol: 'regionsCallState/columns/Nom_Region?key_groupement=Appels préalables',
+        routeData: 'regionsCallState/Nom_Region?key_groupement=Appels préalables',
         objChart: {
             element_chart: undefined,
             element_id: 'callsStatesAgenciesChart',
@@ -167,8 +167,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Date_Heure_Note_Semaine , Gpmt_Appel_Pre, Date_Heure_Note_Annee) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Date_Heure_Note_Semaine , Gpmt_Appel_Pre, Date_Heure_Note_Annee'
         },
-        routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine?key_groupement=appels-pralables',
-        routeData: 'regionsCallState/Date_Heure_Note_Semaine?key_groupement=appels-pralables',
+        routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine?key_groupement=Appels préalables',
+        routeData: 'regionsCallState/Date_Heure_Note_Semaine?key_groupement=Appels préalables',
         objChart: {
             element_chart: undefined,
             element_id: 'callsStatesWeeksChart',
@@ -213,8 +213,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Code_Intervention, Nom_Region) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Code_Intervention, Nom_Region'
         },
-        routeCol: 'clientsByCallState/columns/Joignable?key_groupement=appels-pralables',
-        routeData: 'clientsByCallState/Joignable?key_groupement=appels-pralables',
+        routeCol: 'clientsByCallState/columns/Joignable?key_groupement=Appels préalables',
+        routeData: 'clientsByCallState/Joignable?key_groupement=Appels préalables',
         objChart: {
             element_chart: undefined,
             element_id: 'statsCallsPosChart',
@@ -257,8 +257,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Code_Intervention, Nom_Region) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Code_Intervention, Nom_Region'
         },
-        routeCol: 'clientsByCallState/columns/Injoignable?key_groupement=appels-pralables',
-        routeData: 'clientsByCallState/Injoignable?key_groupement=appels-pralables',
+        routeCol: 'clientsByCallState/columns/Injoignable?key_groupement=Appels préalables',
+        routeData: 'clientsByCallState/Injoignable?key_groupement=Appels préalables',
         objChart: {
             element_chart: undefined,
             element_id: 'statscallsNegChart',
@@ -324,8 +324,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Code_Intervention, Nom_Region) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Code_Intervention, Nom_Region'
         },
-        routeCol: 'clientsWithCallStates/columns?key_groupement=appels-pralables',
-        routeData: 'clientsWithCallStates?key_groupement=appels-pralables',
+        routeCol: 'clientsWithCallStates/columns?key_groupement=Appels préalables',
+        routeData: 'clientsWithCallStates?key_groupement=Appels préalables',
         objChart: {
             element_chart: undefined,
             element_id: 'CallResultPrealableChart',

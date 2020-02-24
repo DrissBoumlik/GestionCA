@@ -70,8 +70,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel'
         },
-        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-GEM',
-        routeData: 'regions/details/groupement?key_groupement=Appels-GEM',
+        routeCol: 'regions/details/groupement/columns?key_groupement=Appels GEM',
+        routeData: 'regions/details/groupement?key_groupement=Appels GEM',
         objChart: {
             element_chart: undefined,
             element_id: 'statsCallsGemChart',
