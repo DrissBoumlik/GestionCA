@@ -306,7 +306,7 @@ class StatsRepository
 
                     $col_arr = array_diff($col_arr, [$nom_region]);
 
-                    $row->values[$nom_region] = $call->$nom_region;
+                    $row->values[$nom_region] = $call->total;
                     $row->$nom_region = $call->total . '|' . $call->$nom_region . '%';
 //                    $row->$nom_region = $call->$nom_region . '%';
 //                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
@@ -489,7 +489,7 @@ class StatsRepository
                     $nom_region = $call->Nom_Region;
 
                     $col_arr = array_diff($col_arr, [$nom_region]);
-                    $row->values[$nom_region] = $call->$nom_region;
+                    $row->values[$nom_region] = $call->total;
                     $row->$nom_region = $call->total . '|' . $call->$nom_region . '%';
 //                    $row->$nom_region = $call->$nom_region . '%';
 //                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
@@ -993,7 +993,7 @@ class StatsRepository
                     $row->Nom_Region = $call->Nom_Region;
                     $code_intervention = $call->Code_Intervention;
                     $col_arr = array_diff($col_arr, [$code_intervention]);
-                    $row->values[$code_intervention ?? ''] = $call->$code_intervention;
+                    $row->values[$code_intervention ?? ''] = $call->total;
                     $row->$code_intervention = $call->total . '|' . $call->$code_intervention . '%';
                     $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
                     return $row;
@@ -1198,7 +1198,7 @@ class StatsRepository
 
                     $col_arr = array_diff($col_arr, [$nom_region]);
 
-                    $row->values[$nom_region] = $call->$nom_region;
+                    $row->values[$nom_region] = $call->total;
                     $row->$nom_region = $call->total . '|' . (isset($call->itemTotal) ? $call->itemTotal : 0) . '|' . (isset($call->$index) ? $call->$index : 0) . '%';
 //                    $row->$nom_region = $call->total . '|' . $call->$nom_region . '%';
                     $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
@@ -1657,7 +1657,7 @@ class StatsRepository
                     $col_arr = array_diff($col_arr, [$code_intervention]);
 //                    dd($call);
 //                    dd($code_intervention, $call->Code_Intervention);
-                    $row->values[$code_intervention ?? ''] = $call->$code_intervention;
+                    $row->values[$code_intervention ?? ''] = $call->total;
                     $row->$code_intervention = $call->total . '|' . $call->$code_intervention . '%';
 //                $row->$code_intervention = $call->$code_intervention;
 //                    $row->total = ceil(round(array_sum($row->values), 2)) . '%'; // round(array_sum($row->values) / count($row->values), 2) . '%';
