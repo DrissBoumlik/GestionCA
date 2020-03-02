@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -63,10 +62,5 @@ class User extends Authenticatable
     public function filters()
     {
         return $this->hasMany(Filter::class);
-    }
-
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new ResetPassword($token));
     }
 }
