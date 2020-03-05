@@ -72,7 +72,7 @@ class UserController extends Controller
         $user = User::create([
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
-            'picture' => $request->gender == 'male' ? 'https://images2.imgbox.com/ce/b9/IolVNBVh_o.png' : 'https://images2.imgbox.com/23/de/asREdFuf_o.png',
+            'picture' => $request->gender == 'male' ? '/storage/users/male.png' : '/storage/users/female.png',
             'email' => $request->email,
             'gender' => $request->gender,
             'status' => $request->status ? true : false,
@@ -97,7 +97,7 @@ class UserController extends Controller
         if ($updated) {
             return response()->json(['message' => 'User Updated Successfully'], 200);
         }
-        return response()->json(['message' => 'Something went wrong'], 422);
+        return response()->json(['message' => 'Un problème est survenue'], 422);
     }
 
     public function updatePicture(Request $request)
@@ -143,7 +143,7 @@ class UserController extends Controller
             if ($updated) {
                 return response()->json(['message' => 'User Updated Successfully'], 200);
             }
-            return response()->json(['message' => 'Something went wrong'], 422);
+            return response()->json(['message' => 'Un problème est survenue'], 422);
         }
         // Validation
         $validation_rules = [
@@ -156,7 +156,7 @@ class UserController extends Controller
             'role' => ['nullable', 'exists:roles,id']
         ];
         if ($user->isAgency()) {
-            $validation_rules['agence_name'] = ['present', 'max:20'];
+            $validation_rules['agence_code'] = ['present', 'max:20'];
         } elseif ($user->isAgent()) {
             $validation_rules['agent_name'] = ['present', 'max:20'];
         }
@@ -215,7 +215,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         // Authorization
-        $this->authorize('deleteUser', $user, auth()->user());
+//        $this->authorize('deleteUser', $user, auth()->user());
 
         if ($user->isAdmin()) {
             return response()->json(['message' => 'You can\'t delete Admin'], 401);
@@ -224,6 +224,6 @@ class UserController extends Controller
         if ($deleted) {
             return response()->json(['message' => 'User Deleted Successfully'], 200);
         }
-        return response()->json(['message' => 'Something went wrong'], 422);
+        return response()->json(['message' => 'Un problème est survenue'], 422);
     }
 }

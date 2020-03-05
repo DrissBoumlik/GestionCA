@@ -111,6 +111,6 @@ class PermissionController extends Controller
         if ($deleted) {
             return response()->json(['message' => 'Permission Deleted Successfully'], 200);
         }
-        return response()->json(['message' => 'Something went wrong'], 422);
+        return response()->json(['message' => 'Un problème est survenue'], 422);
     }
 }

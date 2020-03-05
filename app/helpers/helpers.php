@@ -435,7 +435,7 @@ if (!function_exists('getPicture')) {
     {
         $user = $user ?? auth()->user();
         $picturePath = Str::contains($user->picture, 'http') ? $user->picture : URL::to('/') . $user->picture;
-        return $user->picture ? $picturePath : ($user->gender == 'male' ? 'https://images2.imgbox.com/ce/b9/IolVNBVh_o.png' : 'https://images2.imgbox.com/23/de/asREdFuf_o.png');
+        return $user->picture ? $picturePath : ($user->gender == 'male' ? '/storage/users/male.png' : '/storage/users/female.png');
     }
 }
 
