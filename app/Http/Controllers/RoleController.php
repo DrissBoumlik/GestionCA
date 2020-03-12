@@ -113,7 +113,7 @@ class RoleController extends Controller
             if ($deleted) {
                 return response()->json(['message' => 'Detached Successfully'], 200);
             }
-            return response()->json(['message' => 'Something went wrong'], 422);
+            return response()->json(['message' => 'Un problème est survenue'], 422);
         } else if (!$assign) {
             return response()->json(['message' => 'Already Detached'], 200);
         } else if (!$relation) {
@@ -122,7 +122,7 @@ class RoleController extends Controller
             if ($relation) {
                 return response()->json(['message' => 'Assigned Successfully'], 200);
             }
-            return response()->json(['message' => 'Something went wrong'], 422);
+            return response()->json(['message' => 'Un problème est survenue'], 422);
         }
         return response()->json(['message' => 'Already Assigned'], 200);
     }
@@ -136,6 +136,6 @@ class RoleController extends Controller
         if ($deleted) {
             return response()->json(['message' => 'Role Deleted Successfully'], 200);
         }
-        return response()->json(['message' => 'Something went wrong'], 422);
+        return response()->json(['message' => 'Un problème est survenue'], 422);
     }
 }

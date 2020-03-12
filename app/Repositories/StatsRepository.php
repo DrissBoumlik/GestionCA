@@ -11,9 +11,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Carbon\Carbon;
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 
 class StatsRepository
 {
@@ -178,7 +180,7 @@ class StatsRepository
             ->where('Groupement', 'not like', 'Appels post');
         $results = applyFilter($results, $filter, 'Groupement');
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $results = $results->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -258,7 +260,7 @@ class StatsRepository
             ->where('Groupement', 'not like', 'Appels post');
         $regions = applyFilter($regions, $filter, 'Groupement');
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $regions = $regions->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -304,7 +306,7 @@ class StatsRepository
 
                     $col_arr = array_diff($col_arr, [$nom_region]);
 
-                    $row->values[$nom_region] = $call->$nom_region;
+                    $row->values[$nom_region] = $call->total;
                     $row->$nom_region = $call->total . '|' . $call->$nom_region . '%';
 //                    $row->$nom_region = $call->$nom_region . '%';
 //                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
@@ -340,7 +342,7 @@ class StatsRepository
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
         $key_groupement = $request->get('key_groupement');
-        $key_groupement = $key_groupement ? clean($key_groupement) : null;
+//        $key_groupement = $key_groupement ? clean($key_groupement) : null;
 
         $route_request = $request->get('route');
         $_route = $route_request ?? getRoute(Route::current());
@@ -357,8 +359,8 @@ class StatsRepository
 
         $results = applyFilter($results, $filter, $route_request ? null : 'Resultat_Appel');
 
-        if($key_groupement) {
-            $results = $results->where('key_groupement', 'like', $key_groupement);
+        if ($key_groupement) {
+            $results = $results->where('Groupement', 'like', $key_groupement);
         }
 
         if ($agentName) {
@@ -399,8 +401,8 @@ class StatsRepository
             $first = new \stdClass();
             $first->name = 'Resultat_Appel';
             $first->data = 'Resultat_Appel';
-            $first->text = 'Résultats Appels Préalables';
-            $first->title = 'Résultats Appels Préalables';
+            $first->text = $key_groupement;
+            $first->title = $key_groupement;
             $first->orderable = false;
             array_unshift($columns, $first);
 
@@ -443,7 +445,7 @@ class StatsRepository
 
         $regions = applyFilter($regions, $filter, $route_request ? null : 'Resultat_Appel');
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $regions = $regions->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -487,7 +489,7 @@ class StatsRepository
                     $nom_region = $call->Nom_Region;
 
                     $col_arr = array_diff($col_arr, [$nom_region]);
-                    $row->values[$nom_region] = $call->$nom_region;
+                    $row->values[$nom_region] = $call->total;
                     $row->$nom_region = $call->total . '|' . $call->$nom_region . '%';
 //                    $row->$nom_region = $call->$nom_region . '%';
 //                    $row->total = round(array_sum($row->values) / count($row->values), 2) . '%';
@@ -540,7 +542,7 @@ class StatsRepository
 
         $columns = applyFilter($columns, $filter, 'Gpmt_Appel_Pre');
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $columns = $columns->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -672,7 +674,7 @@ class StatsRepository
         $regions = applyFilter($regions, $filter, 'Gpmt_Appel_Pre');
 
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $regions = $regions->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -816,7 +818,7 @@ class StatsRepository
             ]);
         }
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $columns = $columns->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -945,7 +947,7 @@ class StatsRepository
             ]);
         }
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $codes = $codes->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -991,7 +993,7 @@ class StatsRepository
                     $row->Nom_Region = $call->Nom_Region;
                     $code_intervention = $call->Code_Intervention;
                     $col_arr = array_diff($col_arr, [$code_intervention]);
-                    $row->values[$code_intervention ?? ''] = $call->$code_intervention;
+                    $row->values[$code_intervention ?? ''] = $call->total;
                     $row->$code_intervention = $call->total . '|' . $call->$code_intervention . '%';
                     $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
                     return $row;
@@ -1045,7 +1047,7 @@ class StatsRepository
             ->where('Groupement', 'Appels clôture');
         $columns = applyFilter($columns, $filter, $intervCol);
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $columns = $columns->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -1122,7 +1124,7 @@ class StatsRepository
             ->where('Groupement', 'Appels clôture');
         $regions = applyFilter($regions, $filter, $intervCol);
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $regions = $regions->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -1196,7 +1198,7 @@ class StatsRepository
 
                     $col_arr = array_diff($col_arr, [$nom_region]);
 
-                    $row->values[$nom_region] = $call->$nom_region;
+                    $row->values[$nom_region] = $call->total;
                     $row->$nom_region = $call->total . '|' . (isset($call->itemTotal) ? $call->itemTotal : 0) . '|' . (isset($call->$index) ? $call->$index : 0) . '%';
 //                    $row->$nom_region = $call->total . '|' . $call->$nom_region . '%';
                     $row->total = isset($row->total) ? $row->total + $call->total : $call->total;
@@ -1260,7 +1262,7 @@ class StatsRepository
             ->where('Type_Note', 'like', 'CAM');
         $results = applyFilter($results, $filter, 'Nom_Region');
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $results = $results->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -1479,7 +1481,7 @@ class StatsRepository
             'Appels préalables - RDV repris Mais non confirmé',
         ]);
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $codes = $codes->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -1609,7 +1611,7 @@ class StatsRepository
             'Appels préalables - RDV repris Mais non confirmé',
         ]);
 
-        if($key_groupement) {
+        if ($key_groupement) {
             $codes = $codes->where('key_groupement', 'like', $key_groupement);
         }
         if ($agentName) {
@@ -1655,7 +1657,7 @@ class StatsRepository
                     $col_arr = array_diff($col_arr, [$code_intervention]);
 //                    dd($call);
 //                    dd($code_intervention, $call->Code_Intervention);
-                    $row->values[$code_intervention ?? ''] = $call->$code_intervention;
+                    $row->values[$code_intervention ?? ''] = $call->total;
                     $row->$code_intervention = $call->total . '|' . $call->$code_intervention . '%';
 //                $row->$code_intervention = $call->$code_intervention;
 //                    $row->total = ceil(round(array_sum($row->values), 2)) . '%'; // round(array_sum($row->values) / count($row->values), 2) . '%';
@@ -1863,7 +1865,6 @@ class StatsRepository
         $keys = $columns->pluck('Nom_Region');
 
 
-
         if (!count($keys)) {
             $data = ['filter' => $filter, 'columns' => [], 'rows' => [], 'rowsFilterHeader' => ''];
             return $data;
@@ -1920,7 +1921,6 @@ class StatsRepository
         $regions = $regions->orderBy('Title');
         $regions = $regions->groupBy('Nom_Region', 'Title')->get();
         $keys = $regions->groupBy(['Nom_Region'])->keys();
-
 
 
         if (!count($regions)) {
@@ -2095,8 +2095,10 @@ class StatsRepository
 
     public function importStats($request)
     {
-        $fileName = $request->file('file')->getClientOriginalName();
-        $request->file('file')->storeAs('data_source', $fileName);
+        $file = $request->file('file');
+        $fileName = $file->getClientOriginalName();
+//        $filePath = $file->storeAs('data_source', $fileName);
+        $stored = Storage::disk('public')->put('storage/data_source/' . $fileName, file_get_contents($file));
 
         $statImport = new StatsImport($request->days);
         Excel::import($statImport, $request->file('file'));

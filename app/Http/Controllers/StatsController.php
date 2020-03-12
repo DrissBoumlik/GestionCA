@@ -216,15 +216,16 @@ class StatsController extends Controller
     public function importStats(Request $request)
     {
         // Authorization
-        $this->authorize('view', auth()->user());
-        try {
+//        $this->authorize('view', auth()->user());
+//        try {
             return response()->json($this->statsRepository->importStats($request));
-        } catch (\Exception $exception) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Une erreur est survenue'
-            ], 422);
-        }
+//        } catch (\Exception $exception) {
+//            return response()->json([
+//                'success' => false,
+//                'message' => $exception->getMessage()
+////                'message' => 'Une erreur est survenue'
+//            ], 422);
+//        }
 
     }
 

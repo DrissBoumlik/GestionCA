@@ -70,8 +70,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel'
         },
-        routeCol: 'regions/details/groupement/columns?key_groupement=Appels-clture',
-        routeData: 'regions/details/groupement?key_groupement=Appels-clture',
+        routeCol: 'regions/details/groupement/columns?key_groupement=Appels clôture',
+        routeData: 'regions/details/groupement?key_groupement=Appels clôture',
         objChart: {
             element_chart: undefined,
             element_id: 'statsCallsClotureChart',
@@ -152,8 +152,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Code_Intervention , Resultat_Appel) groupedst ',
             queryGroupBy: ' GROUP BY st.Id_Externe,Nom_Region, Code_Intervention , Resultat_Appel'
         },
-        routeCol: 'nonValidatedFolders/columns/Code_Intervention?key_groupement=Appels-clture',
-        routeData: 'nonValidatedFolders/Code_Intervention?key_groupement=Appels-clture',
+        routeCol: 'nonValidatedFolders/columns/Code_Intervention?key_groupement=Appels clôture',
+        routeData: 'nonValidatedFolders/Code_Intervention?key_groupement=Appels clôture',
         objChart: {
             element_chart: undefined,
             element_id: 'statsFoldersByCodeChart',
@@ -189,8 +189,8 @@ $(function () {
         filterQuery: {
             appCltquery: true,
         },
-        routeCol: 'Cloturetech/columns?key_groupement=Appels-clture',
-        routeData: 'Cloturetech?key_groupement=Appels-clture',
+        routeCol: 'Cloturetech/columns?key_groupement=Appels clôture',
+        routeData: 'Cloturetech?key_groupement=Appels clôture',
         objChart: {
             element_chart: undefined,
             element_id: 'statsColturetechChart',
@@ -230,8 +230,8 @@ $(function () {
         filterQuery: {
             appCltquery: true,
         },
-        routeCol: 'GlobalDelay/columns?key_groupement=Appels-clture',
-        routeData: 'GlobalDelay?key_groupement=Appels-clture',
+        routeCol: 'GlobalDelay/columns?key_groupement=Appels clôture',
+        routeData: 'GlobalDelay?key_groupement=Appels clôture',
         objChart: {
             element_chart: undefined,
             element_id: 'statsGlobalDelayChart',
@@ -264,9 +264,9 @@ $(function () {
 
     let detailClick = false;
 
-    getDatesFilter();
+    getDatesFilter(globalElements);
 
-    userFilter();
+    userFilter(userObject);
 
     //<editor-fold desc="FUNCTIONS">
     function getColumns(object, data = null, params = {
@@ -640,114 +640,9 @@ $(function () {
         });
     }
 
-    function getDatesFilter() {
-        $.ajax({
-            url: APP_URL + '/dates',
-            method: 'GET',
-            success: function (response) {
-                let treeData = response.dates;
-
-                $('.tree-view').each(function (index, item) {
-                    let treeId = '#' + $(this).attr('id');
-                    let object = globalElements.filter(function (element) {
-                        return element.filterElement.dates === treeId;
-                    });
-                    new Tree(treeId, {
-                        data: [{id: '-1', text: 'Dates', children: treeData}],
-                        closeDepth: 1,
-                        loaded: function () {
-                            // this.values = ['2019-12-02', '2019-12-03'];
-                            // console.log(this.selectedNodes);
-                            // console.log(this.values);
-                            // this.disables = ['0-0-0', '0-0-1', '0-0-2']
-
-                            if (object.length) {
-                                object = object[0];
-                                object.filterTree.datesTreeObject = this;
-                                if (object.filterTree.dates) {
-                                    object.filterTree.datesTreeObject.values = object.filterTree.dates;
-                                }
-                            }
-                        },
-                        onChange: function () {
-                            dates = this.values;
-                            if (object.filterTree) {
-                                object.filterTree.dates = this.values;
-                            }
-                        }
-                    });
-                });
-                // if (datesFilterListExist && datesFilterValuesExist) {
-                //     assignFilter(datesFilterList, datesFilterValues);
-                // }
-                $('.treejs-node .treejs-nodes .treejs-switcher').click();
-                $('.refresh-form button').removeClass('d-none');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-            }
-        });
-    }
-
-    function userFilter(isPost = false) {
-        $.ajax({
-            url: APP_URL + '/user/filter',
-            method: isPost ? 'POST' : 'GET',
-            data: {filter: userObject.filterTree.dates},
-            success: function (response) {
-                if (response.userFilter) {
-                    userObject.filterTree.dates = response.userFilter.date_filter;
-                    if (userObject.filterTree.datesTreeObject && userObject.filterTree.dates) {
-                        userObject.filterTree.datesTreeObject.values = userObject.filterTree.dates;
-                        if (userObject.objDetail) {
-                            userObject.objDetail.filterTree.dates = userObject.filterTree.dates;
-                        }
-                    }
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-            }
-        });
-    }
-
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS TOOLS">
-
-    function elementExists(object) {
-        if (object !== null && object !== undefined) {
-            let element = $('#' + object.element);
-            if (element !== null && element !== undefined) {
-                return element.length;
-            } else {
-                return object.length;
-            }
-        }
-        return false;
-    }
-
-    function dynamicColors(uniqueColors) {
-        let color = {
-            r: Math.floor(Math.random() * 255),
-            g: Math.floor(Math.random() * 255),
-            b: Math.floor(Math.random() * 255)
-        };
-        let exists = false;
-        do {
-            exists = uniqueColors.some(function (uniqueColor) {
-                return uniqueColor.r === color.r && uniqueColor.g === color.g && uniqueColor.b === color.b;
-            });
-        } while (exists);
-        uniqueColors.push(color);
-        return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
-    }
-
-    function feedBack(message, status) {
-        swal(
-            status.replace(/^\w/, c => c.toUpperCase()) + '!',
-            message,
-            status
-        )
-    }
 
     function createChild(row, object, data = null) {
         detailClick = true;
@@ -786,16 +681,6 @@ $(function () {
         row.child.hide();
     }
 
-    function toggleLoader(parent, remove = false) {
-        if (remove) {
-            parent.find('.loader_wrapper').remove();
-            parent.find('.loader_container').remove();
-        } else {
-            parent.append('<div class="loader_wrapper"><div class="loader"></div></div>');
-            parent.append('<div class="loader_container"></div>');
-        }
-    }
-
     //</editor-fold>
 
     //<editor-fold desc="GLOBAL FILTER">
@@ -814,7 +699,7 @@ $(function () {
             element.filterTree.dates = userObject.filterTree.dates;
             element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
         });
-        userFilter(true);
+        userFilter(userObject, true);
         getColumns(statsCallsCloture, filterData(), {
             removeTotal: false,
             refreshMode: true,
@@ -853,39 +738,45 @@ $(function () {
     });
 //</editor-fold>
     $("#printElement").on("click", function () {
-        let statsCallsClotureChart = document.getElementById('statsCallsClotureChart');
-        let statsFoldersByTypeChart = document.getElementById('statsFoldersByTypeChart');
-        let statsFoldersByCodeChart = document.getElementById('statsFoldersByCodeChart');
-        let statsColturetechChart = document.getElementById('statsColturetechChart');
-        let statsGlobalDelayChart = document.getElementById('statsGlobalDelayChart');
+        toggleLoader($('body'));
 
-        //creates image
-        let statsCallsClotureChartImg = statsCallsClotureChart.toDataURL("image/png", 1.0);
-        let statsFoldersByTypeChartImg = statsFoldersByTypeChart.toDataURL("image1/png", 1.0);
-        let statsFoldersByCodeChartImg = statsFoldersByCodeChart.toDataURL("image2/png", 1.0);
-        let statsColturetechChartImg = statsColturetechChart.toDataURL("image3/png", 1.0);
-        let statsGlobalDelayChartImg = statsGlobalDelayChart.toDataURL("image4/png", 1.0);
+        setTimeout(function () {
+            let statsCallsClotureChart = document.getElementById('statsCallsClotureChart');
+            let statsFoldersByTypeChart = document.getElementById('statsFoldersByTypeChart');
+            let statsFoldersByCodeChart = document.getElementById('statsFoldersByCodeChart');
+            let statsColturetechChart = document.getElementById('statsColturetechChart');
+            let statsGlobalDelayChart = document.getElementById('statsGlobalDelayChart');
 
-        //creates PDF from img
-        let doc = new jsPDF('p', 'pt', [ 842,  842]);
-        doc.text(10, 20, 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement');
-        doc.autoTable({html: '#statsCallsCloture', margin: {top: 30}, pageBreak: 'auto' });
-        doc.addImage(statsCallsClotureChartImg, 'JPEG',150 , ($('#statsCallsCloture').height()/1.328147) + 30 , 500 , 350);
-        doc.addPage();
-        doc.text(10, 20, 'Répartition des dossiers non validés par Code Type intervention');
-        doc.addImage(statsFoldersByTypeChartImg, 'JPEG', 532 , 30 , 350 , 300);
-        doc.autoTable({html: '#statsFoldersByType', margin: {left: 0 , top: 30}, pageBreak: 'auto',styles: {cellPadding: {top: 0, bottom: 0,right : 0}}, tableWidth: 525, columnStyles: { 6: {cellWidth: 45 }, 5:{cellWidth: 45 } } });
-        doc.addPage();
-        doc.text(10, 20, 'Répartition des dossiers non validés par code intervention');
-        doc.addImage(statsFoldersByCodeChartImg, 'JPEG', 532 , 30 , 350 , 300);
-        doc.autoTable({html: '#statsFoldersByCode', margin: {left: 0 , top: 30}, pageBreak: 'auto',styles: {cellPadding: {top: 0, bottom: 0,right : 0}} , tableWidth: 525});
-        doc.addPage();
-        doc.text(10, 20 , 'Délai de validation post solde');
-        doc.autoTable({html: '#statsColturetech', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520 });
-        doc.addImage(statsColturetechChartImg, 'JPEG',532, 30 , 350 , 300);
-        doc.text(10, 390 , 'Délai global de traitement OT');
-        doc.autoTable({html: '#statsGlobalDelay',pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0} });
-        doc.addImage(statsGlobalDelayChartImg, 'JPEG',532 , 400 , 350 , 300);
-        doc.save('Appels Clôture.pdf');
+            //creates image
+            let statsCallsClotureChartImg = statsCallsClotureChart.toDataURL("image/png", 1.0);
+            let statsFoldersByTypeChartImg = statsFoldersByTypeChart.toDataURL("image1/png", 1.0);
+            let statsFoldersByCodeChartImg = statsFoldersByCodeChart.toDataURL("image2/png", 1.0);
+            let statsColturetechChartImg = statsColturetechChart.toDataURL("image3/png", 1.0);
+            let statsGlobalDelayChartImg = statsGlobalDelayChart.toDataURL("image4/png", 1.0);
+
+            //creates PDF from img
+            let doc = new jsPDF('p', 'pt', [ 842,  842]);
+            doc.text(10, 20, 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement');
+            doc.autoTable({html: '#statsCallsCloture', margin: {top: 30}, pageBreak: 'auto' });
+            doc.addImage(statsCallsClotureChartImg, 'JPEG',150 , ($('#statsCallsCloture').height()/1.328147) + 30 , 500 , 350);
+            doc.addPage();
+            doc.text(10, 20, 'Répartition des dossiers non validés par Code Type intervention');
+            doc.addImage(statsFoldersByTypeChartImg, 'JPEG', 532 , 30 , 350 , 300);
+            doc.autoTable({html: '#statsFoldersByType', margin: {left: 0 , top: 30}, pageBreak: 'auto',styles: {cellPadding: {top: 0, bottom: 0,right : 0}}, tableWidth: 525, columnStyles: { 6: {cellWidth: 45 }, 5:{cellWidth: 45 } } });
+            doc.addPage();
+            doc.text(10, 20, 'Répartition des dossiers non validés par code intervention');
+            doc.addImage(statsFoldersByCodeChartImg, 'JPEG', 532 , 30 , 350 , 300);
+            doc.autoTable({html: '#statsFoldersByCode', margin: {left: 0 , top: 30}, pageBreak: 'auto',styles: {cellPadding: {top: 0, bottom: 0,right : 0}} , tableWidth: 525});
+            doc.addPage();
+            doc.text(10, 20 , 'Délai de validation post solde');
+            doc.autoTable({html: '#statsColturetech', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520 });
+            doc.addImage(statsColturetechChartImg, 'JPEG',532, 30 , 350 , 300);
+            doc.text(10, 390 , 'Délai global de traitement OT');
+            doc.autoTable({html: '#statsGlobalDelay',pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0} });
+            doc.addImage(statsGlobalDelayChartImg, 'JPEG',532 , 400 , 350 , 300);
+            doc.save('Appels Clôture.pdf');
+
+            toggleLoader($('body'), true);
+        }, 100);
     })
 });

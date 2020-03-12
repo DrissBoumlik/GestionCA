@@ -59,42 +59,8 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function projects()
-    {
-        return $this->belongsToMany(Project::class, 'project_users');
-    }
-
-    public function userSkill()
-    {
-        return $this->hasMany(UserSkill::class);
-    }
-
-    public function skills()
-    {
-        return $this->belongsToMany(Skill::class, 'user_skills')->withPivot('isTopSkill');
-    }
-
-    public function nonTopSkills()
-    {
-        return Skill::whereHas('userSkill', function ($query) {
-            $query->where(['user_id' => $this->id, 'isTopSkill' => false]);
-        })->get();
-    }
-
-    public function topSkills()
-    {
-        return Skill::whereHas('userSkill', function ($query) {
-            $query->where(['user_id' => $this->id, 'isTopSkill' => true]);
-        })->get();
-    }
-
     public function filters()
     {
         return $this->hasMany(Filter::class);
-    }
-
-    public function filter($route)
-    {
-
     }
 }
