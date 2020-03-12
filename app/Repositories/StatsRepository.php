@@ -1986,7 +1986,7 @@ class StatsRepository
             ->select('EXPORT_ALL_EXTRACT_CUI')
             ->distinct()
             ->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['bf5','bf8'])
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['PCA','F5E'])
             ->where('Nom_Region','0 - DOIDF');
 
         $columns = applyFilter($columns, $filter);
@@ -2015,12 +2015,27 @@ class StatsRepository
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
+            $third = new \stdClass();
+            $third->title = 'Date_Heure_Note';
+            $third->name = 'Date_Heure_Note';
+            $third->data = 'Date_Heure_Note';
+            $third->orderable = false;
+            array_unshift($regions_names, $third);
+
+            $second = new \stdClass();
+            $second->title = 'Date_Creation';
+            $second->name = 'Date_Creation';
+            $second->data = 'Date_Creation';
+            $second->orderable = false;
+            array_unshift($regions_names, $second);
+
             $first = new \stdClass();
             $first->title = 'Id_Externe';
             $first->name = 'Id_Externe';
             $first->data = 'Id_Externe';
             $first->orderable = false;
             array_unshift($regions_names, $first);
+
 
             return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
         }
@@ -2035,9 +2050,9 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
 
         $regions = \DB::table('stats as st')
-            ->select('Id_Externe','EXPORT_ALL_EXTRACT_CUI', \DB::raw('TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) count')
+            ->select('Id_Externe','Date_Creation','Date_Heure_Note','EXPORT_ALL_EXTRACT_CUI', \DB::raw('TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) count')
             )->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['bf5','bf8'])
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['PCA','F5E'])
             ->where('Nom_Region','0 - DOIDF');
 
         $regions = applyFilter($regions, $filter);
@@ -2066,9 +2081,11 @@ class StatsRepository
                 $col_arr = $keys->all();
                 $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
                     $row->Id_Externe = $call->Id_Externe;
+                    $row->Date_Creation = $call->Date_Creation;
+                    $row->Date_Heure_Note = $call->Date_Heure_Note ;
                     $EXPORT_ALL_EXTRACT_CUI = $call->EXPORT_ALL_EXTRACT_CUI;
                     $row->$EXPORT_ALL_EXTRACT_CUI =  $call->count . ' H';
-                    $row->values[$EXPORT_ALL_EXTRACT_CUI] = $call->count . ' H';
+                    $row->values[$EXPORT_ALL_EXTRACT_CUI] = $call->count;
                     $col_arr = array_diff($col_arr, [$EXPORT_ALL_EXTRACT_CUI]);
 
                     return $row;

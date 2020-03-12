@@ -884,6 +884,9 @@ $(function () {
                             removeTotalColumn: false,
                             details: false
                         });
+                        let parent = $('#' +statsProcessingDelay.element).parents('.col-12');
+                        toggleLoader(parent, true);
+                        isfinished = true;
                     }
                 }
             },
@@ -894,7 +897,7 @@ $(function () {
                 if (ajaxRequests === 0) {
                     toggleLoader($('#refreshAll').parents('.col-12'), true);
                 }
-                if (object.objChart !== null && object.objChart !== undefined) {
+                if (object.objChart !== null && object.objChart !== undefined && object !== statsProcessingDelay) {
                     try {
                         InitChart(object.objChart, object.columns, response.data, {
                             removeTotal: params.removeTotal,
@@ -921,6 +924,9 @@ $(function () {
         // console.log(objectChart.chartTitle);
         // console.log(columns);
         // console.log(data);
+        if(objectChart === statsProcessingDelay.objChart && !isfinished){
+           columns.splice(1,2);
+        }
         let labels = [...columns];
         labels = labels.map((column) => {
             return column.data;
