@@ -1556,7 +1556,7 @@ class StatsRepository
                 ' and Resultat_Appel in ("Appels préalables - RDV confirmé",
                                         "Appels préalables - RDV confirmé Client non informé",
                                         "Appels préalables - RDV repris et confirmé",
-                                        
+
                                         "Appels préalables - RDV confirmé",
                                         "Appels préalables - RDV confirmé Client non informé",
                                         "Appels préalables - RDV repris et confirmé",
@@ -1970,6 +1970,124 @@ class StatsRepository
             });
             $regions = $regions->values();
 
+            return ['data' => $regions];
+        }
+    }
+
+    public function getColumnsProcessingDelayCall(Request $request, $filter = null)
+    {
+        $agentName = $request->get('agent_name');
+        $agenceCode = $request->get('agence_code');
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+
+        $columns = \DB::table('stats as st')
+            ->select('EXPORT_ALL_EXTRACT_CUI')
+            ->distinct()
+            ->whereNotNull('Nom_Region')
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['bf5','bf8'])
+            ->where('Nom_Region','0 - DOIDF');
+
+        $columns = applyFilter($columns, $filter);
+        if ($agentName) {
+            $columns = $columns->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $columns = $columns->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+
+        $keys = $columns->pluck('EXPORT_ALL_EXTRACT_CUI');
+
+        if (!count($keys)) {
+            $data = ['filter' => $filter, 'columns' => [], 'rows' => [], 'rowsFilterHeader' => ''];
+            return $data;
+        } else {
+            $regions_names = [];
+            $keys->map(function ($key, $index) use (&$regions_names) {
+                $regions_names[$index + 1] = new \stdClass();
+                $regions_names[$index + 1]->data = $key;
+                $regions_names[$index + 1]->name = $key;
+                $regions_names[$index + 1]->text = $key;
+                $regions_names[$index + 1]->title = $key;
+            });
+            usort($regions_names, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
+            $first = new \stdClass();
+            $first->title = 'Id_Externe';
+            $first->name = 'Id_Externe';
+            $first->data = 'Id_Externe';
+            $first->orderable = false;
+            array_unshift($regions_names, $first);
+
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
+        }
+    }
+
+    public function getProcessingDelayCall(Request $request, $filter = null)
+    {
+        $agentName = $request->get('agent_name');
+        $agenceCode = $request->get('agence_code');
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+
+        $regions = \DB::table('stats as st')
+            ->select('Id_Externe','EXPORT_ALL_EXTRACT_CUI', \DB::raw('TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) count')
+            )->whereNotNull('Nom_Region')
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['bf5','bf8'])
+            ->where('Nom_Region','0 - DOIDF');
+
+        $regions = applyFilter($regions, $filter);
+        if ($agentName) {
+            $regions = $regions->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+
+        $regions = $regions->groupBy('Id_Externe','EXPORT_ALL_EXTRACT_CUI')->get();
+
+        $keys = $regions->groupBy(['EXPORT_ALL_EXTRACT_CUI'])->keys();
+
+
+
+        if (!count($regions)) {
+            $data = ['data' => []];
+            return $data;
+        } else {
+            $regions = $regions->groupBy('Id_Externe');
+            $regions = $regions->map(function ($region) use ($keys) {
+                $row = new \stdClass();
+                $row->values = [];
+
+                $col_arr = $keys->all();
+                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
+                    $row->Id_Externe = $call->Id_Externe;
+                    $EXPORT_ALL_EXTRACT_CUI = $call->EXPORT_ALL_EXTRACT_CUI;
+                    $row->$EXPORT_ALL_EXTRACT_CUI =  $call->count;
+                    $row->values[$EXPORT_ALL_EXTRACT_CUI] = $call->count;
+                    $col_arr = array_diff($col_arr, [$EXPORT_ALL_EXTRACT_CUI]);
+
+                    return $row;
+                });
+
+                $_item = $items->last();
+
+                $index = count($_item->values);
+                foreach ($col_arr as $col) {
+                    $_item->values[$col] = 0;
+                    $_item->$col = '0';
+                }
+
+                ksort($_item->values);
+
+                $_item->values = collect($_item->values)->values();
+                return $_item;
+            });
+            $regions = $regions->values();
             return ['data' => $regions];
         }
     }

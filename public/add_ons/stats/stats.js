@@ -7,6 +7,8 @@ $(function () {
     let ajaxRequests = 0;
     let detailstr = {};
     let detailsrow = {};
+    let drawChart = {};
+    let isfinished = false;
 
 
     const agence_name_element = $('#agence_name');
@@ -543,9 +545,51 @@ $(function () {
             });
         });
     }
+
+    let statsProcessingDelay = {
+        element_dt: undefined,
+        element: 'statsProcessingDelay',
+        columnName: 'Nom_Region',
+        rowName: '',
+        columns: undefined,
+        data: undefined,
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-03', rows: ''},
+        filterQuery: {
+            appCltquery: true,
+        },
+        routeCol: 'ProcessingDelay/columns',
+        routeData: 'ProcessingDelay',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsProcessingDelayChart',
+            data: undefined,
+            chartTitle: 'Délai global de traitement OT'
+        }
+    };
+    if (elementExists(statsProcessingDelay)) {
+        getColumns(statsProcessingDelay, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: false,
+            removeTotalColumn: false,
+            pagination: true
+        });
+        $('#refreshProcessingDelay').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
+            getColumns(statsProcessingDelay, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: false,
+                pagination: true
+            });
+        });
+    }
     //</editor-fold>
 
-    let globalElements = [userObject, statsRegions, statsFolders, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, statsFoldersByType, statsFoldersByCode, statsPerimeters,statsColturetech,statsGlobalDelay];
+
+    let globalElements = [userObject, statsRegions, statsFolders, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, statsFoldersByType, statsFoldersByCode, statsPerimeters,statsColturetech,statsGlobalDelay,statsProcessingDelay];
 
     let detailClick = false;
 
@@ -754,7 +798,7 @@ $(function () {
         removeTotal: true,
         removeTotalColumn: false,
         details: false,
-        pagination: false
+        pagination: false,
     }) {
         let table = $('#' + object.element);
         if ($.fn.DataTable.isDataTable(table)) {
@@ -805,6 +849,15 @@ $(function () {
             ajax: {
                 url: APP_URL + '/' + object.routeData,
                 data: data,
+                'complete': function (response) {
+                    if(object === statsProcessingDelay){
+                        InitChart(statsProcessingDelay.objChart, statsProcessingDelay.columns, response.responseJSON.data , {
+                            removeTotal: false,
+                            removeTotalColumn: false,
+                            details: false
+                        });
+                    }
+                }
             },
             columns: object.columns,
             initComplete: function (settings, response) {
@@ -829,6 +882,8 @@ $(function () {
             }
         });
     }
+
+
 
     function InitChart(objectChart, columns, data, params = {
         removeTotal: true,
@@ -1176,6 +1231,13 @@ $(function () {
             details: false,
             removeTotalColumn: false,
             pagination: false
+        });
+        getColumns(statsProcessingDelay, filterData(), {
+            removeTotal: false,
+            refreshMode: true,
+            details: false,
+            removeTotalColumn: false,
+            pagination: true
         });
     });
     //</editor-fold>

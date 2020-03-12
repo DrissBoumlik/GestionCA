@@ -140,6 +140,8 @@ Route::group([
     Route::get('Cloturetech/columns', 'StatsController@getCloturetechColumn');
     Route::get('GlobalDelay', 'StatsController@getGlobalDelay');
     Route::get('GlobalDelay/columns', 'StatsController@getGlobalDelayColumn');
+    Route::get('ProcessingDelay', 'StatsController@getProcessingDelay');
+    Route::get('ProcessingDelay/columns', 'StatsController@getProcessingDelayColumn');
 
     Route::get('Export/ExportXls', 'StatsController@exportXls')->name('ExportXls');
 

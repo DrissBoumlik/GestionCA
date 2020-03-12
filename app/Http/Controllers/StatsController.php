@@ -190,6 +190,17 @@ class StatsController extends Controller
         $data = $this->statsRepository->getGlobalDelayCall($request);
         return DataTables::of($data['data'])->toJson();
     }
+
+    public function getProcessingDelayColumn(Request $request)
+    {
+        return $this->statsRepository->getColumnsProcessingDelayCall($request);
+    }
+
+    public function getProcessingDelay(Request $request)
+    {
+        $data = $this->statsRepository->getProcessingDelayCall($request);
+        return DataTables::of($data['data'])->toJson();
+    }
     //endregion
 
 
