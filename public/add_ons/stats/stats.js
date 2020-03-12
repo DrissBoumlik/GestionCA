@@ -1073,84 +1073,96 @@ $(function () {
             refreshMode: true,
             details: true,
             removeTotalColumn: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         getColumns(statsFolders, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
             removeTotalColumn: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         getColumns(callsStatesAgencies, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
             removeTotalColumn: true,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         getColumns(callsStatesWeeks, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
             removeTotalColumn: true,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         getColumns(statscallsPos, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
             removeTotalColumn: true,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         getColumns(statscallsNeg, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
             removeTotalColumn: true,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         getColumns(statsFoldersByType, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
             removeTotalColumn: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         getColumns(statsFoldersByCode, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
             removeTotalColumn: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         getColumns(statsPerimeters, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
             removeTotalColumn: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         getColumns(statsColturetech, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
             removeTotalColumn: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         getColumns(statsGlobalDelay, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
             removeTotalColumn: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         getColumns(statsProcessingDelay, filterData(), {
             removeTotal: false,
             refreshMode: true,
             details: false,
             removeTotalColumn: false,
-            pagination: true
+            pagination: true,
+            searching : true
         });
     });
     //</editor-fold>
