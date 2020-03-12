@@ -2067,8 +2067,8 @@ class StatsRepository
                 $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
                     $row->Id_Externe = $call->Id_Externe;
                     $EXPORT_ALL_EXTRACT_CUI = $call->EXPORT_ALL_EXTRACT_CUI;
-                    $row->$EXPORT_ALL_EXTRACT_CUI =  $call->count;
-                    $row->values[$EXPORT_ALL_EXTRACT_CUI] = $call->count;
+                    $row->$EXPORT_ALL_EXTRACT_CUI =  $call->count . ' H';
+                    $row->values[$EXPORT_ALL_EXTRACT_CUI] = $call->count . ' H';
                     $col_arr = array_diff($col_arr, [$EXPORT_ALL_EXTRACT_CUI]);
 
                     return $row;

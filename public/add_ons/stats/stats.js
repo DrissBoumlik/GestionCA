@@ -109,7 +109,8 @@ $(function () {
             refreshMode: false,
             details: true,
             removeTotalColumn: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         $('#refreshRegions').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -118,7 +119,8 @@ $(function () {
                 refreshMode: true,
                 details: true,
                 removeTotalColumn: false,
-                pagination: false
+                pagination: false,
+                searching : false
             });
         });
     }
@@ -151,7 +153,8 @@ $(function () {
             removeTotal: false,
             refreshMode: false,
             details: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         $('#refreshFolders').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -160,7 +163,8 @@ $(function () {
                 refreshMode: true,
                 removeTotalColumn: false,
                 details: false,
-                pagination: false
+                pagination: false,
+                searching : false
             });
         });
     }
@@ -196,7 +200,8 @@ $(function () {
             removeTotal: true,
             refreshMode: false,
             details: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         $('#refreshCallStatesAgencies').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -205,7 +210,8 @@ $(function () {
                 refreshMode: true,
                 removeTotalColumn: true,
                 details: false,
-                pagination: false
+                pagination: false,
+                searching : false
             });
         });
     }
@@ -240,7 +246,8 @@ $(function () {
             removeTotal: true,
             refreshMode: false,
             details: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         $('#refreshCallStatesWeeks').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -249,7 +256,8 @@ $(function () {
                 refreshMode: true,
                 removeTotalColumn: true,
                 details: false,
-                pagination: false
+                pagination: false,
+                searching : false
             });
         });
     }
@@ -286,7 +294,8 @@ $(function () {
             refreshMode: false,
             removeTotalColumn: true,
             details: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         $('#refreshCallResultPos').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -295,7 +304,8 @@ $(function () {
                 refreshMode: true,
                 details: false,
                 removeTotalColumn: true,
-                pagination: false
+                pagination: false,
+                searching : false
             });
         });
     }
@@ -330,7 +340,8 @@ $(function () {
             refreshMode: false,
             removeTotalColumn: true,
             details: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         $('#refreshCallResultNeg').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -339,7 +350,8 @@ $(function () {
                 refreshMode: true,
                 details: false,
                 removeTotalColumn: true,
-                pagination: false
+                pagination: false,
+                searching : false
             });
         });
     }
@@ -378,7 +390,8 @@ $(function () {
                 refreshMode: true,
                 details: false,
                 removeTotalColumn: false,
-                pagination: false
+                pagination: false,
+                searching : false
             });
         });
     }
@@ -415,7 +428,8 @@ $(function () {
                 refreshMode: true,
                 details: false,
                 removeTotalColumn: false,
-                pagination: false
+                pagination: false,
+                searching : false
             });
         });
     }
@@ -451,7 +465,8 @@ $(function () {
             removeTotal: true,
             refreshMode: false,
             details: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         $('#refreshPerimeters').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -460,7 +475,8 @@ $(function () {
                 refreshMode: true,
                 removeTotalColumn: true,
                 details: false,
-                pagination: false
+                pagination: false,
+                searching : false
             });
         });
     }
@@ -491,7 +507,8 @@ $(function () {
             refreshMode: false,
             details: false,
             removeTotalColumn: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         $('#refreshColturetech').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -500,7 +517,8 @@ $(function () {
                 refreshMode: true,
                 details: false,
                 removeTotalColumn: false,
-                pagination: false
+                pagination: false,
+                searching : false
             });
         });
     }
@@ -532,7 +550,8 @@ $(function () {
             refreshMode: false,
             details: false,
             removeTotalColumn: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         $('#refreshGlobalDelay').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -541,7 +560,8 @@ $(function () {
                 refreshMode: true,
                 details: false,
                 removeTotalColumn: false,
-                pagination: false
+                pagination: false,
+                searching : false
             });
         });
     }
@@ -573,7 +593,8 @@ $(function () {
             refreshMode: false,
             details: false,
             removeTotalColumn: false,
-            pagination: true
+            pagination: true,
+            searching : true
         });
         $('#refreshProcessingDelay').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -582,7 +603,8 @@ $(function () {
                 refreshMode: true,
                 details: false,
                 removeTotalColumn: false,
-                pagination: true
+                pagination: true,
+                searching : true
             });
         });
     }
@@ -604,7 +626,8 @@ $(function () {
         refreshMode: false,
         details: false,
         removeTotalColumn: false,
-        pagination: false
+        pagination: false,
+        searching: false
     }) {
         ajaxRequests++;
         if (params.refreshMode) {
@@ -697,7 +720,8 @@ $(function () {
                             removeTotal: params.removeTotal,
                             removeTotalColumn: params.removeTotalColumn,
                             details: params.details,
-                            pagination: params.pagination
+                            pagination: params.pagination,
+                            searching: params.searching
                         });
                         if (params.details) {
                             $('#' + object.element).on('click', 'td.details-control', function () {
@@ -717,54 +741,57 @@ $(function () {
                             });
                         }
                         // CELL CLICK
-                        let tableId = '#' + object.element;
-                        $(tableId + ' tbody').on('click', 'td', function () {
-                            let agent_name = $('#agent_name').val();
-                            let agence_name = $('#agence_name').val();
-                            let col = object.element_dt.cell(this).index().column + 1;
-                            let row = object.element_dt.cell(this).index().row + 1;
-                            let colText = $(tableId + " > thead > tr > th:nth-child(" + col + ")").text();
-                            let rowText = $(tableId + " > tbody > tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
-                            if(object.element === 'statsColturetech'){
-                                switch (rowText) {
-                                    case 'superieur un jour': rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440 '; break;
-                                    case 'Entre 1H et 6h' : rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) between 60 and 360 '; break;
-                                    case 'Entre 30min et 1H': rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) BETWEEN 30 and 60 '; break;
-                                    default: rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) < 30 ';
+                        if(object.element !== 'statsProcessingDelay'){
+                            let tableId = '#' + object.element;
+                            $(tableId + ' tbody').on('click', 'td', function () {
+                                let agent_name = $('#agent_name').val();
+                                let agence_name = $('#agence_name').val();
+                                let col = object.element_dt.cell(this).index().column + 1;
+                                let row = object.element_dt.cell(this).index().row + 1;
+                                let colText = $(tableId + " > thead > tr > th:nth-child(" + col + ")").text();
+                                let rowText = $(tableId + " > tbody > tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
+                                if(object.element === 'statsColturetech'){
+                                    switch (rowText) {
+                                        case 'superieur un jour': rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440 '; break;
+                                        case 'Entre 1H et 6h' : rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) between 60 and 360 '; break;
+                                        case 'Entre 30min et 1H': rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) BETWEEN 30 and 60 '; break;
+                                        default: rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) < 30 ';
+                                    }
                                 }
-                            }
-                            if(object.element === 'statsGlobalDelay'){
-                                switch (rowText) {
-                                    case 'Superieur 15 Jours': rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) > 15 '; break;
-                                    case 'Entre une semaine et 15 jours' : rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) between 7 and 15 '; break;
-                                    default: rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) < 7 ';
+                                if(object.element === 'statsGlobalDelay'){
+                                    switch (rowText) {
+                                        case 'Superieur 15 Jours': rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) > 15 '; break;
+                                        case 'Entre une semaine et 15 jours' : rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) between 7 and 15 '; break;
+                                        default: rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) < 7 ';
+                                    }
                                 }
-                            }
-                            if (object.columnName === 'Date_Heure_Note_Semaine') {
-                                colText = colText.split('_')[0];
-                            }
-                            let lastRowIndex = object.element_dt.rows().count();
-                            let lastColumnIndex = object.element_dt.columns().count();
+                                if (object.columnName === 'Date_Heure_Note_Semaine') {
+                                    colText = colText.split('_')[0];
+                                }
+                                let lastRowIndex = object.element_dt.rows().count();
+                                let lastColumnIndex = object.element_dt.columns().count();
 
-                            if (((params.details && col > 2) || (!params.details && col > 1))
-                                && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
-                                && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
-                                let dates = object.filterTree.dates;
-                                window.location = APP_URL + '/all-stats?' +
-                                    'row=' + object.rowName +
-                                    '&rowValue=' + rowText +
-                                    '&col=' + object.columnName +
-                                    '&colValue=' + colText +
-                                    '&agent=' + (agent_name === undefined || agent_name === null ? '' : agent_name) +
-                                    '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) +
-                                    '&dates=' + (dates === undefined || dates === null ? '' : dates) +
-                                    '&queryJoin=' + (object.filterQuery.queryJoin === undefined || object.filterQuery.queryJoin === null ? '' : object.filterQuery.queryJoin) +
-                                    '&subGroupBy=' + (object.filterQuery.subGroupBy === undefined || object.filterQuery.subGroupBy === null ? '' : object.filterQuery.subGroupBy) +
-                                    '&queryGroupBy=' + (object.filterQuery.queryGroupBy === undefined || object.filterQuery.queryGroupBy === null ? '' : object.filterQuery.queryGroupBy) +
-                                    '&appCltquery=' + (object.filterQuery.appCltquery === undefined || object.filterQuery.appCltquery === null ? '' : object.filterQuery.appCltquery);
-                            }
-                            // console.log(colText + ' --- ' + rowText)
-                        });
+                                if (((params.details && col > 2) || (!params.details && col > 1))
+                                    && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
+                                    && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
+                                    let dates = object.filterTree.dates;
+                                    window.location = APP_URL + '/all-stats?' +
+                                        'row=' + object.rowName +
+                                        '&rowValue=' + rowText +
+                                        '&col=' + object.columnName +
+                                        '&colValue=' + colText +
+                                        '&agent=' + (agent_name === undefined || agent_name === null ? '' : agent_name) +
+                                        '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) +
+                                        '&dates=' + (dates === undefined || dates === null ? '' : dates) +
+                                        '&queryJoin=' + (object.filterQuery.queryJoin === undefined || object.filterQuery.queryJoin === null ? '' : object.filterQuery.queryJoin) +
+                                        '&subGroupBy=' + (object.filterQuery.subGroupBy === undefined || object.filterQuery.subGroupBy === null ? '' : object.filterQuery.subGroupBy) +
+                                        '&queryGroupBy=' + (object.filterQuery.queryGroupBy === undefined || object.filterQuery.queryGroupBy === null ? '' : object.filterQuery.queryGroupBy) +
+                                        '&appCltquery=' + (object.filterQuery.appCltquery === undefined || object.filterQuery.appCltquery === null ? '' : object.filterQuery.appCltquery);
+                                }
+                                // console.log(colText + ' --- ' + rowText)
+                            });
+                        }
+
                     } catch (error) {
                         console.log(error);
                         // swal(
@@ -799,6 +826,7 @@ $(function () {
         removeTotalColumn: false,
         details: false,
         pagination: false,
+        searching: false
     }) {
         let table = $('#' + object.element);
         if ($.fn.DataTable.isDataTable(table)) {
@@ -843,7 +871,7 @@ $(function () {
             info: false,
             processing: true,
             serverSide: true,
-            searching: false,
+            searching: params.searching,
             // ordering: false,
             bPaginate: params.pagination,
             ajax: {
