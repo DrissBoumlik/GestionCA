@@ -1986,7 +1986,7 @@ class StatsRepository
             ->select('EXPORT_ALL_EXTRACT_CUI')
             ->distinct()
             ->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['PCA','F5E'])
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['bf5','bf8'])
             ->where('Nom_Region','0 - DOIDF');
 
         $columns = applyFilter($columns, $filter);
@@ -2052,7 +2052,7 @@ class StatsRepository
         $regions = \DB::table('stats as st')
             ->select('Id_Externe','Date_Creation','Date_Heure_Note','EXPORT_ALL_EXTRACT_CUI', \DB::raw('TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) count')
             )->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['PCA','F5E'])
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['bf5','bf8'])
             ->where('Nom_Region','0 - DOIDF');
 
         $regions = applyFilter($regions, $filter);
