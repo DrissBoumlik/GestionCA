@@ -554,7 +554,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
-        filterElement: {dates: '#tree-view-03', rows: ''},
+        filterElement: {dates: '#tree-view-04', rows: ''},
         filterQuery: {
             appCltquery: true,
         },
