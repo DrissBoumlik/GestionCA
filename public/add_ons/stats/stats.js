@@ -1070,8 +1070,10 @@ $(function () {
         toggleLoader($(this).parents('.col-12'));
 
         globalElements.map(function (element) {
-            element.filterTree.dates = userObject.filterTree.dates;
-            element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
+            if($(element.filterElement.dates).length){
+                element.filterTree.dates = userObject.filterTree.dates;
+                element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
+            }
         });
         userFilter(userObject, true);
         getColumns(statsRegions, filterData(), {
@@ -1162,6 +1164,7 @@ $(function () {
             pagination: false,
             searching : false
         });
+        if (elementExists(statsProcessingDelay)) {
         getColumns(statsProcessingDelay, filterData(), {
             removeTotal: false,
             refreshMode: true,
@@ -1170,6 +1173,7 @@ $(function () {
             pagination: true,
             searching : true
         });
+        }
     });
     //</editor-fold>
     $("#printElement").on("click", function () {
