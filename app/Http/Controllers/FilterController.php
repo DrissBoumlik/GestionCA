@@ -20,7 +20,10 @@ class FilterController extends Controller
     public function dashboard_filter(Request $request, $filter)
     {
         $viewName = $filter;
-        return view('stats.details.' . $viewName);
+        return view('stats.details.' . $viewName)->with([
+            'agence' => $request->agence_code,
+            'agent' => $request->agent_name
+        ]);
     }
 
     public function getUserFilter(Request $request)
