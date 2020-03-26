@@ -2066,19 +2066,19 @@ class StatsRepository
         }
 
         if($first == 0){
-            $missing->EXPORT_ALL_EXTRACT_CUI = "FC1";
+            $missing->EXPORT_ALL_EXTRACT_CUI = "bf5";
             $missing->count = 0;
             $missing->Title = "1-Moins De 4 Heurs";
             array_push($array_regions,$missing);
         }
         if($second == 0){
-            $missing->EXPORT_ALL_EXTRACT_CUI = "FC1";
+            $missing->EXPORT_ALL_EXTRACT_CUI = "bf5";
             $missing->count = 0;
             $missing->Title = "2-Entre 4 Heurs Et 24 Heurs";
             array_push($array_regions,$missing);
         }
         if($third == 0){
-            $missing->EXPORT_ALL_EXTRACT_CUI = "FC1";
+            $missing->EXPORT_ALL_EXTRACT_CUI = "bf5";
             $missing->count = 0;
             $missing->Title = "3-Superieur 24 Heurs";
             array_push($array_regions,$missing);
