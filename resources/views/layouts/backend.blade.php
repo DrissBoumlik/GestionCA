@@ -181,6 +181,16 @@
                 )
             }
 
+            function filterSelectOnChange(caller, agence_code, agent_name) {
+                let agenceParam = agence_code ? 'agence_code=' + agence_code : '';
+                let agentParam = agent_name ? 'agent_name=' + agent_name : '';
+                let params = agenceParam || agentParam ? ('?' + agenceParam + '&' + agentParam) : '' ;
+                let url = APP_URL + '/' + $(caller).val() + params;
+                if ($('#filterDashboard').prop('selectedIndex') && url !== window.location.href) {
+                    window.location = url;
+                }
+            }
+
         </script>
         <!-- OneUI Core JS -->
         <script src="{{ asset('js/oneui.app.js') }}"></script>

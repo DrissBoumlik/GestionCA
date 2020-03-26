@@ -1049,12 +1049,7 @@ $(function () {
 
     //<editor-fold desc="GLOBAL FILTER">
     $('#filterDashboard').on('change', function () {
-        let agenceParam = agence_code ? 'agence_code=' + agence_code : '';
-        let agentParam = agent_name ? 'agent_name=' + agent_name : '';
-        let url = APP_URL + '/' + $(this).val() + '/?' + agenceParam + '&' + agentParam;
-        if ($('#filterDashboard').prop('selectedIndex') && url !== window.location.href) {
-            window.location = url;
-        }
+        filterSelectOnChange(this, agence_code, agent_name);
     });
 
     $("#refreshAll").on('click', function () {
