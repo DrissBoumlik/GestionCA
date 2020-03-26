@@ -12,6 +12,15 @@ use Illuminate\Support\Facades\Route;
 
 class FilterRepository
 {
+    public function getViewFilter(Request $request, $filter)
+    {
+        $viewName = $filter;
+        return view('stats.details.' . $viewName)->with([
+            'agence' => $request->agence_code,
+            'agent' => $request->agent_name
+        ]);
+    }
+
     public function getUserFilter(Request $request)
     {
         $user = getAuthUser();

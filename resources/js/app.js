@@ -89,4 +89,9 @@ frLang = {
         agence_code = $(e.currentTarget).val();
         window.location.href = APP_URL + `/agents?agent_name=${agence_code}`;
     });
+
+    // Handling sidebar events with logo app
+    $('#page-header button[data-action=sidebar_toggle]').on('click', function () {
+        $('.sidebar-mini .logo').addClass('visible');
+    });
 })(jQuery);

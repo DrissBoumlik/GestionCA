@@ -510,10 +510,7 @@ $(function () {
 
     //<editor-fold desc="GLOBAL FILTER">
     $('#filterDashboard').on('change', function () {
-        let url = APP_URL + '/' + $(this).val();
-        if ($('#filterDashboard').prop('selectedIndex') && url !== window.location.href) {
-            window.location = url;
-        }
+        filterSelectOnChange(this, agence_code, agent_name);
     });
 
     $("#refreshAll").on('click', function () {
