@@ -2034,9 +2034,9 @@ class StatsRepository
 
         $regions = \DB::table('stats as st')
             ->select('EXPORT_ALL_EXTRACT_CUI', \DB::raw('count(DISTINCT Id_Externe) as count'), \DB::raw('CASE
-                        WHEN TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) > 24 THEN "3-Superieur 24 Heurs"
-                        WHEN TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) between 4 and 24   then "2-Entre 4 Heurs Et 24 Heurs"
-                        ELSE "1-Moins De 4 Heurs"
+                        WHEN TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) > 24 THEN "3 - Superieur 24 Heurs"
+                        WHEN TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) between 4 and 24   then "2 - Entre 4 Heurs Et 24 Heurs"
+                        ELSE "1 - Moins De 4 Heurs"
                     END as Title')
             )->whereNotNull('Nom_Region')
             ->whereIn('EXPORT_ALL_EXTRACT_CUI',['bf5','bf8'])
@@ -2060,33 +2060,32 @@ class StatsRepository
         $third = 0;
         if(!empty($array_regions)){
         foreach ($array_regions as $object){
-            if($object->Title === "1-Moins De 4 Heurs"){$first++;}
-            if($object->Title === "2-Entre 4 Heurs Et 24 Heurs"){$second++;}
-            if($object->Title === "3-Superieur 24 Heurs"){$third++;}
+            if($object->Title === "1 - Moins De 4 Heurs"){$first++;}
+            if($object->Title === "2 - Entre 4 Heurs Et 24 Heurs"){$second++;}
+            if($object->Title === "3 - Superieur 24 Heurs"){$third++;}
         }
 
         if($first == 0){
-            $missing->EXPORT_ALL_EXTRACT_CUI = "bf5";
+            $missing->EXPORT_ALL_EXTRACT_CUI = "BF5";
             $missing->count = 0;
-            $missing->Title = "1-Moins De 4 Heurs";
+            $missing->Title = "1 - Moins De 4 Heurs";
             array_push($array_regions,$missing);
         }
         if($second == 0){
-            $missing->EXPORT_ALL_EXTRACT_CUI = "bf5";
+            $missing->EXPORT_ALL_EXTRACT_CUI = "BF5";
             $missing->count = 0;
-            $missing->Title = "2-Entre 4 Heurs Et 24 Heurs";
+            $missing->Title = "2 - Entre 4 Heurs Et 24 Heurs";
             array_push($array_regions,$missing);
         }
         if($third == 0){
-            $missing->EXPORT_ALL_EXTRACT_CUI = "bf5";
+            $missing->EXPORT_ALL_EXTRACT_CUI = "BF5";
             $missing->count = 0;
-            $missing->Title = "3-Superieur 24 Heurs";
+            $missing->Title = "3 - Superieur 24 Heurs";
             array_push($array_regions,$missing);
         }
         $regions = collect($array_regions);
         }
         $keys = $regions->groupBy(['EXPORT_ALL_EXTRACT_CUI'])->keys();
-
 
         if (!count($regions)) {
             $data = ['data' => []];
@@ -2103,7 +2102,8 @@ class StatsRepository
                 });
             });
             $regions = $temp->flatten();
-            $regions = $regions->groupBy('Title')->sort();
+            $regions = $regions->sortby('Title');
+            $regions = $regions->groupBy('Title');
             $regions = $regions->map(function ($region) use ($keys) {
                 $row = new \stdClass();
                 $row->values = [];
