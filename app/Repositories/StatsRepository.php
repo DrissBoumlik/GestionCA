@@ -1986,7 +1986,7 @@ class StatsRepository
             ->select('EXPORT_ALL_EXTRACT_CUI')
             ->distinct()
             ->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['F1S','F1C'])
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['bf5','bf8'])
             ->where('Nom_Region','0 - DOIDF');
 
         $columns = applyFilter($columns, $filter);
@@ -2039,7 +2039,7 @@ class StatsRepository
                         ELSE "1-Moins De 4 Heurs"
                     END as Title')
             )->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['F1S','F1C'])
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['bf5','bf8'])
             ->where('Nom_Region','0 - DOIDF');
 
         $regions = applyFilter($regions, $filter);
@@ -2053,6 +2053,36 @@ class StatsRepository
         $regions = $regions->orderBy('Title');
         //dd($regions->groupBy('EXPORT_ALL_EXTRACT_CUI', 'Title')->toSql(),  $regions->groupBy('EXPORT_ALL_EXTRACT_CUI', 'Title')->getBindings());
         $regions = $regions->groupBy('EXPORT_ALL_EXTRACT_CUI', 'Title')->get();
+        $array_regions = $regions->toArray();
+        $missing = new \stdClass();
+        $first = 0;
+        $second = 0;
+        $third = 0;
+        foreach ($array_regions as $object){
+            if($object->Title === "1-Moins De 4 Heurs"){$first++;}
+            if($object->Title === "2-Entre 4 Heurs Et 24 Heurs"){$second++;}
+            if($object->Title === "3-Superieur 24 Heurs"){$third++;}
+        }
+
+        if($first == 0){
+            $missing->EXPORT_ALL_EXTRACT_CUI = "FC1";
+            $missing->count = 0;
+            $missing->Title = "1-Moins De 4 Heurs";
+            array_push($array_regions,$missing);
+        }
+        if($second == 0){
+            $missing->EXPORT_ALL_EXTRACT_CUI = "FC1";
+            $missing->count = 0;
+            $missing->Title = "2-Entre 4 Heurs Et 24 Heurs";
+            array_push($array_regions,$missing);
+        }
+        if($third == 0){
+            $missing->EXPORT_ALL_EXTRACT_CUI = "FC1";
+            $missing->count = 0;
+            $missing->Title = "3-Superieur 24 Heurs";
+            array_push($array_regions,$missing);
+        }
+        $regions = collect($array_regions);
         $keys = $regions->groupBy(['EXPORT_ALL_EXTRACT_CUI'])->keys();
 
 
@@ -2071,8 +2101,7 @@ class StatsRepository
                 });
             });
             $regions = $temp->flatten();
-
-            $regions = $regions->groupBy('Title');
+            $regions = $regions->groupBy('Title')->sort();
             $regions = $regions->map(function ($region) use ($keys) {
                 $row = new \stdClass();
                 $row->values = [];
@@ -2101,6 +2130,7 @@ class StatsRepository
 
                 return $_item;
             });
+
             $regions = $regions->values();
 
             return ['data' => $regions];
