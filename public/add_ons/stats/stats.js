@@ -491,6 +491,7 @@ $(function () {
         filterElement: {dates: '#tree-view-02', rows: ''},
         filterQuery: {
             appCltquery: true,
+            queryJoin : ' and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE is not null'
         },
         routeCol: 'Cloturetech/columns?key_groupement=Appels clôture',
         routeData: 'Cloturetech?key_groupement=Appels clôture',
@@ -534,6 +535,7 @@ $(function () {
         filterElement: {dates: '#tree-view-03', rows: ''},
         filterQuery: {
             appCltquery: true,
+            queryJoin : ' and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE is not null'
         },
         routeCol: 'GlobalDelay/columns?key_groupement=Appels clôture',
         routeData: 'GlobalDelay?key_groupement=Appels clôture',
@@ -569,7 +571,7 @@ $(function () {
     let statsProcessingDelay = {
         element_dt: undefined,
         element: 'statsProcessingDelay',
-        columnName: 'Nom_Region',
+        columnName: 'EXPORT_ALL_EXTRACT_CUI',
         rowName: '',
         columns: undefined,
         data: undefined,
@@ -593,8 +595,8 @@ $(function () {
             refreshMode: false,
             details: false,
             removeTotalColumn: false,
-            pagination: true,
-            searching : true
+            pagination: false,
+            searching : false
         });
         $('#refreshProcessingDelay').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -603,8 +605,8 @@ $(function () {
                 refreshMode: true,
                 details: false,
                 removeTotalColumn: false,
-                pagination: true,
-                searching : true
+                pagination: false,
+                searching : false
             });
         });
     }
@@ -741,7 +743,6 @@ $(function () {
                             });
                         }
                         // CELL CLICK
-                        if(object.element !== 'statsProcessingDelay'){
                             let tableId = '#' + object.element;
                             $(tableId + ' tbody').on('click', 'td', function () {
                                 let agent_name = $('#agent_name').val();
@@ -763,6 +764,13 @@ $(function () {
                                         case 'Superieur 15 Jours': rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) > 15 '; break;
                                         case 'Entre une semaine et 15 jours' : rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) between 7 and 15 '; break;
                                         default: rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) < 7 ';
+                                    }
+                                }
+                                if(object.element === 'statsProcessingDelay'){
+                                    switch (rowText) {
+                                        case 'Superieur 24 Heurs': rowText = ' and TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) > 24 '; break;
+                                        case 'Entre 4 Heurs Et 24 Heurs' : rowText = ' and TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) between 4 and 24 '; break;
+                                        default: rowText = ' and TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) < 4 ';
                                     }
                                 }
                                 if (object.columnName === 'Date_Heure_Note_Semaine') {
@@ -790,7 +798,6 @@ $(function () {
                                 }
                                 // console.log(colText + ' --- ' + rowText)
                             });
-                        }
 
                     } catch (error) {
                         console.log(error);
@@ -871,24 +878,12 @@ $(function () {
             info: false,
             processing: true,
             serverSide: true,
-            searching: params.searching,
+            searching: false,
             // ordering: false,
             bPaginate: params.pagination,
             ajax: {
                 url: APP_URL + '/' + object.routeData,
                 data: data,
-                'complete': function (response) {
-                    if(object === statsProcessingDelay){
-                        InitChart(statsProcessingDelay.objChart, statsProcessingDelay.columns, response.responseJSON.data , {
-                            removeTotal: false,
-                            removeTotalColumn: false,
-                            details: false
-                        });
-                        let parent = $('#' +statsProcessingDelay.element).parents('.col-12');
-                        toggleLoader(parent, true);
-                        isfinished = true;
-                    }
-                }
             },
             columns: object.columns,
             initComplete: function (settings, response) {
@@ -897,7 +892,6 @@ $(function () {
                 if (ajaxRequests === 0) {
                     toggleLoader($('#refreshAll').parents('.col-12'), true);
                 }
-                if (object.objChart !== null && object.objChart !== undefined && object !== statsProcessingDelay) {
                     try {
                         InitChart(object.objChart, object.columns, response.data, {
                             removeTotal: params.removeTotal,
@@ -910,7 +904,6 @@ $(function () {
                         console.log(error);
                     }
                 }
-            }
         });
     }
 
@@ -924,9 +917,6 @@ $(function () {
         // console.log(objectChart.chartTitle);
         // console.log(columns);
         // console.log(data);
-        if(objectChart === statsProcessingDelay.objChart && !isfinished){
-           columns.splice(1,2);
-        }
         let labels = [...columns];
         labels = labels.map((column) => {
             return column.data;
@@ -1170,8 +1160,8 @@ $(function () {
             refreshMode: true,
             details: false,
             removeTotalColumn: false,
-            pagination: true,
-            searching : true
+            pagination: false,
+            searching : false
         });
         }
     });

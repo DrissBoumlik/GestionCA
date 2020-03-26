@@ -1986,7 +1986,7 @@ class StatsRepository
             ->select('EXPORT_ALL_EXTRACT_CUI')
             ->distinct()
             ->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['bf5','bf8'])
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['F1S','F1C'])
             ->where('Nom_Region','0 - DOIDF');
 
         $columns = applyFilter($columns, $filter);
@@ -1998,6 +1998,7 @@ class StatsRepository
         }
 
         $keys = $columns->pluck('EXPORT_ALL_EXTRACT_CUI');
+
 
         if (!count($keys)) {
             $data = ['filter' => $filter, 'columns' => [], 'rows' => [], 'rowsFilterHeader' => ''];
@@ -2015,34 +2016,16 @@ class StatsRepository
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
-            $third = new \stdClass();
-            $third->title = 'Date_Heure_Note';
-            $third->name = 'Date_Heure_Note';
-            $third->data = 'Date_Heure_Note';
-            $third->orderable = false;
-            array_unshift($regions_names, $third);
-
-            $second = new \stdClass();
-            $second->title = 'Date_Creation';
-            $second->name = 'Date_Creation';
-            $second->data = 'Date_Creation';
-            $second->orderable = false;
-            array_unshift($regions_names, $second);
-
             $first = new \stdClass();
-            $first->title = 'Id_Externe';
-            $first->name = 'Id_Externe';
-            $first->data = 'Id_Externe';
+            $first->title = 'EXPORT_ALL_EXTRACT_CUI';
+            $first->name = 'EXPORT_ALL_EXTRACT_CUI';
+            $first->data = 'EXPORT_ALL_EXTRACT_CUI';
             $first->orderable = false;
             array_unshift($regions_names, $first);
 
-
             return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
-        }
-    }
-
-    public function getProcessingDelayCall(Request $request, $filter = null)
-    {
+        }}
+    public function getProcessingDelayCall(Request $request, $filter = null){
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
         $_route = getRoute(Route::current());
@@ -2050,9 +2033,13 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
 
         $regions = \DB::table('stats as st')
-            ->select('Id_Externe','Date_Creation','Date_Heure_Note','EXPORT_ALL_EXTRACT_CUI', \DB::raw('TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) count')
+            ->select('EXPORT_ALL_EXTRACT_CUI', \DB::raw('count(DISTINCT Id_Externe) as count'), \DB::raw('CASE
+                        WHEN TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) > 24 THEN "3-Superieur 24 Heurs"
+                        WHEN TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) between 4 and 24   then "2-Entre 4 Heurs Et 24 Heurs"
+                        ELSE "1-Moins De 4 Heurs"
+                    END as Title')
             )->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['bf5','bf8'])
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['F1S','F1C'])
             ->where('Nom_Region','0 - DOIDF');
 
         $regions = applyFilter($regions, $filter);
@@ -2063,31 +2050,40 @@ class StatsRepository
             $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
-        $regions = $regions->groupBy('Id_Externe','EXPORT_ALL_EXTRACT_CUI')->get();
-
+        $regions = $regions->orderBy('Title');
+        //dd($regions->groupBy('EXPORT_ALL_EXTRACT_CUI', 'Title')->toSql(),  $regions->groupBy('EXPORT_ALL_EXTRACT_CUI', 'Title')->getBindings());
+        $regions = $regions->groupBy('EXPORT_ALL_EXTRACT_CUI', 'Title')->get();
         $keys = $regions->groupBy(['EXPORT_ALL_EXTRACT_CUI'])->keys();
-
 
 
         if (!count($regions)) {
             $data = ['data' => []];
             return $data;
         } else {
-            $regions = $regions->groupBy('Id_Externe');
+            $temp = $regions->groupBy(['EXPORT_ALL_EXTRACT_CUI']);
+            $temp = $temp->map(function ($calls, $index) {
+                $totalZone = $calls->reduce(function ($carry, $call) {
+                    return $carry + $call->count;
+                }, 0);
+                return $calls->map(function ($call) use ($index, $totalZone) {
+                    $call->$index = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
+                    return $call;
+                });
+            });
+            $regions = $temp->flatten();
+
+            $regions = $regions->groupBy('Title');
             $regions = $regions->map(function ($region) use ($keys) {
                 $row = new \stdClass();
                 $row->values = [];
 
                 $col_arr = $keys->all();
                 $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
-                    $row->Id_Externe = $call->Id_Externe;
-                    $row->Date_Creation = $call->Date_Creation;
-                    $row->Date_Heure_Note = $call->Date_Heure_Note ;
-                    $EXPORT_ALL_EXTRACT_CUI = $call->EXPORT_ALL_EXTRACT_CUI;
-                    $row->$EXPORT_ALL_EXTRACT_CUI =  $call->count . ' H';
-                    $row->values[$EXPORT_ALL_EXTRACT_CUI] = $call->count;
-                    $col_arr = array_diff($col_arr, [$EXPORT_ALL_EXTRACT_CUI]);
-
+                    $row->EXPORT_ALL_EXTRACT_CUI = explode('-', $call->Title)[1];
+                    $ALL_EXTRACT_CUI = $call->EXPORT_ALL_EXTRACT_CUI;
+                    $row->$ALL_EXTRACT_CUI = $call->count . '|' . $call->$ALL_EXTRACT_CUI . '%';
+                    $row->values[$ALL_EXTRACT_CUI] = $call->count;
+                    $col_arr = array_diff($col_arr, [$ALL_EXTRACT_CUI]);
                     return $row;
                 });
 
@@ -2102,9 +2098,11 @@ class StatsRepository
                 ksort($_item->values);
 
                 $_item->values = collect($_item->values)->values();
+
                 return $_item;
             });
             $regions = $regions->values();
+
             return ['data' => $regions];
         }
     }
