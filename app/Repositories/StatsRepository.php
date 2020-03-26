@@ -2058,6 +2058,7 @@ class StatsRepository
         $first = 0;
         $second = 0;
         $third = 0;
+        if(!empty($array_regions)){
         foreach ($array_regions as $object){
             if($object->Title === "1-Moins De 4 Heurs"){$first++;}
             if($object->Title === "2-Entre 4 Heurs Et 24 Heurs"){$second++;}
@@ -2083,6 +2084,7 @@ class StatsRepository
             array_push($array_regions,$missing);
         }
         $regions = collect($array_regions);
+        }
         $keys = $regions->groupBy(['EXPORT_ALL_EXTRACT_CUI'])->keys();
 
 
