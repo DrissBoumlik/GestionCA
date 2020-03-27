@@ -114,13 +114,13 @@ class StatsController extends Controller
 
     public function getNonValidatedFoldersColumn(Request $request, $column)
     {
-        $data = $this->statsRepository->getColumnsNonValidatedFolders($request, $column);
+        $data = $this->statsRepository->GetColumnsNonValidatedFolders($request, $column);
         return $data;
     }
 
     public function getNonValidatedFolders(Request $request, $column)
     {
-        $data = $this->statsRepository->getDataNonValidatedFolders($request, $column);
+        $data = $this->statsRepository->GetDataNonValidatedFolders($request, $column);
         return DataTables::of($data['data'])->toJson();
     }
 
@@ -130,24 +130,24 @@ class StatsController extends Controller
 
     public function getClientsByCallStateColumn(Request $request, $callResult)
     {
-        $data = $this->statsRepository->getColumnsClientsByCallState($request, $callResult);
+        $data = $this->statsRepository->GetColumnsClientsByCallState($request, $callResult);
         return $data;
     }
 
     public function getClientsByCallState(Request $request, $callResult)
     {
-        $data = $this->statsRepository->getDataClientsByCallState($request, $callResult);
+        $data = $this->statsRepository->GetDataClientsByCallState($request, $callResult);
         return DataTables::of($data['data'])->toJson();
     }
 
     public function getClientsWithCallStatesColumn(Request $request)
     {
-        return $this->statsRepository->getColumnsClientsWithCallStates($request);
+        return $this->statsRepository->GetColumnsClientsWithCallStates($request);
     }
 
     public function getClientsWithCallStates(Request $request)
     {
-        $data = $this->statsRepository->getDataClientsWithCallStates($request);
+        $data = $this->statsRepository->GetDataClientsWithCallStates($request);
         return DataTables::of($data['data'])->toJson();
     }
     #endregion
@@ -156,13 +156,13 @@ class StatsController extends Controller
 
     public function getClientsByPerimeterColumn(Request $request)
     {
-        $data = $this->statsRepository->getColumnsClientsByPerimeter($request);
+        $data = $this->statsRepository->GetColumnsClientsByPerimeter($request);
         return $data;
     }
 
     public function getClientsByPerimeter(Request $request)
     {
-        $data = $this->statsRepository->getDataClientsByPerimeter($request);
+        $data = $this->statsRepository->GetDataClientsByPerimeter($request);
         return DataTables::of($data['data'])->toJson();
     }
 
@@ -171,34 +171,34 @@ class StatsController extends Controller
     //region Global Stats
     public function getCloturetechColumn(Request $request)
     {
-        return $this->statsRepository->getColumnsCloturetechCall($request);
+        return $this->statsRepository->GetColumnsCloturetechCall($request);
     }
 
     public function getCloturetech(Request $request)
     {
-        $data = $this->statsRepository->getCloturetechCall($request);
+        $data = $this->statsRepository->GetCloturetechCall($request);
         return DataTables::of($data['data'])->toJson();
     }
 
     public function getGlobalDelayColumn(Request $request)
     {
-        return $this->statsRepository->getColumnsGlobalDelayCall($request);
+        return $this->statsRepository->GetColumnsGlobalDelayCall($request);
     }
 
     public function getGlobalDelay(Request $request)
     {
-        $data = $this->statsRepository->getGlobalDelayCall($request);
+        $data = $this->statsRepository->GetGlobalDelayCall($request);
         return DataTables::of($data['data'])->toJson();
     }
 
     public function getProcessingDelayColumn(Request $request)
     {
-        return $this->statsRepository->getColumnsProcessingDelayCall($request);
+        return $this->statsRepository->GetColumnsProcessingDelayCall($request);
     }
 
     public function getProcessingDelay(Request $request)
     {
-        $data = $this->statsRepository->getProcessingDelayCall($request);
+        $data = $this->statsRepository->GetProcessingDelayCall($request);
         return DataTables::of($data['data'])->toJson();
     }
     //endregion

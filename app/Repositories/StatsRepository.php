@@ -196,6 +196,7 @@ class StatsRepository
             ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
+            ->where('key_groupement', 'like', $key_groupement)
             ->pluck($callResult);
 
         $keys = $results->pluck('Nom_Region');
@@ -377,6 +378,7 @@ class StatsRepository
             ->whereNotNull('Nom_Region')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
+            ->where('Groupement', 'like', $key_groupement)
             ->pluck('Resultat_Appel');
 
         $keys = $results->pluck('Nom_Region');
@@ -567,6 +569,7 @@ class StatsRepository
             ->where('Gpmt_Appel_Pre', 'not like', 'Non renseigné')
             ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
             ->whereNotNull('Nom_Region')
+            ->where('key_groupement', 'like', $key_groupement)
             ->pluck('Gpmt_Appel_Pre');
 
 
@@ -774,7 +777,7 @@ class StatsRepository
         }
     }
 
-    public function getColumnsClientsByCallState(Request $request, $callResult)
+    public function GetColumnsClientsByCallState(Request $request, $callResult)
     {
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
@@ -831,6 +834,7 @@ class StatsRepository
             ->select('Nom_Region')
             ->distinct()
             ->whereNotNull('Nom_Region')
+            ->where('key_groupement', 'like', $key_groupement)
             ->pluck('Nom_Region');
 
         $columns = $columns->where('Gpmt_Appel_Pre', 'like', $callResult);
@@ -873,7 +877,7 @@ class StatsRepository
         }
     }
 
-    public function getDataClientsByCallState(Request $request, $callResult)
+    public function GetDataClientsByCallState(Request $request, $callResult)
     {
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
@@ -1028,7 +1032,7 @@ class StatsRepository
         }
     }
 
-    public function getColumnsNonValidatedFolders(Request $request, $intervCol)
+    public function GetColumnsNonValidatedFolders(Request $request, $intervCol)
     {
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
@@ -1062,6 +1066,7 @@ class StatsRepository
             ->distinct()
             ->whereNotNull('Nom_Region')
             ->where('Groupement', 'Appels clôture')
+            ->where('key_groupement', 'like', $key_groupement)
             ->pluck($intervCol);
 
         $keys = $columns->pluck('Nom_Region');
@@ -1094,7 +1099,7 @@ class StatsRepository
         }
     }
 
-    public function getDataNonValidatedFolders(Request $request, $intervCol)
+    public function GetDataNonValidatedFolders(Request $request, $intervCol)
     {
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
@@ -1240,7 +1245,7 @@ class StatsRepository
         }
     }
 
-    public function getColumnsClientsByPerimeter(Request $request)
+    public function GetColumnsClientsByPerimeter(Request $request)
     {
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
@@ -1280,6 +1285,7 @@ class StatsRepository
             ->where('st.Groupement', 'not like', 'Non renseigné')
             ->where('st.Groupement', 'not like', 'Appels post')
             ->where('Type_Note', 'like', 'CAM')
+            ->where('key_groupement', 'like', $key_groupement)
             ->pluck('Nom_Region');
 
         $keys = $results->pluck('Groupement');
@@ -1323,7 +1329,7 @@ class StatsRepository
         }
     }
 
-    public function getDataClientsByPerimeter(Request $request)
+    public function GetDataClientsByPerimeter(Request $request)
     {
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
@@ -1439,7 +1445,7 @@ class StatsRepository
         }
     }
 
-    public function getColumnsClientsWithCallStates(Request $request, $filter = null)
+    public function GetColumnsClientsWithCallStates(Request $request, $filter = null)
     {
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
@@ -1494,6 +1500,7 @@ class StatsRepository
             ->select('Nom_Region')
             ->distinct()
             ->whereNotNull('Nom_Region')
+            ->where('key_groupement', 'like', $key_groupement)
             ->pluck('Nom_Region');
 
 
@@ -1534,7 +1541,7 @@ class StatsRepository
         }
     }
 
-    public function getDataClientsWithCallStates(Request $request, $filter = null)
+    public function GetDataClientsWithCallStates(Request $request, $filter = null)
     {
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
@@ -1703,7 +1710,7 @@ class StatsRepository
     }
 
 
-    public function getColumnsCloturetechCall(Request $request, $filter = null)
+    public function GetColumnsCloturetechCall(Request $request, $filter = null)
     {
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
@@ -1756,7 +1763,7 @@ class StatsRepository
         }
     }
 
-    public function getCloturetechCall(Request $request, $filter = null)
+    public function GetCloturetechCall(Request $request, $filter = null)
     {
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
@@ -1839,7 +1846,7 @@ class StatsRepository
     }
 
 
-    public function getColumnsGlobalDelayCall(Request $request, $filter = null)
+    public function GetColumnsGlobalDelayCall(Request $request, $filter = null)
     {
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
@@ -1892,7 +1899,7 @@ class StatsRepository
         }
     }
 
-    public function getGlobalDelayCall(Request $request, $filter = null)
+    public function GetGlobalDelayCall(Request $request, $filter = null)
     {
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
@@ -1974,7 +1981,7 @@ class StatsRepository
         }
     }
 
-    public function getColumnsProcessingDelayCall(Request $request, $filter = null)
+    public function GetColumnsProcessingDelayCall(Request $request, $filter = null)
     {
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
@@ -2025,7 +2032,7 @@ class StatsRepository
 
             return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
         }}
-    public function getProcessingDelayCall(Request $request, $filter = null){
+    public function GetProcessingDelayCall(Request $request, $filter = null){
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
         $_route = getRoute(Route::current());
