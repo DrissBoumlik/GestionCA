@@ -195,9 +195,17 @@ class StatsRepository
             ->whereNotNull('Nom_Region')
             ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'not like', 'Appels post')
-            ->where('key_groupement', 'like', $key_groupement)
-            ->pluck($callResult);
+            ->where('Groupement', 'not like', 'Appels post');
+        if ($key_groupement) {
+            $rowsKeys = $rowsKeys->where('key_groupement', 'like', $key_groupement);
+        }
+        if ($agentName) {
+            $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $rowsKeys = $rowsKeys->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+        $rowsKeys = $rowsKeys->pluck($callResult);
 
         $keys = $results->pluck('Nom_Region');
 
@@ -377,9 +385,17 @@ class StatsRepository
             ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('Nom_Region')
             ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'not like', 'Appels post')
-            ->where('Groupement', 'like', $key_groupement)
-            ->pluck('Resultat_Appel');
+            ->where('Groupement', 'not like', 'Appels post');
+        if ($key_groupement) {
+            $rowsKeys = $rowsKeys->where('Groupement', 'like', $key_groupement);
+        }
+        if ($agentName) {
+            $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $rowsKeys = $rowsKeys->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+        $rowsKeys = $rowsKeys->pluck('Resultat_Appel');
 
         $keys = $results->pluck('Nom_Region');
 
@@ -568,9 +584,17 @@ class StatsRepository
             ->distinct()
             ->where('Gpmt_Appel_Pre', 'not like', 'Non renseigné')
             ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
-            ->whereNotNull('Nom_Region')
-            ->where('key_groupement', 'like', $key_groupement)
-            ->pluck('Gpmt_Appel_Pre');
+            ->whereNotNull('Nom_Region');
+        if ($key_groupement) {
+            $rowsKeys = $rowsKeys->where('key_groupement', 'like', $key_groupement);
+        }
+        if ($agentName) {
+            $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $rowsKeys = $rowsKeys->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+        $rowsKeys = $rowsKeys->pluck('Gpmt_Appel_Pre');
 
 
         if (!count($keys)) {
@@ -833,9 +857,17 @@ class StatsRepository
         $rowsKeys = \DB::table('stats as st')
             ->select('Nom_Region')
             ->distinct()
-            ->whereNotNull('Nom_Region')
-            ->where('key_groupement', 'like', $key_groupement)
-            ->pluck('Nom_Region');
+            ->whereNotNull('Nom_Region');
+        if ($key_groupement) {
+            $rowsKeys = $rowsKeys->where('key_groupement', 'like', $key_groupement);
+        }
+        if ($agentName) {
+            $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $rowsKeys = $rowsKeys->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+        $rowsKeys = $rowsKeys->pluck('Nom_Region');
 
         $columns = $columns->where('Gpmt_Appel_Pre', 'like', $callResult);
 
@@ -1065,9 +1097,17 @@ class StatsRepository
             ->select($intervCol)
             ->distinct()
             ->whereNotNull('Nom_Region')
-            ->where('Groupement', 'Appels clôture')
-            ->where('key_groupement', 'like', $key_groupement)
-            ->pluck($intervCol);
+            ->where('Groupement', 'Appels clôture');
+        if ($key_groupement) {
+            $rowsKeys = $rowsKeys->where('key_groupement', 'like', $key_groupement);
+        }
+        if ($agentName) {
+            $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $rowsKeys = $rowsKeys->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+        $rowsKeys = $rowsKeys->pluck($intervCol);
 
         $keys = $columns->pluck('Nom_Region');
 
@@ -1284,9 +1324,17 @@ class StatsRepository
             ->whereNotNull('st.Nom_Region')
             ->where('st.Groupement', 'not like', 'Non renseigné')
             ->where('st.Groupement', 'not like', 'Appels post')
-            ->where('Type_Note', 'like', 'CAM')
-            ->where('key_groupement', 'like', $key_groupement)
-            ->pluck('Nom_Region');
+            ->where('Type_Note', 'like', 'CAM');
+        if ($key_groupement) {
+            $rowsKeys = $rowsKeys->where('key_groupement', 'like', $key_groupement);
+        }
+        if ($agentName) {
+            $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $rowsKeys = $rowsKeys->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+        $rowsKeys = $rowsKeys->pluck('Nom_Region');
 
         $keys = $results->pluck('Groupement');
 
@@ -1499,9 +1547,17 @@ class StatsRepository
         $rowsKeys = \DB::table('stats as st')
             ->select('Nom_Region')
             ->distinct()
-            ->whereNotNull('Nom_Region')
-            ->where('key_groupement', 'like', $key_groupement)
-            ->pluck('Nom_Region');
+            ->whereNotNull('Nom_Region');
+        if ($key_groupement) {
+            $rowsKeys = $rowsKeys->where('key_groupement', 'like', $key_groupement);
+        }
+        if ($agentName) {
+            $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $rowsKeys = $rowsKeys->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+        $rowsKeys = $rowsKeys->pluck('Nom_Region');
 
 
         $keys = $codes->pluck('Code_Intervention');
@@ -1993,8 +2049,8 @@ class StatsRepository
             ->select('EXPORT_ALL_EXTRACT_CUI')
             ->distinct()
             ->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['bf5','bf8'])
-            ->where('Nom_Region','0 - DOIDF');
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI', ['bf5', 'bf8'])
+            ->where('Nom_Region', '0 - DOIDF');
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2031,8 +2087,11 @@ class StatsRepository
             array_unshift($regions_names, $first);
 
             return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
-        }}
-    public function GetProcessingDelayCall(Request $request, $filter = null){
+        }
+    }
+
+    public function GetProcessingDelayCall(Request $request, $filter = null)
+    {
         $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
         $_route = getRoute(Route::current());
@@ -2046,8 +2105,8 @@ class StatsRepository
                         ELSE "1-Moins De 4 Heurs"
                     END as Title')
             )->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI',['bf5','bf8'])
-            ->where('Nom_Region','0 - DOIDF');
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI', ['bf5', 'bf8'])
+            ->where('Nom_Region', '0 - DOIDF');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2065,32 +2124,38 @@ class StatsRepository
         $first = 0;
         $second = 0;
         $third = 0;
-        if(!empty($array_regions)){
-        foreach ($array_regions as $object){
-            if($object->Title === "1-Moins De 4 Heurs"){$first++;}
-            if($object->Title === "2-Entre 4 Heurs Et 24 Heurs"){$second++;}
-            if($object->Title === "3-Superieur 24 Heurs"){$third++;}
-        }
+        if (!empty($array_regions)) {
+            foreach ($array_regions as $object) {
+                if ($object->Title === "1-Moins De 4 Heurs") {
+                    $first++;
+                }
+                if ($object->Title === "2-Entre 4 Heurs Et 24 Heurs") {
+                    $second++;
+                }
+                if ($object->Title === "3-Superieur 24 Heurs") {
+                    $third++;
+                }
+            }
 
-        if($first == 0){
-            $missing->EXPORT_ALL_EXTRACT_CUI = "BF5";
-            $missing->count = 0;
-            $missing->Title = "1-Moins De 4 Heurs";
-            array_push($array_regions,$missing);
-        }
-        if($second == 0){
-            $missing->EXPORT_ALL_EXTRACT_CUI = "BF5";
-            $missing->count = 0;
-            $missing->Title = "2-Entre 4 Heurs Et 24 Heurs";
-            array_push($array_regions,$missing);
-        }
-        if($third == 0){
-            $missing->EXPORT_ALL_EXTRACT_CUI = "BF5";
-            $missing->count = 0;
-            $missing->Title = "3-Superieur 24 Heurs";
-            array_push($array_regions,$missing);
-        }
-        $regions = collect($array_regions);
+            if ($first == 0) {
+                $missing->EXPORT_ALL_EXTRACT_CUI = "BF5";
+                $missing->count = 0;
+                $missing->Title = "1-Moins De 4 Heurs";
+                array_push($array_regions, $missing);
+            }
+            if ($second == 0) {
+                $missing->EXPORT_ALL_EXTRACT_CUI = "BF5";
+                $missing->count = 0;
+                $missing->Title = "2-Entre 4 Heurs Et 24 Heurs";
+                array_push($array_regions, $missing);
+            }
+            if ($third == 0) {
+                $missing->EXPORT_ALL_EXTRACT_CUI = "BF5";
+                $missing->count = 0;
+                $missing->Title = "3-Superieur 24 Heurs";
+                array_push($array_regions, $missing);
+            }
+            $regions = collect($array_regions);
         }
         $keys = $regions->groupBy(['EXPORT_ALL_EXTRACT_CUI'])->keys();
 
