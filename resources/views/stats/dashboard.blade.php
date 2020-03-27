@@ -119,10 +119,10 @@
                     </div>
                 </div>
             @endif
-{{--            @if(!$agence && !$agent)--}}
+            @if(!$agence && !$agent)
                 @include('stats.layouts.filter_menu')
                 <hr class="separator">
-{{--            @endif--}}
+            @endif
             @include('stats.layouts.global_date_filter')
         </div>
         <hr class="separator">
