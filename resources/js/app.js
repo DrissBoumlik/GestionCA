@@ -55,10 +55,14 @@ frLang = {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    let willReload = false;
     $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
         try {
             if (jqXHR.status === 401) {
-                window.location.reload();
+                if(!willReload) {
+                    willReload = true;
+                    window.location.reload();
+                }
             }
         } catch {
         }
