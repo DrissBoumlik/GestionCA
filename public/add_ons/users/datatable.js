@@ -89,10 +89,6 @@ $(function () {
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(route);
-                console.log(jqXHR);
-                console.log(textStatus);
-                console.log(errorThrown);
                 if (jqXHR.status === 401 || jqXHR.status === 422) {
                     feedBack(jqXHR.responseJSON.message, 'error');
                 }

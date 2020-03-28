@@ -235,9 +235,6 @@ $(document).ready(function () {
                 // tableTasks.draw(false);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR);
-                console.log(textStatus);
-                console.log(errorThrown);
                 $('#modal-loader').modal('hide');
                 Swal.fire({
                     // position: 'top-end',
