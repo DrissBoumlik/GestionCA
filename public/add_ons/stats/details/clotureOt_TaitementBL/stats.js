@@ -125,7 +125,14 @@ $(function () {
         }
     };
     if (elementExists(statsFoldersByType)) {
-        getColumns(statsFoldersByType, filterData());
+        getColumns(statsFoldersByType, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false,
+            searching: false
+        });
         $('#refreshFoldersByType').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statsFoldersByType, filterData(), {
@@ -162,7 +169,14 @@ $(function () {
         }
     };
     if (elementExists(statsFoldersByCode)) {
-        getColumns(statsFoldersByCode, filterData());
+        getColumns(statsFoldersByCode, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: false,
+            removeTotalColumn: false,
+            pagination: false,
+            searching: false
+        });
         $('#refreshFoldersByCode').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statsFoldersByCode, filterData(), {
