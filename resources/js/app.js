@@ -61,7 +61,19 @@ frLang = {
             if (jqXHR.status === 401) {
                 if(!willReload) {
                     willReload = true;
-                    window.location.reload();
+                    Swal.fire({
+                        // position: 'top-end',
+                        type: 'error',
+                        title: 'Votre session a expirée, Vous devez se reconnecter',
+                        showConfirmButton: true,
+                        customClass: {
+                            confirmButton: 'btn btn-success m-1',
+                        },
+                        confirmButtonText: 'Ok',
+                    });
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
                 }
             }
         } catch {
