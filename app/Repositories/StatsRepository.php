@@ -1273,11 +1273,11 @@ class StatsRepository
                 $total->$index = $total->values[$index] . '%';
             });
 
-            $total->$intervCol = 'Total Général';
-            $total->total = round(array_sum($total->values)); //round(array_sum($total->values) / count($total->values), 2) . '%';
-            $total->values = collect($total->values)->values();
-            $total->isTotal = true;
-            $regions->push($total);
+//            $total->$intervCol = 'Total Général';
+//            $total->total = round(array_sum($total->values)); //round(array_sum($total->values) / count($total->values), 2) . '%';
+//            $total->values = collect($total->values)->values();
+//            $total->isTotal = true;
+//            $regions->push($total);
 
             $regions = $regions->values();
             $data = ['data' => $regions];
