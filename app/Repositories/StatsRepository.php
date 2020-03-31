@@ -2049,8 +2049,7 @@ class StatsRepository
             ->select('EXPORT_ALL_EXTRACT_CUI')
             ->distinct()
             ->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI', ['bf5', 'bf8'])
-            ->where('Nom_Region', '0 - DOIDF');
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI', ['bf5', 'bf8']);
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2105,8 +2104,7 @@ class StatsRepository
                         ELSE "1-Moins De 4 Heurs"
                     END as Title')
             )->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI', ['bf5', 'bf8'])
-            ->where('Nom_Region', '0 - DOIDF');
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI', ['bf5', 'bf8']);
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
