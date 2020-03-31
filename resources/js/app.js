@@ -64,7 +64,7 @@ frLang = {
                     Swal.fire({
                         // position: 'top-end',
                         type: 'error',
-                        title: 'Votre session a expirée, Vous devez se reconnecter',
+                        title: 'Votre session a expirée<br/>Vous devez se reconnecter',
                         showConfirmButton: true,
                         customClass: {
                             confirmButton: 'btn btn-success m-1',
@@ -73,7 +73,7 @@ frLang = {
                     });
                     setTimeout(function () {
                         window.location.reload();
-                    }, 1000);
+                    }, 3000);
                 }
             }
         } catch {
