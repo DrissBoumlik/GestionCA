@@ -201,7 +201,7 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '#btn-import', function (event) {
-        if(!$('#form-import').valid()) {
+        if (!$('#form-import').valid()) {
             return;
         }
         $('#modal-import').modal('hide');
@@ -209,9 +209,35 @@ $(document).ready(function () {
         let formData = new FormData($('#form-import')[0]);
         if (days !== null && days !== undefined) {
             formData.append('days', days);
-            console.log(formData);
         }
         event.preventDefault();
+
+        let request_resolved = false, sendRequestCountData = false;
+        let totalImportedData = 0;
+        let coundData = setInterval(function () {
+            if (sendRequestCountData) {
+                $.ajax({
+                    method: 'get',
+                    url: APP_URL + '/stats/import-stats/data/count',
+                    dateType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        totalImportedData = data.imported_data;
+                        $('.imported-data').text(data.imported_data + ' lignes inserées');
+                        if (request_resolved) {
+                            clearInterval(coundData);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                });
+            }
+        }, 3000);
+
         $.ajax({
             method: 'post',
             url: APP_URL + '/stats/import-stats',
@@ -220,21 +246,25 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             success: function (data) {
-                $('#modal-loader').modal('hide');
+                request_resolved = true;
                 let type = data.success ? 'success' : 'error';
-                Swal.fire({
-                    // position: 'top-end',
-                    type: type,
-                    title: data.message,
-                    showConfirmButton: true,
-                    customClass: {
-                        confirmButton: 'btn btn-success m-1',
-                    },
-                    confirmButtonText: 'Ok',
-                });
+                setTimeout(function () {
+                    $('#modal-loader').modal('hide');
+                    Swal.fire({
+                        // position: 'top-end',
+                        type: type,
+                        title: 'Total inserés : ' + totalImportedData + ' enregistrements', // data.message,
+                        showConfirmButton: true,
+                        customClass: {
+                            confirmButton: 'btn btn-success m-1',
+                        },
+                        confirmButtonText: 'Ok',
+                    });
+                }, 3100);
                 // tableTasks.draw(false);
             },
             error: function (jqXHR, textStatus, errorThrown) {
+                request_resolved = true;
                 $('#modal-loader').modal('hide');
                 Swal.fire({
                     // position: 'top-end',
@@ -248,5 +278,6 @@ $(document).ready(function () {
                 });
             }
         });
+        sendRequestCountData = true;
     });
 });
