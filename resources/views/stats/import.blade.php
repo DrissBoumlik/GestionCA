@@ -61,7 +61,8 @@
         </div>
         <div class="row mb-4">
             <div class="col-12">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-import" id="showModalImport">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-import"
+                        id="showModalImport">
                     <i class="fa fa-fw fa-upload mr-1"></i> Importer
                 </button>
             </div>
@@ -71,9 +72,12 @@
 
     <!-- Model Loader -->
     <div class="modal" id="modal-loader" tabindex="-1" role="dialog" aria-labelledby="modal-loader" aria-hidden="true">
-        <div class="spinner-wrapper">
+        <div class="spinner-wrapper align-center">
             <div class="spinner-border text-primary" role="status">
                 <span class="sr-only">Loading...</span>
+            </div>
+            <div class="imported-data mt-4 font-size-h3" id="imported-data">
+                0 lignes inserées
             </div>
         </div>
     </div>
@@ -98,10 +102,11 @@
                                 <label class="d-none">Bootstrap’s Custom File Input</label>
                                 <div class="custom-file">
                                     <!-- Populating custom file input label with the selected filename (data-toggle="custom-file-input" is initialized in Helpers.coreBootstrapCustomFileInput()) -->
-{{--                                    accept=".xlsx, .xls, .xlsm"--}}
+                                    {{--                                    accept=".xlsx, .xls, .xlsm"--}}
                                     <input type="file" class="custom-file-input" data-toggle="custom-file-input"
                                            id="file" name="file">
-                                    <label class="custom-file-label capitalize-first-letter" for="file">choisir le fichier</label>
+                                    <label class="custom-file-label capitalize-first-letter" for="file">choisir le
+                                        fichier</label>
                                 </div>
                             </div>
                         </form>
@@ -119,7 +124,8 @@
 
     <!-- Modal ALERT -->
     <!-- Pop In Block Modal -->
-    <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin" aria-hidden="true">
+    <div class="modal fade" id="modal-block-popin" tabindex="-1" role="dialog" aria-labelledby="modal-block-popin"
+         aria-hidden="true">
         <div class="modal-dialog modal-dialog-popin" role="document">
             <div class="modal-content">
                 <div class="block block-themed block-transparent mb-0">
@@ -136,7 +142,7 @@
                     </div>
                     <div class="block-content block-content-full text-right border-top">
                         <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>
-{{--                        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"><i class="fa fa-check mr-1"></i>Ok</button>--}}
+                        {{--                        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal"><i class="fa fa-check mr-1"></i>Ok</button>--}}
                     </div>
                 </div>
             </div>

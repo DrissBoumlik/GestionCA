@@ -26,4 +26,11 @@ class ToolController extends Controller
     {
         return redirect('dashboard');
     }
+
+    public function getInsertedData()
+    {
+        return [
+            'imported_data' => getImportedData(true)
+        ];
+    }
 }

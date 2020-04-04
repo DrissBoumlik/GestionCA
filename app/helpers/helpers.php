@@ -3,8 +3,19 @@
 use App\Models\Filter;
 use App\Models\Stats;
 use App\Models\User;
+use App\Models\UserFlag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
+if (!function_exists('getImportedData')) {
+    function getImportedData($wantValue = false)
+    {
+        $user_flag = UserFlag::where('user_id', getAuthUser()->id)->first();
+        $result = $user_flag ? ($wantValue ? $user_flag->flags['imported_data'] : $user_flag) : -1;
+        return $result;
+//        return $wantValue ? ($user_flag ? $user_flag->flags['imported_data'] : 0) : $user_flag;
+    }
+}
 
 if (!function_exists('checkColumnsExistence')) {
     function checkColumnsExistence($column)
@@ -676,7 +687,7 @@ if (!function_exists('clean')) {
 if (!function_exists('getAuthUser')) {
     function getAuthUser()
     {
-        return auth()->user() ?? User::find(1);
+        return auth()->user();
     }
 }
 

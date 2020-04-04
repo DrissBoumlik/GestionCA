@@ -147,6 +147,7 @@ Route::group([
 
     Route::get('/user/filter', 'FilterController@getUserFilter');
     Route::post('/user/filter', 'FilterController@saveUserFilter');
-    //
+
+    Route::get('stats/import-stats/data/count', 'ToolController@getInsertedData');
 
 });

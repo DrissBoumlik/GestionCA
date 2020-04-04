@@ -8,6 +8,7 @@ use App\Imports\StatsImport;
 use App\Models\Filter;
 use App\Models\Stats;
 use App\Models\User;
+use App\Models\UserFlag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -2213,6 +2214,16 @@ class StatsRepository
     public function importStats($request)
     {
         $file = $request->file('file');
+        $fileName = $file->getClientOriginalName();
+//        $filePath = $file->storeAs('data_source', $fileName);
+        $stored = Storage::disk('public')->put('storage/data_source/' . $fileName, file_get_contents($file));
+
+        $user_flag = UserFlag::firstOrCreate([
+            'user_id' => getAuthUser()->id
+        ]);
+        $user_flag->flags = ['imported_data' => 0];
+        $user_flag->save();
+
         $statImport = new StatsImport($request->days);
         Excel::import($statImport, $request->file('file'));
         return [
