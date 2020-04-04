@@ -2213,10 +2213,6 @@ class StatsRepository
     public function importStats($request)
     {
         $file = $request->file('file');
-        $fileName = $file->getClientOriginalName();
-//        $filePath = $file->storeAs('data_source', $fileName);
-        $stored = Storage::disk('public')->put('storage/data_source/' . $fileName, file_get_contents($file));
-
         $statImport = new StatsImport($request->days);
         Excel::import($statImport, $request->file('file'));
         return [
