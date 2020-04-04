@@ -3,7 +3,7 @@
 <select class="custom-select my-1 mr-sm-2" id="filterDashboard">
     <option selected>Choisir...</option>
     <option value="dashboard" {{ (request()->is('dashboard') || request()->is('/')) ? 'selected' : '' }}>Dashboard</option>
-    <option value="1" disabled>Traitement assistance</option>
+    <option value="dashboard/traitement-assistance" {{ request()->is('dashboard/traitement-assistance') ? 'selected' : '' }}>Traitement assistance</option>
     <option value="2" disabled>Appel Post</option>
     <option value="dashboard/appels-gem" {{ request()->is('dashboard/appels-gem') ? 'selected' : '' }}>Appel GEM</option>
     <option value="dashboard/appels-pralables" {{ request()->is('dashboard/appels-pralables') ? 'selected' : '' }}>Appel préalable</option>

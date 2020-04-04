@@ -8,6 +8,7 @@ use App\Imports\StatsImport;
 use App\Models\Filter;
 use App\Models\Stats;
 use App\Models\User;
+use App\Models\UserFlag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -2049,8 +2050,7 @@ class StatsRepository
             ->select('EXPORT_ALL_EXTRACT_CUI')
             ->distinct()
             ->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI', ['bf5', 'bf8'])
-            ->where('Nom_Region', '0 - DOIDF');
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI', ['bf5', 'bf8']);
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2105,8 +2105,7 @@ class StatsRepository
                         ELSE "1-Moins De 4 Heurs"
                     END as Title')
             )->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI', ['bf5', 'bf8'])
-            ->where('Nom_Region', '0 - DOIDF');
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI', ['bf5', 'bf8']);
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2218,6 +2217,12 @@ class StatsRepository
         $fileName = $file->getClientOriginalName();
 //        $filePath = $file->storeAs('data_source', $fileName);
         $stored = Storage::disk('public')->put('storage/data_source/' . $fileName, file_get_contents($file));
+
+        $user_flag = UserFlag::firstOrCreate([
+            'user_id' => getAuthUser()->id
+        ]);
+        $user_flag->flags = ['imported_data' => 0];
+        $user_flag->save();
 
         $statImport = new StatsImport($request->days);
         Excel::import($statImport, $request->file('file'));

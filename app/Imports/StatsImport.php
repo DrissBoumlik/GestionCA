@@ -93,6 +93,14 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
      */
     public function model($row)
     {
+        $this->index++;
+        $user_flag = getImportedData(false);
+        if ($user_flag) {
+            $imported_data = $user_flag->flags['imported_data'];
+            $user_flag->flags = ['imported_data' => $imported_data + 1];
+            $user_flag->save();
+        }
+
         $formatted_date = $this->transformDate($row['dimension_notesdate_note']);
         if (!$this->days || in_array($formatted_date, $this->days)) {
             return new Stats([
