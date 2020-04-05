@@ -178,7 +178,8 @@ class StatsRepository
             ->whereNotNull('Nom_Region')
             ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'not like', 'Appels post');
+            ->where('Groupement', 'not like', 'Appels post')
+            ->whereNull('isNotReady');
         $results = applyFilter($results, $filter, 'Groupement');
 
         if ($key_groupement) {
@@ -196,7 +197,8 @@ class StatsRepository
             ->whereNotNull('Nom_Region')
             ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'not like', 'Appels post');
+            ->where('Groupement', 'not like', 'Appels post')
+            ->whereNull('isNotReady');
         if ($key_groupement) {
             $rowsKeys = $rowsKeys->where('key_groupement', 'like', $key_groupement);
         }
@@ -259,6 +261,7 @@ class StatsRepository
                 ' and Resultat_Appel not like "=%"
             and Groupement not like "Non Renseigné"
             and Groupement not like "Appels post"
+            and isNotReady is null
             GROUP BY Id_Externe, Nom_Region, ' . $callResult . ', Key_Groupement) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
@@ -267,7 +270,8 @@ class StatsRepository
             ->whereNotNull('Nom_Region')
             ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'not like', 'Appels post');
+            ->where('Groupement', 'not like', 'Appels post')
+            ->whereNull('isNotReady');
         $regions = applyFilter($regions, $filter, 'Groupement');
 
         if ($key_groupement) {
@@ -365,7 +369,8 @@ class StatsRepository
             ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('Nom_Region')
             ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'not like', 'Appels post');
+            ->where('Groupement', 'not like', 'Appels post')
+            ->whereNull('isNotReady');
 
         $results = applyFilter($results, $filter, $route_request ? null : 'Resultat_Appel');
 
@@ -386,7 +391,8 @@ class StatsRepository
             ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('Nom_Region')
             ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'not like', 'Appels post');
+            ->where('Groupement', 'not like', 'Appels post')
+            ->whereNull('isNotReady');
         if ($key_groupement) {
             $rowsKeys = $rowsKeys->where('Groupement', 'like', $key_groupement);
         }
@@ -452,6 +458,7 @@ class StatsRepository
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
                 ($key_groupement ? 'and key_groupement like "' . $key_groupement . '"' : '') .
+                ' and isNotReady is null ' .
                 ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
@@ -460,7 +467,8 @@ class StatsRepository
             ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('Nom_Region')
             ->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'not like', 'Appels post');
+            ->where('Groupement', 'not like', 'Appels post')
+            ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter, $route_request ? null : 'Resultat_Appel');
 
@@ -557,7 +565,8 @@ class StatsRepository
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'like', 'Appels préalables')
             ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->whereNull('isNotReady');
 
         $columns = applyFilter($columns, $filter, 'Gpmt_Appel_Pre');
 
@@ -585,7 +594,8 @@ class StatsRepository
             ->distinct()
             ->where('Gpmt_Appel_Pre', 'not like', 'Non renseigné')
             ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->whereNull('isNotReady');
         if ($key_groupement) {
             $rowsKeys = $rowsKeys->where('key_groupement', 'like', $key_groupement);
         }
@@ -672,6 +682,7 @@ class StatsRepository
                     ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                     ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
                     ' and ' . $queryFilters .
+                    ' and isNotReady is null ' .
                     ' GROUP BY Id_Externe, ' . $column . ', Gpmt_Appel_Pre, Date_Heure_Note_Annee) groupedst'),
                     function ($join) {
                         $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
@@ -688,6 +699,7 @@ class StatsRepository
                     ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                     ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
                     ' and ' . $queryFilters .
+                    ' and isNotReady is null ' .
                     ' GROUP BY Id_Externe, ' . $column . ', Gpmt_Appel_Pre) groupedst'),
                     function ($join) {
                         $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
@@ -697,7 +709,8 @@ class StatsRepository
         $regions = $regions->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'like', 'Appels préalables')
             ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter, 'Gpmt_Appel_Pre');
 
@@ -816,7 +829,8 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select('Code_Intervention')
             ->distinct()
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->whereNull('isNotReady');
 
         $columns = applyFilter($columns, $filter, 'Nom_Region');
 
@@ -858,7 +872,8 @@ class StatsRepository
         $rowsKeys = \DB::table('stats as st')
             ->select('Nom_Region')
             ->distinct()
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->whereNull('isNotReady');
         if ($key_groupement) {
             $rowsKeys = $rowsKeys->where('key_groupement', 'like', $key_groupement);
         }
@@ -948,13 +963,14 @@ class StatsRepository
                                                 "Appels préalables - RDV annulé Rétractation/Résiliation",
                                                 "Appels préalables - RDV planifié mais non confirmé",
                                                 "Appels préalables - RDV repris Mais non confirmé")') .
-
+                ' and isNotReady is null ' .
                 ' GROUP BY Id_Externe, Code_Intervention, Nom_Region) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->whereNull('isNotReady');
 
         $codes = applyFilter($codes, $filter, 'Nom_Region');
 
@@ -1081,7 +1097,8 @@ class StatsRepository
             ->select('Nom_Region')
             ->distinct()
             ->whereNotNull('Nom_Region')
-            ->where('Groupement', 'Appels clôture');
+            ->where('Groupement', 'Appels clôture')
+            ->whereNull('isNotReady');
         $columns = applyFilter($columns, $filter, $intervCol);
 
         if ($key_groupement) {
@@ -1098,7 +1115,8 @@ class StatsRepository
             ->select($intervCol)
             ->distinct()
             ->whereNotNull('Nom_Region')
-            ->where('Groupement', 'Appels clôture');
+            ->where('Groupement', 'Appels clôture')
+            ->whereNull('isNotReady');
         if ($key_groupement) {
             $rowsKeys = $rowsKeys->where('key_groupement', 'like', $key_groupement);
         }
@@ -1161,13 +1179,15 @@ class StatsRepository
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
                 ($key_groupement ? 'and key_groupement like "' . $key_groupement . '"' : '') .
+                ' and isNotReady is null ' .
                 ' GROUP BY Id_Externe, Nom_Region, ' . $intervCol . ', Resultat_Appel) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
             ->whereNotNull('Nom_Region')
-            ->where('Groupement', 'Appels clôture');
+            ->where('Groupement', 'Appels clôture')
+            ->whereNull('isNotReady');
         $regions = applyFilter($regions, $filter, $intervCol);
 
         if ($key_groupement) {
@@ -1305,7 +1325,8 @@ class StatsRepository
             ->whereNotNull('st.Nom_Region')
             ->where('st.Groupement', 'not like', 'Non renseigné')
             ->where('st.Groupement', 'not like', 'Appels post')
-            ->where('Type_Note', 'like', 'CAM');
+            ->where('Type_Note', 'like', 'CAM')
+            ->whereNull('isNotReady');
         $results = applyFilter($results, $filter, 'Nom_Region');
 
         if ($key_groupement) {
@@ -1325,7 +1346,8 @@ class StatsRepository
             ->whereNotNull('st.Nom_Region')
             ->where('st.Groupement', 'not like', 'Non renseigné')
             ->where('st.Groupement', 'not like', 'Appels post')
-            ->where('Type_Note', 'like', 'CAM');
+            ->where('Type_Note', 'like', 'CAM')
+            ->whereNull('isNotReady');
         if ($key_groupement) {
             $rowsKeys = $rowsKeys->where('key_groupement', 'like', $key_groupement);
         }
@@ -1404,6 +1426,7 @@ class StatsRepository
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
                 ($key_groupement ? 'and key_groupement like "' . $key_groupement . '"' : '') .
+                ' and isNotReady is null ' .
                 ' GROUP BY Id_Externe, Groupement, Resultat_Appel, Nom_Region ) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
@@ -1416,7 +1439,8 @@ class StatsRepository
             ->whereNotNull('st.Nom_Region')
             ->where('st.Groupement', 'not like', 'Non renseigné')
             ->where('st.Groupement', 'not like', 'Appels post')
-            ->where('Type_Note', 'like', 'CAM');
+            ->where('Type_Note', 'like', 'CAM')
+            ->whereNull('isNotReady');
         $results = applyFilter($results, $filter, 'Nom_Region');
         if ($key_groupement) {
             $results = $results->where('key_groupement', 'like', $key_groupement);
@@ -1509,7 +1533,8 @@ class StatsRepository
         $codes = \DB::table('stats as st')
             ->select('Code_Intervention')
             ->distinct()
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->whereNull('isNotReady');
 
         $codes = applyFilter($codes, $filter, 'Nom_Region');
 
@@ -1548,7 +1573,8 @@ class StatsRepository
         $rowsKeys = \DB::table('stats as st')
             ->select('Nom_Region')
             ->distinct()
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->whereNull('isNotReady');
         if ($key_groupement) {
             $rowsKeys = $rowsKeys->where('key_groupement', 'like', $key_groupement);
         }
@@ -1641,13 +1667,14 @@ class StatsRepository
                                         "Appels préalables - RDV annulé Rétractation/Résiliation",
                                         "Appels préalables - RDV planifié mais non confirmé",
                                         "Appels préalables - RDV repris Mais non confirmé")' .
-
+                ' and isNotReady is null ' .
                 ' GROUP BY Id_Externe, Code_Intervention, Nom_Region) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->whereNull('isNotReady');
 
         $codes = applyFilter($codes, $filter, 'Nom_Region');
 
@@ -1780,7 +1807,8 @@ class StatsRepository
             ->distinct()
             ->whereNotNull('EXPORT_ALL_Date_VALIDATION')
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->whereNull('isNotReady');
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -1837,7 +1865,8 @@ class StatsRepository
             ->whereNotNull('EXPORT_ALL_Date_VALIDATION')
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
             ->whereNotNull('Nom_Region')
-            ->whereRaw('TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) not between 360 and 1440');
+            ->whereRaw('TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) not between 360 and 1440')
+            ->whereNull('isNotReady');
         if ($agentName) {
             $regions = $regions->where('st.Utilisateur', $agentName);
         }
@@ -1916,7 +1945,8 @@ class StatsRepository
             ->distinct()
             ->whereNotNull('EXPORT_ALL_Date_VALIDATION')
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->whereNull('isNotReady');
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -1972,7 +2002,8 @@ class StatsRepository
                     END as Title')
             )->whereNotNull('EXPORT_ALL_Date_VALIDATION')
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
-            ->whereNotNull('Nom_Region');
+            ->whereNotNull('Nom_Region')
+            ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2050,7 +2081,8 @@ class StatsRepository
             ->select('EXPORT_ALL_EXTRACT_CUI')
             ->distinct()
             ->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI', ['bf5', 'bf8']);
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI', ['bf5', 'bf8'])
+            ->whereNull('isNotReady');
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2105,7 +2137,8 @@ class StatsRepository
                         ELSE "1-Moins De 4 Heurs"
                     END as Title')
             )->whereNotNull('Nom_Region')
-            ->whereIn('EXPORT_ALL_EXTRACT_CUI', ['bf5', 'bf8']);
+            ->whereIn('EXPORT_ALL_EXTRACT_CUI', ['bf5', 'bf8'])
+            ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2221,11 +2254,21 @@ class StatsRepository
         $user_flag = UserFlag::firstOrCreate([
             'user_id' => getAuthUser()->id
         ]);
-        $user_flag->flags = ['imported_data' => 0];
+        $user_flag->flags = [
+            'imported_data' => 0,
+            'is_importing' => true
+        ];
         $user_flag->save();
 
         $statImport = new StatsImport($request->days);
         Excel::import($statImport, $request->file('file'));
+        $user_flag = getImportedData(false);
+        $user_flag->flags = [
+            'imported_data' => $user_flag->flags['imported_data'],
+            'is_importing' => false
+        ];
+        $user_flag->save();
+        \DB::table('stats')->update(['isNotReady' => null]);
         return [
             'success' => true,
             'message' => 'Le fichier a été importé avec succès'

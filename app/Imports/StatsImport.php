@@ -93,11 +93,13 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
      */
     public function model($row)
     {
-        $this->index++;
         $user_flag = getImportedData(false);
         if ($user_flag) {
             $imported_data = $user_flag->flags['imported_data'];
-            $user_flag->flags = ['imported_data' => $imported_data + 1];
+            $user_flag->flags = [
+                'imported_data' => $imported_data + 1,
+                'is_importing' => true
+            ];
             $user_flag->save();
         }
 
@@ -141,6 +143,7 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
                 'EXPORT_ALL_Date_CHARGEMENT_PDA' => $row['dimension_notesexport_all_date_chargement_pda'],
                 'EXPORT_ALL_Date_SOLDE' => $row['dimension_notesexport_all_date_solde'],
                 'EXPORT_ALL_Date_VALIDATION' => $row['dimension_notesexport_all_date_validation'],
+                'isNotReady' => true
             ]);
         }
     }
@@ -150,7 +153,7 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
      *
      * @return string|null
      */
-    public function transformDate($value, $format = 'Y-m-d')
+    public function transformDate($value, $format = 'Y - m - d')
     {
         try {
             return Carbon::instance(Date::excelToDateTimeObject($value))->format($format);

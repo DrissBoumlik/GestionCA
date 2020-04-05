@@ -55,6 +55,9 @@
             </main>
             <!-- END Main Container -->
 
+            <!-- Section : Print status when Importation in progress -->
+            @include('plugins.import_status')
+
             <!-- Footer -->
             @include('layouts.layouts-files.footer')
             <!-- END Footer -->
@@ -65,6 +68,10 @@
             APP_URL = '{{ URL::to('/') }}';
             ajaxRequests = 0;
             detailClick = false;
+
+            request_resolved = false;
+            sendRequestCountData = false;
+            totalImportedData = 0;
         </script>
         <!-- OneUI Core JS -->
         <script src="{{ asset('js/oneui.app.js') }}"></script>

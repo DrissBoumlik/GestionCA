@@ -59,7 +59,7 @@ frLang = {
     $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
         try {
             if (jqXHR.status === 401) {
-                if(!willReload) {
+                if (!willReload) {
                     willReload = true;
                     Swal.fire({
                         // position: 'top-end',
@@ -248,19 +248,31 @@ frLang = {
                             let row = object.element_dt.cell(this).index().row + 1;
                             let colText = $(tableId + " > thead > tr > th:nth-child(" + col + ")").text();
                             let rowText = $(tableId + " > tbody > tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
-                            if(object.element === 'statsColturetech'){
+                            if (object.element === 'statsColturetech') {
                                 switch (rowText) {
-                                    case 'superieur un jour': rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440 '; break;
-                                    case 'Entre 1H et 6h' : rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) between 60 and 360 '; break;
-                                    case 'Entre 30min et 1H': rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) BETWEEN 30 and 60 '; break;
-                                    default: rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) < 30';
+                                    case 'superieur un jour':
+                                        rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440 ';
+                                        break;
+                                    case 'Entre 1H et 6h' :
+                                        rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) between 60 and 360 ';
+                                        break;
+                                    case 'Entre 30min et 1H':
+                                        rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) BETWEEN 30 and 60 ';
+                                        break;
+                                    default:
+                                        rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) < 30';
                                 }
                             }
-                            if(object.element === 'statsGlobalDelay'){
+                            if (object.element === 'statsGlobalDelay') {
                                 switch (rowText) {
-                                    case 'Superieur 15 Jours': rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) > 15 '; break;
-                                    case 'Entre une semaine et 15 jours' : rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) between 7 and 15 '; break;
-                                    default: rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) < 7 ';
+                                    case 'Superieur 15 Jours':
+                                        rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) > 15 ';
+                                        break;
+                                    case 'Entre une semaine et 15 jours' :
+                                        rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) between 7 and 15 ';
+                                        break;
+                                    default:
+                                        rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) < 7 ';
                                 }
                             }
                             if (object.columnName === 'Date_Heure_Note_Semaine') {
@@ -276,7 +288,7 @@ frLang = {
                                 window.location = APP_URL + '/all-stats?' +
                                     'row=' + (object.rowName === undefined || object.rowName === null ? '' : object.rowName) +
                                     '&rowValue=' + rowText +
-                                    '&col=' + (object.columnName === undefined || object.columnName === null ? '' : object.columnName)+
+                                    '&col=' + (object.columnName === undefined || object.columnName === null ? '' : object.columnName) +
                                     '&colValue=' + colText +
                                     '&agent=' + (agent_name === undefined || agent_name === null ? '' : agent_name) +
                                     '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) +
@@ -312,7 +324,7 @@ frLang = {
             error: function (jqXHR, textStatus, errorThrown) {
             }
         });
-    }
+    };
 
     window.InitDataTable = function (object, data = null, params = {
         removeTotal: true,
@@ -392,7 +404,7 @@ frLang = {
                 }
             }
         });
-    }
+    };
 
     window.InitChart = function (objectChart, columns, data, params = {
         removeTotal: true,
@@ -487,7 +499,7 @@ frLang = {
                 }
             }
         });
-    }
+    };
 
     window.getDatesFilter = function (globalElements) {
         $.ajax({
@@ -535,7 +547,7 @@ frLang = {
             error: function (jqXHR, textStatus, errorThrown) {
             }
         });
-    }
+    };
 
     window.userFilter = function (userObject, isPost = false) {
         $.ajax({
@@ -556,18 +568,53 @@ frLang = {
             error: function (jqXHR, textStatus, errorThrown) {
             }
         });
-    }
+    };
 
     window.filterSelectOnChange = function (caller, agence_code, agent_name) {
         let agenceParam = agence_code ? 'agence_code=' + agence_code : '';
         let agentParam = agent_name ? 'agent_name=' + agent_name : '';
-        let params = agenceParam || agentParam ? ('?' + agenceParam + '&' + agentParam) : '' ;
+        let params = agenceParam || agentParam ? ('?' + agenceParam + '&' + agentParam) : '';
         let url = APP_URL + '/' + $(caller).val() + params;
         if ($('#filterDashboard').prop('selectedIndex') && url !== window.location.href) {
             window.location = url;
         }
-    }
+    };
 
+    window.checkDataCount = function () {
+        let coundData = setInterval(function () {
+            if (sendRequestCountData) {
+                console.log('sending data');
+                $.ajax({
+                    method: 'get',
+                    url: APP_URL + '/stats/import-stats/data/count',
+                    dateType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        totalImportedData = data.flags.imported_data;
+                        isImporting = data.flags.is_importing;
+                        if ($('.imported-data').length) {
+                            $('.imported-data').text(totalImportedData + ' lignes inserées');
+                        }
+                        console.log(totalImportedData + ' lignes inserées');
+                        console.log('importing... : ' + isImporting);
+                        if (request_resolved || !isImporting) {
+                            console.log('finisfed');
+                            window.localStorage.removeItem('sendRequestCountData');
+                            $('.import_status-wrapper').addClass('d-none');
+                            clearInterval(coundData);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        window.localStorage.removeItem('sendRequestCountData');
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                    }
+                });
+            }
+        }, 3000);
+    };
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS TOOLS">
@@ -598,7 +645,7 @@ frLang = {
             pagination: false
         });
         // InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
-    }
+    };
 
     window.destroyChild = function (row) {
         var table = $("table", row.child());
@@ -607,7 +654,7 @@ frLang = {
 
         // And then hide the row
         row.child.hide();
-    }
+    };
 
     window.toggleLoader = function (parent, remove = false) {
         if (remove) {
@@ -617,7 +664,7 @@ frLang = {
             parent.append('<div class="loader_wrapper"><div class="loader"></div></div>');
             parent.append('<div class="loader_container"></div>');
         }
-    }
+    };
 
     window.elementExists = function (object) {
         if (object !== null && object !== undefined) {
@@ -629,7 +676,7 @@ frLang = {
             }
         }
         return false;
-    }
+    };
 
     window.dynamicColors = function (uniqueColors) {
         let color = {
@@ -647,7 +694,7 @@ frLang = {
         } while (exists);
         uniqueColors.push(color);
         return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
-    }
+    };
 
     window.feedBack = function (message, status) {
         swal(
@@ -655,7 +702,13 @@ frLang = {
             message,
             status
         )
-    }
+    };
     //</editor-fold>
 
+    sendRequestCountData = Boolean(window.localStorage.getItem('sendRequestCountData'));
+    if(sendRequestCountData) {
+        checkDataCount();
+    } else {
+        $('.import_status-wrapper').addClass('d-none');
+    }
 })(jQuery);

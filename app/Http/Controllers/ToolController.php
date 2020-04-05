@@ -30,7 +30,7 @@ class ToolController extends Controller
     public function getInsertedData()
     {
         return [
-            'imported_data' => getImportedData(true)
+            'flags' => getImportedData(true)
         ];
     }
 }

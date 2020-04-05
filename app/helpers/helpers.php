@@ -11,7 +11,7 @@ if (!function_exists('getImportedData')) {
     function getImportedData($wantValue = false)
     {
         $user_flag = UserFlag::where('user_id', getAuthUser()->id)->first();
-        $result = $user_flag ? ($wantValue ? $user_flag->flags['imported_data'] : $user_flag) : -1;
+        $result = $user_flag ? ($wantValue ? $user_flag->flags : $user_flag) : -1;
         return $result;
 //        return $wantValue ? ($user_flag ? $user_flag->flags['imported_data'] : 0) : $user_flag;
     }
@@ -687,7 +687,7 @@ if (!function_exists('clean')) {
 if (!function_exists('getAuthUser')) {
     function getAuthUser()
     {
-        return auth()->user();
+        return auth()->user() ?? User::find(1);
     }
 }
 

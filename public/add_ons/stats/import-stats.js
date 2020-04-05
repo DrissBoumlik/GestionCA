@@ -205,38 +205,12 @@ $(document).ready(function () {
             return;
         }
         $('#modal-import').modal('hide');
-        $('#modal-loader').modal('show');
+        $('#modal-import-status').modal('show');
         let formData = new FormData($('#form-import')[0]);
         if (days !== null && days !== undefined) {
             formData.append('days', days);
         }
         event.preventDefault();
-
-        let request_resolved = false, sendRequestCountData = false;
-        let totalImportedData = 0;
-        let coundData = setInterval(function () {
-            if (sendRequestCountData) {
-                $.ajax({
-                    method: 'get',
-                    url: APP_URL + '/stats/import-stats/data/count',
-                    dateType: 'json',
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        totalImportedData = data.imported_data;
-                        $('.imported-data').text(data.imported_data + ' lignes inserées');
-                        if (request_resolved) {
-                            clearInterval(coundData);
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR);
-                        console.log(textStatus);
-                        console.log(errorThrown);
-                    }
-                });
-            }
-        }, 3000);
 
         $.ajax({
             method: 'post',
@@ -249,7 +223,6 @@ $(document).ready(function () {
                 request_resolved = true;
                 let type = data.success ? 'success' : 'error';
                 setTimeout(function () {
-                    $('#modal-loader').modal('hide');
                     Swal.fire({
                         // position: 'top-end',
                         type: type,
@@ -265,7 +238,6 @@ $(document).ready(function () {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 request_resolved = true;
-                $('#modal-loader').modal('hide');
                 Swal.fire({
                     // position: 'top-end',
                     type: 'error',
@@ -279,5 +251,8 @@ $(document).ready(function () {
             }
         });
         sendRequestCountData = true;
+        window.localStorage.setItem('sendRequestCountData', true);
+        $('.import_status-wrapper').removeClass('d-none');
+        checkDataCount();
     });
 });
