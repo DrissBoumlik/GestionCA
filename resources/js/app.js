@@ -583,7 +583,6 @@ frLang = {
     window.checkDataCount = function () {
         let coundData = setInterval(function () {
             if (sendRequestCountData) {
-                console.log('sending data');
                 $.ajax({
                     method: 'get',
                     url: APP_URL + '/stats/import-stats/data/count',
@@ -598,8 +597,7 @@ frLang = {
                             importedDataElement.text(totalImportedData + ' lignes inserées');
                         }
                         console.log(totalImportedData + ' lignes inserées');
-                        console.log('importing... : ' + isImporting);
-                        if (request_resolved || isImporting == 2) {
+                        if (request_resolved || isImporting == 0) {
                             console.log('finished');
                             window.localStorage.removeItem('sendRequestCountData');
                             $('.import_status-wrapper').addClass('d-none');
@@ -619,7 +617,7 @@ frLang = {
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         window.localStorage.removeItem('sendRequestCountData');
-                        if (request_resolved || isImporting == 2) {
+                        if (request_resolved || isImporting == 0) {
                             $('.import_status-wrapper').addClass('d-none');
                             Swal.fire({
                                 // position: 'top-end',

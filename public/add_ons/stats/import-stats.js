@@ -213,46 +213,52 @@ $(document).ready(function () {
         event.preventDefault();
 
         $.ajax({
-            method: 'post',
-            url: APP_URL + '/stats/import-stats',
-            data: formData,
-            dateType: 'json',
-            processData: false,
-            contentType: false,
+            method: 'get',
+            url: 'stats/import-stats/status/edit/1',
             success: function (data) {
-                request_resolved = true;
-                let type = data.success ? 'success' : 'error';
-                setTimeout(function () {
-                    Swal.fire({
-                        // position: 'top-end',
-                        type: type,
-                        title: 'Total inserés : ' + totalImportedData + ' enregistrements', // data.message,
-                        showConfirmButton: true,
-                        customClass: {
-                            confirmButton: 'btn btn-success m-1',
-                        },
-                        confirmButtonText: 'Ok',
-                    });
-                }, 3100);
-                // tableTasks.draw(false);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                request_resolved = true;
-                Swal.fire({
-                    // position: 'top-end',
-                    type: 'error',
-                    title: 'Une erreur est survenue',
-                    showConfirmButton: true,
-                    customClass: {
-                        confirmButton: 'btn btn-success m-1',
+                sendRequestCountData = true;
+                window.localStorage.setItem('sendRequestCountData', true);
+                $('.import_status-wrapper').removeClass('d-none');
+                $.ajax({
+                    method: 'post',
+                    url: APP_URL + '/stats/import-stats',
+                    data: formData,
+                    dateType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        request_resolved = true;
+                        let type = data.success ? 'success' : 'error';
+                        setTimeout(function () {
+                            Swal.fire({
+                                // position: 'top-end',
+                                type: type,
+                                title: 'Total inserés : ' + totalImportedData + ' enregistrements', // data.message,
+                                showConfirmButton: true,
+                                customClass: {
+                                    confirmButton: 'btn btn-success m-1',
+                                },
+                                confirmButtonText: 'Ok',
+                            });
+                        }, 3100);
+                        // tableTasks.draw(false);
                     },
-                    confirmButtonText: 'Ok',
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        request_resolved = true;
+                        Swal.fire({
+                            // position: 'top-end',
+                            type: 'error',
+                            title: 'Une erreur est survenue',
+                            showConfirmButton: true,
+                            customClass: {
+                                confirmButton: 'btn btn-success m-1',
+                            },
+                            confirmButtonText: 'Ok',
+                        });
+                    }
                 });
+                checkDataCount();
             }
         });
-        sendRequestCountData = true;
-        window.localStorage.setItem('sendRequestCountData', true);
-        $('.import_status-wrapper').removeClass('d-none');
-        checkDataCount();
     });
 });

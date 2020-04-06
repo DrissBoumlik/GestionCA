@@ -149,5 +149,6 @@ Route::group([
     Route::post('/user/filter', 'FilterController@saveUserFilter');
 
     Route::get('stats/import-stats/data/count', 'ToolController@getInsertedData');
+    Route::get('stats/import-stats/status/edit/{flag}', 'ToolController@editImportingStatus');
 
 });
