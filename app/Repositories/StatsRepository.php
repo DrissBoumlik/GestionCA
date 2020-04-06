@@ -2257,7 +2257,7 @@ class StatsRepository
         ]);
         $user_flag->flags = [
             'imported_data' => 0,
-            'is_importing' => true
+            'is_importing' => 0
         ];
         $user_flag->save();
 
@@ -2266,7 +2266,7 @@ class StatsRepository
         $user_flag = getImportedData(false);
         $user_flag->flags = [
             'imported_data' => $user_flag->flags['imported_data'],
-            'is_importing' => false
+            'is_importing' => 2
         ];
         $user_flag->save();
         \DB::table('stats')->update(['isNotReady' => null]);

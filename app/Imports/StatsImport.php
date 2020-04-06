@@ -98,7 +98,7 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
             $imported_data = $user_flag->flags['imported_data'];
             $user_flag->flags = [
                 'imported_data' => $imported_data + 1,
-                'is_importing' => true
+                'is_importing' => 1
             ];
             $user_flag->save();
         }

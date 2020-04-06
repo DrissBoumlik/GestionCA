@@ -599,8 +599,8 @@ frLang = {
                         }
                         console.log(totalImportedData + ' lignes inserées');
                         console.log('importing... : ' + isImporting);
-                        if (request_resolved || !isImporting) {
-                            console.log('finisfed');
+                        if (request_resolved || isImporting == 2) {
+                            console.log('finished');
                             window.localStorage.removeItem('sendRequestCountData');
                             $('.import_status-wrapper').addClass('d-none');
                             Swal.fire({
@@ -619,7 +619,8 @@ frLang = {
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         window.localStorage.removeItem('sendRequestCountData');
-                        if (request_resolved || !isImporting) {
+                        if (request_resolved || isImporting == 2) {
+                            $('.import_status-wrapper').addClass('d-none');
                             Swal.fire({
                                 // position: 'top-end',
                                 type: 'error',
