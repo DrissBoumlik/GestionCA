@@ -119,6 +119,7 @@ class StatsRepository
         $dates = \DB::table('stats as st')
             ->select('Date_Heure_Note_Annee', 'Date_Heure_Note_Mois', 'Date_Heure_Note_Semaine', 'Date_Note')
             ->distinct()
+            ->whereNull('isNotReady')
             ->orderBy('Date_Heure_Note_Annee')
             ->orderBy('Date_Heure_Note_Mois')
             ->orderBy('Date_Heure_Note_Semaine')

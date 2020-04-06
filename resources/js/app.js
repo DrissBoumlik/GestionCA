@@ -593,8 +593,9 @@ frLang = {
                     success: function (data) {
                         totalImportedData = data.flags.imported_data;
                         isImporting = data.flags.is_importing;
-                        if ($('.imported-data').length) {
-                            $('.imported-data').text(totalImportedData + ' lignes inserées');
+                        let importedDataElement = $('.imported-data');
+                        if (importedDataElement.length) {
+                            importedDataElement.text(totalImportedData + ' lignes inserées');
                         }
                         console.log(totalImportedData + ' lignes inserées');
                         console.log('importing... : ' + isImporting);
@@ -602,14 +603,34 @@ frLang = {
                             console.log('finisfed');
                             window.localStorage.removeItem('sendRequestCountData');
                             $('.import_status-wrapper').addClass('d-none');
+                            Swal.fire({
+                                // position: 'top-end',
+                                type: 'success',
+                                title: 'Total inserés : ' + totalImportedData + ' enregistrements', // data.message,
+                                showConfirmButton: true,
+                                customClass: {
+                                    confirmButton: 'btn btn-success m-1',
+                                },
+                                confirmButtonText: 'Ok',
+                            });
                             clearInterval(coundData);
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         window.localStorage.removeItem('sendRequestCountData');
-                        console.log(jqXHR);
-                        console.log(textStatus);
-                        console.log(errorThrown);
+                        if (request_resolved || !isImporting) {
+                            Swal.fire({
+                                // position: 'top-end',
+                                type: 'error',
+                                title: 'Une erreur est survenue',
+                                showConfirmButton: true,
+                                customClass: {
+                                    confirmButton: 'btn btn-success m-1',
+                                },
+                                confirmButtonText: 'Ok',
+                            });
+                            clearInterval(coundData);
+                        }
                     }
                 });
             }
