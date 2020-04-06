@@ -613,6 +613,7 @@ frLang = {
                                 },
                                 confirmButtonText: 'Ok',
                             });
+                            $('.modal').modal('hide');
                             clearInterval(coundData);
                         }
                     },
@@ -629,6 +630,7 @@ frLang = {
                                 },
                                 confirmButtonText: 'Ok',
                             });
+                            $('.modal').modal('hide');
                             clearInterval(coundData);
                         }
                     }
