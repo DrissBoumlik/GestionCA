@@ -23,6 +23,7 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
     private $days = [];
     public $data = [];
     private $index = 0;
+    private $user_flag;
 
     public function __construct($days)
     {
@@ -30,6 +31,7 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
             $this->days = explode(',', $days);
             \DB::table('stats')->whereIn('date_note', $this->days)->delete();
         }
+        $this->user_flag = getImportedData(false);
     }
 
     public function collection(Collection $rows)
@@ -93,18 +95,16 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
      */
     public function model($row)
     {
-        $user_flag = getImportedData(false);
-        if ($user_flag) {
-            $imported_data = $user_flag->flags['imported_data'];
-            $user_flag->flags = [
-                'imported_data' => $imported_data + 1,
-                'is_importing' => 1
-            ];
-            $user_flag->save();
-        }
-
         $formatted_date = $this->transformDate($row['dimension_notesdate_note']);
         if (!$this->days || in_array($formatted_date, $this->days)) {
+            if ($this->user_flag) {
+                $imported_data = $this->user_flag->flags['imported_data'];
+                $this->user_flag->flags = [
+                    'imported_data' => $imported_data + 1,
+                    'is_importing' => 1
+                ];
+                $this->user_flag->save();
+            }
             return new Stats([
                 'Type_Note' => $row['dimension_notestype_note'],
                 'Utilisateur' => $row['dimension_notesutilisateur'],

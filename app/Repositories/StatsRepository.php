@@ -2269,7 +2269,9 @@ class StatsRepository
             'is_importing' => 0
         ];
         $user_flag->save();
-        \DB::table('stats')->update(['isNotReady' => null]);
+        \DB::table('stats')
+            ->whereNotNull('isNotReady')
+            ->update(['isNotReady' => null]);
         return [
             'success' => true,
             'message' => 'Le fichier a été importé avec succès'

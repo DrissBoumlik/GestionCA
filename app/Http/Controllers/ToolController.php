@@ -35,7 +35,7 @@ class ToolController extends Controller
         ]);
         $user_flag->flags = [
             'imported_data' => 0,
-            'is_importing' => (bool)$flag
+            'is_importing' => (int)$flag
         ];
         $user_flag->save();
         return [

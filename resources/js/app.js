@@ -299,15 +299,9 @@ frLang = {
                                     '&appCltquery=' + (object.filterQuery.appCltquery === undefined || object.filterQuery.appCltquery === null ? '' : object.filterQuery.appCltquery) +
                                     (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : '');
                             }
-                            // console.log(colText + ' --- ' + rowText)
                         });
                     } catch (error) {
                         console.log(error);
-                        // swal(
-                        //     'Error!',
-                        //     "Aucun résultat n'a été trouvé",
-                        //     'error'
-                        // );
                         Swal.fire({
                             // position: 'top-end',
                             type: 'error',
@@ -411,9 +405,6 @@ frLang = {
         removeTotalColumn: false,
         details: false
     }) {
-        // console.log(objectChart.chartTitle);
-        // console.log(columns);
-        // console.log(data);
         let labels = [...columns];
         labels = labels.map((column) => {
             return column.data;
@@ -581,62 +572,73 @@ frLang = {
     };
 
     window.checkDataCount = function () {
-        let coundData = setInterval(function () {
-            if (sendRequestCountData) {
-                $.ajax({
-                    method: 'get',
-                    url: APP_URL + '/stats/import-stats/data/count',
-                    dateType: 'json',
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        totalImportedData = data.flags.imported_data;
-                        isImporting = data.flags.is_importing;
-                        let importedDataElement = $('.imported-data');
-                        if (importedDataElement.length) {
-                            importedDataElement.text(totalImportedData + ' lignes inserées');
-                        }
-                        console.log(totalImportedData + ' lignes inserées');
-                        if (request_resolved || isImporting == 0) {
-                            console.log('finished');
-                            window.localStorage.removeItem('sendRequestCountData');
-                            $('.import_status-wrapper').addClass('d-none');
-                            Swal.fire({
-                                // position: 'top-end',
-                                type: 'success',
-                                title: 'Total inserés : ' + totalImportedData + ' enregistrements', // data.message,
-                                showConfirmButton: true,
-                                customClass: {
-                                    confirmButton: 'btn btn-success m-1',
-                                },
-                                confirmButtonText: 'Ok',
-                            });
-                            $('.modal').modal('hide');
-                            clearInterval(coundData);
-                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        window.localStorage.removeItem('sendRequestCountData');
-                        if (request_resolved || isImporting == 0) {
-                            $('.import_status-wrapper').addClass('d-none');
-                            Swal.fire({
-                                // position: 'top-end',
-                                type: 'error',
-                                title: 'Une erreur est survenue',
-                                showConfirmButton: true,
-                                customClass: {
-                                    confirmButton: 'btn btn-success m-1',
-                                },
-                                confirmButtonText: 'Ok',
-                            });
-                            $('.modal').modal('hide');
-                            clearInterval(coundData);
-                        }
-                    }
-                });
+        if (sendRequestCountData) {
+            let importedDataElement = $('.imported-data');
+            let storedDataCount = window.localStorage.getItem('storedDataCount');
+            if (importedDataElement.length) {
+                importedDataElement.text(storedDataCount + ' lignes inserées');
             }
-        }, 3000);
+            $.ajax({
+                method: 'get',
+                url: APP_URL + '/stats/import-stats/data/count',
+                dateType: 'json',
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    totalImportedData = data.flags.imported_data;
+                    isImporting = data.flags.is_importing;
+
+                    window.localStorage.setItem('storedDataCount', totalImportedData);
+                    if (importedDataElement.length) {
+                        importedDataElement.text(totalImportedData + ' lignes inserées');
+                    }
+                    if (request_resolved || isImporting == 0) {
+                        window.localStorage.removeItem('sendRequestCountData');
+                        window.localStorage.removeItem('storedDataCount');
+                        $('.import_status-wrapper').addClass('d-none');
+                        Swal.fire({
+                            // position: 'top-end',
+                            type: 'success',
+                            title: 'Total inserés : ' + totalImportedData + ' enregistrements', // data.message,
+                            showConfirmButton: true,
+                            customClass: {
+                                confirmButton: 'btn btn-success m-1',
+                            },
+                            confirmButtonText: 'Ok',
+                        });
+                        $('.modal').modal('hide');
+                    } else {
+                        setTimeout(function () {
+                            checkDataCount();
+                        }, 4000);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (request_resolved || isImporting == 0) {
+                        window.localStorage.removeItem('sendRequestCountData');
+                        window.localStorage.removeItem('storedDataCount');
+                        $('.import_status-wrapper').addClass('d-none');
+                        Swal.fire({
+                            // position: 'top-end',
+                            type: 'error',
+                            title: 'Une erreur est survenue',
+                            showConfirmButton: true,
+                            customClass: {
+                                confirmButton: 'btn btn-success m-1',
+                            },
+                            confirmButtonText: 'Ok',
+                        });
+                        $('.modal').modal('hide');
+                    } else {
+                        setTimeout(function () {
+                            checkDataCount();
+                        }, 4000);
+                    }
+                }
+            });
+        }
     };
+
     //</editor-fold>
 
     //<editor-fold desc="FUNCTIONS TOOLS">
@@ -728,7 +730,7 @@ frLang = {
     //</editor-fold>
 
     sendRequestCountData = Boolean(window.localStorage.getItem('sendRequestCountData'));
-    if(sendRequestCountData) {
+    if (sendRequestCountData) {
         checkDataCount();
     } else {
         $('.import_status-wrapper').addClass('d-none');
