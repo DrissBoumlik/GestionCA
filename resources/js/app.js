@@ -572,14 +572,14 @@ frLang = {
     };
 
     window.checkDataCount = function (ImportingReady = true) {
-        let sendRequestCountData = window.localStorage.getItem('sendRequestCountData');
+        let sendRequestCountData = Boolean(JSON.parse(window.localStorage.getItem('sendRequestCountData')));
         if (sendRequestCountData) {
             let importedDataElement = $('.imported-data');
             let totalImportedData = window.localStorage.getItem('totalImportedData');
             if (importedDataElement.length && ImportingReady) {
                 importedDataElement.text(totalImportedData + ' lignes inserées');
             }
-            let request_resolved = window.localStorage.getItem('request_resolved');
+            let request_resolved = Boolean(JSON.parse(window.localStorage.getItem('request_resolved')));
             $.ajax({
                 method: 'get',
                 url: APP_URL + '/stats/import-stats/data/count',
@@ -597,22 +597,22 @@ frLang = {
                         }
                         if (request_resolved || isImporting == 2) {
                             window.localStorage.removeItem('sendRequestCountData');
-                            window.localStorage.removeItem('totalImportedData');
+                            // window.localStorage.removeItem('totalImportedData');
+                            window.localStorage.removeItem('request_resolved');
                             $('.import_status-wrapper').addClass('d-none');
-                            if (sendRequestCountData == null) {
-                                Swal.fire({
-                                    // position: 'top-end',
-                                    type: 'success',
-                                    title: 'Total inserés : ' + totalImportedData + ' enregistrements', // data.message,
-                                    showConfirmButton: true,
-                                    customClass: {
-                                        confirmButton: 'btn btn-success m-1',
-                                    },
-                                    confirmButtonText: 'Ok',
-                                });
-                            }
+                            Swal.fire({
+                                // position: 'top-end',
+                                type: 'success',
+                                title: 'Total inserés : ' + totalImportedData + ' enregistrements',
+                                showConfirmButton: true,
+                                customClass: {
+                                    confirmButton: 'btn btn-success m-1',
+                                },
+                                confirmButtonText: 'Ok',
+                            });
                             $('.modal').modal('hide');
                         } else {
+
                             setTimeout(function () {
                                 checkDataCount();
                             }, 4000);
@@ -630,19 +630,18 @@ frLang = {
                     if (request_resolved || isImporting == 2) {
                         window.localStorage.removeItem('sendRequestCountData');
                         window.localStorage.removeItem('totalImportedData');
+                        window.localStorage.removeItem('request_resolved');
                         $('.import_status-wrapper').addClass('d-none');
-                        if (sendRequestCountData == null) {
-                            Swal.fire({
-                                // position: 'top-end',
-                                type: 'error',
-                                title: 'Une erreur est survenue',
-                                showConfirmButton: true,
-                                customClass: {
-                                    confirmButton: 'btn btn-success m-1',
-                                },
-                                confirmButtonText: 'Ok',
-                            });
-                        }
+                        Swal.fire({
+                            // position: 'top-end',
+                            type: 'error',
+                            title: 'Une erreur est survenue',
+                            showConfirmButton: true,
+                            customClass: {
+                                confirmButton: 'btn btn-success m-1',
+                            },
+                            confirmButtonText: 'Ok',
+                        });
                         $('.modal').modal('hide');
                     } else {
                         setTimeout(function () {
@@ -744,7 +743,7 @@ frLang = {
     };
     //</editor-fold>
 
-    let sendRequestCountData = Boolean(window.localStorage.getItem('sendRequestCountData'));
+    let sendRequestCountData = Boolean(JSON.parse(window.localStorage.getItem('sendRequestCountData')));
     if (sendRequestCountData) {
         checkDataCount();
     } else {

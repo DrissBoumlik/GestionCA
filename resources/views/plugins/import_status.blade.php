@@ -22,7 +22,9 @@
                         </div>
                     </div>
                     <div class="block-content font-size-sm">
-                        <p><i class="fas fa-spinner animated rotateIn infinite mr-2"></i><span class="imported-data">0 lignes inserées</span></p>
+                        <p><i class="fas fa-spinner animated rotateIn infinite mr-2"></i><span class="imported-data">
+                                Veuiller patientez, <span style="color:red">Ne rafraîchissez pas la page</span>
+                            </span></p>
                     </div>
                     <div class="block-content block-content-full text-right border-top">
                         <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Close</button>

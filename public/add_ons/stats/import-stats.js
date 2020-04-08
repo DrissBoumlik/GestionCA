@@ -219,6 +219,10 @@ $(document).ready(function () {
         }
         event.preventDefault();
 
+        let importedDataElement = $('.imported-data');
+        if (importedDataElement.length) {
+            importedDataElement.html('Veuiller patientez, <span style="color:red">Ne rafraîchissez pas la page</span>');
+        }
         $.ajax({
             method: 'get',
             url: 'stats/import-stats/status/edit/0',
@@ -229,12 +233,14 @@ $(document).ready(function () {
                 setTimeout(function () {
                     ImportDataRequest(formData);
                 }, 10000);
-                checkDataCount();
+                checkDataCount(false);
             }
         });
     }
 
     function ImportDataRequest(formData) {
+        let request_resolved = false;
+        window.localStorage.setItem('request_resolved', request_resolved);
         $.ajax({
             method: 'post',
             url: APP_URL + '/stats/import-stats',
@@ -245,20 +251,6 @@ $(document).ready(function () {
             success: function (data) {
                 request_resolved = true;
                 window.localStorage.setItem('request_resolved', request_resolved);
-                let type = data.success ? 'success' : 'error';
-                setTimeout(function () {
-                    Swal.fire({
-                        // position: 'top-end',
-                        type: type,
-                        title: 'Total inserés : ' + totalImportedData + ' enregistrements', // data.message,
-                        showConfirmButton: true,
-                        customClass: {
-                            confirmButton: 'btn btn-success m-1',
-                        },
-                        confirmButtonText: 'Ok',
-                    });
-                }, 3100);
-                // tableTasks.draw(false);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 request_resolved = true;

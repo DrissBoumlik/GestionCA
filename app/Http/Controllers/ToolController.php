@@ -46,7 +46,8 @@ class ToolController extends Controller
     public function getInsertedData()
     {
         $flags = getImportedData(true);
-        if ($flags['is_importing'] == 0){
+        if ($flags['is_importing'] == 0 ||
+            ($flags['is_importing'] == 1 && $flags['imported_data'] == 0)) {
             $flags = null;
         }
         return [
