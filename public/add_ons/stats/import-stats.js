@@ -201,6 +201,13 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '#btn-import', function (event) {
+        PrepareImportDataRequest();
+    });
+
+
+    //<editor-fold desc="FUNCTIONS IMPORT">
+
+    function PrepareImportDataRequest() {
         if (!$('#form-import').valid()) {
             return;
         }
@@ -212,53 +219,55 @@ $(document).ready(function () {
         }
         event.preventDefault();
 
+        let sendRequestCountData = true;
+        window.localStorage.setItem('sendRequestCountData', true);
+        $('.import_status-wrapper').removeClass('d-none');
+        ImportDataRequest(formData);
+        checkDataCount();
+    }
+
+    function ImportDataRequest(formData) {
         $.ajax({
-            method: 'get',
-            url: 'stats/import-stats/status/edit/1',
+            method: 'post',
+            url: APP_URL + '/stats/import-stats',
+            data: formData,
+            dateType: 'json',
+            processData: false,
+            contentType: false,
             success: function (data) {
-                sendRequestCountData = true;
-                window.localStorage.setItem('sendRequestCountData', true);
-                $('.import_status-wrapper').removeClass('d-none');
-                $.ajax({
-                    method: 'post',
-                    url: APP_URL + '/stats/import-stats',
-                    data: formData,
-                    dateType: 'json',
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        request_resolved = true;
-                        let type = data.success ? 'success' : 'error';
-                        setTimeout(function () {
-                            Swal.fire({
-                                // position: 'top-end',
-                                type: type,
-                                title: 'Total inserés : ' + totalImportedData + ' enregistrements', // data.message,
-                                showConfirmButton: true,
-                                customClass: {
-                                    confirmButton: 'btn btn-success m-1',
-                                },
-                                confirmButtonText: 'Ok',
-                            });
-                        }, 3100);
-                        // tableTasks.draw(false);
+                request_resolved = true;
+                window.localStorage.setItem('request_resolved', request_resolved);
+                let type = data.success ? 'success' : 'error';
+                setTimeout(function () {
+                    Swal.fire({
+                        // position: 'top-end',
+                        type: type,
+                        title: 'Total inserés : ' + totalImportedData + ' enregistrements', // data.message,
+                        showConfirmButton: true,
+                        customClass: {
+                            confirmButton: 'btn btn-success m-1',
+                        },
+                        confirmButtonText: 'Ok',
+                    });
+                }, 3100);
+                // tableTasks.draw(false);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                request_resolved = true;
+                window.localStorage.setItem('request_resolved', request_resolved);
+                Swal.fire({
+                    // position: 'top-end',
+                    type: 'error',
+                    title: 'Une erreur est survenue',
+                    showConfirmButton: true,
+                    customClass: {
+                        confirmButton: 'btn btn-success m-1',
                     },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        request_resolved = true;
-                        Swal.fire({
-                            // position: 'top-end',
-                            type: 'error',
-                            title: 'Une erreur est survenue',
-                            showConfirmButton: true,
-                            customClass: {
-                                confirmButton: 'btn btn-success m-1',
-                            },
-                            confirmButtonText: 'Ok',
-                        });
-                    }
+                    confirmButtonText: 'Ok',
                 });
-                checkDataCount();
             }
         });
-    });
+    }
+
+    //</editor-fold>
 });

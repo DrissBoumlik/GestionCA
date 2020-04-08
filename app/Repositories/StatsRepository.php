@@ -2252,15 +2252,6 @@ class StatsRepository
 //        $filePath = $file->storeAs('data_source', $fileName);
         $stored = Storage::disk('public')->put('storage/data_source/' . $fileName, file_get_contents($file));
 
-        $user_flag = UserFlag::firstOrCreate([
-            'user_id' => getAuthUser()->id
-        ]);
-        $user_flag->flags = [
-            'imported_data' => 0,
-            'is_importing' => 1
-        ];
-        $user_flag->save();
-
         $statImport = new StatsImport($request->days);
         Excel::import($statImport, $request->file('file'));
         $user_flag = getImportedData(false);
@@ -2268,7 +2259,7 @@ class StatsRepository
             'imported_data' => $user_flag->flags['imported_data'],
             'is_importing' => 0
         ];
-        $user_flag->save();
+        $user_flag->update();
         \DB::table('stats')
             ->whereNotNull('isNotReady')
             ->update(['isNotReady' => null]);

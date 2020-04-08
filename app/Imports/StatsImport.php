@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Stats;
+use App\Models\UserFlag;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,7 +32,14 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
             $this->days = explode(',', $days);
             \DB::table('stats')->whereIn('date_note', $this->days)->delete();
         }
-        $this->user_flag = getImportedData(false);
+        $this->user_flag = UserFlag::firstOrCreate([
+            'user_id' => getAuthUser()->id
+        ]);
+        $this->user_flag->flags = [
+            'imported_data' => 0,
+            'is_importing' => 1
+        ];
+        $this->user_flag->update();
     }
 
     public function collection(Collection $rows)

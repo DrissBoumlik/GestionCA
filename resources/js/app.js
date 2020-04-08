@@ -571,13 +571,15 @@ frLang = {
         }
     };
 
-    window.checkDataCount = function () {
+    window.checkDataCount = function (ImportingReady = true) {
+        let sendRequestCountData = window.localStorage.getItem('sendRequestCountData');
         if (sendRequestCountData) {
             let importedDataElement = $('.imported-data');
-            let storedDataCount = window.localStorage.getItem('storedDataCount');
-            if (importedDataElement.length) {
-                importedDataElement.text(storedDataCount + ' lignes inserées');
+            let totalImportedData = window.localStorage.getItem('totalImportedData');
+            if (importedDataElement.length && ImportingReady) {
+                importedDataElement.text(totalImportedData + ' lignes inserées');
             }
+            let request_resolved = window.localStorage.getItem('request_resolved');
             $.ajax({
                 method: 'get',
                 url: APP_URL + '/stats/import-stats/data/count',
@@ -585,49 +587,62 @@ frLang = {
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    totalImportedData = data.flags.imported_data;
-                    isImporting = data.flags.is_importing;
+                    if (data.flags) {
+                        totalImportedData = data.flags.imported_data;
+                        isImporting = data.flags.is_importing;
 
-                    window.localStorage.setItem('storedDataCount', totalImportedData);
-                    if (importedDataElement.length) {
-                        importedDataElement.text(totalImportedData + ' lignes inserées');
-                    }
-                    if (request_resolved || isImporting == 0) {
-                        window.localStorage.removeItem('sendRequestCountData');
-                        window.localStorage.removeItem('storedDataCount');
-                        $('.import_status-wrapper').addClass('d-none');
-                        Swal.fire({
-                            // position: 'top-end',
-                            type: 'success',
-                            title: 'Total inserés : ' + totalImportedData + ' enregistrements', // data.message,
-                            showConfirmButton: true,
-                            customClass: {
-                                confirmButton: 'btn btn-success m-1',
-                            },
-                            confirmButtonText: 'Ok',
-                        });
-                        $('.modal').modal('hide');
+                        window.localStorage.setItem('totalImportedData', totalImportedData);
+                        if (importedDataElement.length) {
+                            importedDataElement.text(totalImportedData + ' lignes inserées');
+                        }
+                        if (request_resolved || isImporting == 0) {
+                            window.localStorage.removeItem('sendRequestCountData');
+                            window.localStorage.removeItem('totalImportedData');
+                            $('.import_status-wrapper').addClass('d-none');
+                            if (sendRequestCountData == null) {
+                                Swal.fire({
+                                    // position: 'top-end',
+                                    type: 'success',
+                                    title: 'Total inserés : ' + totalImportedData + ' enregistrements', // data.message,
+                                    showConfirmButton: true,
+                                    customClass: {
+                                        confirmButton: 'btn btn-success m-1',
+                                    },
+                                    confirmButtonText: 'Ok',
+                                });
+                            }
+                            $('.modal').modal('hide');
+                        } else {
+                            setTimeout(function () {
+                                checkDataCount();
+                            }, 4000);
+                        }
                     } else {
+                        if (importedDataElement.length) {
+                            importedDataElement.html('Veuiller patientez, <span style="color:red">Ne rafraîchissez pas la page</span>');
+                        }
                         setTimeout(function () {
-                            checkDataCount();
+                            checkDataCount(false);
                         }, 4000);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     if (request_resolved || isImporting == 0) {
                         window.localStorage.removeItem('sendRequestCountData');
-                        window.localStorage.removeItem('storedDataCount');
+                        window.localStorage.removeItem('totalImportedData');
                         $('.import_status-wrapper').addClass('d-none');
-                        Swal.fire({
-                            // position: 'top-end',
-                            type: 'error',
-                            title: 'Une erreur est survenue',
-                            showConfirmButton: true,
-                            customClass: {
-                                confirmButton: 'btn btn-success m-1',
-                            },
-                            confirmButtonText: 'Ok',
-                        });
+                        if (sendRequestCountData == null) {
+                            Swal.fire({
+                                // position: 'top-end',
+                                type: 'error',
+                                title: 'Une erreur est survenue',
+                                showConfirmButton: true,
+                                customClass: {
+                                    confirmButton: 'btn btn-success m-1',
+                                },
+                                confirmButtonText: 'Ok',
+                            });
+                        }
                         $('.modal').modal('hide');
                     } else {
                         setTimeout(function () {
@@ -729,7 +744,7 @@ frLang = {
     };
     //</editor-fold>
 
-    sendRequestCountData = Boolean(window.localStorage.getItem('sendRequestCountData'));
+    let sendRequestCountData = Boolean(window.localStorage.getItem('sendRequestCountData'));
     if (sendRequestCountData) {
         checkDataCount();
     } else {
