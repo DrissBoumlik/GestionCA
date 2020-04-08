@@ -230,9 +230,7 @@ $(document).ready(function () {
                 let sendRequestCountData = true;
                 window.localStorage.setItem('sendRequestCountData', sendRequestCountData);
                 $('.import_status-wrapper').removeClass('d-none');
-                setTimeout(function () {
-                    ImportDataRequest(formData);
-                }, 10000);
+                ImportDataRequest(formData);
                 checkDataCount(false);
             }
         });
