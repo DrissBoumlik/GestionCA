@@ -28,10 +28,25 @@ class ToolController extends Controller
         return redirect('dashboard');
     }
 
+    public function editImportingStatus($flag)
+    {
+        $user_flag = UserFlag::firstOrCreate([
+            'user_id' => getAuthUser()->id
+        ]);
+        $user_flag->flags = [
+            'imported_data' => 0,
+            'is_importing' => (int)$flag
+        ];
+        $user_flag->save();
+        return [
+            'flags' => $user_flag->flags
+        ];
+    }
+
     public function getInsertedData()
     {
         $flags = getImportedData(true);
-        if ($flags['is_importing'] != 1){
+        if ($flags['is_importing'] == 0){
             $flags = null;
         }
         return [

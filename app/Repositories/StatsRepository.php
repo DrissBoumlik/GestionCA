@@ -2257,7 +2257,7 @@ class StatsRepository
         $user_flag = getImportedData(false);
         $user_flag->flags = [
             'imported_data' => $user_flag->flags['imported_data'],
-            'is_importing' => 0
+            'is_importing' => 2
         ];
         $user_flag->update();
         \DB::table('stats')

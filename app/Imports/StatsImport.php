@@ -32,9 +32,7 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
             $this->days = explode(',', $days);
             \DB::table('stats')->whereIn('date_note', $this->days)->delete();
         }
-        $this->user_flag = UserFlag::firstOrCreate([
-            'user_id' => getAuthUser()->id
-        ]);
+        $this->user_flag = getImportedData(false);
         $this->user_flag->flags = [
             'imported_data' => 0,
             'is_importing' => 1

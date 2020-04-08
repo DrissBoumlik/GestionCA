@@ -595,7 +595,7 @@ frLang = {
                         if (importedDataElement.length) {
                             importedDataElement.text(totalImportedData + ' lignes inserées');
                         }
-                        if (request_resolved || isImporting == 0) {
+                        if (request_resolved || isImporting == 2) {
                             window.localStorage.removeItem('sendRequestCountData');
                             window.localStorage.removeItem('totalImportedData');
                             $('.import_status-wrapper').addClass('d-none');
@@ -627,7 +627,7 @@ frLang = {
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    if (request_resolved || isImporting == 0) {
+                    if (request_resolved || isImporting == 2) {
                         window.localStorage.removeItem('sendRequestCountData');
                         window.localStorage.removeItem('totalImportedData');
                         $('.import_status-wrapper').addClass('d-none');

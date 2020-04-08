@@ -219,11 +219,19 @@ $(document).ready(function () {
         }
         event.preventDefault();
 
-        let sendRequestCountData = true;
-        window.localStorage.setItem('sendRequestCountData', true);
-        $('.import_status-wrapper').removeClass('d-none');
-        ImportDataRequest(formData);
-        checkDataCount();
+        $.ajax({
+            method: 'get',
+            url: 'stats/import-stats/status/edit/0',
+            success: function (data) {
+                let sendRequestCountData = true;
+                window.localStorage.setItem('sendRequestCountData', sendRequestCountData);
+                $('.import_status-wrapper').removeClass('d-none');
+                setTimeout(function () {
+                    ImportDataRequest(formData);
+                }, 10000);
+                checkDataCount();
+            }
+        });
     }
 
     function ImportDataRequest(formData) {
