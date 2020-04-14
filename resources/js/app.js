@@ -232,8 +232,10 @@ frLang = {
                                     tr.removeClass('shown');
                                 } else {
                                     // Open this row
+                                    object.rowIndex = $('tr').index(tr);
+                                    object.highlightedRow = $('#'+object.element+ ' tr').index(tr);
                                     data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
-                                    object.objDetail.element = 'details-' + $('tr').index(tr);
+                                    object.objDetail.element = 'details-' + object.rowIndex;
                                     createChild(row, object, data); // class is for background colour
                                     tr.addClass('shown');
                                 }

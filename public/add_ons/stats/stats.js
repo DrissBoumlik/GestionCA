@@ -6,7 +6,7 @@ $(function () {
     let detailstr = {};
     let detailsrow = {};
     let drawChart = {};
-    let isfinished = false;
+    let isdrawn = false;
     ajaxRequests = 0;
 
 
@@ -626,14 +626,18 @@ $(function () {
 
     let statsTypeIntervention = {
         columnName: 'produit',
-        rowName: 'produit',
+        rowName: 'Code_Type_Intervention',
         element_dt: undefined,
         element: 'statsTypeIntervention',
         columns: undefined,
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-05', rows: '#stats-groupement-filter'},
-        filterQuery: {},
+        filterQuery: {
+            appCltquery: true,
+        },
+        rowIndex : undefined,
+        highlightedRow : undefined,
         routeCol: 'TypeIntervention/columns',
         routeData: 'TypeIntervention',
         objChart: {
@@ -673,7 +677,7 @@ $(function () {
             searching : false
         });
         $('#refreshRegions').on('click', function () {
-            toggleLoader($('#refreshAll').parents('.col-12'));
+            toggleLoader($('#refreshTypeIntervention').parents('.col-12'));
             getColumns(statsTypeIntervention, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -687,7 +691,7 @@ $(function () {
     //</editor-fold>
 
 
-    let globalElements = [userObject, statsRegions, statsFolders, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, statsFoldersByType, statsFoldersByCode, statsPerimeters,statsColturetech,statsGlobalDelay,statsProcessingDelay];
+    let globalElements = [userObject, statsRegions, statsFolders, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, statsFoldersByType, statsFoldersByCode, statsPerimeters,statsColturetech,statsGlobalDelay,statsProcessingDelay,statsTypeIntervention];
 
     detailClick = false;
 
@@ -809,6 +813,14 @@ $(function () {
             pagination: false,
             searching : false
         });
+            getColumns(statsTypeIntervention, filterData(), {
+                removeTotal: false,
+                refreshMode: false,
+                details: true,
+                removeTotalColumn: false,
+                pagination: false,
+                searching : false
+            });
         }
     });
     //</editor-fold>
@@ -836,7 +848,7 @@ $(function () {
             let statsPerimetersChart = document.getElementById('statsPerimetersChart');
             let statsColturetechChart = document.getElementById('statsColturetechChart');
             let statsGlobalDelayChart = document.getElementById('statsGlobalDelayChart');
-
+            let statsTypeInterventionChart = document.getElementById('statsTypeInterventionChart');
             //creates image
             let statsRegionsChartImg = statsRegionsChart.toDataURL("image/png", 1.0);
             let statsFoldersChartImg = statsFoldersChart.toDataURL("image2/png", 1.0);
@@ -849,6 +861,7 @@ $(function () {
             let statsPerimetersChartImg = statsPerimetersChart.toDataURL("image9/png", 1.0);
             let statsColturetechChartImg = statsColturetechChart.toDataURL("image10/png", 1.0);
             let statsGlobalDelayChartImg = statsGlobalDelayChart.toDataURL("image11/png", 1.0);
+            let statsTypeInterventionChartImg = statsGlobalDelayChart.toDataURL("image12/png", 1.0);
             //creates PDF from img
             let doc = new jsPDF('p', 'pt', [842, 842]);
             doc.addImage(logo, 'jpeg', 371, 10, 100, 30);
@@ -961,6 +974,16 @@ $(function () {
                 styles: {fontSize: 7}
             });
             doc.addImage(statsGlobalDelayChartImg, 'JPEG', 532, 400, 350, 300);
+            doc.addPage();
+            doc.text(10, 20, 'Répartition des dossiers non validés par Code Type intervention');
+            doc.autoTable({
+                html: '#statsTypeIntervention',
+                margin: {left: 0, top: 30},
+                pageBreak: 'auto',
+                tableWidth: 520,
+                styles: {fontSize: 7}
+            });
+            doc.addImage(statsTypeInterventionChartImg, 'JPEG', 532, 30, 350, 300);
             doc.addImage(footer, 'jpeg', 371, 810, 100, 30);
             doc.save('dashboard.pdf');
 

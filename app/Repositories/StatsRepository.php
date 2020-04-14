@@ -2255,7 +2255,7 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select('produit')
             ->distinct()
-            ->whereNotNull('produit');
+            ->where('produit','!=','');
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
