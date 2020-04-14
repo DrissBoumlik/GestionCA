@@ -201,6 +201,30 @@ class StatsController extends Controller
         $data = $this->statsRepository->GetProcessingDelayCall($request);
         return DataTables::of($data['data'])->toJson();
     }
+
+    public function getTypeInterventionColumn(Request $request)
+    {
+        $data = $this->statsRepository->GetColumnsTypeIntervention($request);
+        return $data;
+    }
+
+    public function getTypeIntervention(Request $request)
+    {
+        $data = $this->statsRepository->getTypeIntervention($request);
+        return DataTables::of($data['data'])->toJson();
+    }
+
+    public function getTypeInterventionColumnGrpCall(Request $request)
+    {
+        $data = $this->statsRepository->GetColumnsTypeInterventionGrpCall($request);
+        return $data;
+    }
+
+    public function getTypeInterventionGrpCall(Request $request)
+    {
+        $data = $this->statsRepository->getTypeInterventionGrpCall($request);
+        return DataTables::of($data['data'])->toJson();
+    }
     //endregion
 
 

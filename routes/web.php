@@ -142,6 +142,11 @@ Route::group([
     Route::get('GlobalDelay/columns', 'StatsController@getGlobalDelayColumn');
     Route::get('ProcessingDelay', 'StatsController@getProcessingDelay');
     Route::get('ProcessingDelay/columns', 'StatsController@getProcessingDelayColumn');
+    Route::get('TypeIntervention', 'StatsController@getTypeIntervention');
+    Route::get('TypeIntervention/columns', 'StatsController@getTypeInterventionColumn');
+    Route::get('TypeIntervention/details', 'StatsController@getTypeInterventionGrpCall');
+    Route::get('TypeIntervention/details/columns', 'StatsController@getTypeInterventionColumnGrpCall');
+
 
     Route::get('Export/ExportXls', 'StatsController@exportXls')->name('ExportXls');
 

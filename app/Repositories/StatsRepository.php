@@ -2244,6 +2244,266 @@ class StatsRepository
         }
     }
 
+    public function GetColumnsTypeIntervention(Request $request, $filter = null)
+    {
+        $agentName = $request->get('agent_name');
+        $agenceCode = $request->get('agence_code');
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+
+        $columns = \DB::table('stats as st')
+            ->select('produit')
+            ->distinct()
+            ->whereNotNull('produit');
+
+        $columns = applyFilter($columns, $filter);
+        if ($agentName) {
+            $columns = $columns->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $columns = $columns->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+
+        $keys = $columns->pluck('produit');
+
+
+        if (!count($keys)) {
+            $data = ['filter' => $filter, 'columns' => [], 'rows' => [], 'rowsFilterHeader' => ''];
+            return $data;
+        } else {
+            $regions_names = [];
+            $keys->map(function ($key, $index) use (&$regions_names) {
+                $regions_names[$index + 1] = new \stdClass();
+                $regions_names[$index + 1]->data = $key;
+                $regions_names[$index + 1]->name = $key;
+                $regions_names[$index + 1]->text = $key;
+                $regions_names[$index + 1]->title = $key;
+            });
+            usort($regions_names, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
+            $first = new \stdClass();
+            $first->title = 'produit';
+            $first->name = 'produit';
+            $first->data = 'produit';
+            $first->orderable = false;
+            array_unshift($regions_names, $first);
+
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
+        }
+    }
+
+    public function getTypeIntervention(Request $request, $filter = null)
+    {
+        $agenceCode = $request->get('agence_code');
+        $agentName = $request->get('agent_name');
+        $route_request = $request->get('route');
+        $_route = $route_request ?? getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+
+        $regions = \DB::table('stats as st')
+            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'),'produit')
+            ->where('produit','!=','');
+
+        $regions = applyFilter($regions, $filter);
+        if ($agentName) {
+            $regions = $regions->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+
+        $regions = $regions->orderBy('Type_Intervention');
+        $regions = $regions->groupBy('Type_Intervention', 'produit')->get();
+        $keys = $regions->groupBy(['produit'])->keys();
+
+
+        if (!count($regions)) {
+            $data = ['data' => []];
+            return $data;
+        } else {
+            $temp = $regions->groupBy(['produit']);
+            $temp = $temp->map(function ($calls, $index) {
+                $totalZone = $calls->reduce(function ($carry, $call) {
+                    return $carry + $call->count;
+                }, 0);
+                return $calls->map(function ($call) use ($index, $totalZone) {
+                    $call->$index = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
+                    return $call;
+                });
+            });
+            $regions = $temp->flatten();
+
+            $regions = $regions->groupBy('Type_Intervention');
+            $regions = $regions->map(function ($region) use ($keys) {
+                $row = new \stdClass();
+                $row->values = [];
+
+                $col_arr = $keys->all();
+                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
+                    $row->produit = $call->Type_Intervention;
+                    $produit = $call->produit;
+                    $row->$produit = $call->count . '|' . $call->$produit . '%';
+                    $row->values[$produit] = $call->count;
+                    $col_arr = array_diff($col_arr, [$produit]);
+                    return $row;
+                });
+
+                $_item = $items->last();
+
+                $index = count($_item->values);
+                foreach ($col_arr as $col) {
+                    $_item->values[$col] = 0;
+                    $_item->$col = '0';
+                }
+
+                ksort($_item->values);
+
+                $_item->values = collect($_item->values)->values();
+
+                return $_item;
+            });
+            $regions = $regions->values();
+
+            return ['data' => $regions];
+        }
+    }
+
+    public function GetColumnsTypeInterventionGrpCall(Request $request, $filter = null)
+    {
+        $agentName = $request->get('agent_name');
+        $agenceCode = $request->get('agence_code');
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+
+        $columns = \DB::table('stats as st')
+            ->select('Nom_Region')
+            ->distinct()
+            ->whereNotNull('Nom_Region');;
+
+        $columns = applyFilter($columns, $filter);
+        if ($agentName) {
+            $columns = $columns->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $columns = $columns->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+
+        $keys = $columns->pluck('Nom_Region');
+
+
+        if (!count($keys)) {
+            $data = ['filter' => $filter, 'columns' => [], 'rows' => [], 'rowsFilterHeader' => ''];
+            return $data;
+        } else {
+            $regions_names = [];
+            $keys->map(function ($key, $index) use (&$regions_names) {
+                $regions_names[$index + 1] = new \stdClass();
+                $regions_names[$index + 1]->data = $key;
+                $regions_names[$index + 1]->name = $key;
+                $regions_names[$index + 1]->text = $key;
+                $regions_names[$index + 1]->title = $key;
+            });
+            usort($regions_names, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
+            $first = new \stdClass();
+            $first->title = 'Code_Type_Intervention';
+            $first->name = 'Code_Type_Intervention';
+            $first->data = 'Code_Type_Intervention';
+            $first->orderable = false;
+            array_unshift($regions_names, $first);
+
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
+        }
+    }
+
+    public function getTypeInterventionGrpCall(Request $request, $filter = null)
+    {
+        $agenceCode = $request->get('agence_code');
+        $agentName = $request->get('agent_name');
+        $route_request = $request->get('route');
+        $key_groupement = $request->get('key_groupement');
+        $_route = $route_request ?? getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+
+
+        $regions = \DB::table('stats as st')
+            ->select('Code_Type_Intervention', 'Nom_Region', \DB::raw('count(distinct st.Id_Externe) as count'))
+            ->whereNotNull('Nom_Region')
+            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+
+        $regions = applyFilter($regions, $filter);
+        if ($agentName) {
+            $regions = $regions->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+
+        $regions = $regions->orderBy('Code_Type_Intervention');
+        //dd($regions->groupBy('Code_Type_Intervention', 'Nom_Region')->toSql(), $regions->getBindings());
+        $regions = $regions->groupBy('Code_Type_Intervention', 'Nom_Region')->get();
+        $keys = $regions->groupBy(['Nom_Region'])->keys();
+
+
+        if (!count($regions)) {
+            $data = ['data' => []];
+            return $data;
+        } else {
+            $temp = $regions->groupBy(['Nom_Region']);
+            $temp = $temp->map(function ($calls, $index) {
+                $totalZone = $calls->reduce(function ($carry, $call) {
+                    return $carry + $call->count;
+                }, 0);
+                return $calls->map(function ($call) use ($index, $totalZone) {
+                    $call->$index = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
+                    return $call;
+                });
+            });
+            $regions = $temp->flatten();
+
+            $regions = $regions->groupBy('Code_Type_Intervention');
+            $regions = $regions->map(function ($region) use ($keys) {
+                $row = new \stdClass();
+                $row->values = [];
+
+                $col_arr = $keys->all();
+                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
+                    $row->Code_Type_Intervention = $call->Code_Type_Intervention;
+                    $Nom_Region = $call->Nom_Region;
+                    $row->$Nom_Region = $call->count . '|' . $call->$Nom_Region . '%';
+                    $row->values[$Nom_Region] = $call->count;
+                    $col_arr = array_diff($col_arr, [$Nom_Region]);
+                    return $row;
+                });
+
+                $_item = $items->last();
+
+                $index = count($_item->values);
+                foreach ($col_arr as $col) {
+                    $_item->values[$col] = 0;
+                    $_item->$col = '0';
+                }
+
+                ksort($_item->values);
+
+                $_item->values = collect($_item->values)->values();
+
+                return $_item;
+            });
+            $regions = $regions->values();
+
+            return ['data' => $regions];
+        }
+    }
+
 
     public function importStats($request)
     {

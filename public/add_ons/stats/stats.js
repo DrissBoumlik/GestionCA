@@ -623,6 +623,67 @@ $(function () {
             });
         });
     }
+
+    let statsTypeIntervention = {
+        columnName: 'produit',
+        rowName: 'produit',
+        element_dt: undefined,
+        element: 'statsTypeIntervention',
+        columns: undefined,
+        data: undefined,
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-05', rows: '#stats-groupement-filter'},
+        filterQuery: {},
+        routeCol: 'TypeIntervention/columns',
+        routeData: 'TypeIntervention',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsTypeInterventionChart',
+            data: undefined,
+            chartTitle: 'It gonna be change after'
+        },
+        children: [],
+        objDetail: {
+            columnName: 'Nom_Region',
+            rowName: 'Code_Type_Intervention',
+            element_dt: undefined,
+            element: undefined,
+            columns: undefined,
+            filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+            filterElement: undefined,
+            filterQuery: {
+            },
+            routeCol: 'TypeIntervention/details/columns',
+            routeData: 'TypeIntervention/details',
+            objChart: {
+                element_chart: undefined,
+                element_id: undefined,
+                data: undefined,
+                chartTitle: 'It gonna be change after'
+            },
+        }
+    };
+    if (elementExists(statsTypeIntervention)) {
+        getColumns(statsTypeIntervention, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: true,
+            removeTotalColumn: false,
+            pagination: false,
+            searching : false
+        });
+        $('#refreshRegions').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
+            getColumns(statsTypeIntervention, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: true,
+                removeTotalColumn: false,
+                pagination: false,
+                searching : false
+            });
+        });
+    }
     //</editor-fold>
 
 

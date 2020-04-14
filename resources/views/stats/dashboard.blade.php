@@ -524,7 +524,39 @@
                     <!-- /.col -->
                 </div>
             @endif
-
+            <!-- / .row -->
+            <div class="row ">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Répartition des dossiers non validés par Code Type
+                                intervention</h3>
+                            <hr>
+                            <div class="refresh-form">
+                                <div id="tree-view-05" class="tree-view d-inline-flex"></div>
+                                <button type="button" id="refreshTypeIntervention"
+                                        class="btn btn-primary float-right d-none">
+                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="statsTypeIntervention"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="statsTypeInterventionChart" class=""></canvas>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
         </div>
         <!-- END Stats -->
     </div>
