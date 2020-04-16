@@ -228,6 +228,17 @@ class StatsController extends Controller
     //endregion
 
 
+    public function getGlobalViewColumns(Request $request)
+    {
+        return $this->statsRepository->GetColumnsGlobalView($request);
+    }
+
+    public function getGlobalView(Request $request)
+    {
+        return $this->statsRepository->GetDataGlobalView($request);
+    }
+
+
     //region Import / Export
     public function import()
     {
