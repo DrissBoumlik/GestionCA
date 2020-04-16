@@ -278,6 +278,68 @@
                 <!-- /.col -->
             </div>
             <!-- /.row -->
+            <hr>
+            <div class="row ">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Résultat Validation par Type Intervention</h3>
+                            <hr>
+                            <div class="refresh-form">
+                                <div id="tree-view-06" class="tree-view d-inline-flex"></div>
+                                <button type="button" id="refreshValTypeIntervention" class="btn btn-primary float-right d-none">
+                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="statsValTypeIntervention"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="statsValTypeInterventionChart" class=""></canvas>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <hr>
+            <div class="row ">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-inline-block">Répartition Codes Intervention par Type Intervention</h3>
+                            <hr>
+                            <div class="refresh-form">
+                                <div id="tree-view-07" class="tree-view d-inline-flex"></div>
+                                <button type="button" id="refreshRepTypeIntervention" class="btn btn-primary float-right d-none">
+                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive">
+                            <table id="statsRepTypeIntervention"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12">
+                    <canvas id="statsRepTypeInterventionChart" class=""></canvas>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
 
         </div>
         <!-- END Stats -->

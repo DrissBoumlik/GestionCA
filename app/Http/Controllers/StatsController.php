@@ -225,6 +225,55 @@ class StatsController extends Controller
         $data = $this->statsRepository->getTypeInterventionGrpCall($request);
         return DataTables::of($data['data'])->toJson();
     }
+
+    public function getValTypeInterventionColumn(Request $request)
+    {
+        $data = $this->statsRepository->GetColumnsValTypeIntervention($request);
+        return $data;
+    }
+
+    public function getValTypeIntervention(Request $request)
+    {
+        $data = $this->statsRepository->getValTypeIntervention($request);
+        return DataTables::of($data['data'])->toJson();
+    }
+
+    public function getValTypeInterventionColumnGrpCall(Request $request)
+    {
+        $data = $this->statsRepository->GetColumnsValTypeInterventionGrpCall($request);
+        return $data;
+    }
+
+    public function getValTypeInterventionGrpCall(Request $request)
+    {
+        $data = $this->statsRepository->getValTypeInterventionGrpCall($request);
+        return DataTables::of($data['data'])->toJson();
+    }
+
+    public function getRepTypeInterventionColumn(Request $request)
+    {
+        $data = $this->statsRepository->GetColumnsRepTypeIntervention($request);
+        return $data;
+    }
+
+    public function getRepTypeIntervention(Request $request)
+    {
+        $data = $this->statsRepository->getRepTypeIntervention($request);
+        return DataTables::of($data['data'])->toJson();
+    }
+
+    public function getRepTypeInterventionColumnGrpCall(Request $request)
+    {
+        $data = $this->statsRepository->GetColumnsRepTypeInterventionGrpCall($request);
+        return $data;
+    }
+
+    public function getRepTypeInterventionGrpCall(Request $request)
+    {
+        $data = $this->statsRepository->getRepTypeInterventionGrpCall($request);
+        return DataTables::of($data['data'])->toJson();
+    }
+
     //endregion
 
 
