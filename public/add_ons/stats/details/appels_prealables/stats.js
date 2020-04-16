@@ -351,6 +351,71 @@ $(function () {
             });
         });
     }
+
+    let statesRepJoiDepartement = {
+        columnName: 'Resultat_Appel',
+        rowName: 'Code_Type_Intervention',
+        element_dt: undefined,
+        element: 'statesRepJoiDepartement',
+        columns: undefined,
+        data: undefined,
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-08', rows: '#RepJoiDepartement-filter'},
+        filterQuery: {
+            appCltquery: true,
+        },
+        rowIndex : undefined,
+        highlightedRow : undefined,
+        routeCol: 'RepJoiDepartement/columns',
+        routeData: 'RepJoiDepartement',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statesRepJoiDepartementChart',
+            data: undefined,
+            chartTitle: 'It gonna be change after'
+        },
+        children: [],
+        objDetail: {
+            columnName: 'Resultat_Appel',
+            rowName: 'Code_Type_Intervention',
+            element_dt: undefined,
+            element: undefined,
+            columns: undefined,
+            filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+            filterElement: undefined,
+            filterQuery: {
+            },
+            routeCol: 'RepJoiDepartement/details/columns',
+            routeData: 'RepJoiDepartement/details',
+            objChart: {
+                element_chart: undefined,
+                element_id: undefined,
+                data: undefined,
+                chartTitle: 'It gonna be change after'
+            },
+        }
+    };
+    if (elementExists(statesRepJoiDepartement)) {
+        getColumns(statesRepJoiDepartement, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: true,
+            removeTotalColumn: false,
+            pagination: false,
+            searching : false
+        });
+        $('#refreshRegions').on('click', function () {
+            toggleLoader($('#refreshRepTypeIntervention').parents('.col-12'));
+            getColumns(statesRepJoiDepartement, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: true,
+                removeTotalColumn: false,
+                pagination: false,
+                searching : false
+            });
+        });
+    }
     //</editor-fold>
 
     let globalElements = [userObject, statsCallsPrealable, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, CallResultPrealable];

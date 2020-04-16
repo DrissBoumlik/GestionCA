@@ -138,22 +138,33 @@ Route::group([
 
     Route::get('Cloturetech', 'StatsController@getCloturetech');
     Route::get('Cloturetech/columns', 'StatsController@getCloturetechColumn');
+
     Route::get('GlobalDelay', 'StatsController@getGlobalDelay');
     Route::get('GlobalDelay/columns', 'StatsController@getGlobalDelayColumn');
+
     Route::get('ProcessingDelay', 'StatsController@getProcessingDelay');
     Route::get('ProcessingDelay/columns', 'StatsController@getProcessingDelayColumn');
+
     Route::get('TypeIntervention', 'StatsController@getTypeIntervention');
     Route::get('TypeIntervention/columns', 'StatsController@getTypeInterventionColumn');
     Route::get('TypeIntervention/details', 'StatsController@getTypeInterventionGrpCall');
     Route::get('TypeIntervention/details/columns', 'StatsController@getTypeInterventionColumnGrpCall');
+
     Route::get('ValTypeIntervention', 'StatsController@getValTypeIntervention');
     Route::get('ValTypeIntervention/columns', 'StatsController@getValTypeInterventionColumn');
     Route::get('ValTypeIntervention/details', 'StatsController@getValTypeInterventionGrpCall');
     Route::get('ValTypeIntervention/details/columns', 'StatsController@getValTypeInterventionColumnGrpCall');
+
     Route::get('RepTypeIntervention', 'StatsController@getRepTypeIntervention');
     Route::get('RepTypeIntervention/columns', 'StatsController@getRepTypeInterventionColumn');
     Route::get('RepTypeIntervention/details', 'StatsController@getRepTypeInterventionGrpCall');
     Route::get('RepTypeIntervention/details/columns', 'StatsController@getRepTypeInterventionColumnGrpCall');
+
+    Route::get('RepJoiDepartement', 'StatsController@getRepJoiDepartement');
+    Route::get('RepJoiDepartement/columns', 'StatsController@getRepJoiDepartementColumn');
+    Route::get('RepJoiDepartement/details', 'StatsController@getRepJoiDepartementGrpCall');
+    Route::get('RepJoiDepartement/details/columns', 'StatsController@getRepJoiDepartementColumnGrpCall');
+
 
     Route::get('Export/ExportXls', 'StatsController@exportXls')->name('ExportXls');
 
