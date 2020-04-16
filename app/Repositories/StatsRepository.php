@@ -2503,8 +2503,8 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select('Resultat_Appel')
             ->distinct()
-            ->where('Groupement','like','Appels clôture')
-            ->whereIn('Resultat_Appel',['Appels clôture - Validé conforme','Appels clôture - CRI non conforme']);
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme']);
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2554,9 +2554,9 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
 
         $regions = \DB::table('stats as st')
-            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'),'Resultat_Appel')
-            ->where('Groupement','like','Appels clôture')
-            ->whereIn('Resultat_Appel',['Appels clôture - Validé conforme','Appels clôture - CRI non conforme']);
+            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'), 'Resultat_Appel')
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme']);
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2634,9 +2634,9 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select('Resultat_Appel')
             ->distinct()
-            ->where('Groupement','like','Appels clôture')
-            ->whereIn('Resultat_Appel',['Appels clôture - Validé conforme','Appels clôture - CRI non conforme'])
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme'])
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2687,10 +2687,10 @@ class StatsRepository
 
 
         $regions = \DB::table('stats as st')
-            ->select('Code_Type_Intervention', 'Resultat_Appel',\DB::raw('count(distinct st.Id_Externe) as count'))
-            ->where('Groupement','like','Appels clôture')
-            ->whereIn('Resultat_Appel',['Appels clôture - Validé conforme','Appels clôture - CRI non conforme'])
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+            ->select('Code_Type_Intervention', 'Resultat_Appel', \DB::raw('count(distinct st.Id_Externe) as count'))
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme'])
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2768,7 +2768,7 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select('Code_Intervention')
             ->distinct()
-            ->where('Groupement','like','Appels clôture');
+            ->where('Groupement', 'like', 'Appels clôture');
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2818,8 +2818,8 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
 
         $regions = \DB::table('stats as st')
-            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'),'Code_Intervention')
-            ->where('Groupement','like','Appels clôture');
+            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'), 'Code_Intervention')
+            ->where('Groupement', 'like', 'Appels clôture');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2895,8 +2895,8 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select('Code_Intervention')
             ->distinct()
-            ->where('Groupement','like','Appels clôture')
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');;
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');;
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2947,9 +2947,9 @@ class StatsRepository
 
 
         $regions = \DB::table('stats as st')
-            ->select('Code_Type_Intervention', 'Code_Intervention',\DB::raw('count(distinct st.Id_Externe) as count'))
-            ->where('Groupement','like','Appels clôture')
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+            ->select('Code_Type_Intervention', 'Code_Intervention', \DB::raw('count(distinct st.Id_Externe) as count'))
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -3093,11 +3093,11 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
 
-            $header = new \stdClass();
-            $header->title = 'Code Type Intervention';
-            $header->text = 'Code Type Intervention';
-            $header->name = $header->data = 'Code_Type_Intervention';
-            $header->orderable = false;
+//            $header = new \stdClass();
+//            $header->title = 'Code Type Intervention';
+//            $header->text = 'Code Type Intervention';
+//            $header->name = $header->data = 'Code_Type_Intervention';
+//            $header->orderable = false;
 
             $first = new \stdClass();
             $first->title = 'Produit';
@@ -3110,7 +3110,7 @@ class StatsRepository
             $last->text =
             $last->title = 'total';
             array_unshift($column_names, $first);
-            array_unshift($column_names, $header);
+//            array_unshift($column_names, $header);
             array_push($column_names, $last);
 
             $data = ['filter' => $filter, 'columns' => $column_names, 'rows' => $rowsKeys, 'rowsFilterHeader' => ''];
@@ -3212,8 +3212,8 @@ class StatsRepository
                     $row->values = [];
                     $col_arr = $keys->all();
                     $item = $product->map(function ($grpCall, $index) use (&$row, &$codes_names, &$total, &$col_arr) {
-                        $row->Code_Type_Intervention = $grpCall->cti; // preg_replace('/\_.+/', '', $grpCall->Code_Type_Intervention);
-                        $row->Produit = $grpCall->Produit;
+//                        $row->Code_Type_Intervention = $grpCall->cti; // preg_replace('/\_.+/', '', $grpCall->Code_Type_Intervention);
+                        $row->Produit = $grpCall->cti . ' / ' . $grpCall->Produit;
                         $column_name = $grpCall->Groupement;
                         $col_arr = array_diff($col_arr, [$column_name]);
                         $row->values[$column_name] = $grpCall->total;

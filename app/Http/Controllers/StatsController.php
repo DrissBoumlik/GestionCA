@@ -284,7 +284,8 @@ class StatsController extends Controller
 
     public function getGlobalView(Request $request)
     {
-        return $this->statsRepository->GetDataGlobalView($request);
+        $data = $this->statsRepository->GetDataGlobalView($request);
+        return DataTables::of($data['data'])->toJson();
     }
 
 

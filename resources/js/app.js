@@ -708,12 +708,11 @@ frLang = {
 
     window.elementExists = function (object) {
         if (object !== null && object !== undefined) {
-            let element = $('#' + object.element);
+            let element = object instanceof jQuery ? object : $('#' + object.element);
             if (element !== null && element !== undefined) {
                 return element.length;
-            } else {
-                return object.length;
             }
+            return false;
         }
         return false;
     };

@@ -701,8 +701,8 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-06', rows: '#global-view-filter'},
         filterQuery: {
-            queryJoin: ' AND Groupement IS NOT NULL AND Groupement not LIKE "Non renseigné" AND Groupement not LIKE "Appels post" AND Type_Note LIKE "CAM" ',
-            subGroupBy: ' GROUP BY Id_Externe, Groupement, Resultat_Appel, Nom_Region ) groupedst ',
+            queryJoin: ' AND Groupement IS NOT NULL AND Groupement not LIKE "Non renseigné" AND Groupement not LIKE "Appels post" AND Code_Type_Intervention NOT LIKE "%AUTRE%" AND Produit != "" ',
+            subGroupBy: ' GROUP BY Id_Externe, Groupement, Nom_Region ) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Groupement, Nom_Region'
         },
         routeCol: 'globalView/columns',
@@ -712,14 +712,37 @@ $(function () {
             element_id: 'globalViewChart',
             data: undefined,
             chartTitle: 'Vue Global IDF'
+        },
+        children: [],
+        objDetail: {
+            columnName: 'Groupement',
+            rowName: 'Produit',
+            element_dt: undefined,
+            element: undefined,
+            columns: undefined,
+            filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+            filterElement: undefined,
+            filterQuery: {
+                queryJoin: ' and Resultat_Appel not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"',
+                subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel) groupedst ',
+                queryGroupBy: 'group by st.Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel'
+            },
+            routeCol: 'regions/details/groupement/columns',
+            routeData: 'regions/details/groupement',
+            objChart: {
+                element_chart: undefined,
+                element_id: undefined,
+                data: undefined,
+                chartTitle: 'Vue Global IDF'
+            },
         }
     };
     if (elementExists(globalView)) {
         getColumns(globalView, filterData(), {
-            removeTotalColumn: false,
-            removeTotal: true,
+            removeTotalColumn: true,
+            removeTotal: false,
             refreshMode: false,
-            details: false,
+            details: true,
             pagination: false,
             searching: false
         });
@@ -729,7 +752,7 @@ $(function () {
                 removeTotalColumn: true,
                 removeTotal: false,
                 refreshMode: true,
-                details: false,
+                details: true,
                 pagination: false,
                 searching: false
             });
@@ -866,7 +889,7 @@ $(function () {
             pagination: false,
             searching: false
         });
-        if (elementExists(statsProcessingDelay)) {
+        if (elementExists(globalView)) {
             getColumns(globalView, filterData(), {
                 removeTotalColumn: true,
                 removeTotal: false,
