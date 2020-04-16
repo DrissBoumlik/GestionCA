@@ -1,4 +1,4 @@
-<div class="import_status-wrapper">
+<div class="import_status-wrapper d-none">
     <div class="import_status wrapper animated pulse infinite">
         <div class="info" data-toggle="modal" data-target="#modal-import-status">
             <i class="fas fa-info"></i>
