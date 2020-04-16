@@ -3293,6 +3293,272 @@ class StatsRepository
         }
     }
 
+    public function GetColumnsRepJoiAutreDepartement(Request $request, $filter = null)
+    {
+        $agentName = $request->get('agent_name');
+        $agenceCode = $request->get('agence_code');
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+
+        $columns = \DB::table('stats as st')
+            ->select(\DB::raw('Gpmt_Appel_Pre'))
+            ->distinct()
+            ->where('Groupement','like','Appels préalables')
+            ->whereIn('Gpmt_Appel_Pre',['Joignable','Injoignable']);
+
+        $columns = applyFilter($columns, $filter);
+        if ($agentName) {
+            $columns = $columns->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $columns = $columns->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+
+        $keys = $columns->pluck('Gpmt_Appel_Pre');
+
+
+        if (!count($keys)) {
+            $data = ['filter' => $filter, 'columns' => [], 'rows' => [], 'rowsFilterHeader' => ''];
+            return $data;
+        } else {
+            $regions_names = [];
+            $keys->map(function ($key, $index) use (&$regions_names) {
+                $regions_names[$index + 1] = new \stdClass();
+                $regions_names[$index + 1]->data = $key;
+                $regions_names[$index + 1]->name = $key;
+                $regions_names[$index + 1]->text = $key;
+                $regions_names[$index + 1]->title = $key;
+            });
+            usort($regions_names, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
+            $first = new \stdClass();
+            $first->title = 'Gpmt_Appel_Pre';
+            $first->name = 'Gpmt_Appel_Pre';
+            $first->data = 'Gpmt_Appel_Pre';
+            $first->orderable = false;
+            array_unshift($regions_names, $first);
+
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
+        }
+    }
+
+    public function getRepJoiAutreDepartement(Request $request, $filter = null)
+    {
+        $agenceCode = $request->get('agence_code');
+        $agentName = $request->get('agent_name');
+        $route_request = $request->get('route');
+        $_route = $route_request ?? getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+
+        $regions = \DB::table('stats as st')
+            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), 'Gpmt_Appel_Pre',
+                \DB::raw('count(distinct st.Id_Externe) as count'))
+            ->where('Groupement','like','Appels préalables')
+            ->whereIn('Gpmt_Appel_Pre',['Joignable','Injoignable']);
+
+        $regions = applyFilter($regions, $filter);
+        if ($agentName) {
+            $regions = $regions->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+
+        $regions = $regions->orderBy('Type_Intervention');
+        $regions = $regions->groupBy('Type_Intervention', 'Gpmt_Appel_Pre')->get();
+        $keys = $regions->groupBy(['Gpmt_Appel_Pre'])->keys();
+
+
+        if (!count($regions)) {
+            $data = ['data' => []];
+            return $data;
+        } else {
+            $temp = $regions->groupBy(['Gpmt_Appel_Pre']);
+            $temp = $temp->map(function ($calls, $index) {
+                $totalZone = $calls->reduce(function ($carry, $call) {
+                    return $carry + $call->count;
+                }, 0);
+                return $calls->map(function ($call) use ($index, $totalZone) {
+                    $call->$index = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
+                    return $call;
+                });
+            });
+            $regions = $temp->flatten();
+
+            $regions = $regions->groupBy('Type_Intervention');
+            $regions = $regions->map(function ($region) use ($keys) {
+                $row = new \stdClass();
+                $row->values = [];
+
+                $col_arr = $keys->all();
+                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
+                    $row->Gpmt_Appel_Pre = $call->Type_Intervention;
+                    $Gpmt_Appel_Pre = $call->Gpmt_Appel_Pre;
+                    $row->$Gpmt_Appel_Pre = $call->count . '|' . $call->$Gpmt_Appel_Pre . '%';
+                    $row->values[$Gpmt_Appel_Pre] = $call->count;
+                    $col_arr = array_diff($col_arr, [$Gpmt_Appel_Pre]);
+                    return $row;
+                });
+
+                $_item = $items->last();
+
+                $index = count($_item->values);
+                foreach ($col_arr as $col) {
+                    $_item->values[$col] = 0;
+                    $_item->$col = '0';
+                }
+
+                ksort($_item->values);
+
+                $_item->values = collect($_item->values)->values();
+
+                return $_item;
+            });
+            $regions = $regions->values();
+
+            return ['data' => $regions];
+        }
+    }
+
+    public function GetColumnsRepJoiAutreDepartementGrpCall(Request $request, $filter = null)
+    {
+        $agentName = $request->get('agent_name');
+        $agenceCode = $request->get('agence_code');
+        $_route = getRoute(Route::current());
+        $key_groupement = $request->get('key_groupement');
+        $route = str_replace('/columns', '', $_route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+
+        $columns = \DB::table('stats as st')
+                ->select(\DB::raw('Gpmt_Appel_Pre'))
+                ->distinct()
+                ->where('Groupement','like','Appels préalables')
+                ->whereIn('Gpmt_Appel_Pre',['Joignable','Injoignable'])
+            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+
+        $columns = applyFilter($columns, $filter);
+        if ($agentName) {
+            $columns = $columns->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $columns = $columns->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+
+        $keys = $columns->pluck('Gpmt_Appel_Pre');
+
+        if (!count($keys)) {
+            $data = ['filter' => $filter, 'columns' => [], 'rows' => [], 'rowsFilterHeader' => ''];
+            return $data;
+        } else {
+            $regions_names = [];
+            $keys->map(function ($key, $index) use (&$regions_names) {
+                $regions_names[$index + 1] = new \stdClass();
+                $regions_names[$index + 1]->data = $key;
+                $regions_names[$index + 1]->name = $key;
+                $regions_names[$index + 1]->text = $key;
+                $regions_names[$index + 1]->title = $key;
+            });
+            usort($regions_names, function ($item1, $item2) {
+                return ($item1->data == $item2->data) ? 0 :
+                    ($item1->data < $item2->data) ? -1 : 1;
+            });
+            $first = new \stdClass();
+            $first->title = 'Gpmt_Appel_Pre';
+            $first->name = 'Gpmt_Appel_Pre';
+            $first->data = 'Gpmt_Appel_Pre';
+            $first->orderable = false;
+            array_unshift($regions_names, $first);
+
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
+        }
+    }
+
+    public function getRepJoiAutreDepartementGrpCall(Request $request, $filter = null)
+    {
+        $agenceCode = $request->get('agence_code');
+        $agentName = $request->get('agent_name');
+        $route_request = $request->get('route');
+        $key_groupement = $request->get('key_groupement');
+        $_route = $route_request ?? getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+
+
+        $regions = \DB::table('stats as st')
+            ->select('Gpmt_Appel_Pre', 'produit',\DB::raw('count(distinct st.Id_Externe) as count'))
+            ->where('Groupement','like','Appels préalables')
+            ->whereIn('produit',['CUIVRE','FTTH'])
+            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+
+        $regions = applyFilter($regions, $filter);
+        if ($agentName) {
+            $regions = $regions->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+
+        $regions = $regions->orderBy('produit');
+        //dd($regions->groupBy('Code_Type_Intervention', 'Nom_Region')->toSql(), $regions->getBindings());
+        $regions = $regions->groupBy('produit', 'Gpmt_Appel_Pre')->get();
+        $keys = $regions->groupBy(['Gpmt_Appel_Pre'])->keys();
+
+
+        if (!count($regions)) {
+            $data = ['data' => []];
+            return $data;
+        } else {
+            $temp = $regions->groupBy(['Gpmt_Appel_Pre']);
+            $temp = $temp->map(function ($calls, $index) {
+                $totalZone = $calls->reduce(function ($carry, $call) {
+                    return $carry + $call->count;
+                }, 0);
+                return $calls->map(function ($call) use ($index, $totalZone) {
+                    $call->$index = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
+                    return $call;
+                });
+            });
+            $regions = $temp->flatten();
+
+            $regions = $regions->groupBy('produit');
+            $regions = $regions->map(function ($region) use ($keys) {
+                $row = new \stdClass();
+                $row->values = [];
+
+                $col_arr = $keys->all();
+                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
+                    $row->Gpmt_Appel_Pre = $call->produit;
+                    $Gpmt_Appel_Pre = $call->Gpmt_Appel_Pre;
+                    $row->$Gpmt_Appel_Pre = $call->count . '|' . $call->$Gpmt_Appel_Pre . '%';
+                    $row->values[$Gpmt_Appel_Pre] = $call->count;
+                    $col_arr = array_diff($col_arr, [$Gpmt_Appel_Pre]);
+                    return $row;
+                });
+
+                $_item = $items->last();
+
+                $index = count($_item->values);
+                foreach ($col_arr as $col) {
+                    $_item->values[$col] = 0;
+                    $_item->$col = '0';
+                }
+
+                ksort($_item->values);
+
+                $_item->values = collect($_item->values)->values();
+
+                return $_item;
+            });
+            $regions = $regions->values();
+
+            return ['data' => $regions];
+        }
+    }
+
 
 
     public function importStats($request)

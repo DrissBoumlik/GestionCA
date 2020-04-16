@@ -351,7 +351,7 @@
                 </div>
             @endif
 
-            @if($agence && !$agence == '0 - DOIDF')
+            @if($agence && $agence != '0 - DOIDF')
                 <div class="row ">
                     <div class="col-12">
                         <div class="card">
@@ -359,17 +359,17 @@
                                 <h3 class="card-title d-inline-block">Répartition Joignabilité par type par département</h3>
                                 <hr>
                                 <div class="refresh-form">
-                                    <div id="tree-view-08" class="tree-view d-inline-flex"></div>
-                                    <div id="RepJoiDepartement-filter"
+                                    <div id="tree-view-10" class="tree-view d-inline-flex"></div>
+                                    <div id="RepJoiAutreDepartement-filter"
                                          class="CallResultPrealable-filter d-inline-flex"></div>
-                                    <button type="button" id="refreshRepJoiDepartement" class="btn btn-primary float-right d-none">
+                                    <button type="button" id="refreshRepJoiAutreDepartement" class="btn btn-primary float-right d-none">
                                         <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                     </button>
                                 </div>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body table-responsive">
-                                <table id="statesRepJoiDepartement"
+                                <table id="statesRepJoiAutreDepartement"
                                        class="table table-bordered table-striped table-valign-middle capitalize">
                                 </table>
                             </div>
@@ -379,7 +379,7 @@
                     </div>
                     <!-- /.col -->
                     <div class="col-12">
-                        <canvas id="statesRepJoiDepartementChart" class=""></canvas>
+                        <canvas id="statesRepJoiAutreDepartementChart" class=""></canvas>
                     </div>
                     <!-- /.col -->
                 </div>

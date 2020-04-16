@@ -353,7 +353,7 @@ $(function () {
     }
 
     let statesRepJoiDepartement = {
-        columnName: 'Resultat_Appel',
+        columnName: 'Nom_Agence',
         rowName: 'Code_Type_Intervention',
         element_dt: undefined,
         element: 'statesRepJoiDepartement',
@@ -376,7 +376,7 @@ $(function () {
         },
         children: [],
         objDetail: {
-            columnName: 'Resultat_Appel',
+            columnName: 'Nom_Agence',
             rowName: 'Code_Type_Intervention',
             element_dt: undefined,
             element: undefined,
@@ -407,6 +407,71 @@ $(function () {
         $('#refreshRegions').on('click', function () {
             toggleLoader($('#refreshRepTypeIntervention').parents('.col-12'));
             getColumns(statesRepJoiDepartement, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: true,
+                removeTotalColumn: false,
+                pagination: false,
+                searching : false
+            });
+        });
+    }
+
+    let statesRepJoiAutreDepartement = {
+        columnName: 'Gpmt_Appel_Pre',
+        rowName: 'Code_Type_Intervention',
+        element_dt: undefined,
+        element: 'statesRepJoiAutreDepartement',
+        columns: undefined,
+        data: undefined,
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-10', rows: '#RepJoiAutreDepartement-filter'},
+        filterQuery: {
+            appCltquery: true,
+        },
+        rowIndex : undefined,
+        highlightedRow : undefined,
+        routeCol: 'RepJoiAutreDepartement/columns',
+        routeData: 'RepJoiAutreDepartement',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statesRepJoiAutreDepartementChart',
+            data: undefined,
+            chartTitle: 'It gonna be change after'
+        },
+        children: [],
+        objDetail: {
+            columnName: 'Gpmt_Appel_Pre',
+            rowName: 'Code_Type_Intervention',
+            element_dt: undefined,
+            element: undefined,
+            columns: undefined,
+            filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+            filterElement: undefined,
+            filterQuery: {
+            },
+            routeCol: 'RepJoiAutreDepartement/details/columns',
+            routeData: 'RepJoiAutreDepartement/details',
+            objChart: {
+                element_chart: undefined,
+                element_id: undefined,
+                data: undefined,
+                chartTitle: 'It gonna be change after'
+            },
+        }
+    };
+    if (elementExists(statesRepJoiAutreDepartement)) {
+        getColumns(statesRepJoiAutreDepartement, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: true,
+            removeTotalColumn: false,
+            pagination: false,
+            searching : false
+        });
+        $('#refreshRegions').on('click', function () {
+            toggleLoader($('#refreshRepTypeIntervention').parents('.col-12'));
+            getColumns(statesRepJoiAutreDepartement, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
                 details: true,

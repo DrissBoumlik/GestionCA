@@ -165,6 +165,10 @@ Route::group([
     Route::get('RepJoiDepartement/details', 'StatsController@getRepJoiDepartementGrpCall');
     Route::get('RepJoiDepartement/details/columns', 'StatsController@getRepJoiDepartementColumnGrpCall');
 
+    Route::get('RepJoiAutreDepartement', 'StatsController@getRepJoiAutreDepartement');
+    Route::get('RepJoiAutreDepartement/columns', 'StatsController@getRepJoiAutreDepartementColumn');
+    Route::get('RepJoiAutreDepartement/details', 'StatsController@getRepJoiAutreDepartementGrpCall');
+    Route::get('RepJoiAutreDepartement/details/columns', 'StatsController@getRepJoiAutreDepartementColumnGrpCall');
 
     Route::get('Export/ExportXls', 'StatsController@exportXls')->name('ExportXls');
 

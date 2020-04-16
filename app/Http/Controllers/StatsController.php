@@ -298,6 +298,30 @@ class StatsController extends Controller
         return DataTables::of($data['data'])->toJson();
     }
 
+    public function getRepJoiAutreDepartementColumn(Request $request)
+    {
+        $data = $this->statsRepository->GetColumnsRepJoiAutreDepartement($request);
+        return $data;
+    }
+
+    public function getRepJoiAutreDepartement(Request $request)
+    {
+        $data = $this->statsRepository->getRepJoiAutreDepartement($request);
+        return DataTables::of($data['data'])->toJson();
+    }
+
+    public function getRepJoiAutreDepartementColumnGrpCall(Request $request)
+    {
+        $data = $this->statsRepository->GetColumnsRepJoiAutreDepartementGrpCall($request);
+        return $data;
+    }
+
+    public function getRepJoiAutreDepartementGrpCall(Request $request)
+    {
+        $data = $this->statsRepository->getRepJoiAutreDepartementGrpCall($request);
+        return DataTables::of($data['data'])->toJson();
+    }
+
     //endregion
 
 
