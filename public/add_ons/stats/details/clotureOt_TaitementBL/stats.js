@@ -271,9 +271,139 @@ $(function () {
             });
         });
     }
+
+    let statsValTypeIntervention = {
+        columnName: 'Resultat_Appel',
+        rowName: 'Code_Type_Intervention',
+        element_dt: undefined,
+        element: 'statsValTypeIntervention',
+        columns: undefined,
+        data: undefined,
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-06', rows: '#stats-groupement-filter'},
+        filterQuery: {
+            appCltquery: true,
+        },
+        rowIndex : undefined,
+        highlightedRow : undefined,
+        routeCol: 'ValTypeIntervention/columns',
+        routeData: 'ValTypeIntervention',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsValTypeInterventionChart',
+            data: undefined,
+            chartTitle: 'It gonna be change after'
+        },
+        children: [],
+        objDetail: {
+            columnName: 'Resultat_Appel',
+            rowName: 'Code_Type_Intervention',
+            element_dt: undefined,
+            element: undefined,
+            columns: undefined,
+            filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+            filterElement: undefined,
+            filterQuery: {
+            },
+            routeCol: 'ValTypeIntervention/details/columns',
+            routeData: 'ValTypeIntervention/details',
+            objChart: {
+                element_chart: undefined,
+                element_id: undefined,
+                data: undefined,
+                chartTitle: 'It gonna be change after'
+            },
+        }
+    };
+    if (elementExists(statsValTypeIntervention)) {
+        getColumns(statsValTypeIntervention, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: true,
+            removeTotalColumn: false,
+            pagination: false,
+            searching : false
+        });
+        $('#refreshRegions').on('click', function () {
+            toggleLoader($('#refreshValTypeIntervention').parents('.col-12'));
+            getColumns(statsValTypeIntervention, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: true,
+                removeTotalColumn: false,
+                pagination: false,
+                searching : false
+            });
+        });
+    }
+
+    let statsRepTypeIntervention = {
+        columnName: 'Resultat_Appel',
+        rowName: 'Code_Type_Intervention',
+        element_dt: undefined,
+        element: 'statsRepTypeIntervention',
+        columns: undefined,
+        data: undefined,
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-07', rows: '#stats-groupement-filter'},
+        filterQuery: {
+            appCltquery: true,
+        },
+        rowIndex : undefined,
+        highlightedRow : undefined,
+        routeCol: 'RepTypeIntervention/columns',
+        routeData: 'RepTypeIntervention',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsRepTypeInterventionChart',
+            data: undefined,
+            chartTitle: 'It gonna be change after'
+        },
+        children: [],
+        objDetail: {
+            columnName: 'Resultat_Appel',
+            rowName: 'Code_Type_Intervention',
+            element_dt: undefined,
+            element: undefined,
+            columns: undefined,
+            filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+            filterElement: undefined,
+            filterQuery: {
+            },
+            routeCol: 'RepTypeIntervention/details/columns',
+            routeData: 'RepTypeIntervention/details',
+            objChart: {
+                element_chart: undefined,
+                element_id: undefined,
+                data: undefined,
+                chartTitle: 'It gonna be change after'
+            },
+        }
+    };
+    if (elementExists(statsRepTypeIntervention)) {
+        getColumns(statsRepTypeIntervention, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: true,
+            removeTotalColumn: false,
+            pagination: false,
+            searching : false
+        });
+        $('#refreshRegions').on('click', function () {
+            toggleLoader($('#refreshRepTypeIntervention').parents('.col-12'));
+            getColumns(statsRepTypeIntervention, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: true,
+                removeTotalColumn: false,
+                pagination: false,
+                searching : false
+            });
+        });
+    }
     //</editor-fold>
 
-    let globalElements = [userObject, statsCallsCloture, statsFoldersByType, statsFoldersByCode, statsColturetech, statsGlobalDelay];
+    let globalElements = [userObject, statsCallsCloture, statsFoldersByType, statsFoldersByCode, statsColturetech, statsGlobalDelay,statsValTypeIntervention,statsRepTypeIntervention];
 
     detailClick = false;
 
@@ -330,6 +460,23 @@ $(function () {
             removeTotalColumn: false,
             pagination: false
         });
+        getColumns(statsValTypeIntervention, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: true,
+            removeTotalColumn: false,
+            pagination: false,
+            searching : false
+        });
+
+        getColumns(statsRepTypeIntervention, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: true,
+            removeTotalColumn: false,
+            pagination: false,
+            searching : false
+        });
     });
 //</editor-fold>
     $("#printElement").on("click", function () {
@@ -341,6 +488,8 @@ $(function () {
             let statsFoldersByCodeChart = document.getElementById('statsFoldersByCodeChart');
             let statsColturetechChart = document.getElementById('statsColturetechChart');
             let statsGlobalDelayChart = document.getElementById('statsGlobalDelayChart');
+            let statsValTypeInterventionChart = document.getElementById('statsValTypeInterventionChart');
+            let statsRepTypeInterventionChart = document.getElementById('statsRepTypeInterventionChart');
 
             //creates image
             let statsCallsClotureChartImg = statsCallsClotureChart.toDataURL("image/png", 1.0);
@@ -348,6 +497,8 @@ $(function () {
             let statsFoldersByCodeChartImg = statsFoldersByCodeChart.toDataURL("image2/png", 1.0);
             let statsColturetechChartImg = statsColturetechChart.toDataURL("image3/png", 1.0);
             let statsGlobalDelayChartImg = statsGlobalDelayChart.toDataURL("image4/png", 1.0);
+            let statsValTypeInterventionChartImg = statsValTypeInterventionChart.toDataURL("image3/png", 1.0);
+            let statsRepTypeInterventionChartImg = statsRepTypeInterventionChart.toDataURL("image4/png", 1.0);
 
             //creates PDF from img
             let doc = new jsPDF('p', 'pt', [ 842,  842]);
@@ -369,6 +520,14 @@ $(function () {
             doc.text(10, 390 , 'Délai global de traitement OT');
             doc.autoTable({html: '#statsGlobalDelay',pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0} });
             doc.addImage(statsGlobalDelayChartImg, 'JPEG',532 , 400 , 350 , 300);
+            doc.addPage();
+            doc.text(10, 20 , 'Résultat Validation par Type Intervention');
+            doc.autoTable({html: '#statsValTypeIntervention', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520 });
+            doc.addImage(statsValTypeInterventionChartImg, 'JPEG',532, 30 , 350 , 300);
+            doc.text(10, 390 , 'Répartition Codes Intervention par Type Intervention');
+            doc.autoTable({html: '#statsRepTypeIntervention',pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0} });
+            doc.addImage(statsRepTypeInterventionChartImg, 'JPEG',532 , 400 , 350 , 300);
+
             doc.save('Appels Clôture.pdf');
 
             toggleLoader($('body'), true);
