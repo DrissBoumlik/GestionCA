@@ -2825,7 +2825,7 @@ class StatsRepository
 
         $regions = \DB::table('stats as st')
             ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'), 'Code_Intervention')
-            ->where('Groupement', 'like', 'Appels clôture')
+            ->where('Groupement', '=', 'Appels clôture')
             ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);

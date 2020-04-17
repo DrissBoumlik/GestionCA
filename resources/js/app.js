@@ -363,7 +363,7 @@ frLang = {
                 width: '10%'
             });
         }
-
+        console.log("start for" + object.element);
         return table.DataTable({
             destroy: true,
             language: frLang,
@@ -380,6 +380,7 @@ frLang = {
             },
             columns: object.columns,
             initComplete: function (settings, response) {
+                console.log("done for" + object.element);
                 ajaxRequests--;
                 object.data = [...response.data];
                 if (ajaxRequests === 0) {
