@@ -177,4 +177,10 @@ Route::group([
 
     Route::get('stats/import-stats/data/count', 'ToolController@getInsertedData');
     Route::get('stats/import-stats/status/edit/{flag}', 'ToolController@editImportingStatus');
+
+    Route::get('/globalView', 'StatsController@getGlobalView');
+    Route::get('/globalView/columns', 'StatsController@getGlobalViewColumns');
+
+    Route::get('/globalView/details', 'StatsController@getGlobalViewDetails');
+    Route::get('/globalView/details/columns', 'StatsController@getGlobalViewDetailsColumns');
 });

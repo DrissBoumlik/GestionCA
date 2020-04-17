@@ -109,7 +109,7 @@ $(function () {
             details: true,
             removeTotalColumn: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         $('#refreshRegions').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -119,7 +119,7 @@ $(function () {
                 details: true,
                 removeTotalColumn: false,
                 pagination: false,
-                searching : false
+                searching: false
             });
         });
     }
@@ -153,7 +153,7 @@ $(function () {
             refreshMode: false,
             details: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         $('#refreshFolders').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -163,7 +163,7 @@ $(function () {
                 removeTotalColumn: false,
                 details: false,
                 pagination: false,
-                searching : false
+                searching: false
             });
         });
     }
@@ -200,7 +200,7 @@ $(function () {
             refreshMode: false,
             details: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         $('#refreshCallStatesAgencies').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -210,7 +210,7 @@ $(function () {
                 removeTotalColumn: true,
                 details: false,
                 pagination: false,
-                searching : false
+                searching: false
             });
         });
     }
@@ -246,7 +246,7 @@ $(function () {
             refreshMode: false,
             details: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         $('#refreshCallStatesWeeks').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -256,7 +256,7 @@ $(function () {
                 removeTotalColumn: true,
                 details: false,
                 pagination: false,
-                searching : false
+                searching: false
             });
         });
     }
@@ -294,7 +294,7 @@ $(function () {
             removeTotalColumn: true,
             details: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         $('#refreshCallResultPos').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -304,7 +304,7 @@ $(function () {
                 details: false,
                 removeTotalColumn: true,
                 pagination: false,
-                searching : false
+                searching: false
             });
         });
     }
@@ -340,7 +340,7 @@ $(function () {
             removeTotalColumn: true,
             details: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         $('#refreshCallResultNeg').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -350,7 +350,7 @@ $(function () {
                 details: false,
                 removeTotalColumn: true,
                 pagination: false,
-                searching : false
+                searching: false
             });
         });
     }
@@ -397,7 +397,7 @@ $(function () {
                 details: false,
                 removeTotalColumn: false,
                 pagination: false,
-                searching : false
+                searching: false
             });
         });
     }
@@ -442,7 +442,7 @@ $(function () {
                 details: false,
                 removeTotalColumn: false,
                 pagination: false,
-                searching : false
+                searching: false
             });
         });
     }
@@ -479,7 +479,7 @@ $(function () {
             refreshMode: false,
             details: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         $('#refreshPerimeters').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -489,7 +489,7 @@ $(function () {
                 removeTotalColumn: true,
                 details: false,
                 pagination: false,
-                searching : false
+                searching: false
             });
         });
     }
@@ -504,7 +504,7 @@ $(function () {
         filterElement: {dates: '#tree-view-02', rows: ''},
         filterQuery: {
             appCltquery: true,
-            queryJoin : ' and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE is not null'
+            queryJoin: ' and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE is not null'
         },
         routeCol: 'Cloturetech/columns?key_groupement=Appels clôture',
         routeData: 'Cloturetech?key_groupement=Appels clôture',
@@ -522,7 +522,7 @@ $(function () {
             details: false,
             removeTotalColumn: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         $('#refreshColturetech').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -532,7 +532,7 @@ $(function () {
                 details: false,
                 removeTotalColumn: false,
                 pagination: false,
-                searching : false
+                searching: false
             });
         });
     }
@@ -548,7 +548,7 @@ $(function () {
         filterElement: {dates: '#tree-view-03', rows: ''},
         filterQuery: {
             appCltquery: true,
-            queryJoin : ' and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE is not null'
+            queryJoin: ' and EXPORT_ALL_Date_VALIDATION is not null and EXPORT_ALL_Date_SOLDE is not null'
         },
         routeCol: 'GlobalDelay/columns?key_groupement=Appels clôture',
         routeData: 'GlobalDelay?key_groupement=Appels clôture',
@@ -566,7 +566,7 @@ $(function () {
             details: false,
             removeTotalColumn: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         $('#refreshGlobalDelay').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -576,7 +576,7 @@ $(function () {
                 details: false,
                 removeTotalColumn: false,
                 pagination: false,
-                searching : false
+                searching: false
             });
         });
     }
@@ -609,7 +609,7 @@ $(function () {
             details: false,
             removeTotalColumn: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         $('#refreshProcessingDelay').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -619,7 +619,7 @@ $(function () {
                 details: false,
                 removeTotalColumn: false,
                 pagination: false,
-                searching : false
+                searching: false
             });
         });
     }
@@ -636,8 +636,8 @@ $(function () {
         filterQuery: {
             appCltquery: true,
         },
-        rowIndex : undefined,
-        highlightedRow : undefined,
+        rowIndex: undefined,
+        highlightedRow: undefined,
         routeCol: 'TypeIntervention/columns',
         routeData: 'TypeIntervention',
         objChart: {
@@ -655,8 +655,7 @@ $(function () {
             columns: undefined,
             filterTree: {dates: [], rows: [], datesTreeObject: undefined},
             filterElement: undefined,
-            filterQuery: {
-            },
+            filterQuery: {},
             routeCol: 'TypeIntervention/details/columns',
             routeData: 'TypeIntervention/details',
             objChart: {
@@ -674,7 +673,7 @@ $(function () {
             details: true,
             removeTotalColumn: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         $('#refreshRegions').on('click', function () {
             toggleLoader($('#refreshTypeIntervention').parents('.col-12'));
@@ -684,14 +683,100 @@ $(function () {
                 details: true,
                 removeTotalColumn: false,
                 pagination: false,
-                searching : false
+                searching: false
             });
         });
     }
     //</editor-fold>
 
 
-    let globalElements = [userObject, statsRegions, statsFolders, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, statsFoldersByType, statsFoldersByCode, statsPerimeters,statsColturetech,statsGlobalDelay,statsProcessingDelay,statsTypeIntervention];
+    //<editor-fold desc="Global View">
+    let globalView = {
+        columnName: 'Groupement',
+        rowName: 'Produit',
+        element_dt: undefined,
+        element: 'globalViewTable',
+        columns: undefined,
+        data: undefined,
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-06', rows: '#global-view-filter'},
+        filterQuery: {
+            queryJoin: ' AND Groupement IS NOT NULL AND Groupement not LIKE "Non renseigné" AND Groupement not LIKE "Appels post" AND Code_Type_Intervention NOT LIKE "%AUTRE%" AND Produit != "" ',
+            subGroupBy: ' GROUP BY Id_Externe, Groupement, Nom_Region ) groupedst ',
+            queryGroupBy: 'group by st.Id_Externe, Groupement, Nom_Region'
+        },
+        routeCol: 'globalView/columns',
+        routeData: 'globalView',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'globalViewChart',
+            data: undefined,
+            chartTitle: 'Vue Global IDF'
+        },
+        children: [],
+        objDetail: {
+            columnName: 'Groupement',
+            rowName: 'Produit',
+            element_dt: undefined,
+            element: undefined,
+            columns: undefined,
+            filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+            filterElement: undefined,
+            filterQuery: {
+                queryJoin: ' and Resultat_Appel not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"',
+                subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel) groupedst ',
+                queryGroupBy: 'group by st.Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel'
+            },
+            routeCol: 'globalView/details/columns',
+            routeData: 'globalView/details',
+            objChart: {
+                element_chart: undefined,
+                element_id: undefined,
+                data: undefined,
+                chartTitle: 'Vue Global IDF'
+            },
+        }
+    };
+    if (elementExists(globalView)) {
+        getColumns(globalView, filterData(), {
+            removeTotalColumn: true,
+            removeTotal: false,
+            refreshMode: false,
+            details: true,
+            pagination: false,
+            searching: false
+        });
+        $('#refreshglobalView').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
+            getColumns(globalView, filterData(), {
+                removeTotalColumn: true,
+                removeTotal: false,
+                refreshMode: true,
+                details: true,
+                pagination: false,
+                searching: false
+            });
+        });
+    }
+    //</editor-fold>
+
+
+    let globalElements = [
+        userObject,
+        statsRegions,
+        statsFolders,
+        callsStatesAgencies,
+        callsStatesWeeks,
+        statscallsPos,
+        statscallsNeg,
+        statsFoldersByType,
+        statsFoldersByCode,
+        statsPerimeters, statsColturetech,
+        statsGlobalDelay,
+        statsProcessingDelay,
+        statsTypeIntervention,
+        globalView
+    ];
 
     detailClick = false;
 
@@ -710,7 +795,7 @@ $(function () {
         toggleLoader($(this).parents('.col-12'));
 
         globalElements.map(function (element) {
-            if($(element.filterElement.dates).length){
+            if ($(element.filterElement.dates).length) {
                 element.filterTree.dates = userObject.filterTree.dates;
                 element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
             }
@@ -722,7 +807,7 @@ $(function () {
             details: true,
             removeTotalColumn: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         getColumns(statsFolders, filterData(), {
             removeTotal: false,
@@ -730,7 +815,7 @@ $(function () {
             details: false,
             removeTotalColumn: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         getColumns(callsStatesAgencies, filterData(), {
             removeTotal: false,
@@ -738,7 +823,7 @@ $(function () {
             details: false,
             removeTotalColumn: true,
             pagination: false,
-            searching : false
+            searching: false
         });
         getColumns(callsStatesWeeks, filterData(), {
             removeTotal: false,
@@ -746,7 +831,7 @@ $(function () {
             details: false,
             removeTotalColumn: true,
             pagination: false,
-            searching : false
+            searching: false
         });
         getColumns(statscallsPos, filterData(), {
             removeTotal: false,
@@ -754,7 +839,7 @@ $(function () {
             details: false,
             removeTotalColumn: true,
             pagination: false,
-            searching : false
+            searching: false
         });
         getColumns(statscallsNeg, filterData(), {
             removeTotal: false,
@@ -762,7 +847,7 @@ $(function () {
             details: false,
             removeTotalColumn: true,
             pagination: false,
-            searching : false
+            searching: false
         });
         getColumns(statsFoldersByType, filterData(), {
             removeTotal: false,
@@ -770,7 +855,7 @@ $(function () {
             details: false,
             removeTotalColumn: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         getColumns(statsFoldersByCode, filterData(), {
             removeTotal: false,
@@ -778,7 +863,7 @@ $(function () {
             details: false,
             removeTotalColumn: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         getColumns(statsPerimeters, filterData(), {
             removeTotal: false,
@@ -786,7 +871,7 @@ $(function () {
             details: false,
             removeTotalColumn: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         getColumns(statsColturetech, filterData(), {
             removeTotal: false,
@@ -794,7 +879,7 @@ $(function () {
             details: false,
             removeTotalColumn: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         getColumns(statsGlobalDelay, filterData(), {
             removeTotal: false,
@@ -802,24 +887,34 @@ $(function () {
             details: false,
             removeTotalColumn: false,
             pagination: false,
-            searching : false
+            searching: false
         });
+        if (elementExists(globalView)) {
+            getColumns(globalView, filterData(), {
+                removeTotalColumn: true,
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                pagination: false,
+                searching: false
+            });
+        }
         if (elementExists(statsProcessingDelay)) {
-        getColumns(statsProcessingDelay, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: false,
-            pagination: false,
-            searching : false
-        });
+            getColumns(statsProcessingDelay, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: false,
+                pagination: false,
+                searching: false
+            });
             getColumns(statsTypeIntervention, filterData(), {
                 removeTotal: false,
                 refreshMode: false,
                 details: true,
                 removeTotalColumn: false,
                 pagination: false,
-                searching : false
+                searching: false
             });
         }
     });

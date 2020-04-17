@@ -325,6 +325,29 @@ class StatsController extends Controller
     //endregion
 
 
+    public function getGlobalViewColumns(Request $request)
+    {
+        return $this->statsRepository->GetColumnsGlobalView($request);
+    }
+
+    public function getGlobalView(Request $request)
+    {
+        $data = $this->statsRepository->GetDataGlobalView($request);
+        return DataTables::of($data['data'])->toJson();
+    }
+
+    public function getGlobalViewDetailsColumns(Request $request)
+    {
+        return $this->statsRepository->GetColumnsGlobalViewDetails($request);
+    }
+
+    public function getGlobalViewDetails(Request $request)
+    {
+        $data = $this->statsRepository->GetDataGlobalViewDetails($request);
+        return DataTables::of($data['data'])->toJson();
+    }
+
+
     //region Import / Export
     public function import()
     {

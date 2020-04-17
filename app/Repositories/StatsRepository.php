@@ -333,7 +333,6 @@ class StatsRepository
 
                 $_item = $item->last();
 //                dd($_item);
-                $index = count($_item->values);
                 foreach ($col_arr as $col) {
                     $_item->values[$col] = 0;
                     $_item->$col = '0%';
@@ -527,7 +526,6 @@ class StatsRepository
                 });
                 $_item = $items->last();
 
-                $index = count($_item->values);
                 foreach ($col_arr as $col) {
                     $_item->values[$col] = 0;
                     $_item->$col = '0%';
@@ -782,7 +780,6 @@ class StatsRepository
                     return $row;
                 });
                 $_item = $item->last();
-                $index = count($_item->values);
                 foreach ($col_arr as $col) {
                     $_item->values[$col] = 0; //'0%';
                     $_item->$col = 0; //'0%';
@@ -1053,7 +1050,6 @@ class StatsRepository
                     return $row;
                 });
                 $_item = $item->last();
-                $index = count($_item->values);
                 foreach ($col_arr as $col) {
                     $_item->values[$col] = 0;
                     $_item->$col = '0%';
@@ -1273,7 +1269,6 @@ class StatsRepository
                     return $row;
                 });
                 $_item = $item->last();
-                $index = count($_item->values);
                 foreach ($col_arr as $col) {
                     $_item->values[$col] = 0; //'0%';
                     $_item->$col = '0';
@@ -1494,7 +1489,6 @@ class StatsRepository
                     return $row;
                 });
                 $_item = $item->last();
-                $index = count($_item->values);
                 foreach ($col_arr as $col) {
                     $_item->values[$col] = 0; //'0%';
                     $_item->$col = 0; //'0%';
@@ -1763,7 +1757,6 @@ class StatsRepository
                     return $row;
                 });
                 $_item = $item->last();
-                $index = count($_item->values);
                 foreach ($col_arr as $col) {
                     $_item->values[$col] = 0;
                     $_item->$col = '0%';
@@ -1914,7 +1907,6 @@ class StatsRepository
 
                 $_item = $items->last();
 
-                $index = count($_item->values);
                 foreach ($col_arr as $col) {
                     $_item->values[$col] = 0;
                     $_item->$col = '0';
@@ -2052,7 +2044,6 @@ class StatsRepository
 
                 $_item = $items->last();
 
-                $index = count($_item->values);
                 foreach ($col_arr as $col) {
                     $_item->values[$col] = 0;
                     $_item->$col = '0';
@@ -2225,7 +2216,6 @@ class StatsRepository
 
                 $_item = $items->last();
 
-                $index = count($_item->values);
                 foreach ($col_arr as $col) {
                     $_item->values[$col] = 0;
                     $_item->$col = '0';
@@ -2255,7 +2245,7 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select('produit')
             ->distinct()
-            ->where('produit','!=','');
+            ->where('produit', '!=', '');
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2305,8 +2295,8 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
 
         $regions = \DB::table('stats as st')
-            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'),'produit')
-            ->where('produit','!=','');
+            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'), 'produit')
+            ->where('produit', '!=', '');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2354,7 +2344,6 @@ class StatsRepository
 
                 $_item = $items->last();
 
-                $index = count($_item->values);
                 foreach ($col_arr as $col) {
                     $_item->values[$col] = 0;
                     $_item->$col = '0';
@@ -2437,7 +2426,7 @@ class StatsRepository
         $regions = \DB::table('stats as st')
             ->select('Code_Type_Intervention', 'Nom_Region', \DB::raw('count(distinct st.Id_Externe) as count'))
             ->whereNotNull('Nom_Region')
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2486,7 +2475,6 @@ class StatsRepository
 
                 $_item = $items->last();
 
-                $index = count($_item->values);
                 foreach ($col_arr as $col) {
                     $_item->values[$col] = 0;
                     $_item->$col = '0';
@@ -2515,8 +2503,8 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select('Resultat_Appel')
             ->distinct()
-            ->where('Groupement','like','Appels clôture')
-            ->whereIn('Resultat_Appel',['Appels clôture - Validé conforme','Appels clôture - CRI non conforme']);
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme']);
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2566,9 +2554,9 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
 
         $regions = \DB::table('stats as st')
-            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'),'Resultat_Appel')
-            ->where('Groupement','like','Appels clôture')
-            ->whereIn('Resultat_Appel',['Appels clôture - Validé conforme','Appels clôture - CRI non conforme']);
+            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'), 'Resultat_Appel')
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme']);
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2646,9 +2634,9 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select('Resultat_Appel')
             ->distinct()
-            ->where('Groupement','like','Appels clôture')
-            ->whereIn('Resultat_Appel',['Appels clôture - Validé conforme','Appels clôture - CRI non conforme'])
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme'])
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2699,10 +2687,10 @@ class StatsRepository
 
 
         $regions = \DB::table('stats as st')
-            ->select('Code_Type_Intervention', 'Resultat_Appel',\DB::raw('count(distinct st.Id_Externe) as count'))
-            ->where('Groupement','like','Appels clôture')
-            ->whereIn('Resultat_Appel',['Appels clôture - Validé conforme','Appels clôture - CRI non conforme'])
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+            ->select('Code_Type_Intervention', 'Resultat_Appel', \DB::raw('count(distinct st.Id_Externe) as count'))
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme'])
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2780,7 +2768,7 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select('Code_Intervention')
             ->distinct()
-            ->where('Groupement','like','Appels clôture');
+            ->where('Groupement', 'like', 'Appels clôture');
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2830,8 +2818,8 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
 
         $regions = \DB::table('stats as st')
-            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'),'Code_Intervention')
-            ->where('Groupement','like','Appels clôture');
+            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'), 'Code_Intervention')
+            ->where('Groupement', 'like', 'Appels clôture');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2907,8 +2895,8 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select('Code_Intervention')
             ->distinct()
-            ->where('Groupement','like','Appels clôture')
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');;
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2959,9 +2947,9 @@ class StatsRepository
 
 
         $regions = \DB::table('stats as st')
-            ->select('Code_Type_Intervention', 'Code_Intervention',\DB::raw('count(distinct st.Id_Externe) as count'))
-            ->where('Groupement','like','Appels clôture')
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+            ->select('Code_Type_Intervention', 'Code_Intervention', \DB::raw('count(distinct st.Id_Externe) as count'))
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -3027,538 +3015,474 @@ class StatsRepository
         }
     }
 
-    public function GetColumnsRepJoiDepartement(Request $request, $filter = null)
+
+    public function GetColumnsGlobalView(Request $request)
     {
-        $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
+        $agentName = $request->get('agent_name');
+        $key_groupement = $request->get('key_groupement');
+        $key_groupement = $key_groupement ? clean($key_groupement) : null;
+
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
-        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route, 'Nom_Region');
 
-        $columns = \DB::table('stats as st')
-            ->select(\DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'))
+
+        $results = \DB::table('stats as st')
+            ->select('st.Groupement')
             ->distinct()
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH']);
+            ->whereNotNull('st.Groupement')
+            ->whereNotNull('st.Nom_Region')
+            ->where('st.Groupement', 'not like', 'Non renseigné')
+            ->where('st.Groupement', 'not like', 'Appels post')
+            ->where('Code_Type_Intervention', 'NOT LIKE', '%AUTRE%')
+            ->where('st.Produit', '!=', '')
+            ->whereNull('isNotReady');
+        $results = applyFilter($results, $filter, 'Nom_Region');
 
-        $columns = applyFilter($columns, $filter);
+        if ($key_groupement) {
+            $results = $results->where('key_groupement', 'like', $key_groupement);
+        }
         if ($agentName) {
-            $columns = $columns->where('st.Utilisateur', $agentName);
+            $results = $results->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $columns = $columns->where('st.Nom_Region', 'like', "%$agenceCode");
+            $results = $results->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
-        $keys = $columns->pluck('departement');
+        $rowsKeys = [];
+//        $rowsKeys = \DB::table('stats as st')
+//            ->select('st.Nom_Region')
+//            ->distinct()
+//            ->whereNotNull('st.Groupement')
+//            ->whereNotNull('st.Nom_Region')
+//            ->where('st.Groupement', 'not like', 'Non renseigné')
+//            ->where('st.Groupement', 'not like', 'Appels post')
+//            ->where('Type_Note', 'like', 'CAM')
+//            ->whereNull('isNotReady');
+//        if ($key_groupement) {
+//            $rowsKeys = $rowsKeys->where('key_groupement', 'like', $key_groupement);
+//        }
+//        if ($agentName) {
+//            $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
+//        }
+//        if ($agenceCode) {
+//            $rowsKeys = $rowsKeys->where('st.Nom_Region', 'like', "%$agenceCode");
+//        }
+//        $rowsKeys = $rowsKeys->pluck('Nom_Region');
 
+        $keys = $results->pluck('Groupement');
 
         if (!count($keys)) {
-            $data = ['filter' => $filter, 'columns' => [], 'rows' => [], 'rowsFilterHeader' => ''];
+            $data = ['filter' => $filter, 'columns' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => ''];
             return $data;
         } else {
-            $regions_names = [];
-            $keys->map(function ($key, $index) use (&$regions_names) {
-                $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->data = $key;
-                $regions_names[$index + 1]->name = $key;
-                $regions_names[$index + 1]->text = $key;
-                $regions_names[$index + 1]->title = $key;
+            $column_names = [];
+            $keys->map(function ($key, $index) use (&$column_names) {
+                $column_names[$index + 1] = new \stdClass();
+                $column_names[$index + 1]->text =
+                $column_names[$index + 1]->data =
+                $column_names[$index + 1]->name =
+                $column_names[$index + 1]->title = $key;
+//            $_value = new \stdClass();
+//            $_value->data = $key;
+//            $_value->name = $key;
+//            return $_value;
             });
-            usort($regions_names, function ($item1, $item2) {
+            usort($column_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
-            $first = new \stdClass();
-            $first->title = 'departement';
-            $first->name = 'departement';
-            $first->data = 'departement';
-            $first->orderable = false;
-            array_unshift($regions_names, $first);
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
+//            $header = new \stdClass();
+//            $header->title = 'Code Type Intervention';
+//            $header->text = 'Code Type Intervention';
+//            $header->name = $header->data = 'Code_Type_Intervention';
+//            $header->orderable = false;
+
+            $first = new \stdClass();
+            $first->title = 'Produit';
+            $first->text = 'Produit';
+            $first->name = $first->data = 'Produit';
+            $first->orderable = false;
+            $last = new \stdClass();
+            $last->data =
+            $last->name =
+            $last->text =
+            $last->title = 'total';
+            array_unshift($column_names, $first);
+//            array_unshift($column_names, $header);
+            array_push($column_names, $last);
+
+            $data = ['filter' => $filter, 'columns' => $column_names, 'rows' => $rowsKeys, 'rowsFilterHeader' => ''];
+            return $data;
         }
     }
 
-    public function getRepJoiDepartement(Request $request, $filter = null)
+    public function GetDataGlobalView(Request $request)
     {
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
-        $route_request = $request->get('route');
-        $_route = $route_request ?? getRoute(Route::current());
+        $key_groupement = $request->get('key_groupement');
+        $key_groupement = $key_groupement ? clean($key_groupement) : null;
+
+        $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
-        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route, 'Nom_Region');
 
-        $regions = \DB::table('stats as st')
-            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'),
-                \DB::raw('count(distinct st.Id_Externe) as count'))
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH']);
 
-        $regions = applyFilter($regions, $filter);
+        $results = \DB::table('stats as st')
+            ->select(\DB::raw('case
+                       when Code_Type_Intervention like "%MAINTENANCE%" then "MAINTENANCE"
+                       when Code_Type_Intervention like "%PRODUCTION%" then "PRODUCTION"
+                       end as "cti"'), 'Produit', 'st.Groupement', \DB::raw('count(distinct st.Id_Externe) as total'))
+            ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime,
+                groupement , Nom_Region
+            FROM stats
+             where Groupement IS NOT NULL
+             AND Nom_Region IS NOT NULL
+             AND Code_Type_Intervention NOT LIKE "%AUTRE%"
+             AND Produit != ""
+             AND Groupement not LIKE "Non renseigné"
+             AND Groupement not LIKE "Appels post"' .
+                ' and ' . $queryFilters .
+                ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+                ($key_groupement ? 'and key_groupement like "' . $key_groupement . '"' : '') .
+                ' and isNotReady is null ' .
+                ' GROUP BY Id_Externe, Groupement, Nom_Region ) groupedst'),
+                function ($join) {
+                    $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
+                    $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
+                    $join->on('st.Groupement', '=', 'groupedst.Groupement');
+                    $join->on('st.Nom_Region', '=', 'groupedst.Nom_Region');
+                })
+            ->whereNotNull('st.Groupement')
+            ->whereNotNull('st.Nom_Region')
+            ->where('Code_Type_Intervention', 'NOT LIKE', '%AUTRE%')
+            ->where('st.Produit', '!=', '')
+            ->where('st.Groupement', 'not like', 'Non renseigné')
+            ->where('st.Groupement', 'not like', 'Appels post')
+            ->whereNull('isNotReady');
+        $results = applyFilter($results, $filter);
+        if ($key_groupement) {
+            $results = $results->where('key_groupement', 'like', $key_groupement);
+        }
         if ($agentName) {
-            $regions = $regions->where('st.Utilisateur', $agentName);
+            $results = $results->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
+            $results = $results->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
-        $regions = $regions->orderBy('Type_Intervention');
-        $regions = $regions->groupBy('Type_Intervention', 'departement')->get();
-        $keys = $regions->groupBy(['departement'])->keys();
+//        dd($results->groupBy('Nom_Region', 'cti', 'Produit', 'Groupement')->toSql());
 
+        $results = $results->groupBy('st.Nom_Region', 'cti', 'Produit', 'Groupement')->get();
 
-        if (!count($regions)) {
+//        dd($results);
+
+        $keys = $results->groupBy(['Groupement'])->keys();
+
+        if (!count($results)) {
             $data = ['data' => []];
             return $data;
         } else {
-            $temp = $regions->groupBy(['departement']);
-            $temp = $temp->map(function ($calls, $index) {
-                $totalZone = $calls->reduce(function ($carry, $call) {
-                    return $carry + $call->count;
-                }, 0);
-                return $calls->map(function ($call) use ($index, $totalZone) {
-                    $call->$index = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
-                    return $call;
+
+            $temp = $results->groupBy(['cti', 'Produit']);
+
+            $temp = $temp->map(function ($group) {
+                return $group->map(function ($product, $index) {
+                    $totalZone = $product->reduce(function ($carry, $call) {
+                        return $carry + $call->total;
+                    }, 0);
+                    return $product->map(function ($call) use ($index, $totalZone) {
+                        $Code = $call->Groupement;
+                        $call->$index = $call->$Code = $totalZone == 0 ? 0.00 : round($call->total * 100 / $totalZone, 2);
+                        return $call;
+                    });
                 });
             });
-            $regions = $temp->flatten();
+            $results = $temp->flatten();
 
-            $regions = $regions->groupBy('Type_Intervention');
-            $regions = $regions->map(function ($region) use ($keys) {
-                $row = new \stdClass();
-                $row->values = [];
+            $total = new \stdClass();
+            $total->values = [];
+            $results = $results->groupBy(['cti', 'Produit']);
+            $results = $results->map(function ($group, $index) use (&$column_names, &$total, $keys) {
+                return $group->map(function ($product, $index) use (&$column_names, &$total, $keys) {
+                    $row = new \stdClass();
+                    $row->values = [];
+                    $col_arr = $keys->all();
+                    $item = $product->map(function ($grpCall, $index) use (&$row, &$codes_names, &$total, &$col_arr) {
 
-                $col_arr = $keys->all();
-                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
-                    $row->departement = $call->Type_Intervention;
-                    $departement = $call->departement;
-                    $row->$departement = $call->count . '|' . $call->$departement . '%';
-                    $row->values[$departement] = $call->count;
-                    $col_arr = array_diff($col_arr, [$departement]);
-                    return $row;
-                });
+//                        $row->Code_Type_Intervention = $grpCall->cti; // preg_replace('/\_.+/', '', $grpCall->Code_Type_Intervention);
+//                        $row->Produit = $grpCall->Produit;
 
-                $_item = $items->last();
+                        $row->Produit = $grpCall->cti . ' / ' . $grpCall->Produit;
+                        $column_name = $grpCall->Groupement;
+                        $col_arr = array_diff($col_arr, [$column_name]);
+                        $row->values[$column_name] = $grpCall->total;
+                        $row->$column_name = $grpCall->total . '|' . $grpCall->$column_name . '%';
+                        $row->total = isset($row->total) ? $row->total + $grpCall->total : $grpCall->total;
+                        return $row;
+                    });
+                    $_item = $item->last();
+                    foreach ($col_arr as $col) {
+                        $_item->values[$col] = 0; //'0%';
+                        $_item->$col = 0; //'0%';
+                    }
+                    collect($_item->values)->map(function ($value, $index) use (&$total) {
+                        $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
+                        $total->$index = $total->values[$index];
+                    });
+                    ksort($_item->values);
+                    $_item->values = collect($_item->values)->values();
+                    return $_item;
+                })->flatten();
+            })->flatten();
+            $total->Produit = 'Total Général';
+            $total->total = round(array_sum($total->values), 2);
+            $total->values = collect($total->values)->values();
+            $total->isTotal = true;
+//            $results->push($total);
+            $results = $results->values();
 
-                $index = count($_item->values);
-                foreach ($col_arr as $col) {
-                    $_item->values[$col] = 0;
-                    $_item->$col = '0';
-                }
-
-                ksort($_item->values);
-
-                $_item->values = collect($_item->values)->values();
-
-                return $_item;
-            });
-            $regions = $regions->values();
-
-            return ['data' => $regions];
+            $data = ['data' => $results];
+            return $data;
         }
     }
 
-    public function GetColumnsRepJoiDepartementGrpCall(Request $request, $filter = null)
-    {
-        $agentName = $request->get('agent_name');
-        $agenceCode = $request->get('agence_code');
-        $_route = getRoute(Route::current());
-        $key_groupement = $request->get('key_groupement');
-        $route = str_replace('/columns', '', $_route);
-        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
 
-        $columns = \DB::table('stats as st')
-            ->select(\DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'))
+    public function GetColumnsGlobalViewDetails(Request $request)
+    {
+        $agenceCode = $request->get('agence_code');
+        $agentName = $request->get('agent_name');
+        list($cti, $produit) = explode(' / ', $request->get('key_groupement'));
+
+        $_route = getRoute(Route::current());
+        $route = str_replace('/columns', '', $_route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route, 'Nom_Region');
+
+
+        $results = \DB::table('stats as st')
+            ->select('st.Groupement')
             ->distinct()
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH'])
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+            ->whereNotNull('st.Groupement')
+            ->whereNotNull('st.Nom_Region')
+            ->where('st.Groupement', 'not like', 'Non renseigné')
+            ->where('st.Groupement', 'not like', 'Appels post')
+            ->where('Code_Type_Intervention', 'NOT LIKE', '%AUTRE%')
+            ->where('st.Produit', '!=', '')
+            ->whereNull('isNotReady');
+        $results = applyFilter($results, $filter, 'Nom_Region');
 
-        $columns = applyFilter($columns, $filter);
+        if ($cti) {
+            $results = $results->where('Code_Type_Intervention', 'like', '%' . $cti . '%');
+        }
+        if ($produit) {
+            $results = $results->where('Produit', 'like', $produit);
+        }
         if ($agentName) {
-            $columns = $columns->where('st.Utilisateur', $agentName);
+            $results = $results->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $columns = $columns->where('st.Nom_Region', 'like', "%$agenceCode");
+            $results = $results->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
-        $keys = $columns->pluck('departement');
+        $rowsKeys = [];
+//        $rowsKeys = \DB::table('stats as st')
+//            ->select('st.Nom_Region')
+//            ->distinct()
+//            ->whereNotNull('st.Groupement')
+//            ->whereNotNull('st.Nom_Region')
+//            ->where('st.Groupement', 'not like', 'Non renseigné')
+//            ->where('st.Groupement', 'not like', 'Appels post')
+//            ->where('Type_Note', 'like', 'CAM')
+//            ->whereNull('isNotReady');
+//        if ($key_groupement) {
+//            $rowsKeys = $rowsKeys->where('key_groupement', 'like', $key_groupement);
+//        }
+//        if ($agentName) {
+//            $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
+//        }
+//        if ($agenceCode) {
+//            $rowsKeys = $rowsKeys->where('st.Nom_Region', 'like', "%$agenceCode");
+//        }
+//        $rowsKeys = $rowsKeys->pluck('Nom_Region');
+
+        $keys = $results->pluck('Groupement');
 
         if (!count($keys)) {
-            $data = ['filter' => $filter, 'columns' => [], 'rows' => [], 'rowsFilterHeader' => ''];
+            $data = ['filter' => $filter, 'columns' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => ''];
             return $data;
         } else {
-            $regions_names = [];
-            $keys->map(function ($key, $index) use (&$regions_names) {
-                $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->data = $key;
-                $regions_names[$index + 1]->name = $key;
-                $regions_names[$index + 1]->text = $key;
-                $regions_names[$index + 1]->title = $key;
+            $column_names = [];
+            $keys->map(function ($key, $index) use (&$column_names) {
+                $column_names[$index + 1] = new \stdClass();
+                $column_names[$index + 1]->text =
+                $column_names[$index + 1]->data =
+                $column_names[$index + 1]->name =
+                $column_names[$index + 1]->title = $key;
+//            $_value = new \stdClass();
+//            $_value->data = $key;
+//            $_value->name = $key;
+//            return $_value;
             });
-            usort($regions_names, function ($item1, $item2) {
+            usort($column_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
+
+//            $header = new \stdClass();
+//            $header->title = 'Code Type Intervention';
+//            $header->text = 'Code Type Intervention';
+//            $header->name = $header->data = 'Code_Type_Intervention';
+//            $header->orderable = false;
+
             $first = new \stdClass();
-            $first->title = 'departement';
-            $first->name = 'departement';
-            $first->data = 'departement';
+            $first->title = 'Agence';
+            $first->text = 'Agence';
+            $first->name = $first->data = 'Nom_Agence';
             $first->orderable = false;
-            array_unshift($regions_names, $first);
+//            $last = new \stdClass();
+//            $last->data =
+//            $last->name =
+//            $last->text =
+//            $last->title = 'total';
+            array_unshift($column_names, $first);
+//            array_unshift($column_names, $header);
+//            array_push($column_names, $last);
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
-        }
-    }
-
-    public function getRepJoiDepartementGrpCall(Request $request, $filter = null)
-    {
-        $agenceCode = $request->get('agence_code');
-        $agentName = $request->get('agent_name');
-        $route_request = $request->get('route');
-        $key_groupement = $request->get('key_groupement');
-        $_route = $route_request ?? getRoute(Route::current());
-        $route = str_replace('/columns', '', $_route);
-        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
-
-
-        $regions = \DB::table('stats as st')
-            ->select(\DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'), 'produit',\DB::raw('count(distinct st.Id_Externe) as count'))
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH'])
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
-
-        $regions = applyFilter($regions, $filter);
-        if ($agentName) {
-            $regions = $regions->where('st.Utilisateur', $agentName);
-        }
-        if ($agenceCode) {
-            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
-        }
-
-        $regions = $regions->orderBy('produit');
-        //dd($regions->groupBy('Code_Type_Intervention', 'Nom_Region')->toSql(), $regions->getBindings());
-        $regions = $regions->groupBy('produit', 'departement')->get();
-        $keys = $regions->groupBy(['departement'])->keys();
-
-
-        if (!count($regions)) {
-            $data = ['data' => []];
+            $data = ['filter' => $filter, 'columns' => $column_names, 'rows' => $rowsKeys, 'rowsFilterHeader' => ''];
             return $data;
-        } else {
-            $temp = $regions->groupBy(['departement']);
-            $temp = $temp->map(function ($calls, $index) {
-                $totalZone = $calls->reduce(function ($carry, $call) {
-                    return $carry + $call->count;
-                }, 0);
-                return $calls->map(function ($call) use ($index, $totalZone) {
-                    $call->$index = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
-                    return $call;
-                });
-            });
-            $regions = $temp->flatten();
-
-            $regions = $regions->groupBy('produit');
-            $regions = $regions->map(function ($region) use ($keys) {
-                $row = new \stdClass();
-                $row->values = [];
-
-                $col_arr = $keys->all();
-                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
-                    $row->departement = $call->produit;
-                    $departement = $call->departement;
-                    $row->$departement = $call->count . '|' . $call->$departement . '%';
-                    $row->values[$departement] = $call->count;
-                    $col_arr = array_diff($col_arr, [$departement]);
-                    return $row;
-                });
-
-                $_item = $items->last();
-
-                $index = count($_item->values);
-                foreach ($col_arr as $col) {
-                    $_item->values[$col] = 0;
-                    $_item->$col = '0';
-                }
-
-                ksort($_item->values);
-
-                $_item->values = collect($_item->values)->values();
-
-                return $_item;
-            });
-            $regions = $regions->values();
-
-            return ['data' => $regions];
         }
     }
 
-    public function GetColumnsRepJoiAutreDepartement(Request $request, $filter = null)
+    public function GetDataGlobalViewDetails(Request $request)
     {
-        $agentName = $request->get('agent_name');
         $agenceCode = $request->get('agence_code');
+        $agentName = $request->get('agent_name');
+        list($cti, $produit) = explode(' / ', $request->get('key_groupement'));
+
         $_route = getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
-        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
+        list($filter, $queryFilters) = makeFilterSubQuery($request, $route, 'Nom_Region');
 
-        $columns = \DB::table('stats as st')
-            ->select(\DB::raw('Gpmt_Appel_Pre'))
-            ->distinct()
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('Gpmt_Appel_Pre',['Joignable','Injoignable']);
 
-        $columns = applyFilter($columns, $filter);
+        $results = \DB::table('stats as st')
+            ->select(\DB::raw('substr(right(Nom_Agence, 4), 2, 2) as na'), 'st.Groupement', \DB::raw('count(distinct st.Id_Externe) as total'))
+            ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime,
+                groupement , Nom_Region
+            FROM stats
+             where Groupement IS NOT NULL
+             AND Nom_Region IS NOT NULL
+             AND Code_Type_Intervention NOT LIKE "%AUTRE%"
+             AND Produit != ""
+             AND Groupement not LIKE "Non renseigné"
+             AND Groupement not LIKE "Appels post"' .
+                ' and ' . $queryFilters .
+                ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+                ($cti ? 'and Code_Type_Intervention like "%' . $cti . '%"' : '') .
+                ($produit ? 'and Produit like "' . $produit . '"' : '') .
+                ' and isNotReady is null ' .
+                ' GROUP BY Id_Externe, Groupement, Nom_Region ) groupedst'),
+                function ($join) {
+                    $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
+                    $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
+                    $join->on('st.Groupement', '=', 'groupedst.Groupement');
+                    $join->on('st.Nom_Region', '=', 'groupedst.Nom_Region');
+                })
+            ->whereNotNull('st.Groupement')
+            ->whereNotNull('st.Nom_Region')
+            ->where('Code_Type_Intervention', 'NOT LIKE', '%AUTRE%')
+            ->where('st.Produit', '!=', '')
+            ->where('st.Groupement', 'not like', 'Non renseigné')
+            ->where('st.Groupement', 'not like', 'Appels post')
+            ->whereNull('isNotReady');
+        $results = applyFilter($results, $filter);
+
+        if ($cti) {
+            $results = $results->where('Code_Type_Intervention', 'like', '%' . $cti . '%');
+        }
+        if ($produit) {
+            $results = $results->where('Produit', 'like', $produit);
+        }
         if ($agentName) {
-            $columns = $columns->where('st.Utilisateur', $agentName);
+            $results = $results->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $columns = $columns->where('st.Nom_Region', 'like', "%$agenceCode");
+            $results = $results->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
-        $keys = $columns->pluck('Gpmt_Appel_Pre');
+//        dd($results->groupBy('na', 'Groupement')->toSql());
 
+        $results = $results->groupBy('na', 'Groupement')->get();
 
-        if (!count($keys)) {
-            $data = ['filter' => $filter, 'columns' => [], 'rows' => [], 'rowsFilterHeader' => ''];
-            return $data;
-        } else {
-            $regions_names = [];
-            $keys->map(function ($key, $index) use (&$regions_names) {
-                $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->data = $key;
-                $regions_names[$index + 1]->name = $key;
-                $regions_names[$index + 1]->text = $key;
-                $regions_names[$index + 1]->title = $key;
-            });
-            usort($regions_names, function ($item1, $item2) {
-                return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
-            });
-            $first = new \stdClass();
-            $first->title = 'Gpmt_Appel_Pre';
-            $first->name = 'Gpmt_Appel_Pre';
-            $first->data = 'Gpmt_Appel_Pre';
-            $first->orderable = false;
-            array_unshift($regions_names, $first);
+//        dd($results);
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
-        }
-    }
+        $keys = $results->groupBy(['Groupement'])->keys();
 
-    public function getRepJoiAutreDepartement(Request $request, $filter = null)
-    {
-        $agenceCode = $request->get('agence_code');
-        $agentName = $request->get('agent_name');
-        $route_request = $request->get('route');
-        $_route = $route_request ?? getRoute(Route::current());
-        $route = str_replace('/columns', '', $_route);
-        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
-
-        $regions = \DB::table('stats as st')
-            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), 'Gpmt_Appel_Pre',
-                \DB::raw('count(distinct st.Id_Externe) as count'))
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('Gpmt_Appel_Pre',['Joignable','Injoignable']);
-
-        $regions = applyFilter($regions, $filter);
-        if ($agentName) {
-            $regions = $regions->where('st.Utilisateur', $agentName);
-        }
-        if ($agenceCode) {
-            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
-        }
-
-        $regions = $regions->orderBy('Type_Intervention');
-        $regions = $regions->groupBy('Type_Intervention', 'Gpmt_Appel_Pre')->get();
-        $keys = $regions->groupBy(['Gpmt_Appel_Pre'])->keys();
-
-
-        if (!count($regions)) {
+        if (!count($results)) {
             $data = ['data' => []];
             return $data;
         } else {
-            $temp = $regions->groupBy(['Gpmt_Appel_Pre']);
-            $temp = $temp->map(function ($calls, $index) {
-                $totalZone = $calls->reduce(function ($carry, $call) {
-                    return $carry + $call->count;
+            $temp = $results->groupBy(['na']);
+
+            $temp = $temp->map(function ($product, $index) {
+                $totalZone = $product->reduce(function ($carry, $call) {
+                    return $carry + $call->total;
                 }, 0);
-                return $calls->map(function ($call) use ($index, $totalZone) {
-                    $call->$index = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
+                return $product->map(function ($call) use ($index, $totalZone) {
+                    $Code = $call->Groupement;
+                    $call->$index = $call->$Code = $totalZone == 0 ? 0.00 : round($call->total * 100 / $totalZone, 2);
                     return $call;
                 });
             });
-            $regions = $temp->flatten();
+            $results = $temp->flatten();
 
-            $regions = $regions->groupBy('Type_Intervention');
-            $regions = $regions->map(function ($region) use ($keys) {
+            $total = new \stdClass();
+            $total->values = [];
+            $results = $results->groupBy(['na']);
+            $results = $results->map(function ($product, $index) use (&$column_names, &$total, $keys) {
                 $row = new \stdClass();
                 $row->values = [];
-
                 $col_arr = $keys->all();
-                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
-                    $row->Gpmt_Appel_Pre = $call->Type_Intervention;
-                    $Gpmt_Appel_Pre = $call->Gpmt_Appel_Pre;
-                    $row->$Gpmt_Appel_Pre = $call->count . '|' . $call->$Gpmt_Appel_Pre . '%';
-                    $row->values[$Gpmt_Appel_Pre] = $call->count;
-                    $col_arr = array_diff($col_arr, [$Gpmt_Appel_Pre]);
+                $item = $product->map(function ($grpCall, $index) use (&$row, &$codes_names, &$total, &$col_arr) {
+//                        $row->Code_Type_Intervention = $grpCall->cti; // preg_replace('/\_.+/', '', $grpCall->Code_Type_Intervention);
+//                        $row->Produit = $grpCall->Produit;
+
+                    $row->Nom_Agence = $grpCall->na;
+                    $column_name = $grpCall->Groupement;
+                    $col_arr = array_diff($col_arr, [$column_name]);
+                    $row->values[$column_name] = $grpCall->total;
+                    $row->$column_name = $grpCall->total . '|' . $grpCall->$column_name . '%';
+//                    $row->total = isset($row->total) ? $row->total + $grpCall->total : $grpCall->total;
                     return $row;
                 });
-
-                $_item = $items->last();
-
-                $index = count($_item->values);
+                $_item = $item->last();
                 foreach ($col_arr as $col) {
-                    $_item->values[$col] = 0;
-                    $_item->$col = '0';
+                    $_item->values[$col] = 0; //'0%';
+                    $_item->$col = 0; //'0%';
                 }
-
+                collect($_item->values)->map(function ($value, $index) use (&$total) {
+                    $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
+                    $total->$index = $total->values[$index];
+                });
                 ksort($_item->values);
-
                 $_item->values = collect($_item->values)->values();
-
                 return $_item;
             });
-            $regions = $regions->values();
+            $total->Produit = 'Total Général';
+            $total->total = round(array_sum($total->values), 2);
+            $total->values = collect($total->values)->values();
+            $total->isTotal = true;
+//            $results->push($total);
+            $results = $results->values();
 
-            return ['data' => $regions];
-        }
-    }
-
-    public function GetColumnsRepJoiAutreDepartementGrpCall(Request $request, $filter = null)
-    {
-        $agentName = $request->get('agent_name');
-        $agenceCode = $request->get('agence_code');
-        $_route = getRoute(Route::current());
-        $key_groupement = $request->get('key_groupement');
-        $route = str_replace('/columns', '', $_route);
-        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
-
-        $columns = \DB::table('stats as st')
-                ->select(\DB::raw('Gpmt_Appel_Pre'))
-                ->distinct()
-                ->where('Groupement','like','Appels préalables')
-                ->whereIn('Gpmt_Appel_Pre',['Joignable','Injoignable'])
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
-
-        $columns = applyFilter($columns, $filter);
-        if ($agentName) {
-            $columns = $columns->where('st.Utilisateur', $agentName);
-        }
-        if ($agenceCode) {
-            $columns = $columns->where('st.Nom_Region', 'like', "%$agenceCode");
-        }
-
-        $keys = $columns->pluck('Gpmt_Appel_Pre');
-
-        if (!count($keys)) {
-            $data = ['filter' => $filter, 'columns' => [], 'rows' => [], 'rowsFilterHeader' => ''];
+            $data = ['data' => $results];
             return $data;
-        } else {
-            $regions_names = [];
-            $keys->map(function ($key, $index) use (&$regions_names) {
-                $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->data = $key;
-                $regions_names[$index + 1]->name = $key;
-                $regions_names[$index + 1]->text = $key;
-                $regions_names[$index + 1]->title = $key;
-            });
-            usort($regions_names, function ($item1, $item2) {
-                return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
-            });
-            $first = new \stdClass();
-            $first->title = 'Gpmt_Appel_Pre';
-            $first->name = 'Gpmt_Appel_Pre';
-            $first->data = 'Gpmt_Appel_Pre';
-            $first->orderable = false;
-            array_unshift($regions_names, $first);
-
-            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
         }
     }
-
-    public function getRepJoiAutreDepartementGrpCall(Request $request, $filter = null)
-    {
-        $agenceCode = $request->get('agence_code');
-        $agentName = $request->get('agent_name');
-        $route_request = $request->get('route');
-        $key_groupement = $request->get('key_groupement');
-        $_route = $route_request ?? getRoute(Route::current());
-        $route = str_replace('/columns', '', $_route);
-        list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
-
-
-        $regions = \DB::table('stats as st')
-            ->select('Gpmt_Appel_Pre', 'produit',\DB::raw('count(distinct st.Id_Externe) as count'))
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH'])
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
-
-        $regions = applyFilter($regions, $filter);
-        if ($agentName) {
-            $regions = $regions->where('st.Utilisateur', $agentName);
-        }
-        if ($agenceCode) {
-            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
-        }
-
-        $regions = $regions->orderBy('produit');
-        //dd($regions->groupBy('Code_Type_Intervention', 'Nom_Region')->toSql(), $regions->getBindings());
-        $regions = $regions->groupBy('produit', 'Gpmt_Appel_Pre')->get();
-        $keys = $regions->groupBy(['Gpmt_Appel_Pre'])->keys();
-
-
-        if (!count($regions)) {
-            $data = ['data' => []];
-            return $data;
-        } else {
-            $temp = $regions->groupBy(['Gpmt_Appel_Pre']);
-            $temp = $temp->map(function ($calls, $index) {
-                $totalZone = $calls->reduce(function ($carry, $call) {
-                    return $carry + $call->count;
-                }, 0);
-                return $calls->map(function ($call) use ($index, $totalZone) {
-                    $call->$index = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
-                    return $call;
-                });
-            });
-            $regions = $temp->flatten();
-
-            $regions = $regions->groupBy('produit');
-            $regions = $regions->map(function ($region) use ($keys) {
-                $row = new \stdClass();
-                $row->values = [];
-
-                $col_arr = $keys->all();
-                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
-                    $row->Gpmt_Appel_Pre = $call->produit;
-                    $Gpmt_Appel_Pre = $call->Gpmt_Appel_Pre;
-                    $row->$Gpmt_Appel_Pre = $call->count . '|' . $call->$Gpmt_Appel_Pre . '%';
-                    $row->values[$Gpmt_Appel_Pre] = $call->count;
-                    $col_arr = array_diff($col_arr, [$Gpmt_Appel_Pre]);
-                    return $row;
-                });
-
-                $_item = $items->last();
-
-                $index = count($_item->values);
-                foreach ($col_arr as $col) {
-                    $_item->values[$col] = 0;
-                    $_item->$col = '0';
-                }
-
-                ksort($_item->values);
-
-                $_item->values = collect($_item->values)->values();
-
-                return $_item;
-            });
-            $regions = $regions->values();
-
-            return ['data' => $regions];
-        }
-    }
-
 
 
     public function importStats($request)
