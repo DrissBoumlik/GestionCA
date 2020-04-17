@@ -2296,7 +2296,8 @@ class StatsRepository
 
         $regions = \DB::table('stats as st')
             ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'), 'produit')
-            ->where('produit', '!=', '');
+            ->where('produit', '!=', '')
+            ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2428,7 +2429,8 @@ class StatsRepository
         $regions = \DB::table('stats as st')
             ->select('Code_Type_Intervention', 'produit', \DB::raw('count(distinct st.Id_Externe) as count'))
             ->where('produit', '!=', '')
-            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%')
+            ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2558,7 +2560,8 @@ class StatsRepository
         $regions = \DB::table('stats as st')
             ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'), 'Resultat_Appel')
             ->where('Groupement', 'like', 'Appels clôture')
-            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme']);
+            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme'])
+            ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2692,7 +2695,8 @@ class StatsRepository
             ->select('Code_Type_Intervention', 'Resultat_Appel', \DB::raw('count(distinct st.Id_Externe) as count'))
             ->where('Groupement', 'like', 'Appels clôture')
             ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme'])
-            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%')
+            ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2821,7 +2825,8 @@ class StatsRepository
 
         $regions = \DB::table('stats as st')
             ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'), 'Code_Intervention')
-            ->where('Groupement', 'like', 'Appels clôture');
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -2898,7 +2903,7 @@ class StatsRepository
             ->select('Code_Intervention')
             ->distinct()
             ->where('Groupement', 'like', 'Appels clôture')
-            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');;
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2951,7 +2956,8 @@ class StatsRepository
         $regions = \DB::table('stats as st')
             ->select('Code_Type_Intervention', 'Code_Intervention', \DB::raw('count(distinct st.Id_Externe) as count'))
             ->where('Groupement', 'like', 'Appels clôture')
-            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%')
+            ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -3082,7 +3088,8 @@ class StatsRepository
             ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'),
                 \DB::raw('count(distinct st.Id_Externe) as count'))
             ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH']);
+            ->whereIn('produit',['CUIVRE','FTTH'])
+            ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -3216,7 +3223,8 @@ class StatsRepository
             ->select(\DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'), 'produit',\DB::raw('count(distinct st.Id_Externe) as count'))
             ->where('Groupement','like','Appels préalables')
             ->whereIn('produit',['CUIVRE','FTTH'])
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+            ->where('Code_Type_Intervention','like',$key_groupement.'%')
+            ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -3348,7 +3356,8 @@ class StatsRepository
             ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), 'Gpmt_Appel_Pre',
                 \DB::raw('count(distinct st.Id_Externe) as count'))
             ->where('Groupement','like','Appels préalables')
-            ->whereIn('Gpmt_Appel_Pre',['Joignable','Injoignable']);
+            ->whereIn('Gpmt_Appel_Pre',['Joignable','Injoignable'])
+            ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -3482,7 +3491,8 @@ class StatsRepository
             ->select('Gpmt_Appel_Pre', 'produit',\DB::raw('count(distinct st.Id_Externe) as count'))
             ->where('Groupement','like','Appels préalables')
             ->whereIn('produit',['CUIVRE','FTTH'])
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+            ->where('Code_Type_Intervention','like',$key_groupement.'%')
+            ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
