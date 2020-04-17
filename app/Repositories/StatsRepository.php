@@ -3918,6 +3918,7 @@ class StatsRepository
             FROM stats
              where Groupement IS NOT NULL
              AND Nom_Region IS NOT NULL
+             AND Nom_Agence IS NOT NULL
              AND Code_Type_Intervention NOT LIKE "%AUTRE%"
              AND Produit != ""
              AND Groupement not LIKE "Non renseigné"
@@ -3937,6 +3938,7 @@ class StatsRepository
                 })
             ->whereNotNull('st.Groupement')
             ->whereNotNull('st.Nom_Region')
+            ->whereNotNull('st.Nom_Agence')
             ->where('Code_Type_Intervention', 'NOT LIKE', '%AUTRE%')
             ->where('st.Produit', '!=', '')
             ->where('st.Groupement', 'not like', 'Non renseigné')

@@ -693,7 +693,7 @@ $(function () {
     //<editor-fold desc="Global View">
     let globalView = {
         columnName: 'Groupement',
-        rowName: 'Produit',
+        rowName: 'Code_Type_Intervention / Produit',
         element_dt: undefined,
         element: 'globalViewTable',
         columns: undefined,
@@ -701,7 +701,7 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-06', rows: '#global-view-filter'},
         filterQuery: {
-            queryJoin: ' AND Groupement IS NOT NULL AND Groupement not LIKE "Non renseigné" AND Groupement not LIKE "Appels post" AND Code_Type_Intervention NOT LIKE "%AUTRE%" AND Produit != "" ',
+            queryJoin: ' AND Nom_Region IS NOT NULL AND Groupement IS NOT NULL AND Groupement not LIKE "Non renseigné" AND Groupement not LIKE "Appels post" AND Code_Type_Intervention NOT LIKE "%AUTRE%" AND Produit != "" ',
             subGroupBy: ' GROUP BY Id_Externe, Groupement, Nom_Region ) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Groupement, Nom_Region'
         },
@@ -717,17 +717,18 @@ $(function () {
         },
         children: [],
         objDetail: {
+            parentElement: 'globalViewTable',
             columnName: 'Groupement',
-            rowName: 'Produit',
+            rowName: 'Nom_Agence',
             element_dt: undefined,
             element: undefined,
             columns: undefined,
             filterTree: {dates: [], rows: [], datesTreeObject: undefined},
             filterElement: undefined,
             filterQuery: {
-                queryJoin: ' and Resultat_Appel not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"',
-                subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel) groupedst ',
-                queryGroupBy: 'group by st.Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel'
+                queryJoin: ' AND Nom_Region IS NOT NULL AND Groupement IS NOT NULL AND Nom_Agence IS NOT NULL AND Groupement not LIKE "Non renseigné" AND Groupement not LIKE "Appels post" AND Code_Type_Intervention NOT LIKE "%AUTRE%" AND Produit != "" ',
+                subGroupBy: ' GROUP BY Id_Externe, Groupement, Nom_Region ) groupedst ',
+                queryGroupBy: 'group by st.Id_Externe, Groupement, Nom_Region'
             },
             routeCol: 'globalView/details/columns',
             routeData: 'globalView/details',
@@ -779,6 +780,7 @@ $(function () {
         statsTypeIntervention,
         globalView
     ];
+    localStorage.setItem('globalElements', JSON.stringify(globalElements));
 
     detailClick = false;
 
