@@ -563,6 +563,8 @@ $(function () {
             let statsCallsPosChart = document.getElementById('statsCallsPosChart');
             let statscallsNegChart = document.getElementById('statscallsNegChart');
             let CallResultPrealableChart = document.getElementById('CallResultPrealableChart');
+            let statesRepJoiDepartementChart = document.getElementById('statesRepJoiDepartementChart');
+            let statesRepJoiAutreDepartementChart = document.getElementById('statesRepJoiAutreDepartementChart');
 
             //creates image
             let statsRegionsChartImg = statsCallsPrealableChart.toDataURL("image/png", 1.0);
@@ -571,6 +573,7 @@ $(function () {
             let statsCallsPosChartImg = statsCallsPosChart.toDataURL("image5/png", 1.0);
             let statscallsNegChartImg = statscallsNegChart.toDataURL("image6/png", 1.0);
             let CallResultPrealableChartImg = statscallsNegChart.toDataURL("image7/png", 1.0);
+
             //creates PDF from img
             let doc = new jsPDF('p', 'pt', [842, 842]);
             doc.addImage(logo, 'jpeg', 371, 10, 100,30);
@@ -614,6 +617,33 @@ $(function () {
                 styles: {fontSize: 7}
             });
             doc.addImage(CallResultPrealableChartImg, 'JPEG', 150, ($('#CallResultPrealable').height() / 1.328147) + 50, 500, 250);
+
+            if (elementExists(statesRepJoiDepartement)) {
+                let statesRepJoiDepartementChartImg = statesRepJoiDepartementChart.toDataURL("image8/png", 1.0);
+                doc.addPage();
+                doc.text(10, 20, 'Répartition Joignabilité par type par département');
+                doc.autoTable({
+                    html: '#statesRepJoiDepartement',
+                    margin: {left: 0, top: 30},
+                    pageBreak: 'auto',
+                    tableWidth: 842,
+                    styles: {fontSize: 7}
+                });
+                doc.addImage(statesRepJoiDepartementChartImg, 'JPEG', 150, ($('#statesRepJoiDepartement').height() / 1.328147) + 50, 500, 250);
+            }else{
+                let statesRepJoiAutreDepartementChartImg = statesRepJoiAutreDepartementChart.toDataURL("image9/png", 1.0);
+                doc.addPage();
+                doc.text(10, 20, 'Répartition Joignabilité par type par département');
+                doc.autoTable({
+                    html: '#statesRepJoiAutreDepartement',
+                    margin: {left: 0, top: 30},
+                    pageBreak: 'auto',
+                    tableWidth: 842,
+                    styles: {fontSize: 7}
+                });
+                doc.addImage(statesRepJoiAutreDepartementChartImg, 'JPEG', 150, ($('#statesRepJoiAutreDepartement').height() / 1.328147) + 50, 500, 250);
+            }
+
             doc .addImage(footer, 'jpeg', 371, 810, 100,30);
             doc.save('Appels Préalables.pdf');
 
