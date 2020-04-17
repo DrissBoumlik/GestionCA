@@ -224,6 +224,13 @@ frLang = {
                         });
                         if (params.details) {
                             $('#' + object.element).on('click', 'td.details-control', function () {
+                                if (object.element === 'globalViewTable') {
+                                    let row = object.element_dt.cell(this).index().row + 1;
+                                    let _values = $(tableId + " > tbody > tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text().split(' / ');
+                                    let _cols = object.rowName.split(' / ');
+                                    object.objDetail.rowName = ' ' + _cols[0] + ' like "%' + _values[0] + '%" AND ' + _cols[1] + ' like "' + _values[1] + '" AND ' + object.objDetail.rowName;
+                                }
+
                                 const tr = $(this).closest('tr');
                                 const row = object.element_dt.row(tr);
                                 if (row.child.isShown()) {
@@ -244,68 +251,73 @@ frLang = {
                         // CELL CLICK
                         let tableId = '#' + object.element;
                         $(tableId + ' tbody').on('click', 'td', function () {
-                            let agent_name = $('#agent_name').val();
-                            let agence_name = $('#agence_name').val();
-                            let col = object.element_dt.cell(this).index().column + 1;
-                            let row = object.element_dt.cell(this).index().row + 1;
-                            let colText = $(tableId + " > thead > tr > th:nth-child(" + col + ")").text();
-                            let rowText = $(tableId + " > tbody > tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
-                            if (object.element === 'statsColturetech') {
-                                switch (rowText) {
-                                    case 'superieur un jour':
-                                        rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440 ';
-                                        break;
-                                    case 'Entre 1H et 6h' :
-                                        rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) between 60 and 360 ';
-                                        break;
-                                    case 'Entre 30min et 1H':
-                                        rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) BETWEEN 30 and 60 ';
-                                        break;
-                                    default:
-                                        rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) < 30';
+                            if (!$(this).hasClass('details-control')) {
+                                let agent_name = $('#agent_name').val();
+                                let agence_name = $('#agence_name').val();
+                                let col = object.element_dt.cell(this).index().column + 1;
+                                let row = object.element_dt.cell(this).index().row + 1;
+                                let colText = $(tableId + " > thead > tr > th:nth-child(" + col + ")").text();
+                                let rowText = $(tableId + " > tbody > tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
+                                if (object.element === 'statsColturetech') {
+                                    switch (rowText) {
+                                        case 'superieur un jour':
+                                            rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) > 1440 ';
+                                            break;
+                                        case 'Entre 1H et 6h' :
+                                            rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) between 60 and 360 ';
+                                            break;
+                                        case 'Entre 30min et 1H':
+                                            rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) BETWEEN 30 and 60 ';
+                                            break;
+                                        default:
+                                            rowText = ' and TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) < 30';
+                                    }
                                 }
-                            }
-                            if (object.element === 'statsGlobalDelay') {
-                                switch (rowText) {
-                                    case 'Superieur 15 Jours':
-                                        rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) > 15 ';
-                                        break;
-                                    case 'Entre une semaine et 15 jours' :
-                                        rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) between 7 and 15 ';
-                                        break;
-                                    default:
-                                        rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) < 7 ';
+                                if (object.element === 'statsGlobalDelay') {
+                                    switch (rowText) {
+                                        case 'Superieur 15 Jours':
+                                            rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) > 15 ';
+                                            break;
+                                        case 'Entre une semaine et 15 jours' :
+                                            rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) between 7 and 15 ';
+                                            break;
+                                        default:
+                                            rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) < 7 ';
+                                    }
                                 }
-                            }
-                            if (object.columnName === 'Date_Heure_Note_Semaine') {
-                                colText = colText.split('_')[0];
-                            }
-                            if (object.element === 'globalViewTable') {
-                                let _cols = object.rowName.split(' - ');
-                                let _values = rowText.split(' - ');
-                                object.rowName = _cols[1];
-                                rowText = ' ' + _values[1] + '" AND ' + _cols[0] + ' LIKE "%' + _values[0] + '%'
-                            }
-                            let lastRowIndex = object.element_dt.rows().count();
-                            let lastColumnIndex = object.element_dt.columns().count();
+                                if (object.columnName === 'Date_Heure_Note_Semaine') {
+                                    colText = colText.split('_')[0];
+                                }
+                                if (object.element === 'globalViewTable') {
+                                    let _cols = object.rowName.split(' - ');
+                                    let _values = rowText.split(' - ');
+                                    object.rowName = _cols[1];
+                                    rowText = ' ' + _values[1] + '" AND ' + _cols[0] + ' LIKE "%' + _values[0] + '%';
+                                }
+                                if (object.parentElement === 'globalViewTable') {
+                                    rowText = '%(' + rowText + ')%';
+                                }
+                                let lastRowIndex = object.element_dt.rows().count();
+                                let lastColumnIndex = object.element_dt.columns().count();
 
-                            if (((params.details && col > 2) || (!params.details && col > 1))
-                                && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
-                                && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
-                                let dates = object.filterTree.dates;
-                                window.location = APP_URL + '/all-stats?' +
-                                    'row=' + (object.rowName === undefined || object.rowName === null ? '' : object.rowName) +
-                                    '&rowValue=' + rowText +
-                                    '&col=' + (object.columnName === undefined || object.columnName === null ? '' : object.columnName) +
-                                    '&colValue=' + colText +
-                                    '&agent=' + (agent_name === undefined || agent_name === null ? '' : agent_name) +
-                                    '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) +
-                                    '&dates=' + (dates === undefined || dates === null ? '' : dates) +
-                                    '&queryJoin=' + (object.filterQuery.queryJoin === undefined || object.filterQuery.queryJoin === null ? '' : object.filterQuery.queryJoin) +
-                                    '&subGroupBy=' + (object.filterQuery.subGroupBy === undefined || object.filterQuery.subGroupBy === null ? '' : object.filterQuery.subGroupBy) +
-                                    '&queryGroupBy=' + (object.filterQuery.queryGroupBy === undefined || object.filterQuery.queryGroupBy === null ? '' : object.filterQuery.queryGroupBy) +
-                                    '&appCltquery=' + (object.filterQuery.appCltquery === undefined || object.filterQuery.appCltquery === null ? '' : object.filterQuery.appCltquery) +
-                                    (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : '');
+                                if (((params.details && col > 2) || (!params.details && col > 1))
+                                    && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
+                                    && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
+                                    let dates = object.filterTree.dates;
+                                    window.location = APP_URL + '/all-stats?' +
+                                        'row=' + (object.rowName === undefined || object.rowName === null ? '' : object.rowName) +
+                                        '&rowValue=' + rowText +
+                                        '&col=' + (object.columnName === undefined || object.columnName === null ? '' : object.columnName) +
+                                        '&colValue=' + colText +
+                                        '&agent=' + (agent_name === undefined || agent_name === null ? '' : agent_name) +
+                                        '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) +
+                                        '&dates=' + (dates === undefined || dates === null ? '' : dates) +
+                                        '&queryJoin=' + (object.filterQuery.queryJoin === undefined || object.filterQuery.queryJoin === null ? '' : object.filterQuery.queryJoin) +
+                                        '&subGroupBy=' + (object.filterQuery.subGroupBy === undefined || object.filterQuery.subGroupBy === null ? '' : object.filterQuery.subGroupBy) +
+                                        '&queryGroupBy=' + (object.filterQuery.queryGroupBy === undefined || object.filterQuery.queryGroupBy === null ? '' : object.filterQuery.queryGroupBy) +
+                                        '&appCltquery=' + (object.filterQuery.appCltquery === undefined || object.filterQuery.appCltquery === null ? '' : object.filterQuery.appCltquery) +
+                                        (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : '');
+                                }
                             }
                         });
                     } catch (error) {

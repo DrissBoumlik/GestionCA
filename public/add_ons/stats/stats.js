@@ -715,6 +715,7 @@ $(function () {
         },
         children: [],
         objDetail: {
+            parentElement: 'globalViewTable',
             columnName: 'Groupement',
             rowName: 'Nom_Agence',
             element_dt: undefined,
@@ -723,7 +724,7 @@ $(function () {
             filterTree: {dates: [], rows: [], datesTreeObject: undefined},
             filterElement: undefined,
             filterQuery: {
-                queryJoin: ' AND Nom_Region IS NOT NULL AND Groupement IS NOT NULL AND Groupement not LIKE "Non renseigné" AND Groupement not LIKE "Appels post" AND Code_Type_Intervention NOT LIKE "%AUTRE%" AND Produit != "" ',
+                queryJoin: ' AND Nom_Region IS NOT NULL AND Groupement IS NOT NULL AND Nom_Agence IS NOT NULL AND Groupement not LIKE "Non renseigné" AND Groupement not LIKE "Appels post" AND Code_Type_Intervention NOT LIKE "%AUTRE%" AND Produit != "" ',
                 subGroupBy: ' GROUP BY Id_Externe, Groupement, Nom_Region ) groupedst ',
                 queryGroupBy: 'group by st.Id_Externe, Groupement, Nom_Region'
             },
@@ -777,6 +778,7 @@ $(function () {
         statsTypeIntervention,
         globalView
     ];
+    localStorage.setItem('globalElements', JSON.stringify(globalElements));
 
     detailClick = false;
 

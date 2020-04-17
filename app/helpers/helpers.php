@@ -79,9 +79,6 @@ if (!function_exists('getStats')) {
         $callType = $request->callType;
         $row = $request->row;
         $rowValue = $request->rowValue;
-        if ($row == 'Nom_Agence') {
-            $rowValue = '%' . $rowValue . '%';
-        }
         $col = $request->col;
         $colValue = $request->colValue;
         $agentName = $request->agent;
