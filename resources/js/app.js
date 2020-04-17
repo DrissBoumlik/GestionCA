@@ -233,7 +233,7 @@ frLang = {
                                 } else {
                                     // Open this row
                                     object.rowIndex = $('tr').index(tr);
-                                    object.highlightedRow = $('#'+object.element+ ' tr').index(tr);
+                                    object.highlightedRow = $('#' + object.element + ' tr').index(tr);
                                     data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
                                     object.objDetail.element = 'details-' + object.rowIndex;
                                     createChild(row, object, data); // class is for background colour
@@ -279,6 +279,12 @@ frLang = {
                             }
                             if (object.columnName === 'Date_Heure_Note_Semaine') {
                                 colText = colText.split('_')[0];
+                            }
+                            if (object.element === 'globalViewTable') {
+                                let _cols = object.rowName.split(' - ');
+                                let _values = rowText.split(' - ');
+                                object.rowName = _cols[1];
+                                rowText = ' ' + _values[1] + '" AND ' + _cols[0] + ' LIKE "%' + _values[0] + '%'
                             }
                             let lastRowIndex = object.element_dt.rows().count();
                             let lastColumnIndex = object.element_dt.columns().count();

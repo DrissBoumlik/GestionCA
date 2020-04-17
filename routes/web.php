@@ -11,9 +11,6 @@
 |
 */
 
-//Auth::routes();
-// Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-// Route::post('register', 'Auth\RegisterController@register');
 
 // Auth Routes
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
@@ -24,12 +21,12 @@ Auth::routes();
 Route::group([
    'middleware' => ['auth'],
 ], function () {
-    //Route::get('/', 'HomeController@dashboard')->name('home');
-//Route::get('/_dashboard', 'HomeController@dashboard')->name('home');
-    Route::get('/', 'ToolController@home');
+
+
+    Route::redirect('/', '/dashboard');
 
 // User Routes
-//Route::get('/users/create', 'UserController@create');
+
     Route::get('/profile', 'UserController@profile');
     Route::resource('/users', 'UserController');
     Route::put('/changeStatus/{user}', 'UserController@changeStatus');
@@ -53,16 +50,11 @@ Route::group([
 
     Route::get('/all-stats', 'StatsController@index')->name('stats.index');
     Route::post('/stats/get-stats', 'StatsController@getStats')->name('stats.get-stats');
-//Route::post('/getRegionsByDates', 'StatsController@getRegionsByDates');
-//Route::post('/getNonValidatedFoldersByCodeByDates', 'StatsController@getNonValidatedFoldersByCodeByDates');
-//Route::post('/getNonValidatedFoldersByTypeByDates', 'StatsController@getNonValidatedFoldersByTypeByDates');
-//Route::post('/getClientsByCallStateJoiByDates', 'StatsController@getClientsByCallStateJoiByDates');
-//Route::post('/getClientsByCallStateInjByDates', 'StatsController@getClientsByCallStateInjByDates');
 
-//Route::get('/getDates', 'StatsController@getDates');
+
     Route::get('/dates', 'StatsController@getDates');
     Route::get('/agences/dates', 'StatsController@getDates');
-//Route::get('/agences/filter/{column}', 'AgenceController@filterList');
+
     Route::get('/agences/regions/{callResult}', 'StatsController@getRegions');
     Route::get('/agences/regions/columns/{callResult}', 'StatsController@getRegionsColumn');
     Route::get('/agences/regionsCallState/{column}', 'StatsController@getRegionsCallState'); // Nom_Region / Date_Heure_Note_Semaine
@@ -73,11 +65,11 @@ Route::group([
 
     Route::get('/agences/clientsByCallState/{callResult}', 'StatsController@getClientsByCallState'); // Injoignable / Joignable
     Route::get('/agences/clientsByCallState/columns/{callResult}', 'StatsController@getClientsByCallStateColumn');
-//Route::get('/agences/list', 'AgenceController@getAgencies')->name('agence.list');
+
     Route::get('/agences', 'StatsController@dashboard')->name('agence.index');
 
     Route::get('/agents/dates', 'StatsController@getDates');
-//Route::get('/agents/filter/{column}', 'AgentController@filterList');
+
     Route::get('/agents/regions/{callResult}', 'StatsController@getRegions');
     Route::get('/agents/regions/columns/{callResult}', 'StatsController@getRegionsColumn');
     Route::get('/agents/regionsCallState/{column}', 'StatsController@getRegionsCallState'); // Nom_Region / Date_Heure_Note_Semaine
@@ -88,9 +80,8 @@ Route::group([
 
     Route::get('/agents/clientsByCallState/{callResult}', 'StatsController@getClientsByCallState'); // Injoignable / Joignable
     Route::get('/agents/clientsByCallState/columns/{callResult}', 'StatsController@getClientsByCallStateColumn');
-//Route::get('/agents/list', 'AgentController@getAgencies')->name('agent.list');
+
     Route::get('/agents', 'StatsController@dashboard')->name('agent.index');
-//Route::get('/getRegions', 'StatsController@getRegions');
 
 
 
@@ -99,14 +90,9 @@ Route::group([
     Route::get('/agents/list', 'StatsController@getAgents')->name('agent.list');
 // ===============
 
-//Route::get('/tasks', 'TaskController@index')->name('tasks.index');
-//Route::get('/tasks/get-tasks', 'TaskController@getTasks')->name('tasks.get-tasks');
-//Route::post('/tasks/import-tasks', 'TaskController@importTasks')->name('tasks.import-tasks');
-
     Route::get('/stats', 'StatsController@import')->name('stats.import');
     Route::post('/stats/import-stats', 'StatsController@importStats')->name('stats.import-stats');
 
-//Route::get('/demo', 'DemoController@index');
 
     Route::get('/regions/details/groupement', 'StatsController@getRegionsByGrpCall'); // column = key_groupement value // // PERCENT
     Route::get('/regions/details/groupement/columns', 'StatsController@getRegionsByGrpCallColumns'); // column = key_groupement value // // PERCENT
