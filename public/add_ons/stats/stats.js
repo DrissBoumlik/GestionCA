@@ -962,7 +962,6 @@ $(function () {
             let statsColturetechChartImg = statsColturetechChart.toDataURL("image10/png", 1.0);
             let statsGlobalDelayChartImg = statsGlobalDelayChart.toDataURL("image11/png", 1.0);
             let statsTypeInterventionChartImg = statsGlobalDelayChart.toDataURL("image12/png", 1.0);
-            let globalViewChartImg = globalViewChart.toDataURL("image12/png", 1.0);
             //creates PDF from img
             let doc = new jsPDF('p', 'pt', [842, 842]);
             doc.addImage(logo, 'jpeg', 371, 10, 100, 30);
@@ -1104,6 +1103,7 @@ $(function () {
             doc.addImage(statsTypeInterventionChartImg, 'JPEG', 150 , doc.previousAutoTable.finalY + 5, 350, 150);
 
             if (elementExists(globalView)) {
+                let globalViewChartImg = globalViewChart.toDataURL("image12/png", 1.0);
                 doc.addPage();
                 doc.autoTable({
                     html: '#globalViewTable',
