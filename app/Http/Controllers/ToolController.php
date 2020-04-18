@@ -23,6 +23,11 @@ class ToolController extends Controller
         return view('tools.unauthorized');
     }
 
+    public function home()
+    {
+        return redirect('dashboard');
+    }
+
     public function editImportingStatus($flag)
     {
         $user_flag = UserFlag::firstOrCreate([

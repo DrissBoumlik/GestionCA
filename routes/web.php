@@ -23,7 +23,7 @@ Route::group([
 ], function () {
 
 
-    Route::redirect('/', '/dashboard');
+    Route::get('/', 'ToolController@home');
 
 // User Routes
 
