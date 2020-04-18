@@ -705,6 +705,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Groupement, Nom_Region ) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Groupement, Nom_Region'
         },
+        rowIndex: undefined,
+        highlightedRow: undefined,
         routeCol: 'globalView/columns',
         routeData: 'globalView',
         objChart: {
@@ -946,6 +948,7 @@ $(function () {
             let statsColturetechChart = document.getElementById('statsColturetechChart');
             let statsGlobalDelayChart = document.getElementById('statsGlobalDelayChart');
             let statsTypeInterventionChart = document.getElementById('statsTypeInterventionChart');
+            let globalViewChart = document.getElementById('globalViewChart');
             //creates image
             let statsRegionsChartImg = statsRegionsChart.toDataURL("image/png", 1.0);
             let statsFoldersChartImg = statsFoldersChart.toDataURL("image2/png", 1.0);
@@ -1075,12 +1078,59 @@ $(function () {
             doc.text(10, 20, 'Répartition des dossiers non validés par Code Type intervention');
             doc.autoTable({
                 html: '#statsTypeIntervention',
+                didDrawCell: function (data) {
+                    if (data.row.index == statsTypeIntervention.highlightedRow && !isdrawn && data.row.section === 'body'){
+                        data.row.height = data.table.height + 250 ;
+                        doc.autoTable({
+                            html: '#details-'+statsTypeIntervention.rowIndex,
+                            startY: data.row.y + 5,
+                            margin: 0,
+                            styles: {fontSize: 7}
+                        });
+                        isdrawn = true;
+                        let detailsRepJoiDepartementChart = document.getElementById('details-'+statsTypeIntervention.rowIndex + '-Chart');
+                        let detailsRepJoiDepartementChartImg = detailsRepJoiDepartementChart.toDataURL("image10/png", 1.0);
+                        doc.addImage(detailsRepJoiDepartementChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 150);
+                    }
+
+                },
                 margin: {left: 0, top: 30},
                 pageBreak: 'auto',
-                tableWidth: 520,
+                tableWidth: 842,
                 styles: {fontSize: 7}
             });
-            doc.addImage(statsTypeInterventionChartImg, 'JPEG', 532, 30, 350, 300);
+            isdrawn = false;
+            doc.addImage(statsTypeInterventionChartImg, 'JPEG', 150 , doc.previousAutoTable.finalY + 5, 350, 150);
+
+            if (elementExists(globalView)) {
+                let globalViewChartImg = globalViewChart.toDataURL("image12/png", 1.0);
+                doc.addPage();
+                doc.autoTable({
+                    html: '#globalViewTable',
+                    didDrawCell: function (data) {
+                        if (data.row.index == globalView.highlightedRow && !isdrawn && data.row.section === 'body'){
+                            data.row.height = data.table.height + 250 ;
+                            doc.autoTable({
+                                html: '#details-'+globalView.rowIndex,
+                                startY: data.row.y + 5,
+                                margin: 0,
+                                styles: {fontSize: 7}
+                            });
+                            isdrawn = true;
+                            let detailsglobalViewChart = document.getElementById('details-'+globalView.rowIndex + '-Chart');
+                            let detailsglobalViewChartImg = detailsglobalViewChart.toDataURL("image10/png", 1.0);
+                            doc.addImage(detailsglobalViewChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 150);
+                        }
+
+                    },
+                    margin: {left: 0, top: 30},
+                    pageBreak: 'auto',
+                    tableWidth: 842,
+                    styles: {fontSize: 7}
+                });
+                isdrawn = false;
+                doc.addImage(globalViewChartImg, 'JPEG', 150 , doc.previousAutoTable.finalY + 5, 350, 150);
+            }
             doc.addImage(footer, 'jpeg', 371, 810, 100, 30);
             doc.save('dashboard.pdf');
 

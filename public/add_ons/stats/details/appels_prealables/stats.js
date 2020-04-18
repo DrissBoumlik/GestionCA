@@ -3,6 +3,7 @@ $(function () {
 
     let agent_name = '';
     let agence_code = '';
+    let isdrawn = false;
     ajaxRequests = 0;
 
 
@@ -624,24 +625,56 @@ $(function () {
                 doc.text(10, 20, 'Répartition Joignabilité par type par département');
                 doc.autoTable({
                     html: '#statesRepJoiDepartement',
+                    didDrawCell: function (data) {
+                        if (data.row.index == statesRepJoiDepartement.highlightedRow && !isdrawn && data.row.section === 'body'){
+                            data.row.height = ($('#details-'+statesRepJoiDepartement.rowIndex).height() * 0.75) + 270;
+                            doc.autoTable({
+                                html: '#details-'+statesRepJoiDepartement.rowIndex,
+                                startY: data.row.y + 5,
+                                margin: 0,
+                                styles: {fontSize: 7}
+                            });
+                            isdrawn = true;
+                            let detailsRepJoiDepartementChart = document.getElementById('details-'+statesRepJoiDepartement.rowIndex + '-Chart');
+                            let detailsRepJoiDepartementChartImg = detailsRepJoiDepartementChart.toDataURL("image10/png", 1.0);
+                            doc.addImage(detailsRepJoiDepartementChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 250)
+                        }
+
+                    },
                     margin: {left: 0, top: 30},
                     pageBreak: 'auto',
                     tableWidth: 842,
                     styles: {fontSize: 7}
                 });
-                doc.addImage(statesRepJoiDepartementChartImg, 'JPEG', 150, ($('#statesRepJoiDepartement').height() / 1.328147) + 50, 500, 250);
+                doc.addImage(statesRepJoiDepartementChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5, 500, 250);
             }else{
                 let statesRepJoiAutreDepartementChartImg = statesRepJoiAutreDepartementChart.toDataURL("image9/png", 1.0);
                 doc.addPage();
                 doc.text(10, 20, 'Répartition Joignabilité par type par département');
                 doc.autoTable({
                     html: '#statesRepJoiAutreDepartement',
+                    didDrawCell: function (data) {
+                        if (data.row.index == statesRepJoiAutreDepartement.highlightedRow && !isdrawn && data.row.section === 'body'){
+                            data.row.height = ($('#details-'+statesRepJoiAutreDepartement.rowIndex).height() * 0.75) + 270;
+                            doc.autoTable({
+                                html: '#details-'+statesRepJoiAutreDepartement.rowIndex,
+                                startY: data.row.y + 5,
+                                margin: 0,
+                                styles: {fontSize: 7}
+                            });
+                            isdrawn = true;
+                            let detailsRepJoiAutreDepartementChart = document.getElementById('details-'+statesRepJoiAutreDepartement.rowIndex + '-Chart');
+                            let detailsRepJoiAutreDepartementChartImg = detailsRepJoiAutreDepartementChart.toDataURL("image10/png", 1.0);
+                            doc.addImage(detailsRepJoiAutreDepartementChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 250)
+                        }
+
+                    },
                     margin: {left: 0, top: 30},
                     pageBreak: 'auto',
                     tableWidth: 842,
                     styles: {fontSize: 7}
                 });
-                doc.addImage(statesRepJoiAutreDepartementChartImg, 'JPEG', 150, ($('#statesRepJoiAutreDepartement').height() / 1.328147) + 50, 500, 250);
+                doc.addImage(statesRepJoiAutreDepartementChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5, 500, 250);
             }
 
             doc .addImage(footer, 'jpeg', 371, 810, 100,30);

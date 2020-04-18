@@ -381,7 +381,6 @@ frLang = {
                 width: '10%'
             });
         }
-
         return table.DataTable({
             destroy: true,
             language: frLang,
