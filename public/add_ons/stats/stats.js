@@ -1088,7 +1088,7 @@ $(function () {
                             isdrawn = false;
                         }
                         if (data.row.index == globalView.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
-                            data.row.height = $('#details-'+globalView.rowIndex[rownum]).height() * 0.75 + + (100 * 0.75);
+                            data.row.height = $('#details-'+globalView.rowIndex[rownum]).height() * 0.75 + (100 * 0.75);
                             doc.autoTable({
                                 html: '#details-'+globalView.rowIndex[rownum],
                                 startY: data.row.y + 5,
