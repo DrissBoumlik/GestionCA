@@ -5,6 +5,8 @@ $(function () {
     let agence_code = '';
     ajaxRequests = 0;
     let isdrawn = false;
+    let newNestedTable = 0;
+    let rownum = 0;
 
 
     const agence_name_element = $('#agence_name');
@@ -285,8 +287,8 @@ $(function () {
         filterQuery: {
             appCltquery: true,
         },
-        rowIndex : undefined,
-        highlightedRow : undefined,
+        rowIndex : [],
+        highlightedRow : [],
         routeCol: 'ValTypeIntervention/columns',
         routeData: 'ValTypeIntervention',
         objChart: {
@@ -325,8 +327,8 @@ $(function () {
             pagination: false,
             searching : false
         });
-        $('#refreshRegions').on('click', function () {
-            toggleLoader($('#refreshValTypeIntervention').parents('.col-12'));
+        $('#refreshValTypeIntervention').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statsValTypeIntervention, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -339,7 +341,7 @@ $(function () {
     }
 
     let statsRepTypeIntervention = {
-        columnName: 'Resultat_Appel',
+        columnName: 'Code_Intervention',
         rowName: 'Code_Type_Intervention',
         element_dt: undefined,
         element: 'statsRepTypeIntervention',
@@ -349,9 +351,10 @@ $(function () {
         filterElement: {dates: '#tree-view-07', rows: '#stats-groupement-filter'},
         filterQuery: {
             appCltquery: true,
+            queryJoin: ' and Groupement like "Appels clôture"',
         },
-        rowIndex : undefined,
-        highlightedRow : undefined,
+        rowIndex : [],
+        highlightedRow : [],
         routeCol: 'RepTypeIntervention/columns',
         routeData: 'RepTypeIntervention',
         objChart: {
@@ -390,8 +393,8 @@ $(function () {
             pagination: false,
             searching : false
         });
-        $('#refreshRegions').on('click', function () {
-            toggleLoader($('#refreshRepTypeIntervention').parents('.col-12'));
+        $('#refreshRepTypeIntervention').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statsRepTypeIntervention, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -521,54 +524,78 @@ $(function () {
             doc.text(10, 390 , 'Délai global de traitement OT');
             doc.autoTable({html: '#statsGlobalDelay',pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0} });
             doc.addImage(statsGlobalDelayChartImg, 'JPEG',532 , 400 , 350 , 300);
+            rownum = 0;
             doc.addPage();
             doc.text(10, 20 , 'Résultat Validation par Type Intervention');
             doc.autoTable({html: '#statsValTypeIntervention',
                 didDrawCell: function (data) {
-                    if (data.row.index == statsValTypeIntervention.highlightedRow && !isdrawn && data.row.section === 'body'){
-                        data.row.height = data.table.height + 200 ;
+                    if(data.row.index != newNestedTable && data.row.section === 'body'){
+                        isdrawn = false;
+                    }
+                    if (data.row.index == statsValTypeIntervention.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
+                        data.row.height = $('#details-'+statsValTypeIntervention.rowIndex[rownum]).height() * 0.75 + (100 * 0.75);
                         doc.autoTable({
-                            html: '#details-'+statsValTypeIntervention.rowIndex,
+                            html: '#details-'+statsValTypeIntervention.rowIndex[rownum],
                             startY: data.row.y + 5,
+                            pageBreak: 'auto',
                             margin: 0,
                             styles: {fontSize: 7}
                         });
-                        isdrawn = true;
-                        let detailsStatsValTypeInterventionChart = document.getElementById('details-'+statsValTypeIntervention.rowIndex + '-Chart');
+                        newNestedTable = data.row.index;
+                        let detailsStatsValTypeInterventionChart = document.getElementById('details-'+statsValTypeIntervention.rowIndex[rownum] + '-Chart');
                         let detailsStatsValTypeInterventionChartImg = detailsStatsValTypeInterventionChart.toDataURL("image7/png", 1.0);
-                        doc.addImage(detailsStatsValTypeInterventionChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 150);
+                        doc.addImage(detailsStatsValTypeInterventionChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 100);
+                        isdrawn = true;
+                        rownum++;
                     }
-
                 },
                 margin: {left: 0 , top: 30},
                 pageBreak: 'auto',
                 tableWidth: 842
             });
-            isdrawn = false;
-            doc.addImage(statsValTypeInterventionChartImg, 'JPEG',150, doc.previousAutoTable.finalY + 5 , 500, 150);
+            if(statsValTypeIntervention.highlightedRow.length > 1){
+                doc.addPage();
+                doc.text(10, 20 , 'La charte de  validation par Type Intervention');
+                doc.addImage(statsValTypeInterventionChartImg, 'JPEG',150, 60 , 500, 300);
+            }else{
+                doc.addImage(statsValTypeInterventionChartImg, 'JPEG',150, doc.previousAutoTable.finalY + 5 , 500, 300);
+            }
+            rownum = 0;
             doc.addPage();
             doc.text(10, 20 , 'Répartition Codes Intervention par Type Intervention');
             doc.autoTable({html: '#statsRepTypeIntervention',
                 didDrawCell: function (data) {
-                    if (data.row.index == statsRepTypeIntervention.highlightedRow && !isdrawn && data.row.section === 'body'){
-                        data.row.height = data.table.height + 200 ;
+                    if(data.row.index != newNestedTable && data.row.section === 'body'){
+                        isdrawn = false;
+                    }
+                    if (data.row.index == statsRepTypeIntervention.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
+                        data.row.height = $('#details-'+statsRepTypeIntervention.rowIndex[rownum]).height() * 0.75 + (100 * 0.75);
                         doc.autoTable({
-                            html: '#details-'+statsRepTypeIntervention.rowIndex,
+                            html: '#details-'+statsRepTypeIntervention.rowIndex[rownum],
                             startY: data.row.y + 5,
+                            pageBreak: 'auto',
                             margin: 0,
                             styles: {fontSize: 7}
                         });
-                        isdrawn = true;
-                        let detailsStatsRepTypeInterventionChart = document.getElementById('details-'+statsRepTypeIntervention.rowIndex + '-Chart');
+                        newNestedTable = data.row.index;
+                        let detailsStatsRepTypeInterventionChart = document.getElementById('details-'+statsRepTypeIntervention.rowIndex[rownum] + '-Chart');
                         let detailsStatsRepTypeInterventionChartImg = detailsStatsRepTypeInterventionChart.toDataURL("image7/png", 1.0);
-                        doc.addImage(detailsStatsRepTypeInterventionChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 150);
+                        doc.addImage(detailsStatsRepTypeInterventionChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 100);
+                        isdrawn = true;
+                        rownum++;
                     }
 
                 },
                 margin: {left: 0 , top: 30},
                 pageBreak: 'auto',
                 tableWidth: 842 });
-            doc.addImage(statsRepTypeInterventionChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 150);
+            if(statsRepTypeIntervention.highlightedRow.length > 1){
+                doc.addPage();
+                doc.text(10, 20 , 'La charte de Répartition Codes Intervention par Type Intervention');
+                doc.addImage(statsRepTypeInterventionChartImg, 'JPEG',150, 60 , 500, 300);
+            }else{
+                doc.addImage(statsRepTypeInterventionChartImg, 'JPEG',150, doc.previousAutoTable.finalY + 5 , 500, 300);
+            }
 
             doc.save('Appels Clôture.pdf');
 

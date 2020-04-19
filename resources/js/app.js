@@ -237,12 +237,15 @@ frLang = {
                                     // This row is already open - close it
                                     destroyChild(row);
                                     tr.removeClass('shown');
+                                    object.highlightedRow.splice(object.highlightedRow.indexOf($('#' + object.element + '> tbody > tr').index(tr)));
                                 } else {
                                     // Open this row
-                                    object.rowIndex = $('tr').index(tr);
-                                    object.highlightedRow = $('#' + object.element + ' tr').index(tr);
+                                    if(object.highlightedRow && object.rowIndex){
+                                        object.rowIndex.push($('tr').index(tr));
+                                        object.highlightedRow.push($('#' + object.element + '> tbody > tr').index(tr));
+                                    }
                                     data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
-                                    object.objDetail.element = 'details-' + object.rowIndex;
+                                    object.objDetail.element = 'details-' + $('tr').index(tr);
                                     createChild(row, object, data); // class is for background colour
                                     tr.addClass('shown');
                                 }

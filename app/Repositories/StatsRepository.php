@@ -2571,7 +2571,7 @@ class StatsRepository
             $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
-        $regions = $regions->orderBy('Type_Intervention');
+        $regions = $regions->orderBy('Type_Intervention', 'DESC');
         $regions = $regions->groupBy('Type_Intervention', 'Resultat_Appel')->get();
         $keys = $regions->groupBy(['Resultat_Appel'])->keys();
 
@@ -2836,7 +2836,7 @@ class StatsRepository
             $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
-        $regions = $regions->orderBy('Code_Intervention');
+        $regions = $regions->orderBy('Code_Intervention', 'DESC');
         $regions = $regions->groupBy('Type_Intervention', 'Code_Intervention')->get();
         $keys = $regions->groupBy(['Code_Intervention'])->keys();
 
@@ -3035,7 +3035,7 @@ class StatsRepository
             ->select(\DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'))
             ->distinct()
             ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH']);
+            ->whereIn('produit',['CUIVRE','FTTH','CUIVRE/FTTH']);
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -3088,7 +3088,7 @@ class StatsRepository
             ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'),
                 \DB::raw('count(distinct st.Id_Externe) as count'))
             ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH'])
+            ->whereIn('produit',['CUIVRE','FTTH','CUIVRE/FTTH'])
             ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
@@ -3099,7 +3099,7 @@ class StatsRepository
             $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
-        $regions = $regions->orderBy('Type_Intervention');
+        $regions = $regions->orderBy('Type_Intervention', 'DESC');
         $regions = $regions->groupBy('Type_Intervention', 'departement')->get();
         $keys = $regions->groupBy(['departement'])->keys();
 
@@ -3168,7 +3168,7 @@ class StatsRepository
             ->select(\DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'))
             ->distinct()
             ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH'])
+            ->whereIn('produit',['CUIVRE','FTTH','CUIVRE/FTTH'])
             ->where('Code_Type_Intervention','like',$key_groupement.'%');
 
         $columns = applyFilter($columns, $filter);
@@ -3222,7 +3222,7 @@ class StatsRepository
         $regions = \DB::table('stats as st')
             ->select(\DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'), 'produit',\DB::raw('count(distinct st.Id_Externe) as count'))
             ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH'])
+            ->whereIn('produit',['CUIVRE','FTTH','CUIVRE/FTTH'])
             ->where('Code_Type_Intervention','like',$key_groupement.'%')
             ->whereNull('isNotReady');
 
@@ -3323,10 +3323,10 @@ class StatsRepository
             $regions_names = [];
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->data = $key;
-                $regions_names[$index + 1]->name = $key;
-                $regions_names[$index + 1]->text = $key;
-                $regions_names[$index + 1]->title = $key;
+                $regions_names[$index + 1]->data =
+                $regions_names[$index + 1]->name =
+                $regions_names[$index + 1]->text =
+                $regions_names[$index + 1]->title = $key ?? '';
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
@@ -3398,7 +3398,7 @@ class StatsRepository
                     $row->Gpmt_Appel_Pre = $call->Type_Intervention;
                     $Gpmt_Appel_Pre = $call->Gpmt_Appel_Pre;
                     $row->$Gpmt_Appel_Pre = $call->count . '|' . $call->$Gpmt_Appel_Pre . '%';
-                    $row->values[$Gpmt_Appel_Pre] = $call->count;
+                    $row->values[$Gpmt_Appel_Pre ?? ''] = $call->count;
                     $col_arr = array_diff($col_arr, [$Gpmt_Appel_Pre]);
                     return $row;
                 });
@@ -3490,7 +3490,7 @@ class StatsRepository
         $regions = \DB::table('stats as st')
             ->select('Gpmt_Appel_Pre', 'produit',\DB::raw('count(distinct st.Id_Externe) as count'))
             ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH'])
+            ->whereIn('produit',['CUIVRE','FTTH','CUIVRE/FTTH'])
             ->where('Code_Type_Intervention','like',$key_groupement.'%')
             ->whereNull('isNotReady');
 

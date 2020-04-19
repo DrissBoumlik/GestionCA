@@ -3,8 +3,10 @@ $(function () {
 
     let agent_name = '';
     let agence_code = '';
-    let isdrawn = false;
     ajaxRequests = 0;
+    let isdrawn = false;
+    let newNestedTable = 0;
+    let rownum = 0;
 
 
     const agence_name_element = $('#agence_name');
@@ -365,8 +367,8 @@ $(function () {
         filterQuery: {
             appCltquery: true,
         },
-        rowIndex : undefined,
-        highlightedRow : undefined,
+        rowIndex : [],
+        highlightedRow : [],
         routeCol: 'RepJoiDepartement/columns',
         routeData: 'RepJoiDepartement',
         objChart: {
@@ -405,8 +407,8 @@ $(function () {
             pagination: false,
             searching : false
         });
-        $('#refreshRegions').on('click', function () {
-            toggleLoader($('#refreshRepTypeIntervention').parents('.col-12'));
+        $('#refreshRepJoiDepartement').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statesRepJoiDepartement, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -430,8 +432,8 @@ $(function () {
         filterQuery: {
             appCltquery: true,
         },
-        rowIndex : undefined,
-        highlightedRow : undefined,
+        rowIndex : [],
+        highlightedRow : [],
         routeCol: 'RepJoiAutreDepartement/columns',
         routeData: 'RepJoiAutreDepartement',
         objChart: {
@@ -443,7 +445,7 @@ $(function () {
         children: [],
         objDetail: {
             columnName: 'Gpmt_Appel_Pre',
-            rowName: 'Code_Type_Intervention',
+            rowName: 'produit',
             element_dt: undefined,
             element: undefined,
             columns: undefined,
@@ -470,8 +472,8 @@ $(function () {
             pagination: false,
             searching : false
         });
-        $('#refreshRegions').on('click', function () {
-            toggleLoader($('#refreshRepTypeIntervention').parents('.col-12'));
+        $('#refreshRepJoiAutreDepartement').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statesRepJoiAutreDepartement, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -485,7 +487,13 @@ $(function () {
     //</editor-fold>
 
     let globalElements = [userObject, statsCallsPrealable, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, CallResultPrealable];
-
+    if(elementExists(statesRepJoiDepartement)){
+        globalElements.push(statesRepJoiDepartement);
+    }else
+        if(elementExists(statesRepJoiAutreDepartement)){
+        globalElements.push(statesRepJoiAutreDepartement);
+    }
+        console.log(globalElements);
     detailClick = false;
 
     getDatesFilter(globalElements);
@@ -549,6 +557,26 @@ $(function () {
             removeTotalColumn: true,
             pagination: false
         });
+        if (elementExists(statesRepJoiDepartement)) {
+            getColumns(statesRepJoiDepartement, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: true,
+                removeTotalColumn: false,
+                pagination: false,
+                searching: false
+            });
+        }
+        if (elementExists(statesRepJoiAutreDepartement)) {
+            getColumns(statesRepJoiAutreDepartement, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: true,
+                removeTotalColumn: false,
+                pagination: false,
+                searching: false
+            });
+        }
     });
     //</editor-fold>
     $("#printElement").on("click", function () {
@@ -621,60 +649,75 @@ $(function () {
 
             if (elementExists(statesRepJoiDepartement)) {
                 let statesRepJoiDepartementChartImg = statesRepJoiDepartementChart.toDataURL("image8/png", 1.0);
+                rownum = 0;
                 doc.addPage();
                 doc.text(10, 20, 'Répartition Joignabilité par type par département');
                 doc.autoTable({
                     html: '#statesRepJoiDepartement',
                     didDrawCell: function (data) {
-                        if (data.row.index == statesRepJoiDepartement.highlightedRow && !isdrawn && data.row.section === 'body'){
-                            data.row.height = ($('#details-'+statesRepJoiDepartement.rowIndex).height() * 0.75) + 270;
+                        if(data.row.index != newNestedTable && data.row.section === 'body'){
+                            isdrawn = false;
+                        }
+                        if (data.row.index == statesRepJoiDepartement.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
+                            data.row.height = data.row.height = $('#details-'+statesRepJoiDepartement.rowIndex[rownum]).height() * 0.75 + (100* 0.75);
                             doc.autoTable({
-                                html: '#details-'+statesRepJoiDepartement.rowIndex,
+                                html: '#details-'+statesRepJoiDepartement.rowIndex[rownum],
                                 startY: data.row.y + 5,
+                                pageBreak: 'auto',
                                 margin: 0,
                                 styles: {fontSize: 7}
                             });
-                            isdrawn = true;
-                            let detailsRepJoiDepartementChart = document.getElementById('details-'+statesRepJoiDepartement.rowIndex + '-Chart');
+                            newNestedTable = data.row.index;
+                            let detailsRepJoiDepartementChart = document.getElementById('details-'+statesRepJoiDepartement.rowIndex[rownum] + '-Chart');
                             let detailsRepJoiDepartementChartImg = detailsRepJoiDepartementChart.toDataURL("image10/png", 1.0);
-                            doc.addImage(detailsRepJoiDepartementChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 250)
+                            doc.addImage(detailsRepJoiDepartementChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 100);
+                            isdrawn = true;
+                            rownum++;
                         }
-
                     },
                     margin: {left: 0, top: 30},
                     pageBreak: 'auto',
                     tableWidth: 842,
                     styles: {fontSize: 7}
                 });
-                doc.addImage(statesRepJoiDepartementChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5, 500, 250);
+
+                    doc.addImage(statesRepJoiDepartementChartImg, 'JPEG',150, doc.previousAutoTable.finalY + 10 , 500, 150);
+
             }else{
                 let statesRepJoiAutreDepartementChartImg = statesRepJoiAutreDepartementChart.toDataURL("image9/png", 1.0);
+                rownum = 0;
                 doc.addPage();
                 doc.text(10, 20, 'Répartition Joignabilité par type par département');
                 doc.autoTable({
                     html: '#statesRepJoiAutreDepartement',
                     didDrawCell: function (data) {
-                        if (data.row.index == statesRepJoiAutreDepartement.highlightedRow && !isdrawn && data.row.section === 'body'){
-                            data.row.height = ($('#details-'+statesRepJoiAutreDepartement.rowIndex).height() * 0.75) + 270;
+                        if(data.row.index != newNestedTable && data.row.section === 'body'){
+                            isdrawn = false;
+                        }
+                        if (data.row.index == statesRepJoiAutreDepartement.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
+                            data.row.height = data.row.height = $('#details-'+statesRepJoiAutreDepartement.rowIndex[rownum]).height() * 0.75 + (100* 0.75);
                             doc.autoTable({
-                                html: '#details-'+statesRepJoiAutreDepartement.rowIndex,
+                                html: '#details-'+statesRepJoiAutreDepartement.rowIndex[rownum],
                                 startY: data.row.y + 5,
+                                pageBreak: 'auto',
                                 margin: 0,
                                 styles: {fontSize: 7}
                             });
-                            isdrawn = true;
-                            let detailsRepJoiAutreDepartementChart = document.getElementById('details-'+statesRepJoiAutreDepartement.rowIndex + '-Chart');
+                            newNestedTable = data.row.index;
+                            let detailsRepJoiAutreDepartementChart = document.getElementById('details-'+statesRepJoiAutreDepartement.rowIndex[rownum] + '-Chart');
                             let detailsRepJoiAutreDepartementChartImg = detailsRepJoiAutreDepartementChart.toDataURL("image10/png", 1.0);
-                            doc.addImage(detailsRepJoiAutreDepartementChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 250)
+                            doc.addImage(detailsRepJoiAutreDepartementChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 100);
+                            isdrawn = true;
+                            rownum++;
                         }
-
                     },
                     margin: {left: 0, top: 30},
                     pageBreak: 'auto',
                     tableWidth: 842,
                     styles: {fontSize: 7}
                 });
-                doc.addImage(statesRepJoiAutreDepartementChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5, 500, 250);
+
+                    doc.addImage(statesRepJoiAutreDepartementChartImg, 'JPEG',150, doc.previousAutoTable.finalY + 120 , 500, 150);
             }
 
             doc .addImage(footer, 'jpeg', 371, 810, 100,30);
