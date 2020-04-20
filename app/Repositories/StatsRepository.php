@@ -2307,7 +2307,7 @@ class StatsRepository
             $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
-        $regions = $regions->orderBy('Type_Intervention');
+        $regions = $regions->orderBy('Type_Intervention', 'DESC');
         $regions = $regions->groupBy('Type_Intervention', 'produit')->get();
         $keys = $regions->groupBy(['produit'])->keys();
 
