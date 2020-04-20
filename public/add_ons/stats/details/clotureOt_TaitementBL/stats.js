@@ -507,22 +507,22 @@ $(function () {
             //creates PDF from img
             let doc = new jsPDF('p', 'pt', [ 842,  842]);
             doc.text(10, 20, 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement');
-            doc.autoTable({html: '#statsCallsCloture', margin: {top: 30}, pageBreak: 'auto' });
+            doc.autoTable({html: '#statsCallsCloture', margin: {top: 30}, pageBreak: 'auto',styles: {fontSize: 7} });
             doc.addImage(statsCallsClotureChartImg, 'JPEG',150 , ($('#statsCallsCloture').height()/1.328147) + 30 , 500 , 350);
             doc.addPage();
             doc.text(10, 20, 'Répartition des dossiers non validés par Code Type intervention');
             doc.addImage(statsFoldersByTypeChartImg, 'JPEG', 532 , 30 , 350 , 300);
-            doc.autoTable({html: '#statsFoldersByType', margin: {left: 0 , top: 30}, pageBreak: 'auto',styles: {cellPadding: {top: 0, bottom: 0,right : 0}}, tableWidth: 525, columnStyles: { 6: {cellWidth: 45 }, 5:{cellWidth: 45 } } });
+            doc.autoTable({html: '#statsFoldersByType', margin: {left: 0 , top: 30}, pageBreak: 'auto',styles: {fontSize: 7, cellPadding: {top: 0, bottom: 0,right : 0}}, tableWidth: 525, columnStyles: { 6: {cellWidth: 45 }, 5:{cellWidth: 45 } } });
             doc.addPage();
             doc.text(10, 20, 'Répartition des dossiers non validés par code intervention');
             doc.addImage(statsFoldersByCodeChartImg, 'JPEG', 532 , 30 , 350 , 300);
-            doc.autoTable({html: '#statsFoldersByCode', margin: {left: 0 , top: 30}, pageBreak: 'auto',styles: {cellPadding: {top: 0, bottom: 0,right : 0}} , tableWidth: 525});
+            doc.autoTable({html: '#statsFoldersByCode', margin: {left: 0 , top: 30}, pageBreak: 'auto',styles: {fontSize: 7,cellPadding: {top: 0, bottom: 0,right : 0}} , tableWidth: 525});
             doc.addPage();
             doc.text(10, 20 , 'Délai de validation post solde');
-            doc.autoTable({html: '#statsColturetech', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520 });
+            doc.autoTable({html: '#statsColturetech', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520, styles: {fontSize: 7} });
             doc.addImage(statsColturetechChartImg, 'JPEG',532, 30 , 350 , 300);
             doc.text(10, 390 , 'Délai global de traitement OT');
-            doc.autoTable({html: '#statsGlobalDelay',pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0} });
+            doc.autoTable({html: '#statsGlobalDelay',pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0}, styles: {fontSize: 7} });
             doc.addImage(statsGlobalDelayChartImg, 'JPEG',532 , 400 , 350 , 300);
             rownum = 0;
             doc.addPage();
@@ -533,7 +533,7 @@ $(function () {
                         isdrawn = false;
                     }
                     if (data.row.index == statsValTypeIntervention.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
-                        data.row.height = $('#details-'+statsValTypeIntervention.rowIndex[rownum]).height() * 0.75 + (100 * 0.75);
+                        data.row.height = ($('#details-'+statsValTypeIntervention.rowIndex[rownum]).height() * 0.75) + 30;
                         doc.autoTable({
                             html: '#details-'+statsValTypeIntervention.rowIndex[rownum],
                             startY: data.row.y + 5,
@@ -551,6 +551,7 @@ $(function () {
                 },
                 margin: {left: 0 , top: 30},
                 pageBreak: 'auto',
+                styles: {fontSize: 7},
                 tableWidth: 842
             });
             if(statsValTypeIntervention.highlightedRow.length > 1){
@@ -569,7 +570,7 @@ $(function () {
                         isdrawn = false;
                     }
                     if (data.row.index == statsRepTypeIntervention.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
-                        data.row.height = $('#details-'+statsRepTypeIntervention.rowIndex[rownum]).height() * 0.75 + (100 * 0.75);
+                        data.row.height = ($('#details-'+statsRepTypeIntervention.rowIndex[rownum]).height() * 0.75) + 30;
                         doc.autoTable({
                             html: '#details-'+statsRepTypeIntervention.rowIndex[rownum],
                             startY: data.row.y + 5,
@@ -588,6 +589,7 @@ $(function () {
                 },
                 margin: {left: 0 , top: 30},
                 pageBreak: 'auto',
+                styles: {fontSize: 7},
                 tableWidth: 842 });
             if(statsRepTypeIntervention.highlightedRow.length > 1){
                 doc.addPage();

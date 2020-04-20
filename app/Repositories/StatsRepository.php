@@ -1832,7 +1832,7 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->title = 'Nom_region';
+            $first->title = 'Nom region';
             $first->name = 'Nom_region';
             $first->data = 'Nom_region';
             $first->orderable = false;
@@ -1969,7 +1969,7 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->title = 'Nom_region';
+            $first->title = 'Nom region';
             $first->name = 'Nom_region';
             $first->data = 'Nom_region';
             $first->orderable = false;
@@ -2104,7 +2104,7 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->title = 'EXPORT_ALL_EXTRACT_CUI';
+            $first->title = 'EXPORT ALL EXTRACT CUI';
             $first->name = 'EXPORT_ALL_EXTRACT_CUI';
             $first->data = 'EXPORT_ALL_EXTRACT_CUI';
             $first->orderable = false;
@@ -2531,14 +2531,14 @@ class StatsRepository
                 $regions_names[$index + 1]->data = $key;
                 $regions_names[$index + 1]->name = $key;
                 $regions_names[$index + 1]->text = $key;
-                $regions_names[$index + 1]->title = $key;
+                $regions_names[$index + 1]->title = ($key == 'Appels clôture - Validé conforme') ? 'Validé Conforme' : 'Validé Non Conforme' ;
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->title = 'Resultat_Appel';
+            $first->title = 'Resultat Appel';
             $first->name = 'Resultat_Appel';
             $first->data = 'Resultat_Appel';
             $first->orderable = false;
@@ -2670,7 +2670,7 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->title = 'Code_Type_Intervention';
+            $first->title = 'Code Type Intervention';
             $first->name = 'Code_Type_Intervention';
             $first->data = 'Code_Type_Intervention';
             $first->orderable = false;
@@ -2804,7 +2804,7 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->title = 'Code_Intervention';
+            $first->title = 'Code Intervention';
             $first->name = 'Code_Intervention';
             $first->data = 'Code_Intervention';
             $first->orderable = false;
@@ -2932,7 +2932,7 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->title = 'Code_Type_Intervention';
+            $first->title = 'Code Type Intervention';
             $first->name = 'Code_Type_Intervention';
             $first->data = 'Code_Type_Intervention';
             $first->orderable = false;
@@ -3333,7 +3333,7 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->title = 'Gpmt_Appel_Pre';
+            $first->title = 'Joignabilité';
             $first->name = 'Gpmt_Appel_Pre';
             $first->data = 'Gpmt_Appel_Pre';
             $first->orderable = false;
@@ -3466,7 +3466,7 @@ class StatsRepository
                     ($item1->data < $item2->data) ? -1 : 1;
             });
             $first = new \stdClass();
-            $first->title = 'Gpmt_Appel_Pre';
+            $first->title = 'joignabilité';
             $first->name = 'Gpmt_Appel_Pre';
             $first->data = 'Gpmt_Appel_Pre';
             $first->orderable = false;

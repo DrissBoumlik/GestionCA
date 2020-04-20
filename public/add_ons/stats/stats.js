@@ -677,8 +677,8 @@ $(function () {
             pagination: false,
             searching: false
         });
-        $('#refreshRegions').on('click', function () {
-            toggleLoader($('#refreshTypeIntervention').parents('.col-12'));
+        $('#refreshTypeIntervention').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(statsTypeIntervention, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
@@ -916,7 +916,7 @@ $(function () {
             });
             getColumns(statsTypeIntervention, filterData(), {
                 removeTotal: false,
-                refreshMode: false,
+                refreshMode: true,
                 details: true,
                 removeTotalColumn: false,
                 pagination: false,
@@ -1088,7 +1088,7 @@ $(function () {
                             isdrawn = false;
                         }
                         if (data.row.index == globalView.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
-                            data.row.height = $('#details-'+globalView.rowIndex[rownum]).height() * 0.75 + (100 * 0.75);
+                            data.row.height = $('#details-'+globalView.rowIndex[rownum]).height() * 0.75 + 30;
                             doc.autoTable({
                                 html: '#details-'+globalView.rowIndex[rownum],
                                 startY: data.row.y + 5,

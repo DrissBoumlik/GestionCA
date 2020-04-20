@@ -659,7 +659,7 @@ $(function () {
                             isdrawn = false;
                         }
                         if (data.row.index == statesRepJoiDepartement.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
-                            data.row.height = data.row.height = $('#details-'+statesRepJoiDepartement.rowIndex[rownum]).height() * 0.75 + (100* 0.75);
+                            data.row.height = data.row.height = $('#details-'+statesRepJoiDepartement.rowIndex[rownum]).height() * 0.75 + 30;
                             doc.autoTable({
                                 html: '#details-'+statesRepJoiDepartement.rowIndex[rownum],
                                 startY: data.row.y + 5,
@@ -695,7 +695,7 @@ $(function () {
                             isdrawn = false;
                         }
                         if (data.row.index == statesRepJoiAutreDepartement.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
-                            data.row.height = data.row.height = $('#details-'+statesRepJoiAutreDepartement.rowIndex[rownum]).height() * 0.75 + (100* 0.75);
+                            data.row.height = data.row.height = $('#details-'+statesRepJoiAutreDepartement.rowIndex[rownum]).height() * 0.75 + 30;
                             doc.autoTable({
                                 html: '#details-'+statesRepJoiAutreDepartement.rowIndex[rownum],
                                 startY: data.row.y + 5,
