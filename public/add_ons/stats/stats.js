@@ -65,6 +65,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement) groupedst',
             queryGroupBy: ' GROUP BY st.Id_Externe, Nom_Region, Groupement, Key_Groupement'
         },
+        rowIndex: [],
+        highlightedRow: [],
         routeCol: 'regions/columns/Groupement',
         routeData: 'regions/Groupement',
         objChart: {
@@ -1088,7 +1090,9 @@ $(function () {
                             isdrawn = false;
                         }
                         if (data.row.index == globalView.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
-                            data.row.height = $('#details-'+globalView.rowIndex[rownum]).height() * 0.75 + 30;
+                            data.row.height = ($('#details-'+globalView.rowIndex[rownum]+ ' tr').length * 26) + 110 ;
+                            doc.setFillColor(255,255,255);
+                            doc.rect(0, data.row.y, 842, data.row.height, 'F');
                             doc.autoTable({
                                 html: '#details-'+globalView.rowIndex[rownum],
                                 startY: data.row.y + 5,

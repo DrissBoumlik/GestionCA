@@ -659,7 +659,9 @@ $(function () {
                             isdrawn = false;
                         }
                         if (data.row.index == statesRepJoiDepartement.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
-                            data.row.height = data.row.height = $('#details-'+statesRepJoiDepartement.rowIndex[rownum]).height() * 0.75 + 30;
+                            data.row.height = ($('#details-'+statesRepJoiDepartement.rowIndex[rownum]+ ' tr').length * 26) + 110;
+                            doc.setFillColor(255,255,255);
+                            doc.rect(0, data.row.y, 842, data.row.height, 'F');
                             doc.autoTable({
                                 html: '#details-'+statesRepJoiDepartement.rowIndex[rownum],
                                 startY: data.row.y + 5,
@@ -681,7 +683,7 @@ $(function () {
                     styles: {fontSize: 7}
                 });
 
-                    doc.addImage(statesRepJoiDepartementChartImg, 'JPEG',150, doc.previousAutoTable.finalY + 10 , 500, 150);
+                    doc.addImage(statesRepJoiDepartementChartImg, 'JPEG',150, doc.previousAutoTable.finalY + 5 , 500, 150);
 
             }else{
                 let statesRepJoiAutreDepartementChartImg = statesRepJoiAutreDepartementChart.toDataURL("image9/png", 1.0);
@@ -695,7 +697,9 @@ $(function () {
                             isdrawn = false;
                         }
                         if (data.row.index == statesRepJoiAutreDepartement.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
-                            data.row.height = data.row.height = $('#details-'+statesRepJoiAutreDepartement.rowIndex[rownum]).height() * 0.75 + 30;
+                            data.row.height = ($('#details-'+statesRepJoiAutreDepartement.rowIndex[rownum]+ ' tr').length * 26) + 110;
+                            doc.setFillColor(255,255,255);
+                            doc.rect(0, data.row.y, 842, data.row.height, 'F');
                             doc.autoTable({
                                 html: '#details-'+statesRepJoiAutreDepartement.rowIndex[rownum],
                                 startY: data.row.y + 5,

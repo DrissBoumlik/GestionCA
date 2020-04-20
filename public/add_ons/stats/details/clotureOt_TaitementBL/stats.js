@@ -533,7 +533,9 @@ $(function () {
                         isdrawn = false;
                     }
                     if (data.row.index == statsValTypeIntervention.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
-                        data.row.height = ($('#details-'+statsValTypeIntervention.rowIndex[rownum]).height() * 0.75) + 30;
+                        data.row.height = ($('#details-'+statsValTypeIntervention.rowIndex[rownum]+ ' tr').length * 26) + 110;
+                        doc.setFillColor(255,255,255);
+                        doc.rect(0, data.row.y, 842, data.row.height, 'F');
                         doc.autoTable({
                             html: '#details-'+statsValTypeIntervention.rowIndex[rownum],
                             startY: data.row.y + 5,
@@ -570,7 +572,9 @@ $(function () {
                         isdrawn = false;
                     }
                     if (data.row.index == statsRepTypeIntervention.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
-                        data.row.height = ($('#details-'+statsRepTypeIntervention.rowIndex[rownum]).height() * 0.75) + 30;
+                        data.row.height = ($('#details-'+statsRepTypeIntervention.rowIndex[rownum]+ ' tr').length * 26) + 110;
+                        doc.setFillColor(255,255,255);
+                        doc.rect(0, data.row.y , 842, data.row.height, 'F');
                         doc.autoTable({
                             html: '#details-'+statsRepTypeIntervention.rowIndex[rownum],
                             startY: data.row.y + 5,
