@@ -2531,7 +2531,7 @@ class StatsRepository
                 $regions_names[$index + 1]->data = $key;
                 $regions_names[$index + 1]->name = $key;
                 $regions_names[$index + 1]->text = $key;
-                $regions_names[$index + 1]->title = ($key == 'Appels clôture - Validé conforme') ? 'Validé Conforme' : 'Validé Non Conforme' ;
+                $regions_names[$index + 1]->title = ($key == 'Appels clôture - Validé conforme') ? 'Validé Conforme' : 'Validé Non Conforme';
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
@@ -3034,8 +3034,8 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select(\DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'))
             ->distinct()
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH','CUIVRE/FTTH']);
+            ->where('Groupement', 'like', 'Appels préalables')
+            ->whereIn('produit', ['CUIVRE', 'FTTH', 'CUIVRE/FTTH']);
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -3087,8 +3087,8 @@ class StatsRepository
         $regions = \DB::table('stats as st')
             ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'),
                 \DB::raw('count(distinct st.Id_Externe) as count'))
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH','CUIVRE/FTTH'])
+            ->where('Groupement', 'like', 'Appels préalables')
+            ->whereIn('produit', ['CUIVRE', 'FTTH', 'CUIVRE/FTTH'])
             ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
@@ -3167,9 +3167,9 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select(\DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'))
             ->distinct()
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH','CUIVRE/FTTH'])
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+            ->where('Groupement', 'like', 'Appels préalables')
+            ->whereIn('produit', ['CUIVRE', 'FTTH', 'CUIVRE/FTTH'])
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -3220,10 +3220,10 @@ class StatsRepository
 
 
         $regions = \DB::table('stats as st')
-            ->select(\DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'), 'produit',\DB::raw('count(distinct st.Id_Externe) as count'))
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH','CUIVRE/FTTH'])
-            ->where('Code_Type_Intervention','like',$key_groupement.'%')
+            ->select(\DB::raw('SUBSTRING(Nom_Agence, -3, 2) as departement'), 'produit', \DB::raw('count(distinct st.Id_Externe) as count'))
+            ->where('Groupement', 'like', 'Appels préalables')
+            ->whereIn('produit', ['CUIVRE', 'FTTH', 'CUIVRE/FTTH'])
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%')
             ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
@@ -3302,8 +3302,8 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select(\DB::raw('Gpmt_Appel_Pre'))
             ->distinct()
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('Gpmt_Appel_Pre',['Joignable','Injoignable']);
+            ->where('Groupement', 'like', 'Appels préalables')
+            ->whereIn('Gpmt_Appel_Pre', ['Joignable', 'Injoignable']);
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -3355,8 +3355,8 @@ class StatsRepository
         $regions = \DB::table('stats as st')
             ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), 'Gpmt_Appel_Pre',
                 \DB::raw('count(distinct st.Id_Externe) as count'))
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('Gpmt_Appel_Pre',['Joignable','Injoignable'])
+            ->where('Groupement', 'like', 'Appels préalables')
+            ->whereIn('Gpmt_Appel_Pre', ['Joignable', 'Injoignable'])
             ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
@@ -3435,9 +3435,9 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select(\DB::raw('Gpmt_Appel_Pre'))
             ->distinct()
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('Gpmt_Appel_Pre',['Joignable','Injoignable'])
-            ->where('Code_Type_Intervention','like',$key_groupement.'%');
+            ->where('Groupement', 'like', 'Appels préalables')
+            ->whereIn('Gpmt_Appel_Pre', ['Joignable', 'Injoignable'])
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%');
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -3488,10 +3488,10 @@ class StatsRepository
 
 
         $regions = \DB::table('stats as st')
-            ->select('Gpmt_Appel_Pre', 'produit',\DB::raw('count(distinct st.Id_Externe) as count'))
-            ->where('Groupement','like','Appels préalables')
-            ->whereIn('produit',['CUIVRE','FTTH','CUIVRE/FTTH'])
-            ->where('Code_Type_Intervention','like',$key_groupement.'%')
+            ->select('Gpmt_Appel_Pre', 'produit', \DB::raw('count(distinct st.Id_Externe) as count'))
+            ->where('Groupement', 'like', 'Appels préalables')
+            ->whereIn('produit', ['CUIVRE', 'FTTH', 'CUIVRE/FTTH'])
+            ->where('Code_Type_Intervention', 'like', $key_groupement . '%')
             ->whereNull('isNotReady');
 
         $regions = applyFilter($regions, $filter);
@@ -3620,6 +3620,9 @@ class StatsRepository
             $data = ['filter' => $filter, 'columns' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => ''];
             return $data;
         } else {
+
+            $keys = sortGroupementColumns($keys);
+
             $column_names = [];
             $keys->map(function ($key, $index) use (&$column_names) {
                 $column_names[$index + 1] = new \stdClass();
@@ -3627,14 +3630,6 @@ class StatsRepository
                 $column_names[$index + 1]->data =
                 $column_names[$index + 1]->name =
                 $column_names[$index + 1]->title = $key;
-//            $_value = new \stdClass();
-//            $_value->data = $key;
-//            $_value->name = $key;
-//            return $_value;
-            });
-            usort($column_names, function ($item1, $item2) {
-                return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
             });
 
 //            $header = new \stdClass();
@@ -3858,6 +3853,9 @@ class StatsRepository
             $data = ['filter' => $filter, 'columns' => [], 'rows' => $rowsKeys, 'rowsFilterHeader' => ''];
             return $data;
         } else {
+
+            $keys = sortGroupementColumns($keys);
+
             $column_names = [];
             $keys->map(function ($key, $index) use (&$column_names) {
                 $column_names[$index + 1] = new \stdClass();
@@ -3865,14 +3863,6 @@ class StatsRepository
                 $column_names[$index + 1]->data =
                 $column_names[$index + 1]->name =
                 $column_names[$index + 1]->title = $key;
-//            $_value = new \stdClass();
-//            $_value->data = $key;
-//            $_value->name = $key;
-//            return $_value;
-            });
-            usort($column_names, function ($item1, $item2) {
-                return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
             });
 
 //            $header = new \stdClass();

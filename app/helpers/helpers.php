@@ -7,6 +7,16 @@ use App\Models\UserFlag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+if (!function_exists('sortGroupementColumns')) {
+    function sortGroupementColumns($columns)
+    {
+        $columns = $columns->all();
+        $sortWith = config('custom_params.groupement');
+        $columns = collect(array_intersect($sortWith, $columns));
+        return $columns;
+    }
+}
+
 if (!function_exists('getImportedData')) {
     function getImportedData($wantValue = false)
     {
