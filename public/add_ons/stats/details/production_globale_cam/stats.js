@@ -117,8 +117,12 @@ $(function () {
         toggleLoader($(this).parents('.col-12'));
 
         globalElements.map(function (element) {
-            element.filterTree.dates = userObject.filterTree.dates;
-            element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
+            try {
+                element.filterTree.dates = userObject.filterTree.dates;
+                element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
+            } catch {
+
+            }
         });
         userFilter(userObject, true);
         getColumns(statsPerimeters, filterData(), {
