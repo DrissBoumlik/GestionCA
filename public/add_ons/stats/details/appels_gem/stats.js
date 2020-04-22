@@ -207,10 +207,10 @@ $(function () {
         toggleLoader($(this).parents('.col-12'));
 
         globalElements.map(function (element) {
-            try{
+            try {
                 element.filterTree.dates = userObject.filterTree.dates;
                 element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
-            }catch {
+            } catch (e) {
 
             }
         });
@@ -252,20 +252,39 @@ $(function () {
             let callsStatesAgenciesChartImg = callsStatesAgenciesChart.toDataURL("image2/png", 1.0);
             let callsStatesWeeksChartImg = callsStatesWeeksChart.toDataURL("image3/png", 1.0);
 
-         //creates PDF from img
-            let doc = new jsPDF('p', 'pt', [ 842,  842]);
-            doc.addImage(logo, 'jpeg', 371, 10, 100,30);
-            doc.text(10 , 40, 'Résultats Appels GEM');
-            doc.autoTable({html: '#statsCallsGem', margin: {left: 0 , top: 50}, pageBreak: 'auto', tableWidth: 520,styles: {fontSize: 7} });
-            doc.addImage(statsCallsGemChartImg, 'JPEG',  532 , 30 , 350 , 300);
+            //creates PDF from img
+            let doc = new jsPDF('p', 'pt', [842, 842]);
+            doc.addImage(logo, 'jpeg', 371, 10, 100, 30);
+            doc.text(10, 40, 'Résultats Appels GEM');
+            doc.autoTable({
+                html: '#statsCallsGem',
+                margin: {left: 0, top: 50},
+                pageBreak: 'auto',
+                tableWidth: 520,
+                styles: {fontSize: 7}
+            });
+            doc.addImage(statsCallsGemChartImg, 'JPEG', 532, 30, 350, 300);
             doc.text(10, 390, 'Résultats Appels Préalables par agence');
-            doc.autoTable({html: '#callsStatesAgencies',  pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0} ,styles: {fontSize: 7} });
-            doc.addImage(callsStatesAgenciesChartImg, 'JPEG',532, 400  , 350 , 350 );
+            doc.autoTable({
+                html: '#callsStatesAgencies',
+                pageBreak: 'auto',
+                tableWidth: 520,
+                startY: 400,
+                margin: {left: 0},
+                styles: {fontSize: 7}
+            });
+            doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 532, 400, 350, 350);
             doc.addPage();
             doc.text(10, 20, 'Résultats Appels Préalables par semaine');
-            doc.autoTable({html: '#callsStatesWeeks', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520,styles: {fontSize: 7} });
-            doc.addImage(callsStatesWeeksChartImg, 'JPEG', 532 , 30 , 350 , 300 );
-            doc .addImage(footer, 'jpeg', 371, 810, 100,30);
+            doc.autoTable({
+                html: '#callsStatesWeeks',
+                margin: {left: 0, top: 30},
+                pageBreak: 'auto',
+                tableWidth: 520,
+                styles: {fontSize: 7}
+            });
+            doc.addImage(callsStatesWeeksChartImg, 'JPEG', 532, 30, 350, 300);
+            doc.addImage(footer, 'jpeg', 371, 810, 100, 30);
             doc.save('Appels Gem.pdf');
             toggleLoader($('body'), true);
         }, 100);

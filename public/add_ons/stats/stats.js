@@ -811,7 +811,7 @@ $(function () {
                     element.filterTree.dates = userObject.filterTree.dates;
                     element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
                 }
-            } catch {
+            } catch (e) {
 
             }
         });
