@@ -366,6 +366,7 @@ $(function () {
         filterElement: {dates: '#tree-view-08', rows: '#RepJoiDepartement-filter'},
         filterQuery: {
             appCltquery: true,
+            queryJoin: ' and Groupement like "Appels préalables" and produit in("CUIVRE", "FTTH", "CUIVRE/FTTH") and nom_agence not REGEXP "^.*[0-9]{2} .[0-9]{2}"',
         },
         rowIndex : [],
         highlightedRow : [],
@@ -380,7 +381,7 @@ $(function () {
         children: [],
         objDetail: {
             columnName: 'Nom_Agence',
-            rowName: 'Code_Type_Intervention',
+            rowName: 'produit',
             element_dt: undefined,
             element: undefined,
             columns: undefined,

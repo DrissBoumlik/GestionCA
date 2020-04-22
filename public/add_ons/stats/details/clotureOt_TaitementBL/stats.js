@@ -286,6 +286,7 @@ $(function () {
         filterElement: {dates: '#tree-view-06', rows: '#stats-groupement-filter'},
         filterQuery: {
             appCltquery: true,
+            queryJoin: ' and Groupement like "Appels clôture"',
         },
         rowIndex : [],
         highlightedRow : [],
@@ -307,6 +308,8 @@ $(function () {
             filterTree: {dates: [], rows: [], datesTreeObject: undefined},
             filterElement: undefined,
             filterQuery: {
+                appCltquery: true,
+                queryJoin: ' and Groupement like "Appels clôture"',
             },
             routeCol: 'ValTypeIntervention/details/columns',
             routeData: 'ValTypeIntervention/details',
@@ -365,7 +368,7 @@ $(function () {
         },
         children: [],
         objDetail: {
-            columnName: 'Resultat_Appel',
+            columnName: 'Code_Intervention',
             rowName: 'Code_Type_Intervention',
             element_dt: undefined,
             element: undefined,
@@ -373,6 +376,8 @@ $(function () {
             filterTree: {dates: [], rows: [], datesTreeObject: undefined},
             filterElement: undefined,
             filterQuery: {
+                appCltquery: true,
+                queryJoin: ' and Groupement like "Appels clôture"',
             },
             routeCol: 'RepTypeIntervention/details/columns',
             routeData: 'RepTypeIntervention/details',

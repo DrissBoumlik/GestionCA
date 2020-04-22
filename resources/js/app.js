@@ -260,6 +260,17 @@ frLang = {
                                 let col = object.element_dt.cell(this).index().column + 1;
                                 let row = object.element_dt.cell(this).index().row + 1;
                                 let colText = $(tableId + " > thead > tr > th:nth-child(" + col + ")").text();
+                                if (object.element === 'statsValTypeIntervention') {
+                                    switch (colText) {
+                                        case 'Validé Conforme':
+                                            colText = 'Appels clôture - Validé conforme';
+                                            break;
+                                        case 'Validé Non Conforme' :
+                                            colText = 'Appels clôture - CRI non conforme';
+                                            break;
+                                    }
+
+                                }
                                 let rowText = $(tableId + " > tbody > tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
                                 if (object.element === 'statsColturetech') {
                                     switch (rowText) {

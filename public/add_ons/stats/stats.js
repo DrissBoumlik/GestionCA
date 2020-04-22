@@ -639,6 +639,7 @@ $(function () {
         filterElement: {dates: '#tree-view-05', rows: '#stats-groupement-filter'},
         filterQuery: {
             appCltquery: true,
+            queryJoin: ' and produit != ""'
         },
         rowIndex: [],
         highlightedRow: [],
@@ -652,14 +653,16 @@ $(function () {
         },
         children: [],
         objDetail: {
-            columnName: 'Nom_Region',
+            columnName: 'produit',
             rowName: 'Code_Type_Intervention',
             element_dt: undefined,
             element: undefined,
             columns: undefined,
             filterTree: {dates: [], rows: [], datesTreeObject: undefined},
             filterElement: undefined,
-            filterQuery: {},
+            filterQuery: {
+                appCltquery: true,
+            },
             routeCol: 'TypeIntervention/details/columns',
             routeData: 'TypeIntervention/details',
             objChart: {

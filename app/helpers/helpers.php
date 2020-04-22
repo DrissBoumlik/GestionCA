@@ -111,7 +111,8 @@ if (!function_exists('getStats')) {
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                 (($row && $rowValue) ? ' and ' . $row . ' like "%' . $rowValue . '%"' : '') .
                 (!$row && $rowValue ? $rowValue : '') .
-                ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ' ') .
+                ( ($col && $colValue && $col !== 'produit') ? ' and ' . $col . ' like "%' . $colValue . '%"' :
+                    ($col && $colValue && $col === 'produit' ? ' and ' . $col . ' like "' . $colValue . '"' : '') ) .
                 ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
                 ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
                 ' and Resultat_Appel not like "=%"' .
