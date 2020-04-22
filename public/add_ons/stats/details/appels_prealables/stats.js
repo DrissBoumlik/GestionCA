@@ -388,6 +388,8 @@ $(function () {
             filterTree: {dates: [], rows: [], datesTreeObject: undefined},
             filterElement: undefined,
             filterQuery: {
+                appCltquery: true,
+                queryJoin: ' and Groupement like "Appels préalables" and nom_agence not REGEXP "^.*[0-9]{2} .[0-9]{2}"',
             },
             routeCol: 'RepJoiDepartement/details/columns',
             routeData: 'RepJoiDepartement/details',
