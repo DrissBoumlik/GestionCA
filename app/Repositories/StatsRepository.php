@@ -3188,10 +3188,10 @@ class StatsRepository
             $regions_names = [];
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->data = $key;
-                $regions_names[$index + 1]->name = $key;
-                $regions_names[$index + 1]->text = $key;
-                $regions_names[$index + 1]->title = $key;
+                $regions_names[$index + 1]->data =
+                $regions_names[$index + 1]->name =
+                $regions_names[$index + 1]->text =
+                $regions_names[$index + 1]->title = $key ?? '';
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
@@ -3266,7 +3266,7 @@ class StatsRepository
                     $row->departement = $call->produit;
                     $departement = $call->departement;
                     $row->$departement = $call->count . '|' . $call->$departement . '%';
-                    $row->values[$departement] = $call->count;
+                    $row->values[$departement ?? ''] = $call->count;
                     $col_arr = array_diff($col_arr, [$departement]);
                     return $row;
                 });
