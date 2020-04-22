@@ -12,5 +12,13 @@ return [
     | changed later to be stored in a separate table in the db
     */
 
-    'MAX_TOP_SKILLS' => 4
+    'MAX_TOP_SKILLS' => 4,
+    'groupement' => [
+        'Appels préalables',
+        'Appels clôture',
+        'Appels GEM',
+        'Traitement/Assistance CA',
+        'AE Contrôle IH',
+        'AE Contre Appel'
+    ]
 ];

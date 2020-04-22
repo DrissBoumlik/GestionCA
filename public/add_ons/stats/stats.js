@@ -902,7 +902,7 @@ $(function () {
                 removeTotalColumn: true,
                 removeTotal: false,
                 refreshMode: true,
-                details: false,
+                details: true,
                 pagination: false,
                 searching: false
             });
