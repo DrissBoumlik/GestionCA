@@ -366,6 +366,7 @@ $(function () {
         filterElement: {dates: '#tree-view-08', rows: '#RepJoiDepartement-filter'},
         filterQuery: {
             appCltquery: true,
+            queryJoin: ' and Groupement like "Appels préalables" and produit in("CUIVRE", "FTTH", "CUIVRE/FTTH") and nom_agence not REGEXP "^.*[0-9]{2} .[0-9]{2}"',
         },
         rowIndex : [],
         highlightedRow : [],
@@ -375,18 +376,20 @@ $(function () {
             element_chart: undefined,
             element_id: 'statesRepJoiDepartementChart',
             data: undefined,
-            chartTitle: 'It gonna be change after'
+            chartTitle: 'la charte de Répartition Joignabilité par type par département'
         },
         children: [],
         objDetail: {
             columnName: 'Nom_Agence',
-            rowName: 'Code_Type_Intervention',
+            rowName: 'produit',
             element_dt: undefined,
             element: undefined,
             columns: undefined,
             filterTree: {dates: [], rows: [], datesTreeObject: undefined},
             filterElement: undefined,
             filterQuery: {
+                appCltquery: true,
+                queryJoin: ' and Groupement like "Appels préalables" and nom_agence not REGEXP "^.*[0-9]{2} .[0-9]{2}"',
             },
             routeCol: 'RepJoiDepartement/details/columns',
             routeData: 'RepJoiDepartement/details',
@@ -394,7 +397,7 @@ $(function () {
                 element_chart: undefined,
                 element_id: undefined,
                 data: undefined,
-                chartTitle: 'It gonna be change after'
+                chartTitle: 'la charte de Répartition Joignabilité par type par département'
             },
         }
     };

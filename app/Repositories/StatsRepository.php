@@ -2707,7 +2707,6 @@ class StatsRepository
         }
 
         $regions = $regions->orderBy('Code_Type_Intervention');
-        //dd($regions->groupBy('Code_Type_Intervention', 'Nom_Region')->toSql(), $regions->getBindings());
         $regions = $regions->groupBy('Code_Type_Intervention', 'Resultat_Appel')->get();
         $keys = $regions->groupBy(['Resultat_Appel'])->keys();
 
@@ -3100,6 +3099,7 @@ class StatsRepository
         }
 
         $regions = $regions->orderBy('Type_Intervention', 'DESC');
+        //dd($regions->groupBy('Type_Intervention', 'departement')->toSql(),$regions->getBindings());
         $regions = $regions->groupBy('Type_Intervention', 'departement')->get();
         $keys = $regions->groupBy(['departement'])->keys();
 

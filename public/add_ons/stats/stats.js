@@ -639,6 +639,7 @@ $(function () {
         filterElement: {dates: '#tree-view-05', rows: '#stats-groupement-filter'},
         filterQuery: {
             appCltquery: true,
+            queryJoin: ' and produit != ""'
         },
         rowIndex: [],
         highlightedRow: [],
@@ -648,25 +649,27 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsTypeInterventionChart',
             data: undefined,
-            chartTitle: 'It gonna be change after'
+            chartTitle: 'la chart de Répartition des dossiers non validés par Code Type intervention'
         },
         children: [],
         objDetail: {
-            columnName: 'Nom_Region',
+            columnName: 'produit',
             rowName: 'Code_Type_Intervention',
             element_dt: undefined,
             element: undefined,
             columns: undefined,
             filterTree: {dates: [], rows: [], datesTreeObject: undefined},
             filterElement: undefined,
-            filterQuery: {},
+            filterQuery: {
+                appCltquery: true,
+            },
             routeCol: 'TypeIntervention/details/columns',
             routeData: 'TypeIntervention/details',
             objChart: {
                 element_chart: undefined,
                 element_id: undefined,
                 data: undefined,
-                chartTitle: 'It gonna be change after'
+                chartTitle: 'la chart de Répartition des dossiers non validés par Code Type intervention'
             },
         }
     };
