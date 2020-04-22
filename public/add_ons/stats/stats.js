@@ -649,7 +649,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsTypeInterventionChart',
             data: undefined,
-            chartTitle: 'It gonna be change after'
+            chartTitle: 'la chart de Répartition des dossiers non validés par Code Type intervention'
         },
         children: [],
         objDetail: {
@@ -669,7 +669,7 @@ $(function () {
                 element_chart: undefined,
                 element_id: undefined,
                 data: undefined,
-                chartTitle: 'It gonna be change after'
+                chartTitle: 'la chart de Répartition des dossiers non validés par Code Type intervention'
             },
         }
     };

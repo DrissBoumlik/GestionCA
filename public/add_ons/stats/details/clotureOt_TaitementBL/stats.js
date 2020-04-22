@@ -296,7 +296,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsValTypeInterventionChart',
             data: undefined,
-            chartTitle: 'It gonna be change after'
+            chartTitle: 'Résultat Validation par Type Intervention'
         },
         children: [],
         objDetail: {
@@ -317,7 +317,7 @@ $(function () {
                 element_chart: undefined,
                 element_id: undefined,
                 data: undefined,
-                chartTitle: 'It gonna be change after'
+                chartTitle: 'les détails de Résultat Validation par Type Intervention'
             },
         }
     };
@@ -364,7 +364,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsRepTypeInterventionChart',
             data: undefined,
-            chartTitle: 'It gonna be change after'
+            chartTitle: 'Répartition Codes Intervention par Type Intervention'
         },
         children: [],
         objDetail: {
@@ -385,7 +385,7 @@ $(function () {
                 element_chart: undefined,
                 element_id: undefined,
                 data: undefined,
-                chartTitle: 'It gonna be change after'
+                chartTitle: 'les détails de Répartition Codes Intervention par Type Intervention'
             },
         }
     };
