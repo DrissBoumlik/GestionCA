@@ -465,7 +465,7 @@ $(function () {
     if (elementExists(globalView)) {
         getColumns(globalView, filterData(), {
             removeTotalColumn: true,
-            removeTotal: false,
+            removeTotal: true,
             refreshMode: false,
             details: true,
             pagination: false,
@@ -475,7 +475,7 @@ $(function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
             getColumns(globalView, filterData(), {
                 removeTotalColumn: true,
-                removeTotal: false,
+                removeTotal: true,
                 refreshMode: true,
                 details: true,
                 pagination: false,
