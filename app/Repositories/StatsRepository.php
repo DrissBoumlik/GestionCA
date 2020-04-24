@@ -3770,16 +3770,16 @@ class StatsRepository
                         $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
                         $total->$index = $total->values[$index];
                     });
-                    ksort($_item->values);
+                    $_item->values = sortGroupementColumnsPreserveKeys(collect($_item->values))->all();
                     $_item->values = collect($_item->values)->values();
                     return $_item;
                 })->flatten();
             })->flatten();
-            $total->Produit = 'Total Général';
-            $total->total = round(array_sum($total->values), 2);
-            $total->values = collect($total->values)->values();
-            $total->isTotal = true;
-            $results->push($total);
+//            $total->Produit = 'Total Général';
+//            $total->total = round(array_sum($total->values), 2);
+//            $total->values = collect($total->values)->values();
+//            $total->isTotal = true;
+//            $results->push($total);
             $results = $results->values();
 
             $data = ['data' => $results];
@@ -3811,12 +3811,12 @@ class StatsRepository
             ->whereNull('isNotReady');
         $results = applyFilter($results, $filter, 'Nom_Region');
 
-        if ($cti) {
-            $results = $results->where('Code_Type_Intervention', 'like', '%' . $cti . '%');
-        }
-        if ($produit) {
-            $results = $results->where('Produit', 'like', $produit);
-        }
+//        if ($cti) {
+//            $results = $results->where('Code_Type_Intervention', 'like', '%' . $cti . '%');
+//        }
+//        if ($produit) {
+//            $results = $results->where('Produit', 'like', $produit);
+//        }
         if ($agentName) {
             $results = $results->where('st.Utilisateur', $agentName);
         }
@@ -3947,13 +3947,18 @@ class StatsRepository
             $results = $results->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
-//        dd($results->groupBy('na', 'Groupement')->toSql());
 
         $results = $results->groupBy('na', 'Groupement')->get();
 
-//        dd($results);
 
-        $keys = $results->groupBy(['Groupement'])->keys();
+//        $keys = $results->groupBy(['Groupement'])->keys();
+        $keys = $this->GetColumnsGlobalViewDetails($request)['columns'];
+        array_shift($keys);
+        $keys = collect($keys);
+        $keys = $keys->transform(function ($key)
+        {
+            return $key->title;
+        });
 
         if (!count($results)) {
             $data = ['data' => []];
@@ -4001,7 +4006,8 @@ class StatsRepository
                     $total->values[$index] = round(!isset($total->values[$index]) ? $value : $value + $total->values[$index], 2);
                     $total->$index = $total->values[$index];
                 });
-                ksort($_item->values);
+//                ksort($_item->values);
+                $_item->values = sortGroupementColumnsPreserveKeys(collect($_item->values))->all();
                 $_item->values = collect($_item->values)->values();
                 return $_item;
             });

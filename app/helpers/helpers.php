@@ -7,6 +7,19 @@ use App\Models\UserFlag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+
+if (!function_exists('sortGroupementColumnsPreserveKeys')) {
+    function sortGroupementColumnsPreserveKeys($columns)
+    {
+        $sortWith = config('custom_params.groupement');
+        $columns = $columns->sortBy(function ($item, $key) use ($sortWith)
+        {
+            return array_flip($sortWith)[$key];
+        });
+        return $columns;
+    }
+}
+
 if (!function_exists('sortGroupementColumns')) {
     function sortGroupementColumns($columns)
     {
