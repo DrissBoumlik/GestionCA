@@ -3726,18 +3726,16 @@ class StatsRepository
             return $data;
         } else {
 
-            $temp = $results->groupBy(['cti', 'Produit']);
+            $temp = $results->groupBy(['Groupement']);
 
-            $temp = $temp->map(function ($group) {
-                return $group->map(function ($product, $index) {
-                    $totalZone = $product->reduce(function ($carry, $call) {
-                        return $carry + $call->total;
-                    }, 0);
-                    return $product->map(function ($call) use ($index, $totalZone) {
-                        $Code = $call->Groupement;
-                        $call->$index = $call->$Code = $totalZone == 0 ? 0.00 : round($call->total * 100 / $totalZone, 2);
-                        return $call;
-                    });
+            $temp = $temp->map(function ($product, $index) {
+                $totalZone = $product->reduce(function ($carry, $call) {
+                    return $carry + $call->total;
+                }, 0);
+                return $product->map(function ($call) use ($index, $totalZone) {
+                    $Code = $call->Groupement;
+                    $call->$index = $call->$Code = $totalZone == 0 ? 0.00 : round($call->total * 100 / $totalZone, 2);
+                    return $call;
                 });
             });
             $results = $temp->flatten();
@@ -3781,7 +3779,7 @@ class StatsRepository
             $total->total = round(array_sum($total->values), 2);
             $total->values = collect($total->values)->values();
             $total->isTotal = true;
-//            $results->push($total);
+            $results->push($total);
             $results = $results->values();
 
             $data = ['data' => $results];
