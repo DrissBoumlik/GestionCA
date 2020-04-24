@@ -3964,7 +3964,7 @@ class StatsRepository
             $data = ['data' => []];
             return $data;
         } else {
-            $temp = $results->groupBy(['na']);
+            $temp = $results->groupBy(['Groupement']);
 
             $temp = $temp->map(function ($product, $index) {
                 $totalZone = $product->reduce(function ($carry, $call) {
