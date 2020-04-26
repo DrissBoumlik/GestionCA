@@ -163,7 +163,7 @@
                                 <div class="refresh-form">
                                     <div id="tree-view-10" class="tree-view d-inline-flex"></div>
                                     <div id="RepJoiAutreDepartement-filter"
-                                         class="CallResultPrealable-filter d-inline-flex"></div>
+                                         class="RepJoiAutreDepartement-filter d-inline-flex"></div>
                                     <button type="button" id="refreshRepJoiAutreDepartement" class="btn btn-primary float-right d-none">
                                         <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                     </button>

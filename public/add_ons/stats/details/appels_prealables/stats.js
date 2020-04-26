@@ -489,14 +489,18 @@ $(function () {
     }
     //</editor-fold>
 
-    let globalElements = [userObject, statsCallsPrealable, callsStatesAgencies, callsStatesWeeks, statscallsPos, statscallsNeg, CallResultPrealable];
-    if(elementExists(statesRepJoiDepartement)){
-        globalElements.push(statesRepJoiDepartement);
-    }else
+    let globalElements = [userObject, statsCallsPrealable, callsStatesWeeks, statscallsPos, statscallsNeg, CallResultPrealable];
+    if(elementExists(callsStatesAgencies)){
+        globalElements.push(callsStatesAgencies);
+    }else{
+        if(elementExists(statesRepJoiDepartement)){
+            globalElements.push(statesRepJoiDepartement);
+        }else
         if(elementExists(statesRepJoiAutreDepartement)){
-        globalElements.push(statesRepJoiAutreDepartement);
+            globalElements.push(statesRepJoiAutreDepartement);
+        }
     }
-        console.log(globalElements);
+
     detailClick = false;
 
     getDatesFilter(globalElements);
@@ -524,13 +528,15 @@ $(function () {
             details: false,
             pagination: false
         });
-        getColumns(callsStatesAgencies, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            details: false,
-            removeTotalColumn: true,
-            pagination: false
-        });
+        if (elementExists(callsStatesAgencies)) {
+            getColumns(callsStatesAgencies, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: true,
+                pagination: false
+            });
+        }
         getColumns(callsStatesWeeks, filterData(), {
             removeTotal: false,
             refreshMode: true,
