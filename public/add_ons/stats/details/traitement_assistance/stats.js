@@ -85,7 +85,7 @@ $(function () {
             details: false,
             removeTotalColumn: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         $('#refreshProcessingDelay').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
@@ -95,7 +95,7 @@ $(function () {
                 details: false,
                 removeTotalColumn: false,
                 pagination: false,
-                searching : false
+                searching: false
             });
         });
     }
@@ -238,9 +238,14 @@ $(function () {
                             let colText = $(tableId + " > thead > tr > th:nth-child(" + col + ")").text();
                             let rowText = $(tableId + " > tbody > tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
                             switch (rowText) {
-                                case 'Superieur 24 Heurs': rowText = ' and TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) > 24 '; break;
-                                case 'Entre 4 Heurs Et 24 Heurs' : rowText = ' and TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) between 4 and 24 '; break;
-                                default: rowText = ' and TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) < 4 ';
+                                case 'Superieur 24 Heurs':
+                                    rowText = ' and TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) > 24 ';
+                                    break;
+                                case 'Entre 4 Heurs Et 24 Heurs' :
+                                    rowText = ' and TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) between 4 and 24 ';
+                                    break;
+                                default:
+                                    rowText = ' and TIMESTAMPDIFF(HOUR,Date_Creation,Date_Heure_Note) < 4 ';
                             }
                             let lastRowIndex = object.element_dt.rows().count();
                             let lastColumnIndex = object.element_dt.columns().count();
@@ -517,8 +522,12 @@ $(function () {
         toggleLoader($(this).parents('.col-12'));
 
         globalElements.map(function (element) {
-            element.filterTree.dates = userObject.filterTree.dates;
-            element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
+            try {
+                element.filterTree.dates = userObject.filterTree.dates;
+                element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
+            } catch (e) {
+
+            }
         });
         userFilter(userObject, true);
         getColumns(statsPerimeters, filterData(), {

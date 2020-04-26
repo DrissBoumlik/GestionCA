@@ -806,9 +806,13 @@ $(function () {
         toggleLoader($(this).parents('.col-12'));
 
         globalElements.map(function (element) {
-            if ($(element.filterElement.dates).length) {
-                element.filterTree.dates = userObject.filterTree.dates;
-                element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
+            try {
+                if ($(element.filterElement.dates).length) {
+                    element.filterTree.dates = userObject.filterTree.dates;
+                    element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
+                }
+            } catch (e) {
+
             }
         });
         userFilter(userObject, true);
@@ -1089,23 +1093,23 @@ $(function () {
                 doc.autoTable({
                     html: '#globalViewTable',
                     didDrawCell: function (data) {
-                        if(data.row.index != newNestedTable && data.row.section === 'body'){
+                        if (data.row.index != newNestedTable && data.row.section === 'body') {
                             isdrawn = false;
                         }
-                        if (data.row.index == globalView.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
-                            data.row.height = ($('#details-'+globalView.rowIndex[rownum]+ ' tr').length * 26) + 110 ;
-                            doc.setFillColor(255,255,255);
+                        if (data.row.index == globalView.highlightedRow[rownum] + 1 && !isdrawn && data.row.section === 'body') {
+                            data.row.height = ($('#details-' + globalView.rowIndex[rownum] + ' tr').length * 26) + 110;
+                            doc.setFillColor(255, 255, 255);
                             doc.rect(0, data.row.y, 842, data.row.height, 'F');
                             doc.autoTable({
-                                html: '#details-'+globalView.rowIndex[rownum],
+                                html: '#details-' + globalView.rowIndex[rownum],
                                 startY: data.row.y + 5,
                                 margin: 0,
                                 styles: {fontSize: 7}
                             });
                             newNestedTable = data.row.index;
-                            let detailsglobalViewChart = document.getElementById('details-'+globalView.rowIndex[rownum] + '-Chart');
+                            let detailsglobalViewChart = document.getElementById('details-' + globalView.rowIndex[rownum] + '-Chart');
                             let detailsglobalViewChartImg = detailsglobalViewChart.toDataURL("image10/png", 1.0);
-                            doc.addImage(detailsglobalViewChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 100);
+                            doc.addImage(detailsglobalViewChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5, 500, 100);
                             isdrawn = true;
                             rownum++;
                         }
@@ -1116,12 +1120,12 @@ $(function () {
                     tableWidth: 842,
                     styles: {fontSize: 7}
                 });
-                if(globalView.highlightedRow.length > 1){
+                if (globalView.highlightedRow.length > 1) {
                     doc.addPage();
-                    doc.text(10, 20 , 'La charte de la vue globale');
-                    doc.addImage(globalViewChartImg, 'JPEG',150, 60 , 500, 300);
-                }else{
-                    doc.addImage(globalViewChartImg, 'JPEG',150, doc.previousAutoTable.finalY + 5 , 500, 300);
+                    doc.text(10, 20, 'La charte de la vue globale');
+                    doc.addImage(globalViewChartImg, 'JPEG', 150, 60, 500, 300);
+                } else {
+                    doc.addImage(globalViewChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5, 500, 300);
                 }
             }
             doc.addImage(footer, 'jpeg', 371, 810, 100, 30);
