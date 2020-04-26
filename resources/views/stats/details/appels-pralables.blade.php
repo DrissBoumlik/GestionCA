@@ -153,7 +153,39 @@
             <!-- /.row -->
             <hr>
 
-
+            @if($agence)
+                <div class="row ">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title d-inline-block">Répartition Joignabilité par type par département</h3>
+                                <hr>
+                                <div class="refresh-form">
+                                    <div id="tree-view-10" class="tree-view d-inline-flex"></div>
+                                    <div id="RepJoiAutreDepartement-filter"
+                                         class="CallResultPrealable-filter d-inline-flex"></div>
+                                    <button type="button" id="refreshRepJoiAutreDepartement" class="btn btn-primary float-right d-none">
+                                        <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body table-responsive">
+                                <table id="statesRepJoiAutreDepartement"
+                                       class="table table-bordered table-striped table-valign-middle capitalize">
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-12">
+                        <canvas id="statesRepJoiAutreDepartementChart" class=""></canvas>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            @else
             <div class="row ">
                 <div class="col-12">
                     <div class="card">
@@ -186,6 +218,8 @@
                 <!-- /.col -->
             </div>
             <!-- /.row -->
+            @endif
+
             <hr>
             <div class="row ">
                 <div class="col-12">
@@ -351,39 +385,6 @@
                 </div>
             @endif
 
-            @if($agence && $agence != '0 - DOIDF')
-                <div class="row ">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title d-inline-block">Répartition Joignabilité par type par département</h3>
-                                <hr>
-                                <div class="refresh-form">
-                                    <div id="tree-view-10" class="tree-view d-inline-flex"></div>
-                                    <div id="RepJoiAutreDepartement-filter"
-                                         class="CallResultPrealable-filter d-inline-flex"></div>
-                                    <button type="button" id="refreshRepJoiAutreDepartement" class="btn btn-primary float-right d-none">
-                                        <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body table-responsive">
-                                <table id="statesRepJoiAutreDepartement"
-                                       class="table table-bordered table-striped table-valign-middle capitalize">
-                                </table>
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-                        <!-- /.card -->
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-12">
-                        <canvas id="statesRepJoiAutreDepartementChart" class=""></canvas>
-                    </div>
-                    <!-- /.col -->
-                </div>
-            @endif
         </div>
         <!-- END Stats -->
     </div>

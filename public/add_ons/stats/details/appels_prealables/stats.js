@@ -600,7 +600,6 @@ $(function () {
 
             //creates image
             let statsRegionsChartImg = statsCallsPrealableChart.toDataURL("image/png", 1.0);
-            let callsStatesAgenciesChartImg = callsStatesAgenciesChart.toDataURL("image1/png", 1.0);
             let callsStatesWeeksChartImg = callsStatesWeeksChart.toDataURL("image2/png", 1.0);
             let statsCallsPosChartImg = statsCallsPosChart.toDataURL("image5/png", 1.0);
             let statscallsNegChartImg = statscallsNegChart.toDataURL("image6/png", 1.0);
@@ -613,12 +612,55 @@ $(function () {
             doc.autoTable({html: '#statsCallsPrealable', margin: {left: 0 , top: 50}, pageBreak: 'auto', tableWidth: 520 ,styles: {fontSize: 7, cellPadding: {right : 0} } });
             doc.addImage(statsRegionsChartImg, 'JPEG',  532 , 30 , 350 , 300);
             doc.addPage();
-            doc.text(10, 20, 'Résultats Appels Préalables par agence');
-            doc.autoTable({html: '#callsStatesAgencies', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520 ,styles: {cellPadding: {right : 0} ,fontSize: 7} });
-            doc.addImage(callsStatesAgenciesChartImg, 'JPEG',  532 , 30 , 350 , 300);
-            doc.text(10, 390, 'Résultats Appels Préalables par semaine');
-            doc.autoTable({html: '#callsStatesWeeks', pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0} ,styles: {fontSize: 7}});
-            doc.addImage(callsStatesWeeksChartImg, 'JPEG',532, 400  , 350 , 350);
+            if(elementExists(callsStatesAgencies)){
+                let callsStatesAgenciesChartImg = callsStatesAgenciesChart.toDataURL("image1/png", 1.0);
+                doc.text(10, 20, 'Résultats Appels Préalables par agence');
+                doc.autoTable({html: '#callsStatesAgencies', margin: {left: 0 , top: 30}, pageBreak: 'auto', tableWidth: 520 ,styles: {cellPadding: {right : 0} ,fontSize: 7} });
+                doc.addImage(callsStatesAgenciesChartImg, 'JPEG',  532 , 30 , 350 , 300);
+                doc.text(10, 390, 'Résultats Appels Préalables par semaine');
+                doc.autoTable({html: '#callsStatesWeeks', pageBreak: 'auto', tableWidth: 520, startY: 400, margin: {left: 0} ,styles: {fontSize: 7}});
+                doc.addImage(callsStatesWeeksChartImg, 'JPEG',532, 400  , 350 , 350);
+            }else{
+                let statesRepJoiAutreDepartementChartImg = statesRepJoiAutreDepartementChart.toDataURL("image9/png", 1.0);
+                rownum = 0;
+                doc.text(10, 20, 'Répartition Joignabilité par type par département');
+                doc.autoTable({
+                    html: '#statesRepJoiAutreDepartement',
+                    didDrawCell: function (data) {
+                        if(data.row.index != newNestedTable && data.row.section === 'body'){
+                            isdrawn = false;
+                        }
+                        if (data.row.index == statesRepJoiAutreDepartement.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
+                            data.row.height = ($('#details-'+statesRepJoiAutreDepartement.rowIndex[rownum]+ ' tr').length * 26) + 110;
+                            doc.setFillColor(255,255,255);
+                            doc.rect(0, data.row.y, 842, data.row.height, 'F');
+                            doc.autoTable({
+                                html: '#details-'+statesRepJoiAutreDepartement.rowIndex[rownum],
+                                startY: data.row.y + 5,
+                                pageBreak: 'auto',
+                                margin: 0,
+                                styles: {fontSize: 7}
+                            });
+                            newNestedTable = data.row.index;
+                            let detailsRepJoiAutreDepartementChart = document.getElementById('details-'+statesRepJoiAutreDepartement.rowIndex[rownum] + '-Chart');
+                            let detailsRepJoiAutreDepartementChartImg = detailsRepJoiAutreDepartementChart.toDataURL("image10/png", 1.0);
+                            doc.addImage(detailsRepJoiAutreDepartementChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 100);
+                            isdrawn = true;
+                            rownum++;
+                        }
+                    },
+                    margin: {left: 0, top: 30},
+                    pageBreak: 'auto',
+                    tableWidth: 842,
+                    styles: {fontSize: 7}
+                });
+
+                doc.addImage(statesRepJoiAutreDepartementChartImg, 'JPEG',150, doc.previousAutoTable.finalY + 5 , 500, 150);
+                doc.addPage();
+                doc.text(10, 20, 'Résultats Appels Préalables par semaine');
+                doc.autoTable({html: '#callsStatesWeeks', pageBreak: 'auto', tableWidth: 842, margin: {left: 0, top: 30} ,styles: {fontSize: 7}});
+                doc.addImage(callsStatesWeeksChartImg, 'JPEG',150, doc.previousAutoTable.finalY  , 500 , 300);
+            }
             doc.addPage();
             doc.text(10, 20, 'Code Interventions liés aux RDV Confirmés (Clients Joignables)');
             doc.autoTable({
@@ -688,45 +730,7 @@ $(function () {
 
                     doc.addImage(statesRepJoiDepartementChartImg, 'JPEG',150, doc.previousAutoTable.finalY + 5 , 500, 150);
 
-            }else{
-                let statesRepJoiAutreDepartementChartImg = statesRepJoiAutreDepartementChart.toDataURL("image9/png", 1.0);
-                rownum = 0;
-                doc.addPage();
-                doc.text(10, 20, 'Répartition Joignabilité par type par département');
-                doc.autoTable({
-                    html: '#statesRepJoiAutreDepartement',
-                    didDrawCell: function (data) {
-                        if(data.row.index != newNestedTable && data.row.section === 'body'){
-                            isdrawn = false;
-                        }
-                        if (data.row.index == statesRepJoiAutreDepartement.highlightedRow[rownum]  + 1 && !isdrawn && data.row.section === 'body'){
-                            data.row.height = ($('#details-'+statesRepJoiAutreDepartement.rowIndex[rownum]+ ' tr').length * 26) + 110;
-                            doc.setFillColor(255,255,255);
-                            doc.rect(0, data.row.y, 842, data.row.height, 'F');
-                            doc.autoTable({
-                                html: '#details-'+statesRepJoiAutreDepartement.rowIndex[rownum],
-                                startY: data.row.y + 5,
-                                pageBreak: 'auto',
-                                margin: 0,
-                                styles: {fontSize: 7}
-                            });
-                            newNestedTable = data.row.index;
-                            let detailsRepJoiAutreDepartementChart = document.getElementById('details-'+statesRepJoiAutreDepartement.rowIndex[rownum] + '-Chart');
-                            let detailsRepJoiAutreDepartementChartImg = detailsRepJoiAutreDepartementChart.toDataURL("image10/png", 1.0);
-                            doc.addImage(detailsRepJoiAutreDepartementChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 100);
-                            isdrawn = true;
-                            rownum++;
-                        }
-                    },
-                    margin: {left: 0, top: 30},
-                    pageBreak: 'auto',
-                    tableWidth: 842,
-                    styles: {fontSize: 7}
-                });
-
-                    doc.addImage(statesRepJoiAutreDepartementChartImg, 'JPEG',150, doc.previousAutoTable.finalY + 120 , 500, 150);
             }
-
             doc .addImage(footer, 'jpeg', 371, 810, 100,30);
             doc.save('Appels Préalables.pdf');
 

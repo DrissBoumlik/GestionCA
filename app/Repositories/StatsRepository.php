@@ -2508,7 +2508,8 @@ class StatsRepository
             ->select('Resultat_Appel')
             ->distinct()
             ->where('Groupement', 'like', 'Appels clôture')
-            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme']);
+            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme'])
+            ->whereNull('isNotReady');
 
         $columns = applyFilter($columns, $filter);
         if ($agentName) {
@@ -2517,6 +2518,20 @@ class StatsRepository
         if ($agenceCode) {
             $columns = $columns->where('st.Nom_Region', 'like', "%$agenceCode");
         }
+        $rowsKeys = \DB::table('stats as st')
+            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'))
+            ->distinct()
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme'])
+            ->whereNull('isNotReady');
+
+        if ($agentName) {
+            $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $rowsKeys = $rowsKeys->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+        $rowsKeys = $rowsKeys->pluck('Type_Intervention');
 
         $keys = $columns->pluck('Resultat_Appel');
 
@@ -2528,9 +2543,9 @@ class StatsRepository
             $regions_names = [];
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->data = $key;
-                $regions_names[$index + 1]->name = $key;
-                $regions_names[$index + 1]->text = $key;
+                $regions_names[$index + 1]->data =
+                $regions_names[$index + 1]->name =
+                $regions_names[$index + 1]->text =
                 $regions_names[$index + 1]->title = ($key == 'Appels clôture - Validé conforme') ? 'Validé Conforme' : 'Validé Non Conforme';
             });
             usort($regions_names, function ($item1, $item2) {
@@ -2539,12 +2554,13 @@ class StatsRepository
             });
             $first = new \stdClass();
             $first->title = 'Resultat Appel';
-            $first->name = 'Resultat_Appel';
-            $first->data = 'Resultat_Appel';
+            $first->name = 'Type_Intervention';
+            $first->data = 'Type_Intervention';
             $first->orderable = false;
             array_unshift($regions_names, $first);
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
+            $data = ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys , 'rowsFilterHeader' => ''];
+            return $data;
         }
     }
 
@@ -2558,7 +2574,8 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
 
         $regions = \DB::table('stats as st')
-            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'), 'Resultat_Appel')
+            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), \DB::raw('count(distinct st.Id_Externe) as count'),
+                \DB::raw('case  WHEN  Resultat_Appel = "Appels clôture - Validé conforme" then "Validé Conforme" ELSE  "Validé Non Conforme" end as Resultat_Appel'))
             ->where('Groupement', 'like', 'Appels clôture')
             ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme'])
             ->whereNull('isNotReady');
@@ -2580,17 +2597,17 @@ class StatsRepository
             $data = ['data' => []];
             return $data;
         } else {
-            $temp = $regions->groupBy(['Resultat_Appel']);
+            $temp = $regions->groupBy(['Type_Intervention']);
             $temp = $temp->map(function ($calls, $index) {
                 $totalZone = $calls->reduce(function ($carry, $call) {
                     return $carry + $call->count;
                 }, 0);
                 return $calls->map(function ($call) use ($index, $totalZone) {
-                    $call->$index = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
+                    $Resultat_Appel = $call->Resultat_Appel;
+                    $call->$Resultat_Appel = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
                     return $call;
                 });
             });
-            $regions = $temp->flatten();
 
             $regions = $regions->groupBy('Type_Intervention');
             $regions = $regions->map(function ($region) use ($keys) {
@@ -2599,7 +2616,7 @@ class StatsRepository
 
                 $col_arr = $keys->all();
                 $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
-                    $row->Resultat_Appel = $call->Type_Intervention;
+                    $row->Type_Intervention = $call->Type_Intervention;
                     $Resultat_Appel = $call->Resultat_Appel;
                     $row->$Resultat_Appel = $call->count . '|' . $call->$Resultat_Appel . '%';
                     $row->values[$Resultat_Appel] = $call->count;
@@ -2622,7 +2639,6 @@ class StatsRepository
                 return $_item;
             });
             $regions = $regions->values();
-
             return ['data' => $regions];
         }
     }
@@ -2660,10 +2676,10 @@ class StatsRepository
             $regions_names = [];
             $keys->map(function ($key, $index) use (&$regions_names) {
                 $regions_names[$index + 1] = new \stdClass();
-                $regions_names[$index + 1]->data = $key;
-                $regions_names[$index + 1]->name = $key;
-                $regions_names[$index + 1]->text = $key;
-                $regions_names[$index + 1]->title = $key;
+                $regions_names[$index + 1]->data =
+                $regions_names[$index + 1]->name =
+                $regions_names[$index + 1]->text =
+                $regions_names[$index + 1]->title = ($key == 'Appels clôture - Validé conforme') ? 'Validé Conforme' : 'Validé Non Conforme';
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
@@ -2692,7 +2708,8 @@ class StatsRepository
 
 
         $regions = \DB::table('stats as st')
-            ->select('Code_Type_Intervention', 'Resultat_Appel', \DB::raw('count(distinct st.Id_Externe) as count'))
+            ->select('Code_Type_Intervention', \DB::raw('count(distinct st.Id_Externe) as count'),
+                \DB::raw('case  WHEN  Resultat_Appel = "Appels clôture - Validé conforme" then "Validé Conforme" ELSE  "Validé Non Conforme" end as Resultat_Appel'))
             ->where('Groupement', 'like', 'Appels clôture')
             ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme'])
             ->where('Code_Type_Intervention', 'like', $key_groupement . '%')
@@ -2735,7 +2752,7 @@ class StatsRepository
                 $col_arr = $keys->all();
                 $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
                     $row->Code_Type_Intervention = $call->Code_Type_Intervention;
-                    $Resultat_Appel = $call->Resultat_Appel;
+                    $Resultat_Appel =  $call->Resultat_Appel;
                     $row->$Resultat_Appel = $call->count . '|' . $call->$Resultat_Appel . '%';
                     $row->values[$Resultat_Appel] = $call->count;
                     $col_arr = array_diff($col_arr, [$Resultat_Appel]);
@@ -2782,6 +2799,20 @@ class StatsRepository
         if ($agenceCode) {
             $columns = $columns->where('st.Nom_Region', 'like', "%$agenceCode");
         }
+        $rowsKeys = \DB::table('stats as st')
+            ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'))
+            ->distinct()
+            ->where('Groupement', 'like', 'Appels clôture')
+            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme'])
+            ->whereNull('isNotReady');
+
+        if ($agentName) {
+            $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $rowsKeys = $rowsKeys->where('st.Nom_Region', 'like', "%$agenceCode");
+        }
+        $rowsKeys = $rowsKeys->pluck('Type_Intervention');
 
         $keys = $columns->pluck('Code_Intervention');
 
@@ -2804,12 +2835,12 @@ class StatsRepository
             });
             $first = new \stdClass();
             $first->title = 'Code Intervention';
-            $first->name = 'Code_Intervention';
-            $first->data = 'Code_Intervention';
+            $first->name = 'Type_Intervention';
+            $first->data = 'Type_Intervention';
             $first->orderable = false;
             array_unshift($regions_names, $first);
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys , 'rowsFilterHeader' => ''];
         }
     }
 
@@ -2844,13 +2875,14 @@ class StatsRepository
             $data = ['data' => []];
             return $data;
         } else {
-            $temp = $regions->groupBy(['Code_Intervention']);
+            $temp = $regions->groupBy(['Type_Intervention']);
             $temp = $temp->map(function ($calls, $index) {
                 $totalZone = $calls->reduce(function ($carry, $call) {
                     return $carry + $call->count;
                 }, 0);
                 return $calls->map(function ($call) use ($index, $totalZone) {
-                    $call->$index = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
+                    $Code_Intervention = $call->Code_Intervention;
+                    $call->$Code_Intervention = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
                     return $call;
                 });
             });
@@ -2863,7 +2895,7 @@ class StatsRepository
                 $col_arr = $keys->all();
 
                 $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
-                    $row->Code_Intervention = $call->Type_Intervention;
+                    $row->Type_Intervention = $call->Type_Intervention;
                     $Code_Intervention = $call->Code_Intervention;
                     $row->$Code_Intervention = $call->count . '|' . $call->$Code_Intervention . '%';
                     $row->values[$Code_Intervention ?? ''] = $call->count;

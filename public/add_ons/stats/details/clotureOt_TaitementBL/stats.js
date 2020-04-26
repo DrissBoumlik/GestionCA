@@ -283,7 +283,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
-        filterElement: {dates: '#tree-view-06', rows: '#stats-groupement-filter'},
+        filterElement: {dates: '#tree-view-06', rows: '#ValTypeIntervention-filter'},
         filterQuery: {
             appCltquery: true,
             queryJoin: ' and Groupement like "Appels clôture"',
@@ -351,7 +351,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
-        filterElement: {dates: '#tree-view-07', rows: '#stats-groupement-filter'},
+        filterElement: {dates: '#tree-view-07', rows: '#RepTypeIntervention-filter'},
         filterQuery: {
             appCltquery: true,
             queryJoin: ' and Groupement like "Appels clôture"',
@@ -674,7 +674,7 @@ $(function () {
                         });
                         newNestedTable = data.row.index;
                         let detailsStatsRepTypeInterventionChart = document.getElementById('details-'+statsRepTypeIntervention.rowIndex[rownum] + '-Chart');
-                        let detailsStatsRepTypeInterventionChartImg = detailsStatsRepTypeInterventionChart.toDataURL("image7/png", 1.0);
+                        let detailsStatsRepTypeInterventionChartImg = detailsStatsRepTypeInterventionChart.toDataURL("image8/png", 1.0);
                         doc.addImage(detailsStatsRepTypeInterventionChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5 , 500, 100);
                         isdrawn = true;
                         rownum++;

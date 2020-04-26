@@ -287,6 +287,8 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-06" class="tree-view d-inline-flex"></div>
+                                <div id="ValTypeIntervention-filter"
+                                     class="ValTypeIntervention-filter d-inline-flex"></div>
                                 <button type="button" id="refreshValTypeIntervention" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
@@ -318,6 +320,8 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-07" class="tree-view d-inline-flex"></div>
+                                <div id="RepTypeIntervention-filter"
+                                class="RepTypeIntervention-filter d-inline-flex"></div>
                                 <button type="button" id="refreshRepTypeIntervention" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
