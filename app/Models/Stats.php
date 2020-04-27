@@ -48,7 +48,8 @@ class Stats extends Model
         'EXPORT_ALL_Date_CHARGEMENT_PDA',
         'EXPORT_ALL_Date_SOLDE',
         'EXPORT_ALL_Date_VALIDATION',
-        'isNotReady'
+        'isNotReady',
+        'produit'
     ];
 
     public static function getRegions($dates = null)
