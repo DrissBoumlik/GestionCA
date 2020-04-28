@@ -489,7 +489,80 @@ $(function () {
     }
     //</editor-fold>
 
-    let globalElements = [userObject, statsCallsPrealable, callsStatesWeeks, statscallsPos, statscallsNeg, CallResultPrealable];
+    //<editor-fold desc="Global View">
+    let globalView = {
+        columnName: 'Groupement',
+        rowName: 'Code_Type_Intervention / Produit',
+        element_dt: undefined,
+        element: 'globalViewTable',
+        columns: undefined,
+        data: undefined,
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-08', rows: '#global-view-filter'},
+        filterQuery: {
+            queryJoin: ' AND Nom_Region IS NOT NULL AND Groupement IS NOT NULL AND Groupement not LIKE "Non renseigné" AND Groupement not LIKE "Appels post" AND Code_Type_Intervention NOT LIKE "%AUTRE%" AND Produit != "" ',
+            subGroupBy: ' GROUP BY Id_Externe, Groupement, Nom_Region ) groupedst ',
+            queryGroupBy: 'group by st.Id_Externe, Groupement, Nom_Region'
+        },
+        rowIndex: [],
+        highlightedRow: [],
+        routeCol: 'globalView/columns',
+        routeData: 'globalView',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'globalViewChart',
+            data: undefined,
+            chartTitle: 'Vue Global IDF'
+        },
+        children: [],
+        objDetail: {
+            parentElement: 'globalViewTable',
+            columnName: 'Groupement',
+            rowName: 'Nom_Agence',
+            element_dt: undefined,
+            element: undefined,
+            columns: undefined,
+            filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+            filterElement: undefined,
+            filterQuery: {
+                queryJoin: ' AND Nom_Region IS NOT NULL AND Groupement IS NOT NULL AND Nom_Agence IS NOT NULL AND Groupement not LIKE "Non renseigné" AND Groupement not LIKE "Appels post" AND Code_Type_Intervention NOT LIKE "%AUTRE%" AND Produit != "" ',
+                subGroupBy: ' GROUP BY Id_Externe, Groupement, Nom_Region ) groupedst ',
+                queryGroupBy: 'group by st.Id_Externe, Groupement, Nom_Region'
+            },
+            routeCol: 'globalView/details/columns',
+            routeData: 'globalView/details',
+            objChart: {
+                element_chart: undefined,
+                element_id: undefined,
+                data: undefined,
+                chartTitle: 'Vue Global IDF'
+            },
+        }
+    };
+    if (elementExists(globalView)) {
+        getColumns(globalView, filterData(), {
+            removeTotalColumn: true,
+            removeTotal: false,
+            refreshMode: false,
+            details: true,
+            pagination: false,
+            searching: false
+        });
+        $('#refreshglobalView').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
+            getColumns(globalView, filterData(), {
+                removeTotalColumn: true,
+                removeTotal: false,
+                refreshMode: true,
+                details: true,
+                pagination: false,
+                searching: false
+            });
+        });
+    }
+    //</editor-fold>
+
+    let globalElements = [userObject, statsCallsPrealable, callsStatesWeeks, statscallsPos, statscallsNeg, CallResultPrealable, globalView];
     if(elementExists(callsStatesAgencies)){
         globalElements.push(callsStatesAgencies);
     }else{
@@ -517,10 +590,23 @@ $(function () {
         toggleLoader($(this).parents('.col-12'));
 
         globalElements.map(function (element) {
-            element.filterTree.dates = userObject.filterTree.dates;
-            element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
+            try {
+                element.filterTree.dates = userObject.filterTree.dates;
+                element.filterTree.datesTreeObject.values = userObject.filterTree.dates;
+            } catch (e) {
+            }
         });
         userFilter(userObject, true);
+        if (elementExists(globalView)) {
+            getColumns(globalView, filterData(), {
+                removeTotalColumn: true,
+                removeTotal: false,
+                refreshMode: true,
+                details: true,
+                pagination: false,
+                searching: false
+            });
+        }
         getColumns(statsCallsPrealable, filterData(), {
             removeTotal: false,
             refreshMode: true,

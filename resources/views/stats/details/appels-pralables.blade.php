@@ -120,6 +120,40 @@
         <hr>
         <!-- Stats -->
         <div class="container-fluid">
+            @if($agence && $agence == '0 - DOIDF')
+                <div class="row ">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title d-inline-block">Vue Global IDF</h3>
+                                <hr>
+                                <div class="refresh-form">
+                                    <div id="tree-view-08" class="tree-view d-inline-flex"></div>
+                                    <div id="global-view-filter" class="tree-groupement-view d-inline-flex"></div>
+                                    <button type="button" id="refreshglobalView"
+                                            class="btn btn-primary float-right d-none">
+                                        <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body table-responsive">
+                                <table id="globalViewTable"
+                                       class="table table-bordered table-striped table-valign-middle capitalize">
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-12">
+                        <canvas id="globalViewChart" class=""></canvas>
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            @else
             <div class="row ">
                 <div class="col-12">
                     <div class="card">
@@ -152,7 +186,7 @@
             </div>
             <!-- /.row -->
             <hr>
-
+            @endif
             @if($agence)
                 <div class="row ">
                     <div class="col-12">
