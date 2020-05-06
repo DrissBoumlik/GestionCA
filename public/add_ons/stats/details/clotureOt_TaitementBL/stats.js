@@ -429,8 +429,8 @@ $(function () {
         },
         rowIndex: [],
         highlightedRow: [],
-        routeCol: 'globalView/columns',
-        routeData: 'globalView',
+        routeCol: 'globalView/columns?key_groupement=Appels clôture',
+        routeData: 'globalView?key_groupement=Appels clôture',
         objChart: {
             element_chart: undefined,
             element_id: 'globalViewChart',
@@ -452,8 +452,8 @@ $(function () {
                 subGroupBy: ' GROUP BY Id_Externe, Groupement, Nom_Region ) groupedst ',
                 queryGroupBy: 'group by st.Id_Externe, Groupement, Nom_Region'
             },
-            routeCol: 'globalView/details/columns',
-            routeData: 'globalView/details',
+            routeCol: 'globalView/details/columns?key_groupement=Appels clôture',
+            routeData: 'globalView/details?key_groupement=Appels clôture',
             objChart: {
                 element_chart: undefined,
                 element_id: undefined,
