@@ -628,72 +628,6 @@ $(function () {
         });
     }
 
-    let statsTypeIntervention = {
-        columnName: 'produit',
-        rowName: 'Code_Type_Intervention',
-        element_dt: undefined,
-        element: 'statsTypeIntervention',
-        columns: undefined,
-        data: undefined,
-        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
-        filterElement: {dates: '#tree-view-05', rows: '#stats-groupement-filter'},
-        filterQuery: {
-            appCltquery: true,
-            queryJoin: ' and produit != ""'
-        },
-        rowIndex: [],
-        highlightedRow: [],
-        routeCol: 'TypeIntervention/columns',
-        routeData: 'TypeIntervention',
-        objChart: {
-            element_chart: undefined,
-            element_id: 'statsTypeInterventionChart',
-            data: undefined,
-            chartTitle: 'la chart de Répartition des dossiers non validés par Code Type intervention'
-        },
-        children: [],
-        objDetail: {
-            columnName: 'produit',
-            rowName: 'Code_Type_Intervention',
-            element_dt: undefined,
-            element: undefined,
-            columns: undefined,
-            filterTree: {dates: [], rows: [], datesTreeObject: undefined},
-            filterElement: undefined,
-            filterQuery: {
-                appCltquery: true,
-            },
-            routeCol: 'TypeIntervention/details/columns',
-            routeData: 'TypeIntervention/details',
-            objChart: {
-                element_chart: undefined,
-                element_id: undefined,
-                data: undefined,
-                chartTitle: 'la chart de Répartition des dossiers non validés par Code Type intervention'
-            },
-        }
-    };
-    if (elementExists(statsTypeIntervention)) {
-        getColumns(statsTypeIntervention, filterData(), {
-            removeTotal: false,
-            refreshMode: false,
-            details: true,
-            removeTotalColumn: false,
-            pagination: false,
-            searching: false
-        });
-        $('#refreshTypeIntervention').on('click', function () {
-            toggleLoader($('#refreshAll').parents('.col-12'));
-            getColumns(statsTypeIntervention, filterData(), {
-                removeTotal: false,
-                refreshMode: true,
-                details: true,
-                removeTotalColumn: false,
-                pagination: false,
-                searching: false
-            });
-        });
-    }
     //</editor-fold>
 
 
@@ -784,7 +718,6 @@ $(function () {
         statsPerimeters, statsColturetech,
         statsGlobalDelay,
         statsProcessingDelay,
-        statsTypeIntervention,
         globalView
     ];
     localStorage.setItem('globalElements', JSON.stringify(globalElements));
@@ -923,14 +856,6 @@ $(function () {
                 pagination: false,
                 searching: false
             });
-            getColumns(statsTypeIntervention, filterData(), {
-                removeTotal: false,
-                refreshMode: true,
-                details: true,
-                removeTotalColumn: false,
-                pagination: false,
-                searching: false
-            });
         }
     });
     //</editor-fold>
@@ -958,7 +883,6 @@ $(function () {
             let statsPerimetersChart = document.getElementById('statsPerimetersChart');
             let statsColturetechChart = document.getElementById('statsColturetechChart');
             let statsGlobalDelayChart = document.getElementById('statsGlobalDelayChart');
-            let statsTypeInterventionChart = document.getElementById('statsTypeInterventionChart');
             let globalViewChart = document.getElementById('globalViewChart');
             //creates image
             let statsRegionsChartImg = statsRegionsChart.toDataURL("image/png", 1.0);
@@ -972,7 +896,6 @@ $(function () {
             let statsPerimetersChartImg = statsPerimetersChart.toDataURL("image9/png", 1.0);
             let statsColturetechChartImg = statsColturetechChart.toDataURL("image10/png", 1.0);
             let statsGlobalDelayChartImg = statsGlobalDelayChart.toDataURL("image11/png", 1.0);
-            let statsTypeInterventionChartImg = statsGlobalDelayChart.toDataURL("image12/png", 1.0);
             //creates PDF from img
             let doc = new jsPDF('p', 'pt', [842, 842]);
             doc.addImage(logo, 'jpeg', 371, 10, 100, 30);

@@ -443,7 +443,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'statesRepJoiAutreDepartementChart',
             data: undefined,
-            chartTitle: 'It gonna be change after'
+            chartTitle: 'la charte de Répartition Joignabilité par type par département'
         },
         children: [],
         objDetail: {
@@ -462,7 +462,7 @@ $(function () {
                 element_chart: undefined,
                 element_id: undefined,
                 data: undefined,
-                chartTitle: 'It gonna be change after'
+                chartTitle: 'la charte de Répartition Joignabilité par type par département'
             },
         }
     };
