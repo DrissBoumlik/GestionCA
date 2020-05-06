@@ -452,8 +452,8 @@ $(function () {
                 subGroupBy: ' GROUP BY Id_Externe, Groupement, Nom_Region ) groupedst ',
                 queryGroupBy: 'group by st.Id_Externe, Groupement, Nom_Region'
             },
-            routeCol: 'globalView/details/columns?key_groupement=Appels clôture',
-            routeData: 'globalView/details?key_groupement=Appels clôture',
+            routeCol: 'globalView/details/columns?groupement=Appels clôture',
+            routeData: 'globalView/details?groupement=Appels clôture',
             objChart: {
                 element_chart: undefined,
                 element_id: undefined,

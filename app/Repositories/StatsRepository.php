@@ -3822,6 +3822,7 @@ class StatsRepository
 
     public function GetColumnsGlobalViewDetails(Request $request)
     {
+        $groupement = $request->get('groupement');
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
         list($cti, $produit) = explode(' / ', $request->get('key_groupement'));
@@ -3849,6 +3850,10 @@ class StatsRepository
 //        if ($produit) {
 //            $results = $results->where('Produit', 'like', $produit);
 //        }
+
+        if ($groupement) {
+            $results = $results->where('groupement', 'like', $groupement);
+        }
         if ($agentName) {
             $results = $results->where('st.Utilisateur', $agentName);
         }
@@ -3922,6 +3927,7 @@ class StatsRepository
 
     public function GetDataGlobalViewDetails(Request $request)
     {
+        $groupement = $request->get('groupement');
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
         list($cti, $produit) = explode(' / ', $request->get('key_groupement'));
@@ -3944,6 +3950,7 @@ class StatsRepository
              AND Groupement not LIKE "Non renseigné"
              AND Groupement not LIKE "Appels post"' .
                 ' and ' . $queryFilters .
+                ($groupement ? 'and Groupement like "' . $groupement . '"' : '') .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
                 ($cti ? 'and Code_Type_Intervention like "%' . $cti . '%"' : '') .
@@ -3966,6 +3973,9 @@ class StatsRepository
             ->whereNull('isNotReady');
         $results = applyFilter($results, $filter);
 
+        if ($groupement) {
+            $results = $results->where('st.groupement', 'like', $groupement);
+        }
         if ($cti) {
             $results = $results->where('Code_Type_Intervention', 'like', '%' . $cti . '%');
         }

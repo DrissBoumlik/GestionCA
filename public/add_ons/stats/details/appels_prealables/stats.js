@@ -529,8 +529,8 @@ $(function () {
                 subGroupBy: ' GROUP BY Id_Externe, Groupement, Nom_Region ) groupedst ',
                 queryGroupBy: 'group by st.Id_Externe, Groupement, Nom_Region'
             },
-            routeCol: 'globalView/details/columns?key_groupement=Appels préalables',
-            routeData: 'globalView/details?key_groupement=Appels préalables',
+            routeCol: 'globalView/details/columns?groupement=Appels préalables',
+            routeData: 'globalView/details?groupement=Appels préalables',
             objChart: {
                 element_chart: undefined,
                 element_id: undefined,
