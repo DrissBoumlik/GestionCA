@@ -561,6 +561,7 @@ class StatsRepository
             $columns = $columns->select($column);
         }
         $columns = $columns->distinct()
+            ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'like', 'Appels préalables')
             ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
@@ -676,6 +677,7 @@ class StatsRepository
             where Groupement not like "Non Renseigné"
             and Groupement like "Appels préalables"
             and Gpmt_Appel_Pre not like "Hors Périmètre"
+            and Resultat_Appel not like "=%" 
             and Nom_Region is not null ' .
                     ($key_groupement ? 'and key_groupement like "' . $key_groupement . '"' : '') .
                     ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
@@ -693,6 +695,7 @@ class StatsRepository
             where Groupement not like "Non Renseigné"
             and Groupement like "Appels préalables"
             and Gpmt_Appel_Pre not like "Hors Périmètre"
+            and Resultat_Appel not like "=%" 
             and Nom_Region is not null ' .
                     ($key_groupement ? 'and key_groupement like "' . $key_groupement . '"' : '') .
                     ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
@@ -708,6 +711,7 @@ class StatsRepository
         $regions = $regions->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'like', 'Appels préalables')
             ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
+            ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('Nom_Region')
             ->whereNull('isNotReady');
 
@@ -827,6 +831,7 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select('Code_Intervention')
             ->distinct()
+            ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('Nom_Region')
             ->whereNull('isNotReady');
 
@@ -938,6 +943,7 @@ class StatsRepository
             ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(distinct st.Id_Externe) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
              where Nom_Region is not null ' .
+                ' and Resultat_Appel not like "=%" ' .
                 ' and ' . $queryFilters .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
@@ -967,6 +973,7 @@ class StatsRepository
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
+            ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('Nom_Region')
             ->whereNull('isNotReady');
 
@@ -1094,6 +1101,7 @@ class StatsRepository
             ->select('Nom_Region')
             ->distinct()
             ->whereNotNull('Nom_Region')
+            ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'Appels clôture')
             ->whereNull('isNotReady');
         $columns = applyFilter($columns, $filter, $intervCol);
@@ -1172,6 +1180,7 @@ class StatsRepository
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Nom_Region is not null
             and Groupement like "Appels clôture" ' .
+                ' and Resultat_Appel not like "=%" ' .
                 ' and ' . $queryFilters .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
@@ -1183,6 +1192,7 @@ class StatsRepository
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
             ->whereNotNull('Nom_Region')
+            ->where('Resultat_Appel', 'not like', '=%')
             ->where('Groupement', 'Appels clôture')
             ->whereNull('isNotReady');
         $regions = applyFilter($regions, $filter, $intervCol);
@@ -1319,6 +1329,7 @@ class StatsRepository
             ->distinct()
             ->whereNotNull('st.Groupement')
             ->whereNotNull('st.Nom_Region')
+            ->where('st.Resultat_Appel', 'not like', '=%')
             ->where('st.Groupement', 'not like', 'Non renseigné')
             ->where('st.Groupement', 'not like', 'Appels post')
             ->where('Type_Note', 'like', 'CAM')
@@ -1415,6 +1426,7 @@ class StatsRepository
             FROM stats
              where Groupement IS NOT NULL
              AND Nom_Region IS NOT NULL
+             AND Resultat_Appel not like "=%"
              AND Groupement not LIKE "Non renseigné"
              AND Groupement not LIKE "Appels post"
              AND Type_Note LIKE "CAM"' .
@@ -1433,6 +1445,7 @@ class StatsRepository
                 })
             ->whereNotNull('st.Groupement')
             ->whereNotNull('st.Nom_Region')
+            ->where('st.Resultat_Appel', 'not like', '=%')
             ->where('st.Groupement', 'not like', 'Non renseigné')
             ->where('st.Groupement', 'not like', 'Appels post')
             ->where('Type_Note', 'like', 'CAM')
@@ -1528,6 +1541,7 @@ class StatsRepository
         $codes = \DB::table('stats as st')
             ->select('Code_Intervention')
             ->distinct()
+            ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('Nom_Region')
             ->whereNull('isNotReady');
 
@@ -1635,6 +1649,7 @@ class StatsRepository
             ->select('Code_Intervention', 'Nom_Region', \DB::raw('count(distinct st.Id_Externe) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
              where Nom_Region is not null ' .
+                ' and Resultat_Appel not like "=%" ' .
                 ' and ' . $queryFilters .
                 ($key_groupement ? 'and key_groupement like "' . $key_groupement . '"' : '') .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
@@ -1668,6 +1683,7 @@ class StatsRepository
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
+            ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('Nom_Region')
             ->whereNull('isNotReady');
 
@@ -3606,6 +3622,7 @@ class StatsRepository
         $results = \DB::table('stats as st')
             ->select('st.Groupement')
             ->distinct()
+            ->where('st.Resultat_Appel', 'not like', '=%')
             ->whereNotNull('st.Groupement')
             ->whereNotNull('st.Nom_Region')
             ->where('st.Groupement', 'not like', 'Non renseigné')
@@ -3710,6 +3727,7 @@ class StatsRepository
                 groupement , Nom_Region
             FROM stats
              where Groupement IS NOT NULL
+             AND Resultat_Appel not like "=%"
              AND Nom_Region IS NOT NULL
              AND Code_Type_Intervention NOT LIKE "%AUTRE%"
              AND Produit != ""
@@ -3727,6 +3745,7 @@ class StatsRepository
                     $join->on('st.Groupement', '=', 'groupedst.Groupement');
                     $join->on('st.Nom_Region', '=', 'groupedst.Nom_Region');
                 })
+            ->where('st.Resultat_Appel', 'not like', '=%')
             ->whereNotNull('st.Groupement')
             ->whereNotNull('st.Nom_Region')
             ->where('Code_Type_Intervention', 'NOT LIKE', '%AUTRE%')
@@ -3835,6 +3854,7 @@ class StatsRepository
         $results = \DB::table('stats as st')
             ->select('st.Groupement')
             ->distinct()
+            ->where('st.Resultat_Appel', 'not like', '=%')
             ->whereNotNull('st.Groupement')
             ->whereNotNull('st.Nom_Region')
             ->where('st.Groupement', 'not like', 'Non renseigné')
@@ -3943,6 +3963,7 @@ class StatsRepository
                 groupement , Nom_Region
             FROM stats
              where Groupement IS NOT NULL
+             AND Resultat_Appel not like "=%"
              AND Nom_Region IS NOT NULL
              AND Nom_Agence IS NOT NULL
              AND Code_Type_Intervention NOT LIKE "%AUTRE%"
@@ -3963,6 +3984,7 @@ class StatsRepository
                     $join->on('st.Groupement', '=', 'groupedst.Groupement');
                     $join->on('st.Nom_Region', '=', 'groupedst.Nom_Region');
                 })
+            ->where('st.Resultat_Appel', 'not like', '=%')
             ->whereNotNull('st.Groupement')
             ->whereNotNull('st.Nom_Region')
             ->whereNotNull('st.Nom_Agence')
