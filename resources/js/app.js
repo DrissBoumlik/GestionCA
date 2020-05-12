@@ -310,8 +310,8 @@ frLang = {
                                     colText = colText.split('_')[0];
                                 }
                                 if (object.element === 'globalViewTable') {
-                                    let _cols = object.rowName.split(' - ');
-                                    let _values = rowText.split(' - ');
+                                    let _cols = object.rowName.split(' / ');
+                                    let _values = rowText.split(' / ');
                                     object.rowName = _cols[1];
                                     rowText = ' ' + _values[1] + '" AND ' + _cols[0] + ' LIKE "%' + _values[0] + '%';
                                 }
