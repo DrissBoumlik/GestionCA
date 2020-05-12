@@ -928,7 +928,7 @@ $(function () {
                         }
 
                     },
-                    margin: {left: 0, top: 30},
+                    margin: {left: 0, top: 50},
                     pageBreak: 'auto',
                     tableWidth: 842,
                     styles: {fontSize: 7}
