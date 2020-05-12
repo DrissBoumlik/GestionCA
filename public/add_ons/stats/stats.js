@@ -899,19 +899,60 @@ $(function () {
             //creates PDF from img
             let doc = new jsPDF('p', 'pt', [842, 842]);
             doc.addImage(logo, 'jpeg', 371, 10, 100, 30);
+            if (elementExists(globalView)) {
+                doc.text(10, 40, 'globale vue');
+                rownum = 0;
+                let globalViewChartImg = globalViewChart.toDataURL("image12/png", 1.0);
+                doc.autoTable({
+                    html: '#globalViewTable',
+                    didDrawCell: function (data) {
+                        if (data.row.index != newNestedTable && data.row.section === 'body') {
+                            isdrawn = false;
+                        }
+                        if (data.row.index == globalView.highlightedRow[rownum] + 1 && !isdrawn && data.row.section === 'body') {
+                            data.row.height = ($('#details-' + globalView.rowIndex[rownum] + ' tr').length * 26) + 110;
+                            doc.setFillColor(255, 255, 255);
+                            doc.rect(0, data.row.y, 842, data.row.height, 'F');
+                            doc.autoTable({
+                                html: '#details-' + globalView.rowIndex[rownum],
+                                startY: data.row.y + 5,
+                                margin: 0,
+                                styles: {fontSize: 7}
+                            });
+                            newNestedTable = data.row.index;
+                            let detailsglobalViewChart = document.getElementById('details-' + globalView.rowIndex[rownum] + '-Chart');
+                            let detailsglobalViewChartImg = detailsglobalViewChart.toDataURL("image10/png", 1.0);
+                            doc.addImage(detailsglobalViewChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5, 500, 100);
+                            isdrawn = true;
+                            rownum++;
+                        }
+
+                    },
+                    margin: {left: 0, top: 30},
+                    pageBreak: 'auto',
+                    tableWidth: 842,
+                    styles: {fontSize: 7}
+                });
+                if (globalView.highlightedRow.length > 1) {
+                    doc.addPage();
+                    doc.text(10, 20, 'La charte de la vue globale');
+                    doc.addImage(globalViewChartImg, 'JPEG', 150, 60, 500, 300);
+                } else {
+                    doc.addImage(globalViewChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5, 500, 300);
+                }
+            }
             if(elementExists(statsRegions)){
                 doc.text(10, 40, 'Résultats Appels');
                 rownum = 0;
                 let statsRegionsChartImg = statsRegionsChart.toDataURL("image/png", 1.0);
                 doc.autoTable({
                     html: '#statsRegions',
-                    theme : 'grid',
                     didDrawCell: function (data) {
                         if (data.row.index != newNestedTable && data.row.section === 'body') {
                             isdrawn = false;
                         }
                         if (data.row.index == statsRegions.highlightedRow[rownum] + 1 && !isdrawn && data.row.section === 'body') {
-                            data.row.height = ($('#details-' + statsRegions.rowIndex[rownum] + ' tr').length * 26) + 110;
+                            //data.row.height = ($('#details-' + statsRegions.rowIndex[rownum] + ' tr').length * 26) + 110;
                             doc.setFillColor(255, 255, 255);
                             doc.rect(0, data.row.y, 520, data.row.height, 'F');
                             doc.autoTable({
@@ -933,8 +974,113 @@ $(function () {
                     tableWidth: 842,
                     styles: {fontSize: 7}
                 });
+                doc.addImage(statsRegionsChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5, 500, 300);
             }
+            doc.addPage();
+            doc.text(10, 20, 'Répartition des dossiers traités par périmètre');
+            doc.autoTable({
+                html: '#statsFolders',
+                pageBreak: 'auto',
+                tableWidth: 520,
+                startY: 30,
+                margin: {left: 0},
+                styles: {fontSize: 7}
+            });
+            doc.addImage(statsFoldersChartImg, 'JPEG', 524, 30, 350, 350);
+            doc.text(10, 390, 'Résultats Appels Préalables par agence');
+            doc.autoTable({
+                html: '#callsStatesAgencies',
+                margin: {left: 0, top: 30},
+                pageBreak: 'auto',
+                tableWidth: 520,
+                startY: 400,
+                styles: {fontSize: 7}
+            });
+            doc.addImage(callsStatesAgenciesChartImg, 'JPEG', 524, 400, 350, 300);
+            doc.addPage();
+            doc.text(10, 20, 'Résultats Appels Préalables par semaine');
+            doc.autoTable({
+                html: '#callsStatesWeeks',
+                pageBreak: 'auto',
+                tableWidth: 520,
+                startY: 30,
+                margin: {left: 0},
+                styles: {fontSize: 7}
+            });
+            doc.addImage(callsStatesWeeksChartImg, 'JPEG', 524, 30, 350, 300);
+            doc.addPage();
+            doc.text(10, 20, 'Code Interventions liés aux RDV Confirmés (Clients Joignables)');
+            doc.autoTable({
+                html: '#statsCallsPos',
+                margin: {left: 0, top: 30},
+                pageBreak: 'auto',
+                tableWidth: 842,
+                styles: {fontSize: 7}
+            });
+            doc.addImage(statsCallsPosChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5, 500, 300);
+            doc.addPage();
+            doc.text(10, 20, 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)');
+            doc.autoTable({
+                html: '#statsCallsNeg',
+                margin: {left: 0, top: 30},
+                pageBreak: 'auto',
+                tableWidth: 842,
+                styles: {fontSize: 7}
+            });
+            doc.addImage(statscallsNegChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5, 500, 250);
+            doc.addPage();
+            doc.text(10, 20, 'Répartition des dossiers non validés par Code Type intervention');
+            doc.addImage(statsFoldersByTypeChartImg, 'JPEG', 524, 30, 350, 300);
+            doc.autoTable({
+                html: '#statsFoldersByType',
+                margin: {left: 0, top: 30},
+                pageBreak: 'auto',
+                tableWidth: 525,
+                styles: {fontSize: 7}
+            });
+            doc.addPage();
+            doc.text(10, 20, 'Répartition des dossiers non validés par code intervention');
+            doc.addImage(statsFoldersByCodeChartImg, 'JPEG', 524, 30, 350, 300);
+            doc.autoTable({
+                html: '#statsFoldersByCode',
+                margin: {left: 0, top: 30},
+                pageBreak: 'auto',
+                tableWidth: 525,
+                styles: {fontSize: 7, cellPadding: {top: 3, bottom: 3}}
+            });
+            doc.addPage();
+            doc.text(10, 20, 'Production Globale CAM');
+            doc.autoTable({
+                html: '#statsPerimeters',
+                margin: {left: 0, top: 30},
+                pageBreak: 'auto',
+                tableWidth: 520,
+                styles: {fontSize: 7}
+            });
+            doc.addImage(statsPerimetersChartImg, 'JPEG', 524, 30, 350, 300);
+            doc.addPage();
+            doc.text(10, 20, 'Délai de validation post solde');
+            doc.autoTable({
+                html: '#statsColturetech',
+                margin: {left: 0, top: 30},
+                pageBreak: 'auto',
+                tableWidth: 520,
+                styles: {fontSize: 7}
+            });
+            doc.addImage(statsColturetechChartImg, 'JPEG', 524, 30, 350, 300);
+            doc.text(10, 390, 'Délai global de traitement OT');
+            doc.autoTable({
+                html: '#statsGlobalDelay',
+                pageBreak: 'auto',
+                tableWidth: 520,
+                startY: 400,
+                margin: {left: 0},
+                styles: {fontSize: 7}
+            });
+            doc.addImage(statsGlobalDelayChartImg, 'JPEG', 524, 400, 350, 300);
 
+            doc.addImage(footer, 'jpeg', 371, 810, 100, 30);
+            doc.save('dashboard.pdf');
             toggleLoader($('body'), true);
         }, 100);
 
