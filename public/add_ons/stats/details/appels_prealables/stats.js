@@ -426,6 +426,7 @@ $(function () {
     let statesRepJoiAutreDepartement = {
         columnName: 'Gpmt_Appel_Pre',
         rowName: 'Code_Type_Intervention',
+        childneedParentValue : true,
         element_dt: undefined,
         element: 'statesRepJoiAutreDepartement',
         columns: undefined,
@@ -449,12 +450,15 @@ $(function () {
         objDetail: {
             columnName: 'Gpmt_Appel_Pre',
             rowName: 'produit',
+            needParentValue : true,
             element_dt: undefined,
             element: undefined,
             columns: undefined,
             filterTree: {dates: [], rows: [], datesTreeObject: undefined},
             filterElement: undefined,
             filterQuery: {
+                appCltquery : true,
+                queryJoin: ' and Groupement like "Appels préalables"',
             },
             routeCol: 'RepJoiAutreDepartement/details/columns',
             routeData: 'RepJoiAutreDepartement/details',

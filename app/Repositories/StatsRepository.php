@@ -3396,7 +3396,7 @@ class StatsRepository
             $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
+            $regions = $regions->where('st.Nom_Region', 'like'  , "%$agenceCode");
         }
 
         $regions = $regions->orderBy('Type_Intervention');
