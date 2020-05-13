@@ -306,6 +306,9 @@ frLang = {
                                             rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) < 7 ';
                                     }
                                 }
+                                if(object.element === 'statesRepJoiDepartement' && colText !== ''){
+                                    object.filterQuery.queryJoin += 'and nom_agence not REGEXP "^.*[0-9]{2} .[0-9]{2}"';
+                                }
                                 if (object.columnName === 'Date_Heure_Note_Semaine') {
                                     colText = colText.split('_')[0];
                                 }

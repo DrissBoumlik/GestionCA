@@ -366,7 +366,7 @@ $(function () {
         filterElement: {dates: '#tree-view-08', rows: '#RepJoiDepartement-filter'},
         filterQuery: {
             appCltquery: true,
-            queryJoin: ' and Groupement like "Appels préalables" and produit in("CUIVRE", "FTTH", "CUIVRE/FTTH") and nom_agence not REGEXP "^.*[0-9]{2} .[0-9]{2}"',
+            queryJoin: ' and Groupement like "Appels préalables" and produit in("CUIVRE", "FTTH", "CUIVRE/FTTH")',
         },
         rowIndex : [],
         highlightedRow : [],
@@ -389,7 +389,7 @@ $(function () {
             filterElement: undefined,
             filterQuery: {
                 appCltquery: true,
-                queryJoin: ' and Groupement like "Appels préalables" and nom_agence not REGEXP "^.*[0-9]{2} .[0-9]{2}"',
+                queryJoin: ' and Groupement like "Appels préalables"',
             },
             routeCol: 'RepJoiDepartement/details/columns',
             routeData: 'RepJoiDepartement/details',
