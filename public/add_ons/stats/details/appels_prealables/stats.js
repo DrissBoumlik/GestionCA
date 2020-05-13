@@ -252,7 +252,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
-        filterElement: {dates: '#tree-view-5', rows: '#code-rdv-intervention-filter'},
+        filterElement: {dates: '#tree-view-5', rows: (agence_code !== '') ? '' : '#code-rdv-intervention-filter'},
         filterQuery: {
             queryJoin: ' and Resultat_Appel in ("Appels préalables - Annulation RDV client non informé", "Appels préalables - Client sauvé","Appels préalables - Client Souhaite être rappelé plus tard","Appels préalables - Injoignable / Absence de répondeur","Appels préalables - Injoignable 2ème Tentative","Appels préalables - Injoignable 3ème Tentative","Appels préalables - Injoignable avec Répondeur","Appels préalables - Numéro erroné","Appels préalables - Numéro Inaccessible","Appels préalables - Numéro non attribué","Appels préalables - Numéro non Renseigné","Appels préalables - RDV annulé le client ne souhaite plus d’intervention","Appels préalables - RDV annulé Rétractation/Résiliation","Appels préalables - RDV planifié mais non confirmé","Appels préalables - RDV repris Mais non confirmé" ) ' +
                 ' and Gpmt_Appel_Pre = "Injoignable" ',
@@ -298,7 +298,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
-        filterElement: {dates: '#tree-view-6', rows: '#CallResultPrealable-filter'},
+        filterElement: {dates: '#tree-view-6', rows: (agence_code !== '') ? '' : '#CallResultPrealable-filter'},
         filterQuery: {
             queryJoin: ' and Gpmt_Appel_Pre in ("Joignable", "Injoignable")' +
                 ' and Resultat_Appel in ("Appels préalables - RDV confirmé",' +
@@ -363,7 +363,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
-        filterElement: {dates: '#tree-view-08', rows: '#RepJoiDepartement-filter'},
+        filterElement: {dates: '#tree-view-00', rows: '#RepJoiDepartement-filter'},
         filterQuery: {
             appCltquery: true,
             queryJoin: ' and Groupement like "Appels préalables" and produit in("CUIVRE", "FTTH", "CUIVRE/FTTH")',
@@ -566,17 +566,28 @@ $(function () {
     }
     //</editor-fold>
 
-    let globalElements = [userObject, statsCallsPrealable, callsStatesWeeks, statscallsPos, statscallsNeg, CallResultPrealable, globalView];
+    let globalElements = [userObject, callsStatesWeeks, statscallsPos, statscallsNeg, CallResultPrealable];
+
+    if(elementExists(statsCallsPrealable)){
+        globalElements.push(statsCallsPrealable);
+    }
+    else {
+        if(elementExists(globalView)){
+            globalElements.push(globalView);
+        }
+    }
     if(elementExists(callsStatesAgencies)){
         globalElements.push(callsStatesAgencies);
-    }else{
-        if(elementExists(statesRepJoiDepartement)){
-            globalElements.push(statesRepJoiDepartement);
-        }else
+    }else {
         if(elementExists(statesRepJoiAutreDepartement)){
             globalElements.push(statesRepJoiAutreDepartement);
         }
     }
+    if(elementExists(statesRepJoiDepartement)){
+            globalElements.push(statesRepJoiDepartement);
+    }
+
+
 
     detailClick = false;
 
@@ -611,13 +622,15 @@ $(function () {
                 searching: false
             });
         }
-        getColumns(statsCallsPrealable, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            removeTotalColumn: false,
-            details: false,
-            pagination: false
-        });
+        if(elementExists(statsCallsPrealable)){
+            getColumns(statsCallsPrealable, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                removeTotalColumn: false,
+                details: false,
+                pagination: false
+            });
+        }
         if (elementExists(callsStatesAgencies)) {
             getColumns(callsStatesAgencies, filterData(), {
                 removeTotal: false,

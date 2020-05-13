@@ -328,8 +328,10 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-5" class="tree-view d-inline-flex"></div>
+                                @if(!$agence)
                                 <div id="code-rdv-intervention-filter"
                                      class="tree-code-rdv-intervention-view d-inline-flex"></div>
+                                @endif
                                 <button type="button" id="refreshCallResultNeg" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
@@ -361,8 +363,10 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-6" class="tree-view d-inline-flex"></div>
+                                @if(!$agence)
                                 <div id="CallResultPrealable-filter"
                                      class="CallResultPrealable-filter d-inline-flex"></div>
+                                @endif
                                 <button type="button" id="refreshCallResultPrealable" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
@@ -393,7 +397,7 @@
                                 <h3 class="card-title d-inline-block">Répartition Joignabilité par type par département</h3>
                                 <hr>
                                 <div class="refresh-form">
-                                    <div id="tree-view-08" class="tree-view d-inline-flex"></div>
+                                    <div id="tree-view-00" class="tree-view d-inline-flex"></div>
                                     <div id="RepJoiDepartement-filter"
                                          class="CallResultPrealable-filter d-inline-flex"></div>
                                     <button type="button" id="refreshRepJoiDepartement" class="btn btn-primary float-right d-none">
