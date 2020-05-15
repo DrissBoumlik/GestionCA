@@ -677,7 +677,7 @@ class StatsRepository
             where Groupement not like "Non Renseigné"
             and Groupement like "Appels préalables"
             and Gpmt_Appel_Pre not like "Hors Périmètre"
-            and Resultat_Appel not like "=%" 
+            and Resultat_Appel not like "=%"
             and Nom_Region is not null ' .
                     ($key_groupement ? 'and key_groupement like "' . $key_groupement . '"' : '') .
                     ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
@@ -695,7 +695,7 @@ class StatsRepository
             where Groupement not like "Non Renseigné"
             and Groupement like "Appels préalables"
             and Gpmt_Appel_Pre not like "Hors Périmètre"
-            and Resultat_Appel not like "=%" 
+            and Resultat_Appel not like "=%"
             and Nom_Region is not null ' .
                     ($key_groupement ? 'and key_groupement like "' . $key_groupement . '"' : '') .
                     ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
@@ -884,9 +884,11 @@ class StatsRepository
             $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $rowsKeys = $rowsKeys->where('st.Nom_Region', 'like', "%$agenceCode");
+            $rowsKeys = [];
+        }else{
+            $rowsKeys = $rowsKeys->pluck('Nom_Region');
         }
-        $rowsKeys = $rowsKeys->pluck('Nom_Region');
+
 
         $columns = $columns->where('Gpmt_Appel_Pre', 'like', $callResult);
 
@@ -1362,9 +1364,11 @@ class StatsRepository
             $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $rowsKeys = $rowsKeys->where('st.Nom_Region', 'like', "%$agenceCode");
+            $rowsKeys = [];
+        }else{
+            $rowsKeys = $rowsKeys->pluck('Nom_Region');
         }
-        $rowsKeys = $rowsKeys->pluck('Nom_Region');
+
 
         $keys = $results->pluck('Groupement');
 
@@ -1591,9 +1595,11 @@ class StatsRepository
             $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $rowsKeys = $rowsKeys->where('st.Nom_Region', 'like', "%$agenceCode");
+            $rowsKeys = [];
+        }else{
+            $rowsKeys = $rowsKeys->pluck('Nom_Region');
         }
-        $rowsKeys = $rowsKeys->pluck('Nom_Region');
+
 
 
         $keys = $codes->pluck('Code_Intervention');
@@ -2575,7 +2581,7 @@ class StatsRepository
             $first->orderable = false;
             array_unshift($regions_names, $first);
 
-            $data = ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys , 'rowsFilterHeader' => ''];
+            $data = ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys , 'rowsFilterHeader' => 'Type Intervention'];
             return $data;
         }
     }
@@ -2856,7 +2862,7 @@ class StatsRepository
             $first->orderable = false;
             array_unshift($regions_names, $first);
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys , 'rowsFilterHeader' => ''];
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys , 'rowsFilterHeader' => 'Type Intervention'];
         }
     }
 
@@ -3412,7 +3418,7 @@ class StatsRepository
             $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
+            $regions = $regions->where('st.Nom_Region', 'like'  , "%$agenceCode");
         }
 
         $regions = $regions->orderBy('Type_Intervention');

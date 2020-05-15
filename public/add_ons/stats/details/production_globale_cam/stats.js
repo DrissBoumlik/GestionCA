@@ -63,7 +63,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
-        filterElement: {dates: '#tree-view-8', rows: '#nom-region-filter'},
+        filterElement: {dates: '#tree-view-8', rows: (agence_code !== '') ? '' : '#nom-region-filter'},
         filterQuery: {
             queryJoin: ' AND Groupement IS NOT NULL AND Groupement not LIKE "Non renseigné" AND Groupement not LIKE "Appels post" AND Type_Note LIKE "CAM" ',
             subGroupBy: ' GROUP BY Id_Externe, Groupement, Resultat_Appel, Nom_Region ) groupedst ',

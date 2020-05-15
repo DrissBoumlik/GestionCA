@@ -2,6 +2,8 @@ require('./bootstrap');
 
 let agence_code = '';
 let agent_name = '';
+let parentAttributName = '';
+let parentAttributValue = '';
 const params = window.location.href.split('?')[1];
 
 if (params) {
@@ -244,6 +246,11 @@ frLang = {
                                         object.rowIndex.push($('tr').index(tr));
                                         object.highlightedRow.push($('#' + object.element + '> tbody > tr').index(tr));
                                     }
+                                    if(object.childneedParentValue && object.childneedParentValue === true){
+                                        let row = object.element_dt.cell(this).index().row + 1;
+                                        parentAttributName = object.rowName;
+                                        parentAttributValue = $('#' + object.element + " > tbody > tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
+                                    }
                                     data = {...data, key_groupement: tr.find('td:nth-child(2)').text()};
                                     object.objDetail.element = 'details-' + $('tr').index(tr);
                                     createChild(row, object, data); // class is for background colour
@@ -299,6 +306,9 @@ frLang = {
                                             rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) < 7 ';
                                     }
                                 }
+                                if(object.element === 'statesRepJoiDepartement' && colText !== ''){
+                                    object.filterQuery.queryJoin += 'and nom_agence not REGEXP "^.*[0-9]{2} .[0-9]{2}"';
+                                }
                                 if (object.columnName === 'Date_Heure_Note_Semaine') {
                                     colText = colText.split('_')[0];
                                 }
@@ -313,7 +323,6 @@ frLang = {
                                 }
                                 let lastRowIndex = object.element_dt.rows().count();
                                 let lastColumnIndex = object.element_dt.columns().count();
-
                                 if (((params.details && col > 2) || (!params.details && col > 1))
                                     && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
                                     && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
@@ -330,6 +339,7 @@ frLang = {
                                         '&subGroupBy=' + (object.filterQuery.subGroupBy === undefined || object.filterQuery.subGroupBy === null ? '' : object.filterQuery.subGroupBy) +
                                         '&queryGroupBy=' + (object.filterQuery.queryGroupBy === undefined || object.filterQuery.queryGroupBy === null ? '' : object.filterQuery.queryGroupBy) +
                                         '&appCltquery=' + (object.filterQuery.appCltquery === undefined || object.filterQuery.appCltquery === null ? '' : object.filterQuery.appCltquery) +
+                                        '&parentValue= '+(object.needParentValue === undefined || object.needParentValue === null  ? '' : ' and ' + parentAttributName + ' like "%' + parentAttributValue + '%"') +
                                         (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : '');
                                 }
                             }

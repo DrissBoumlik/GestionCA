@@ -112,22 +112,22 @@ if (!function_exists('getStats')) {
         $subGroupBy = $request->subGroupBy;
         $queryGroupBy = $request->queryGroupBy;
         $appCltquery = $request->appCltquery;
+        $parentValue = $request->parentValue;
 
         $key_groupement = $request->get('key_groupement');
         $key_groupement = $key_groupement ? clean($key_groupement) : null;
         $allStats = null;
 
-
         if ($appCltquery) {
-            $allStats = DB::select('SELECT * FROM stats AS st WHERE Nom_Region is not null ' . ($queryJoin ?? '') . ' ' .
+            $allStats = DB::select('SELECT * FROM stats AS st WHERE Nom_Region is not null ' . ($queryJoin ?? '') . ' ' . ($parentValue ?? ''). ' ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                 (($row && $rowValue && $row !== 'produit') ? ' and ' . $row . ' like "%' . $rowValue . '%"' :
                     ($row && $rowValue && $row === 'produit' ? ' and ' . $row . ' like "' . $rowValue . '"' : '') ) .
                 (!$row && $rowValue ? $rowValue : '') .
-                ( $col && $colValue && $col !== 'produit' ? ' and ' . $col . ' like "%' . $colValue . '%"' :
-                    ($col && $colValue && $col === 'produit' ? ' and ' . $col . ' like "' . $colValue . '"' :
-                        ($col && !$colValue ? ' and ' . $col . ' is null ' : ' '))) .
+                ($col && !$colValue ? ' and ' . $col . ' is null ' : '') .
+                ( $col && $colValue && $col !== 'produit' && $col !== 'Gpmt_Appel_Pre' ? ' and ' . $col . ' like "%' . $colValue . '%"' :
+                    ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : '')) .
                 ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
                 ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
                 ' and Resultat_Appel not like "=%"' .

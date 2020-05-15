@@ -119,7 +119,9 @@
                             <hr>
                             <div class="refresh-form">
                                 <div id="tree-view-8" class="tree-view d-inline-flex"></div>
+                                @if(!$agence)
                                 <div id="nom-region-filter" class="tree-nom-region-view d-inline-flex"></div>
+                                @endif
                                 <button type="button" id="refreshPerimeters" class="btn btn-primary float-right d-none">
                                     <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
                                 </button>
