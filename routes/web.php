@@ -50,6 +50,7 @@ Route::group([
 
     Route::get('/dashboard', 'StatsController@dashboard')->name('dashboard');
     Route::get('/agences', 'StatsController@dashboard')->name('agence.index');
+    Route::get('/agents', 'StatsController@dashboard')->name('agent.index');
 
     Route::get('/all-stats', 'StatsController@index')->name('stats.index');
     Route::post('/stats/get-stats', 'StatsController@getStats')->name('stats.get-stats');
