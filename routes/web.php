@@ -19,13 +19,14 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 Auth::routes();
 
 Route::group([
-   'middleware' => ['auth'],
+    'middleware' => ['auth'],
 ], function () {
 
 
     Route::get('/', 'ToolController@home');
 
-// User Routes
+    //region Users / Roles / Permissions
+    // User Routes
 
     Route::get('/profile', 'UserController@profile');
     Route::resource('/users', 'UserController');
@@ -43,57 +44,26 @@ Route::group([
     Route::resource('/permissions', 'PermissionController');
     Route::get('/getPermissions', 'PermissionController@getPermissions');
     Route::get('/getPermissionRoles/{permission}', 'PermissionController@getRoles');
+    //endregion
 
     Route::get('/unauthorized', 'ToolController@unauthorized');
 
     Route::get('/dashboard', 'StatsController@dashboard')->name('dashboard');
+    Route::get('/agences', 'StatsController@dashboard')->name('agence.index');
 
     Route::get('/all-stats', 'StatsController@index')->name('stats.index');
     Route::post('/stats/get-stats', 'StatsController@getStats')->name('stats.get-stats');
 
 
     Route::get('/dates', 'StatsController@getDates');
-    Route::get('/agences/dates', 'StatsController@getDates');
-
-    Route::get('/agences/regions/{callResult}', 'StatsController@getRegions');
-    Route::get('/agences/regions/columns/{callResult}', 'StatsController@getRegionsColumn');
-    Route::get('/agences/regionsCallState/{column}', 'StatsController@getRegionsCallState'); // Nom_Region / Date_Heure_Note_Semaine
-    Route::get('/agences/regionsCallState/columns/{column}', 'StatsController@getRegionsCallStateColumn');
-
-    Route::get('/agences/nonValidatedFolders/{column}', 'StatsController@getNonValidatedFolders'); // Code_Intervention / Code_Type_Intervention
-    Route::get('/agences/nonValidatedFolders/columns/{column}', 'StatsController@getNonValidatedFoldersColumn');
-
-    Route::get('/agences/clientsByCallState/{callResult}', 'StatsController@getClientsByCallState'); // Injoignable / Joignable
-    Route::get('/agences/clientsByCallState/columns/{callResult}', 'StatsController@getClientsByCallStateColumn');
-
-    Route::get('/agences', 'StatsController@dashboard')->name('agence.index');
-
-    Route::get('/agents/dates', 'StatsController@getDates');
-
-    Route::get('/agents/regions/{callResult}', 'StatsController@getRegions');
-    Route::get('/agents/regions/columns/{callResult}', 'StatsController@getRegionsColumn');
-    Route::get('/agents/regionsCallState/{column}', 'StatsController@getRegionsCallState'); // Nom_Region / Date_Heure_Note_Semaine
-    Route::get('/agents/regionsCallState/columns/{column}', 'StatsController@getRegionsCallStateColumn');
-
-    Route::get('/agents/nonValidatedFolders/{column}', 'StatsController@getNonValidatedFolders'); // Code_Intervention / Code_Type_Intervention
-    Route::get('/agents/nonValidatedFolders/columns/{column}', 'StatsController@getNonValidatedFoldersColumn');
-
-    Route::get('/agents/clientsByCallState/{callResult}', 'StatsController@getClientsByCallState'); // Injoignable / Joignable
-    Route::get('/agents/clientsByCallState/columns/{callResult}', 'StatsController@getClientsByCallStateColumn');
-
-    Route::get('/agents', 'StatsController@dashboard')->name('agent.index');
-
-
 
     Route::get('/stats/filter/{column}', 'StatsController@filterList');
     Route::get('/agences/list', 'StatsController@getAgencies')->name('agence.list');
     Route::get('/agents/list', 'StatsController@getAgents')->name('agent.list');
-// ===============
-
-    Route::get('/stats', 'StatsController@import')->name('stats.import');
-    Route::post('/stats/import-stats', 'StatsController@importStats')->name('stats.import-stats');
 
 
+
+    //region DASHBOARD
     Route::get('/regions/details/groupement', 'StatsController@getRegionsByGrpCall'); // column = key_groupement value // // PERCENT
     Route::get('/regions/details/groupement/columns', 'StatsController@getRegionsByGrpCallColumns'); // column = key_groupement value // // PERCENT
 
@@ -117,9 +87,10 @@ Route::group([
 
     Route::get('clientsWithCallStates', 'StatsController@getClientsWithCallStates'); // value = Injoignable + Joignable  => Appel Prealable
     Route::get('clientsWithCallStates/columns', 'StatsController@getClientsWithCallStatesColumn');
+    //endregion
 
 
-//    FILTERS
+    //region FILTERS PAGES
     Route::get('/dashboard/{filter}', 'FilterController@dashboard_filter');
 
     Route::get('Cloturetech', 'StatsController@getCloturetech');
@@ -156,7 +127,24 @@ Route::group([
     Route::get('RepJoiAutreDepartement/details', 'StatsController@getRepJoiAutreDepartementGrpCall');
     Route::get('RepJoiAutreDepartement/details/columns', 'StatsController@getRepJoiAutreDepartementColumnGrpCall');
 
+
+    Route::get('/globalView', 'StatsController@getGlobalView');
+    Route::get('/globalView/columns', 'StatsController@getGlobalViewColumns');
+
+    Route::get('/globalView/details', 'StatsController@getGlobalViewDetails');
+    Route::get('/globalView/details/columns', 'StatsController@getGlobalViewDetailsColumns');
+    //endregion
+
+
+    //region Import / Export
+    Route::get('/agents/import', 'AgentController@importView')->name('agents.importView');
+    Route::post('/agents/import', 'AgentController@import')->name('agents.import');
+
+    Route::get('/stats', 'StatsController@import')->name('stats.import');
+    Route::post('/stats/import-stats', 'StatsController@importStats')->name('stats.import-stats');
+
     Route::get('Export/ExportXls', 'StatsController@exportXls')->name('ExportXls');
+    //endregion
 
     Route::get('/user/filter', 'FilterController@getUserFilter');
     Route::post('/user/filter', 'FilterController@saveUserFilter');
@@ -164,9 +152,6 @@ Route::group([
     Route::get('stats/import-stats/data/count', 'ToolController@getInsertedData');
     Route::get('stats/import-stats/status/edit/{flag}', 'ToolController@editImportingStatus');
 
-    Route::get('/globalView', 'StatsController@getGlobalView');
-    Route::get('/globalView/columns', 'StatsController@getGlobalViewColumns');
 
-    Route::get('/globalView/details', 'StatsController@getGlobalViewDetails');
-    Route::get('/globalView/details/columns', 'StatsController@getGlobalViewDetailsColumns');
+
 });
