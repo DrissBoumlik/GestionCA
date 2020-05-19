@@ -51,7 +51,7 @@ $(document).ready(function () {
             return {
                 id: year + '-' + month + '-' + 'S' + number,
                 text: 'S' + number,
-                children: days
+                days: days
             };
         });
     }
@@ -106,9 +106,10 @@ $(document).ready(function () {
             text: 'Décembre',
         },
     ];
+    let currentYear = new Date().getFullYear();
     let _years = [
-        {id: new Date().getFullYear() - 1, text: new Date().getFullYear() - 1},
-        {id: new Date().getFullYear(), text: new Date().getFullYear()},
+        {id: currentYear - 1, text: currentYear - 1},
+        {id: currentYear, text: currentYear},
     ];
     // let dayOfWeek = new Date(lastYear, 0, 1).getDay();
     // let indexOfWeek = 1;
@@ -127,7 +128,7 @@ $(document).ready(function () {
         let months = _months.map(function (month, index_2) {
             let weeks = getWeeksStartAndEndInMonth(month.id - 1, year.id, 'monday', weeksNumber);
             weeksNumber += weeks.length;
-            weeksNumber = (weeks[weeks.length - 1].children.length === 7) ? weeksNumber : weeksNumber - 1;
+            weeksNumber = (weeks[weeks.length - 1].days.length === 7) ? weeksNumber : weeksNumber - 1;
             return {...month, id: year.id + '-' + month.id, children: weeks};
         });
         return {...year, children: months};
@@ -143,7 +144,7 @@ $(document).ready(function () {
     //     monthElt.append(element);
     // });
 
-    let days = null;
+    let dates = null;
     new Tree('#tree-view-months', {
         data: [{id: '-1', text: 'Choisisser un/des Mois', children: _tree}],
         closeDepth: 2,
@@ -154,14 +155,13 @@ $(document).ready(function () {
             // this.disables = ['0-0-0', '0-0-1', '0-0-2']
         },
         onChange: function () {
-            days = this.values;
-            // console.log(dates);
+            dates = this.values;
         }
     });
     $('.treejs-switcher').click();
 
     $(document).on('click', '#showModalImport', function (event) {
-        if (days === null || days === undefined || !days.length) {
+        if (dates === null || dates === undefined || !dates.length) {
             // alert('Vous dever choisir au moin une date');
             $('#modal-import').modal('hide');
             $('#modal-block-popin').modal('show');
@@ -181,7 +181,7 @@ $(document).ready(function () {
         messages: {
             file: {
                 required: "Le fichier est obligatoire",
-                extension: "L'extension est invalide"
+                extension: "Le fichier est invalide"
             }
         },
         errorPlacement: function (error, element) {
@@ -211,48 +211,42 @@ $(document).ready(function () {
         if (!$('#form-import').valid()) {
             return;
         }
-        $('#modal-import').modal('hide');
-        $('#modal-import-status').modal('show');
+        // $('#modal-import').modal('hide');
+        // $('#modal-import-status').modal('show');
         let formData = new FormData($('#form-import')[0]);
-        if (days !== null && days !== undefined) {
-            formData.append('days', days);
+        if (dates !== null && dates !== undefined) {
+            formData.append('dates', dates);
         }
         event.preventDefault();
 
-        let importedDataElement = $('.imported-data');
-        if (importedDataElement.length) {
-            importedDataElement.html('Veuiller patientez, <span style="color:red">Ne rafraîchissez pas la page</span>');
-        }
-        $.ajax({
-            method: 'get',
-            url: APP_URL + '/import/status/edit/0',
-            success: function (data) {
-                let sendRequestCountData = true;
-                window.localStorage.setItem('sendRequestCountData', sendRequestCountData);
-                $('.import_status-wrapper').removeClass('d-none');
-                ImportDataRequest(formData);
-                checkDataCount(false);
-            }
-        });
-    }
-
-    function ImportDataRequest(formData) {
-        let request_resolved = false;
-        window.localStorage.setItem('request_resolved', request_resolved);
+        // let importedDataElement = $('.imported-data');
+        // if (importedDataElement.length) {
+        //     importedDataElement.html('Veuiller patientez, <span style="color:red">Ne rafraîchissez pas la page</span>');
+        // }
         $.ajax({
             method: 'post',
-            url: APP_URL + '/import/stats',
+            url: APP_URL + '/import/agents',
             data: formData,
             dateType: 'json',
             processData: false,
             contentType: false,
             success: function (data) {
-                request_resolved = true;
-                window.localStorage.setItem('request_resolved', request_resolved);
+                // request_resolved = true;
+                // window.localStorage.setItem('request_resolved', request_resolved);
+                Swal.fire({
+                    // position: 'top-end',
+                    type: 'success',
+                    title: data.message,
+                    showConfirmButton: true,
+                    customClass: {
+                        confirmButton: 'btn btn-success m-1',
+                    },
+                    confirmButtonText: 'Ok',
+                });
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                request_resolved = true;
-                window.localStorage.setItem('request_resolved', request_resolved);
+                // request_resolved = true;
+                // window.localStorage.setItem('request_resolved', request_resolved);
                 Swal.fire({
                     // position: 'top-end',
                     type: 'error',
