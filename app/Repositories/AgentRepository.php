@@ -15,7 +15,7 @@ class AgentRepository
         $fileName = $file->getClientOriginalName();
         $stored = Storage::disk('public')->put('storage/data_source/' . $fileName, file_get_contents($file));
 
-        $agentsImport = new AgentsImport($request->days);
+        $agentsImport = new AgentsImport($request->dates);
         Excel::import($agentsImport, $request->file('file'));
 //        $user_flag = getImportedData(false);
 //        $user_flag->flags = [

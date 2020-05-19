@@ -22,16 +22,18 @@ class AgentsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBat
 {
     use Importable;
 
-    private $days = [];
+    private $dates = [];
     public $data = [];
     private $index = 0;
     private $user_flag;
 
-    public function __construct($days)
+    public function __construct($dates)
     {
-        if ($days) {
-            $this->days = explode(',', $days);
-            \DB::table('agents')->whereIn('imported_at', $this->days)->delete();
+        if ($dates) {
+            $this->dates = array_map(function ($date) {
+                return preg_replace('/\d+-\d+-/', '', $date);
+            }, explode(',', $dates));
+            \DB::table('agents')->whereIn('imported_at', $this->dates)->delete();
         }
 //        $this->user_flag = getImportedData(false);
 //        $this->user_flag->flags = [
@@ -78,7 +80,7 @@ class AgentsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBat
             'pseudo' => $row['pseudo'],
             'fullName'=> $row['nom_complet'],
             'hours'=> $row['heures'],
-            'imported_at'=> null,
+            'imported_at'=> implode(',', $this->dates),
             'isNotReady' => true
         ]);
     }
