@@ -51,7 +51,7 @@ $(document).ready(function () {
             return {
                 id: year + '-' + month + '-' + 'S' + number,
                 text: 'S' + number,
-                children: days
+                days: days
             };
         });
     }
@@ -128,7 +128,7 @@ $(document).ready(function () {
         let months = _months.map(function (month, index_2) {
             let weeks = getWeeksStartAndEndInMonth(month.id - 1, year.id, 'monday', weeksNumber);
             weeksNumber += weeks.length;
-            weeksNumber = (weeks[weeks.length - 1].children.length === 7) ? weeksNumber : weeksNumber - 1;
+            weeksNumber = (weeks[weeks.length - 1].days.length === 7) ? weeksNumber : weeksNumber - 1;
             return {...month, id: year.id + '-' + month.id, children: weeks};
         });
         return {...year, children: months};
@@ -144,7 +144,7 @@ $(document).ready(function () {
     //     monthElt.append(element);
     // });
 
-    let days = null;
+    let dates = null;
     new Tree('#tree-view-months', {
         data: [{id: '-1', text: 'Choisisser un/des Mois', children: _tree}],
         closeDepth: 2,
@@ -155,14 +155,13 @@ $(document).ready(function () {
             // this.disables = ['0-0-0', '0-0-1', '0-0-2']
         },
         onChange: function () {
-            days = this.values;
-            // console.log(dates);
+            dates = this.values;
         }
     });
     $('.treejs-switcher').click();
 
     $(document).on('click', '#showModalImport', function (event) {
-        if (days === null || days === undefined || !days.length) {
+        if (dates === null || dates === undefined || !dates.length) {
             // alert('Vous dever choisir au moin une date');
             $('#modal-import').modal('hide');
             $('#modal-block-popin').modal('show');
@@ -215,8 +214,8 @@ $(document).ready(function () {
         // $('#modal-import').modal('hide');
         // $('#modal-import-status').modal('show');
         let formData = new FormData($('#form-import')[0]);
-        if (days !== null && days !== undefined) {
-            formData.append('days', days);
+        if (dates !== null && dates !== undefined) {
+            formData.append('dates', dates);
         }
         event.preventDefault();
 
@@ -226,7 +225,7 @@ $(document).ready(function () {
         // }
         $.ajax({
             method: 'post',
-            url: APP_URL + '/agents/import',
+            url: APP_URL + '/import/agents',
             data: formData,
             dateType: 'json',
             processData: false,
@@ -237,7 +236,7 @@ $(document).ready(function () {
                 Swal.fire({
                     // position: 'top-end',
                     type: 'success',
-                    title: 'Importées avzec succées',
+                    title: data.message,
                     showConfirmButton: true,
                     customClass: {
                         confirmButton: 'btn btn-success m-1',

@@ -85,19 +85,19 @@
                     </ul>
                 </li>
 
-                <li class="nav-main-item">
+                <li class="nav-main-item{{ request()->is('import/*') ? ' open' : '' }}">
                     <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                         <i class="nav-main-link-icon fas fa-building"></i>
                         <span class="nav-main-link-name">Importation</span>
                     </a>
                     <ul class="nav-main-submenu">
                         <li class="nav-main-item">
-                            <a class="nav-main-link {{ request()->is('stats') ? ' active' : '' }}" href="{{ route('stats.import') }}">
+                            <a class="nav-main-link {{ request()->is('import/stats') ? ' active' : '' }}" href="{{ route('stats.importView') }}">
                                 <span class="nav-main-link-name">Importation des données</span>
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link {{ request()->is('agents/import') ? ' active' : '' }}" href="{{ route('agents.import') }}">
+                            <a class="nav-main-link {{ request()->is('import/agents') ? ' active' : '' }}" href="{{ route('agents.importView') }}">
                                 <span class="nav-main-link-name">Importation des agents</span>
                             </a>
                         </li>

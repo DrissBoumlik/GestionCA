@@ -615,6 +615,7 @@ frLang = {
     };
 
     window.checkDataCount = function (ImportingReady = true) {
+        $('.import_status-wrapper').removeClass('d-none');
         let sendRequestCountData = Boolean(JSON.parse(window.localStorage.getItem('sendRequestCountData')));
         if (sendRequestCountData) {
             let importedDataElement = $('.imported-data');
@@ -625,7 +626,7 @@ frLang = {
             let request_resolved = Boolean(JSON.parse(window.localStorage.getItem('request_resolved')));
             $.ajax({
                 method: 'get',
-                url: APP_URL + '/stats/import-stats/data/count',
+                url: APP_URL + '/import/data/count',
                 dateType: 'json',
                 processData: false,
                 contentType: false,
@@ -787,6 +788,7 @@ frLang = {
 
     let sendRequestCountData = Boolean(JSON.parse(window.localStorage.getItem('sendRequestCountData')));
     if (sendRequestCountData) {
+        $('.import_status-wrapper').removeClass('d-none');
         checkDataCount();
     } else {
         $('.import_status-wrapper').addClass('d-none');

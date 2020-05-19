@@ -225,7 +225,7 @@ $(document).ready(function () {
         }
         $.ajax({
             method: 'get',
-            url: 'stats/import-stats/status/edit/0',
+            url: APP_URL + '/import/status/edit/0',
             success: function (data) {
                 let sendRequestCountData = true;
                 window.localStorage.setItem('sendRequestCountData', sendRequestCountData);
@@ -241,7 +241,7 @@ $(document).ready(function () {
         window.localStorage.setItem('request_resolved', request_resolved);
         $.ajax({
             method: 'post',
-            url: APP_URL + '/stats/import-stats',
+            url: APP_URL + '/import/stats',
             data: formData,
             dateType: 'json',
             processData: false,

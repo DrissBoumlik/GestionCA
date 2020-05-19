@@ -137,11 +137,14 @@ Route::group([
 
 
     //region Import / Export
-    Route::get('/agents/import', 'AgentController@importView')->name('agents.importView');
-    Route::post('/agents/import', 'AgentController@import')->name('agents.import');
+    Route::get('/import/agents', 'AgentController@importView')->name('agents.importView');
+    Route::post('/import/agents', 'AgentController@import')->name('agents.import');
 
-    Route::get('/stats', 'StatsController@import')->name('stats.import');
-    Route::post('/stats/import-stats', 'StatsController@importStats')->name('stats.import-stats');
+    Route::get('/import/stats', 'StatsController@import')->name('stats.importView');
+    Route::post('/import/stats', 'StatsController@importStats')->name('stats.import');
+
+    Route::get('/import/data/count', 'ToolController@getInsertedData');
+    Route::get('/import/status/edit/{flag}', 'ToolController@editImportingStatus');
 
     Route::get('Export/ExportXls', 'StatsController@exportXls')->name('ExportXls');
     //endregion
@@ -149,8 +152,6 @@ Route::group([
     Route::get('/user/filter', 'FilterController@getUserFilter');
     Route::post('/user/filter', 'FilterController@saveUserFilter');
 
-    Route::get('stats/import-stats/data/count', 'ToolController@getInsertedData');
-    Route::get('stats/import-stats/status/edit/{flag}', 'ToolController@editImportingStatus');
 
 
 
