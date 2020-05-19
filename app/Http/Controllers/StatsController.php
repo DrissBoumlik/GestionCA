@@ -360,9 +360,9 @@ class StatsController extends Controller
     public function importStats(Request $request)
     {
         // Authorization
-//        $this->authorize('view', auth()->user());
+        $this->authorize('view', auth()->user());
 //        try {
-            return response()->json($this->statsRepository->importStats($request));
+        return response()->json($this->statsRepository->importStats($request));
 //        } catch (\Exception $exception) {
 //            return response()->json([
 //                'success' => false,
