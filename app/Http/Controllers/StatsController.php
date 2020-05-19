@@ -322,6 +322,18 @@ class StatsController extends Controller
         return DataTables::of($data['data'])->toJson();
     }
 
+    public function getAgentProdColumn(Request $request)
+    {
+        $data = $this->statsRepository->GetColumnsgetAgentProd($request);
+        return $data;
+    }
+
+    public function getAgentProd(Request $request)
+    {
+        $data = $this->statsRepository->getgetAgentProd($request);
+        return DataTables::of($data['data'])->toJson();
+    }
+
     //endregion
 
 

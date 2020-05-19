@@ -156,6 +156,9 @@ Route::group([
     Route::get('RepJoiAutreDepartement/details', 'StatsController@getRepJoiAutreDepartementGrpCall');
     Route::get('RepJoiAutreDepartement/details/columns', 'StatsController@getRepJoiAutreDepartementColumnGrpCall');
 
+    Route::get('AgentProd', 'StatsController@getAgentProd');
+    Route::get('AgentProd/columns', 'StatsController@getAgentProdColumn');
+
     Route::get('Export/ExportXls', 'StatsController@exportXls')->name('ExportXls');
 
     Route::get('/user/filter', 'FilterController@getUserFilter');
