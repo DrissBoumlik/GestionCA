@@ -560,6 +560,41 @@
                 </div>
             @endif
             <!-- / .row -->
+            @if(!$agence && !$agent)
+                    <hr>
+                    <div class="row ">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title d-inline-block">production d'agent par groupement des appel </h3>
+                                    <hr>
+                                    <div class="refresh-form">
+                                        <div id="tree-view-05" class="tree-view d-inline-flex"></div>
+                                        <button type="button" id="refreshAgentProd"
+                                                class="btn btn-primary float-right d-none">
+                                            <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body table-responsive">
+                                    <table id="statsAgentProd"
+                                           class="table table-bordered table-striped table-valign-middle capitalize">
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-12">
+                            <canvas id="statsAgentProdChart" class=""></canvas>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                @endif
+
+
         </div>
         <!-- END Stats -->
     </div>

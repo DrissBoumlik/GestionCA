@@ -134,6 +134,9 @@ Route::group([
 
     Route::get('/globalView/details', 'StatsController@getGlobalViewDetails');
     Route::get('/globalView/details/columns', 'StatsController@getGlobalViewDetailsColumns');
+
+    Route::get('AgentProd', 'StatsController@getAgentProd');
+    Route::get('AgentProd/columns', 'StatsController@getAgentProdColumn');
     //endregion
 
 

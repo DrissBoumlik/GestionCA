@@ -129,7 +129,8 @@ frLang = {
         refreshMode: false,
         details: false,
         removeTotalColumn: false,
-        pagination: false
+        pagination: false,
+        searching: false
     }) {
         ajaxRequests++;
         if (params.refreshMode) {
@@ -222,7 +223,8 @@ frLang = {
                             removeTotal: params.removeTotal,
                             removeTotalColumn: params.removeTotalColumn,
                             details: params.details,
-                            pagination: params.pagination
+                            pagination: params.pagination,
+                            searching: params.searching
                         });
                         if (params.details) {
                             $('#' + object.element).on('click', 'td.details-control', function () {
@@ -368,7 +370,8 @@ frLang = {
         removeTotal: true,
         removeTotalColumn: false,
         details: false,
-        pagination: false
+        pagination: false,
+        searching: false
     }) {
         let table = $('#' + object.element);
         if ($.fn.DataTable.isDataTable(table)) {
@@ -412,7 +415,7 @@ frLang = {
             info: false,
             processing: true,
             serverSide: true,
-            searching: false,
+            searching: params.searching,
             // ordering: false,
             bPaginate: params.pagination,
             ajax: {
@@ -458,6 +461,9 @@ frLang = {
         let column = labels.shift();
         if (params.removeTotalColumn) {
             labels.pop();
+        }
+        if(objectChart.element_id === 'statsAgentProdChart'){
+            labels.shift();
         }
         let datasets = [...data];
         if (params.removeTotal) {
@@ -724,7 +730,8 @@ frLang = {
             removeTotalColumn: false,
             details: false,
             refreshMode: false,
-            pagination: false
+            pagination: false,
+            searching : false
         });
         // InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
     };

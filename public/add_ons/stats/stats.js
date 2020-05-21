@@ -702,6 +702,50 @@ $(function () {
             });
         });
     }
+
+    let statsAgentProd = {
+        element_dt: undefined,
+        element: 'statsAgentProd',
+        columnName: 'EXPORT_ALL_EXTRACT_CUI',
+        rowName: '',
+        columns: undefined,
+        data: undefined,
+        filterTree: {dates: [], rows: [], datesTreeObject: undefined},
+        filterElement: {dates: '#tree-view-05', rows: ''},
+        filterQuery: {
+            appCltquery: true,
+        },
+        routeCol: 'AgentProd/columns',
+        routeData: 'AgentProd',
+        objChart: {
+            element_chart: undefined,
+            element_id: 'statsAgentProdChart',
+            data: undefined,
+            chartTitle: 'Délai global de traitement OT'
+        }
+    };
+
+    if (elementExists(statsAgentProd)) {
+        getColumns(statsAgentProd, filterData(), {
+            removeTotal: false,
+            refreshMode: false,
+            details: false,
+            removeTotalColumn: false,
+            pagination: true,
+            searching: true
+        });
+        $('#refreshAgentProd').on('click', function () {
+            toggleLoader($('#refreshAll').parents('.col-12'));
+            getColumns(statsAgentProd, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: false,
+                pagination: true,
+                searching: true
+            });
+        });
+    }
     //</editor-fold>
 
 
@@ -724,6 +768,9 @@ $(function () {
         if(elementExists(statsRegions)){
         globalElements.push(statsRegions);
     }
+        if(elementExists(statsAgentProd)){
+            globalElements.push(statsAgentProd);
+        }
     localStorage.setItem('globalElements', JSON.stringify(globalElements));
 
     detailClick = false;
@@ -861,6 +908,17 @@ $(function () {
                 removeTotalColumn: false,
                 pagination: false,
                 searching: false
+            });
+        }
+
+        if(elementExists(statsAgentProd)){
+            getColumns(statsAgentProd, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: false,
+                pagination: true,
+                searching: true
             });
         }
     });
