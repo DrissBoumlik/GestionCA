@@ -17,7 +17,7 @@ class CreateAgentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('pseudo')->nullable();
             $table->string('fullName')->nullable();
-            $table->float('hours')->nullable();
+            $table->float('hours')->default(0);
             $table->string('imported_at')->nullable();
             $table->boolean('isNotReady')->nullable();
             $table->timestamps();
