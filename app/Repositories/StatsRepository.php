@@ -4173,7 +4173,9 @@ class StatsRepository
                 \DB::raw('count(distinct st.Id_Externe) as count'),'hours')
             ->join('agents',function ($join){
                 $join->on('st.Utilisateur','=','agents.pseudo');
-                $join->on('st.Date_Heure_Note_Semaine','=','agents.imported_at');
+                $join->on('st.Date_Heure_Note_Annee','=',\DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(agents.imported_at,"-", 1),"-",-1)'));
+                $join->on(\DB::raw('CONVERT(st.Date_Heure_Note_Mois, UNSIGNED INTEGER)') ,'=',\DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(agents.imported_at,"-", 2),"-",-1)'));
+                $join->on('st.Date_Heure_Note_Semaine','=',\DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(agents.imported_at,"-", 3),"-",-1)'));
             })
             ->whereNotNull('Groupement')
             ->whereNotNull('Utilisateur')
@@ -4188,7 +4190,7 @@ class StatsRepository
         if ($agenceCode) {
             $regions = $regions->where('st.Nom_Region', 'like'  , "%$agenceCode");
         }
-
+       // dd($regions->groupBy('Utilisateur','fullname', 'Groupement','hours')->toSql());
         $regions = $regions->orderBy('Groupement');
         $regions = $regions->groupBy('Utilisateur','fullname', 'Groupement','hours')->get();
         $keys = $regions->groupBy(['Groupement'])->keys();
