@@ -462,6 +462,9 @@ frLang = {
         if (params.removeTotalColumn) {
             labels.pop();
         }
+        if(objectChart.element_id === 'statsAgentProdChart'){
+            labels.shift();
+        }
         let datasets = [...data];
         if (params.removeTotal) {
             datasets.pop();

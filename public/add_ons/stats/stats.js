@@ -736,7 +736,7 @@ $(function () {
         });
         $('#refreshAgentProd').on('click', function () {
             toggleLoader($('#refreshAll').parents('.col-12'));
-            getColumns(statsProcessingDelay, filterData(), {
+            getColumns(statsAgentProd, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
                 details: false,
@@ -908,6 +908,17 @@ $(function () {
                 removeTotalColumn: false,
                 pagination: false,
                 searching: false
+            });
+        }
+
+        if(elementExists(statsAgentProd)){
+            getColumns(statsAgentProd, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                details: false,
+                removeTotalColumn: false,
+                pagination: true,
+                searching: true
             });
         }
     });

@@ -4104,6 +4104,7 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select(\DB::raw('Groupement'))
             ->distinct()
+            ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('Groupement');
 
         $columns = applyFilter($columns, $filter);
@@ -4133,12 +4134,26 @@ class StatsRepository
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
+            $second = new \stdClass();
+            $second->title = 'nom complet';
+            $second->name = 'fullname';
+            $second->data = 'fullname';
+            $second->orderable = false;
+            array_unshift($regions_names, $second);
+
             $first = new \stdClass();
-            $first->title = 'Groupement';
+            $first->title = 'pseudo';
             $first->name = 'Groupement';
             $first->data = 'Groupement';
             $first->orderable = false;
             array_unshift($regions_names, $first);
+
+            $last = new \stdClass();
+            $last->data = 'hours';
+            $last->name = 'hours';
+            $last->text = 'hours';
+            $last->title = 'heures';
+            array_push($regions_names, $last);
 
             return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
         }
@@ -4154,11 +4169,17 @@ class StatsRepository
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
 
         $regions = \DB::table('stats as st')
-            ->select('Utilisateur', 'Groupement',
-                \DB::raw('count(distinct st.Id_Externe) as count'))
+            ->select('Utilisateur','fullname', 'Groupement',
+                \DB::raw('count(distinct st.Id_Externe) as count'),'hours')
+            ->join('agents',function ($join){
+                $join->on('st.Utilisateur','=','agents.pseudo');
+                $join->on('st.Date_Heure_Note_Semaine','=','agents.imported_at');
+            })
             ->whereNotNull('Groupement')
             ->whereNotNull('Utilisateur')
-            ->whereNull('isNotReady');
+            ->where('Resultat_Appel', 'not like', '=%')
+            ->whereNull('st.isNotReady')
+            ->whereNull('agents.isNotReady');
 
         $regions = applyFilter($regions, $filter);
         if ($agentName) {
@@ -4169,7 +4190,7 @@ class StatsRepository
         }
 
         $regions = $regions->orderBy('Groupement');
-        $regions = $regions->groupBy('Utilisateur', 'Groupement')->get();
+        $regions = $regions->groupBy('Utilisateur','fullname', 'Groupement','hours')->get();
         $keys = $regions->groupBy(['Groupement'])->keys();
 
 
@@ -4189,7 +4210,7 @@ class StatsRepository
             });
             $regions = $temp->flatten();
 
-            $regions = $regions->groupBy('Utilisateur');
+            $regions = $regions->groupBy('Utilisateur','fullname','hours');
             $regions = $regions->map(function ($region) use ($keys) {
                 $row = new \stdClass();
                 $row->values = [];
@@ -4197,8 +4218,10 @@ class StatsRepository
                 $col_arr = $keys->all();
                 $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
                     $row->Groupement = $call->Utilisateur;
+                    $row->fullname = $call->fullname;
                     $Groupement = $call->Groupement;
                     $row->$Groupement = $call->count . '|' . $call->$Groupement . '%';
+                    $row->hours = $call->hours;
                     $row->values[$Groupement] = $call->count;
                     $col_arr = array_diff($col_arr, [$Groupement]);
                     return $row;
