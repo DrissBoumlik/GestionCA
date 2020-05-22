@@ -49,7 +49,7 @@ $(document).ready(function () {
                 });
             }
             return {
-                id: year + '-' + month + '-' + 'S' + number,
+                id: year + '-' + (month + 1) + '-' + 'S' + number,
                 text: 'S' + number,
                 days: days
             };
@@ -129,6 +129,7 @@ $(document).ready(function () {
             let weeks = getWeeksStartAndEndInMonth(month.id - 1, year.id, 'monday', weeksNumber);
             weeksNumber += weeks.length;
             weeksNumber = (weeks[weeks.length - 1].days.length === 7) ? weeksNumber : weeksNumber - 1;
+            console.log({...month, id: year.id + '-' + month.id, children: weeks});
             return {...month, id: year.id + '-' + month.id, children: weeks};
         });
         return {...year, children: months};
