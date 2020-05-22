@@ -566,10 +566,11 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title d-inline-block">production d'agent par groupement des appel </h3>
+                                    <h3 class="card-title d-inline-block">production d'agent par groupement des appels </h3>
                                     <hr>
                                     <div class="refresh-form">
                                         <div id="tree-view-05" class="tree-view d-inline-flex"></div>
+                                        <div id="AgentProd-filter" class="tree-groupement-view d-inline-flex"></div>
                                         <button type="button" id="refreshAgentProd"
                                                 class="btn btn-primary float-right d-none">
                                             <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>

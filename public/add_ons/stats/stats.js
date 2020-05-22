@@ -711,7 +711,7 @@ $(function () {
         columns: undefined,
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
-        filterElement: {dates: '#tree-view-05', rows: ''},
+        filterElement: {dates: '#tree-view-05', rows: '#AgentProd-filter'},
         filterQuery: {
             appCltquery: true,
         },
@@ -721,7 +721,7 @@ $(function () {
             element_chart: undefined,
             element_id: 'statsAgentProdChart',
             data: undefined,
-            chartTitle: 'Délai global de traitement OT'
+            chartTitle: 'charte production agent par groupement d\'appels'
         }
     };
 

@@ -4115,6 +4115,21 @@ class StatsRepository
             $columns = $columns->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
+        $rowsKeys = \DB::table('stats as st')
+        ->select('utilisateur')
+        ->distinct()
+            ->where('Resultat_Appel', 'not like', '=%')
+            ->whereNotNull('utilisateur')
+            ->whereNotNull('Groupement');
+        if ($agentName) {
+            $rowsKeys = $rowsKeys->where('st.Utilisateur', $agentName);
+        }
+        if ($agenceCode) {
+            $rowsKeys = [];
+        }else{
+            $rowsKeys = $rowsKeys->pluck('utilisateur');
+        }
+
         $keys = $columns->pluck('Groupement');
 
 
@@ -4143,8 +4158,8 @@ class StatsRepository
 
             $first = new \stdClass();
             $first->title = 'pseudo';
-            $first->name = 'Groupement';
-            $first->data = 'Groupement';
+            $first->name = 'utilisateur';
+            $first->data = 'utilisateur';
             $first->orderable = false;
             array_unshift($regions_names, $first);
 
@@ -4155,7 +4170,7 @@ class StatsRepository
             $last->title = 'heures';
             array_push($regions_names, $last);
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys, 'rowsFilterHeader' => ''];
         }
     }
 
@@ -4167,10 +4182,21 @@ class StatsRepository
         $_route = $route_request ?? getRoute(Route::current());
         $route = str_replace('/columns', '', $_route);
         list($filter, $queryFilters) = makeFilterSubQuery($request, $route);
-
+        $querydate = '';
+        $year = 0;
+        $month = 0;
+        foreach($filter->date_filter as $filterdate){
+            $year = 'SUBSTRING_INDEX(SUBSTRING_INDEX("'.$filterdate.'","-", 1),"-",-1)';
+            $month = 'CONVERT(SUBSTRING_INDEX(SUBSTRING_INDEX("'.$filterdate.'","-", 2),"-",-1), UNSIGNED INTEGER)';
+            $querydate .=  'concat('.$year.',"-",'.$month.', "-S", week("'.$filterdate.'")+1),';
+        }
+        $querydate = substr($querydate , 0 ,-1);
         $regions = \DB::table('stats as st')
             ->select('Utilisateur','fullname', 'Groupement',
-                \DB::raw('count(distinct st.Id_Externe) as count'),'Date_Heure_Note_Semaine','hours')
+                \DB::raw('count(distinct st.Id_Externe) as count'),
+                \DB::raw('(select sum(hours) from agents where pseudo = st.utilisateur
+	                    and imported_at in ('.$querydate.')) hours
+                '))
             ->join('agents',function ($join){
                 $join->on('st.Utilisateur','=','agents.pseudo');
                 $join->on('st.Date_Heure_Note_Annee','=',\DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(agents.imported_at,"-", 1),"-",-1)'));
@@ -4190,9 +4216,9 @@ class StatsRepository
         if ($agenceCode) {
             $regions = $regions->where('st.Nom_Region', 'like'  , "%$agenceCode");
         }
-       // dd($regions->groupBy('Utilisateur','fullname', 'Groupement','hours')->toSql());
+        //dd($regions->groupBy('Utilisateur','fullname', 'Groupement','hours')->get());
         $regions = $regions->orderBy('Groupement');
-        $regions = $regions->groupBy('Utilisateur','fullname', 'Groupement','Date_Heure_Note_Semaine','hours')->get();
+        $regions = $regions->groupBy('Utilisateur','fullname', 'Groupement','hours')->get();
         $keys = $regions->groupBy(['Groupement'])->keys();
 
 
@@ -4200,13 +4226,14 @@ class StatsRepository
             $data = ['data' => []];
             return $data;
         } else {
-            $temp = $regions->groupBy(['Groupement']);
+            $temp = $regions->groupBy(['Utilisateur']);
             $temp = $temp->map(function ($calls, $index) {
                 $totalZone = $calls->reduce(function ($carry, $call) {
                     return $carry + $call->count;
                 }, 0);
                 return $calls->map(function ($call) use ($index, $totalZone) {
-                    $call->$index = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
+                    $Groupement = $call->Groupement;
+                    $call->$Groupement = $totalZone == 0 ? 0.00 : round($call->count * 100 / $totalZone, 2);
                     return $call;
                 });
             });
@@ -4218,17 +4245,14 @@ class StatsRepository
                 $row->values = [];
 
                 $col_arr = $keys->all();
-                $previous_week = '';
-                $sum_hours = 0;
-                $items = $region->map(function ($call, $index) use (&$row, &$col_arr,$previous_week,$sum_hours) {
-                    $row->Groupement = $call->Utilisateur;
+                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
+                    $row->utilisateur = $call->Utilisateur;
                     $row->fullname = $call->fullname;
                     $Groupement = $call->Groupement;
                     $row->$Groupement = $call->count . '|' . $call->$Groupement . '%';
-                    $row->hours = ($previous_week !== $call->Date_Heure_Note_Semaine) ? $sum_hours += $call->hours : $call->hours;
+                    $row->hours = $call->hours;
                     $row->values[$Groupement] = $call->count;
                     $col_arr = array_diff($col_arr, [$Groupement]);
-                    $previous_week = $call->Date_Heure_Note_Semaine;
                     return $row;
                 });
 
