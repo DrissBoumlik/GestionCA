@@ -4170,7 +4170,7 @@ class StatsRepository
 
         $regions = \DB::table('stats as st')
             ->select('Utilisateur','fullname', 'Groupement',
-                \DB::raw('count(distinct st.Id_Externe) as count'),'hours')
+                \DB::raw('count(distinct st.Id_Externe) as count'),'Date_Heure_Note_Semaine','hours')
             ->join('agents',function ($join){
                 $join->on('st.Utilisateur','=','agents.pseudo');
                 $join->on('st.Date_Heure_Note_Annee','=',\DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(agents.imported_at,"-", 1),"-",-1)'));
@@ -4192,7 +4192,7 @@ class StatsRepository
         }
        // dd($regions->groupBy('Utilisateur','fullname', 'Groupement','hours')->toSql());
         $regions = $regions->orderBy('Groupement');
-        $regions = $regions->groupBy('Utilisateur','fullname', 'Groupement','hours')->get();
+        $regions = $regions->groupBy('Utilisateur','fullname', 'Groupement','Date_Heure_Note_Semaine','hours')->get();
         $keys = $regions->groupBy(['Groupement'])->keys();
 
 
@@ -4218,14 +4218,17 @@ class StatsRepository
                 $row->values = [];
 
                 $col_arr = $keys->all();
-                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
+                $previous_week = '';
+                $sum_hours = 0;
+                $items = $region->map(function ($call, $index) use (&$row, &$col_arr,$previous_week,$sum_hours) {
                     $row->Groupement = $call->Utilisateur;
                     $row->fullname = $call->fullname;
                     $Groupement = $call->Groupement;
                     $row->$Groupement = $call->count . '|' . $call->$Groupement . '%';
-                    $row->hours = $call->hours;
+                    $row->hours = ($previous_week !== $call->Date_Heure_Note_Semaine) ? $sum_hours += $call->hours : $call->hours;
                     $row->values[$Groupement] = $call->count;
                     $col_arr = array_diff($col_arr, [$Groupement]);
+                    $previous_week = $call->Date_Heure_Note_Semaine;
                     return $row;
                 });
 
