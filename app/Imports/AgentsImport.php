@@ -30,11 +30,8 @@ class AgentsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBat
     public function __construct($dates)
     {
         if ($dates) {
-            $this->dates = $dates;
-//                array_map(function ($date) {
-////                return preg_replace('/\d+-\d+-/', '', $date);
-//            }, explode(',', $dates));
-            \DB::table('agents')->where('imported_at', 'like', $this->dates)->delete();
+            $this->dates = explode(',', $dates);
+            \DB::table('agents')->whereIn('imported_at', $this->dates)->delete();
         }
 //        $this->user_flag = getImportedData(false);
 //        $this->user_flag->flags = [
@@ -48,20 +45,23 @@ class AgentsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBat
     {
         $rows->shift();
         $data = $rows->map(function ($row, $index) {
-            $hours = $row['heures'];
-            if ($hours == null || $hours == '') {
-                $hours = 0;
+            $rowDate = $row['annee'] . '-' . $row['mois'] . '-' . $row['semaine'];
+            if (!$this->dates || in_array($rowDate, $this->dates)) {
+                $hours = $row['heures'];
+                if ($hours == null || $hours == '') {
+                    $hours = 0;
+                }
+                $item = [
+                    'pseudo' => $row['pseudo'],
+                    'fullName' => $row['nom_complet'],
+                    'hours' => $hours,
+                    'imported_at' => $this->dates,
+                    'isNotReady' => true,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ];
+                return $item;
             }
-            $item = [
-                'pseudo' => $row['pseudo'],
-                'fullName'=> $row['nom_complet'],
-                'hours'=> $hours,
-                'imported_at'=> $this->dates,
-                'isNotReady' => true,
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ];
-            return $item;
         });
         Stats::insert($data->all());
     }
@@ -81,17 +81,21 @@ class AgentsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBat
 //                ];
 //                $this->user_flag->save();
 //            }
-        $hours = $row['heures'];
-        if ($hours == null || $hours == '') {
-            $hours = 0;
+
+        $rowDate = $row['annee'] . '-' . $row['mois'] . '-' . $row['semaine'];
+        if (!$this->dates || in_array($rowDate, $this->dates)) {
+            $hours = $row['heures'];
+            if ($hours == null || $hours == '') {
+                $hours = 0;
+            }
+            return new Agent([
+                'pseudo' => $row['pseudo'],
+                'fullName' => $row['nom_complet'],
+                'hours' => $hours,
+                'imported_at' => $rowDate,
+                'isNotReady' => true
+            ]);
         }
-        return new Agent([
-            'pseudo' => $row['pseudo'],
-            'fullName'=> $row['nom_complet'],
-            'hours'=> $hours,
-            'imported_at'=> $this->dates,
-            'isNotReady' => true
-        ]);
     }
 
     /**
