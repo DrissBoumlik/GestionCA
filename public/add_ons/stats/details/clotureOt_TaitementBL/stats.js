@@ -486,7 +486,12 @@ $(function () {
     //</editor-fold>
 
 
-    let globalElements = [userObject, statsCallsCloture, statsFoldersByType, statsFoldersByCode, statsColturetech, statsGlobalDelay,statsValTypeIntervention,statsRepTypeIntervention, globalView];
+    let globalElements = [userObject, statsFoldersByType, statsFoldersByCode, statsColturetech, statsGlobalDelay,statsValTypeIntervention,statsRepTypeIntervention];
+    if(elementExists(globalView)){
+        globalElements.push(globalView);
+    }else if(elementExists(statsCallsCloture)){
+        globalElements.push(statsCallsCloture);
+    }
 
     detailClick = false;
 
@@ -511,13 +516,16 @@ $(function () {
             }
         });
         userFilter(userObject, true);
-        getColumns(statsCallsCloture, filterData(), {
-            removeTotal: false,
-            refreshMode: true,
-            removeTotalColumn: false,
-            details: false,
-            pagination: false
-        });
+        if(elementExists(statsCallsCloture)){
+            getColumns(statsCallsCloture, filterData(), {
+                removeTotal: false,
+                refreshMode: true,
+                removeTotalColumn: false,
+                details: false,
+                pagination: false
+            });
+        }
+
         getColumns(statsFoldersByCode, filterData(), {
             removeTotal: false,
             refreshMode: true,
@@ -587,9 +595,9 @@ $(function () {
             let statsGlobalDelayChart = document.getElementById('statsGlobalDelayChart');
             let statsValTypeInterventionChart = document.getElementById('statsValTypeInterventionChart');
             let statsRepTypeInterventionChart = document.getElementById('statsRepTypeInterventionChart');
-
+            let globalViewChart = document.getElementById('globalViewChart');
             //creates image
-            let statsCallsClotureChartImg = statsCallsClotureChart.toDataURL("image/png", 1.0);
+
             let statsFoldersByTypeChartImg = statsFoldersByTypeChart.toDataURL("image1/png", 1.0);
             let statsFoldersByCodeChartImg = statsFoldersByCodeChart.toDataURL("image2/png", 1.0);
             let statsColturetechChartImg = statsColturetechChart.toDataURL("image3/png", 1.0);
@@ -599,9 +607,53 @@ $(function () {
 
             //creates PDF from img
             let doc = new jsPDF('p', 'pt', [ 842,  842]);
-            doc.text(10, 20, 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement');
-            doc.autoTable({html: '#statsCallsCloture', margin: {top: 30}, pageBreak: 'auto',styles: {fontSize: 7} });
-            doc.addImage(statsCallsClotureChartImg, 'JPEG',150 , ($('#statsCallsCloture').height()/1.328147) + 30 , 500 , 350);
+            if(elementExists(statsCallsCloture)){
+                let statsCallsClotureChartImg = statsCallsClotureChart.toDataURL("image/png", 1.0);
+                doc.text(10, 20, 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement');
+                doc.autoTable({html: '#statsCallsCloture', margin: {top: 30}, pageBreak: 'auto',styles: {fontSize: 7} });
+                doc.addImage(statsCallsClotureChartImg, 'JPEG',150 ,doc.previousAutoTable.finalY + 5 , 500 , 350);
+            }else{
+                doc.text(10, 40, 'globale vue');
+                rownum = 0;
+                let globalViewChartImg = globalViewChart.toDataURL("image12/png", 1.0);
+                doc.autoTable({
+                    html: '#globalViewTable',
+                    didDrawCell: function (data) {
+                        if (data.row.index != newNestedTable && data.row.section === 'body') {
+                            isdrawn = false;
+                        }
+                        if (data.row.index == globalView.highlightedRow[rownum] + 1 && !isdrawn && data.row.section === 'body') {
+                            data.row.height = ($('#details-' + globalView.rowIndex[rownum] + ' tr').length * 26) + 110;
+                            doc.setFillColor(255, 255, 255);
+                            doc.rect(0, data.row.y, 842, data.row.height, 'F');
+                            doc.autoTable({
+                                html: '#details-' + globalView.rowIndex[rownum],
+                                startY: data.row.y + 5,
+                                margin: 0,
+                                styles: {fontSize: 7}
+                            });
+                            newNestedTable = data.row.index;
+                            let detailsglobalViewChart = document.getElementById('details-' + globalView.rowIndex[rownum] + '-Chart');
+                            let detailsglobalViewChartImg = detailsglobalViewChart.toDataURL("image10/png", 1.0);
+                            doc.addImage(detailsglobalViewChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5, 500, 100);
+                            isdrawn = true;
+                            rownum++;
+                        }
+
+                    },
+                    margin: {left: 0, top: 50},
+                    pageBreak: 'auto',
+                    tableWidth: 842,
+                    styles: {fontSize: 7}
+                });
+                if (globalView.highlightedRow.length > 1) {
+                    doc.addPage();
+                    doc.text(10, 20, 'La charte de la vue globale');
+                    doc.addImage(globalViewChartImg, 'JPEG', 150, 60, 500, 300);
+                }else {
+                    doc.addImage(globalViewChartImg, 'JPEG', 150, doc.previousAutoTable.finalY + 5, 500, 300);
+                }
+            }
             doc.addPage();
             doc.text(10, 20, 'Répartition des dossiers non validés par Code Type intervention');
             doc.addImage(statsFoldersByTypeChartImg, 'JPEG', 532 , 30 , 350 , 300);

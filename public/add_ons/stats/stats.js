@@ -730,7 +730,7 @@ $(function () {
             removeTotal: false,
             refreshMode: false,
             details: false,
-            removeTotalColumn: false,
+            removeTotalColumn: true,
             pagination: true,
             searching: true
         });
@@ -740,7 +740,7 @@ $(function () {
                 removeTotal: false,
                 refreshMode: true,
                 details: false,
-                removeTotalColumn: false,
+                removeTotalColumn: true,
                 pagination: true,
                 searching: true
             });
@@ -916,7 +916,7 @@ $(function () {
                 removeTotal: false,
                 refreshMode: true,
                 details: false,
-                removeTotalColumn: false,
+                removeTotalColumn: true,
                 pagination: true,
                 searching: true
             });
@@ -943,6 +943,7 @@ $(function () {
             let statsColturetechChart = document.getElementById('statsColturetechChart');
             let statsGlobalDelayChart = document.getElementById('statsGlobalDelayChart');
             let globalViewChart = document.getElementById('globalViewChart');
+            let statsAgentProdChart = document.getElementById('statsAgentProdChart');
             //creates image
             let statsFoldersChartImg = statsFoldersChart.toDataURL("image2/png", 1.0);
             let callsStatesAgenciesChartImg = callsStatesAgenciesChart.toDataURL("image3/png", 1.0);
@@ -954,6 +955,7 @@ $(function () {
             let statsPerimetersChartImg = statsPerimetersChart.toDataURL("image9/png", 1.0);
             let statsColturetechChartImg = statsColturetechChart.toDataURL("image10/png", 1.0);
             let statsGlobalDelayChartImg = statsGlobalDelayChart.toDataURL("image11/png", 1.0);
+
             //creates PDF from img
             let doc = new jsPDF('p', 'pt', [842, 842]);
             doc.addImage(logo, 'jpeg', 371, 10, 100, 30);
@@ -1136,7 +1138,19 @@ $(function () {
                 styles: {fontSize: 7}
             });
             doc.addImage(statsGlobalDelayChartImg, 'JPEG', 524, 400, 350, 300);
-
+            if(elementExists(statsAgentProd)){
+                let statsAgentProdChartImg = statsAgentProdChart.toDataURL("image13/png", 1.0);
+                doc.addPage();
+                doc.text(10, 20, 'Délai de validation post solde');
+                doc.autoTable({
+                    html: '#statsAgentProd',
+                    margin: {left: 0, top: 30},
+                    pageBreak: 'auto',
+                    tableWidth: 842,
+                    styles: {fontSize: 7}
+                });
+                doc.addImage(statsAgentProdChartImg,'JPEG',150, doc.previousAutoTable.finalY + 5, 500, 300);
+            }
             doc.addImage(footer, 'jpeg', 371, 810, 100, 30);
             doc.save('dashboard.pdf');
             toggleLoader($('body'), true);
