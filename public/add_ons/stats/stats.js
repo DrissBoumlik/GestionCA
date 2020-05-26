@@ -706,14 +706,15 @@ $(function () {
     let statsAgentProd = {
         element_dt: undefined,
         element: 'statsAgentProd',
-        columnName: 'EXPORT_ALL_EXTRACT_CUI',
-        rowName: '',
+        columnName: 'groupement',
+        rowName: 'utilisateur',
         columns: undefined,
         data: undefined,
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-05', rows: '#AgentProd-filter'},
         filterQuery: {
             appCltquery: true,
+            queryJoin: ' and Resultat_Appel not like "=%" ',
         },
         routeCol: 'AgentProd/columns',
         routeData: 'AgentProd',

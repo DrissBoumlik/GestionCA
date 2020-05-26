@@ -4170,7 +4170,7 @@ class StatsRepository
             $last->title = 'heures';
             array_push($regions_names, $last);
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys, 'rowsFilterHeader' => ''];
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Utilisateurs'];
         }
     }
 
