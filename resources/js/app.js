@@ -128,6 +128,8 @@ frLang = {
         removeTotal: true,
         refreshMode: false,
         details: false,
+        removeLink : false,
+        linkOrder : 0,
         removeTotalColumn: false,
         pagination: false,
         searching: false
@@ -204,9 +206,9 @@ frLang = {
                                     newData = '';
                                 }
                                 let classHasTotalCol = params.removeTotalColumn ? 'hasTotal' : '';
-
+                                let removeLinkCol = params.removeLink ? 'removeLink' : '';
                                 let rowClass = full.isTotal ? '' : 'pointer detail-data';
-                                return '<span class="' + rowClass + ' ' + classHasTotalCol + '">' + newData + '<\span>';
+                                return '<span class="' + rowClass + ' ' + classHasTotalCol + ' ' + removeLinkCol +'">' + newData + '<\span>';
                             }
                         };
                     });
@@ -222,6 +224,8 @@ frLang = {
                         object.element_dt = InitDataTable(object, data, {
                             removeTotal: params.removeTotal,
                             removeTotalColumn: params.removeTotalColumn,
+                            removeLink : params.removeLink,
+                            linkOrder : params.linkOrder,
                             details: params.details,
                             pagination: params.pagination,
                             searching: params.searching
@@ -327,7 +331,8 @@ frLang = {
                                 let lastColumnIndex = object.element_dt.columns().count();
                                 if (((params.details && col > 2) || (!params.details && col > 1))
                                     && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
-                                    && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))) {
+                                    && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))
+                                    && ((!params.removeLink && col > 1) || (params.removeLink && col !== params.linkOrder))) {
                                     let dates = object.filterTree.dates;
                                     window.location = APP_URL + '/all-stats?' +
                                         'row=' + (object.rowName === undefined || object.rowName === null ? '' : object.rowName) +
@@ -728,6 +733,8 @@ frLang = {
         getColumns(objectChildItem, data, {
             removeTotal: false,
             removeTotalColumn: false,
+            removeLink : false,
+            linkOrder : 0,
             details: false,
             refreshMode: false,
             pagination: false,

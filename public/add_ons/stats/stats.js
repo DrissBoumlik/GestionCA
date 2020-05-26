@@ -730,6 +730,8 @@ $(function () {
         getColumns(statsAgentProd, filterData(), {
             removeTotal: false,
             refreshMode: false,
+            removeLink : true,
+            linkOrder : 2,
             details: false,
             removeTotalColumn: true,
             pagination: true,
@@ -740,6 +742,8 @@ $(function () {
             getColumns(statsAgentProd, filterData(), {
                 removeTotal: false,
                 refreshMode: true,
+                removeLink : true,
+                linkOrder : 2,
                 details: false,
                 removeTotalColumn: true,
                 pagination: true,
