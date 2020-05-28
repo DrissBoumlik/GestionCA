@@ -66,7 +66,7 @@
                     </div>
                     <div class="btn-view-data-wrapper">
                         <button type="button" class="btn btn-primary btn-view-data">
-                            <i class="fa fa-fw fa-view mr-1"></i> Visualiser les données importées
+                            <i class="fa fa-fw fa-eye mr-1"></i> Visualiser les données importées
                         </button>
                     </div>
                 </div>
