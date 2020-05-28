@@ -212,8 +212,7 @@ $(document).ready(function () {
         if (!$('#form-import').valid()) {
             return;
         }
-        // $('#modal-import').modal('hide');
-        // $('#modal-import-status').modal('show');
+        $('#modal-import').modal('hide');
         let formData = new FormData($('#form-import')[0]);
         if (dates !== null && dates !== undefined) {
             formData.append('dates', dates);

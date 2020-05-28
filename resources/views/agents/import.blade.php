@@ -57,10 +57,19 @@
         </div>
         <div class="row mb-4">
             <div class="col-12">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-import"
-                        id="showModalImport">
-                    <i class="fa fa-fw fa-upload mr-1"></i> Importer
-                </button>
+                <div class="btns">
+                    <div class="btn-import-wrapper">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-import"
+                                id="showModalImport">
+                            <i class="fa fa-fw fa-upload mr-1"></i> Importer
+                        </button>
+                    </div>
+                    <div class="btn-view-data-wrapper">
+                        <a href="/agents/all-data" class="btn btn-primary" target="_blank">
+                            <i class="fa fa-fw fa-view mr-1"></i> Visualiser les données importées
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

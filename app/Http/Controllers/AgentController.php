@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agent;
 use Illuminate\Http\Request;
 use App\Repositories\AgentRepository;
+use Yajra\DataTables\Facades\DataTables;
 
 class AgentController extends Controller
 {
@@ -12,6 +14,18 @@ class AgentController extends Controller
     public function __construct(AgentRepository $agentRepository)
     {
         $this->agentRepository = $agentRepository;
+    }
+
+    public function allData()
+    {
+        $this->authorize('view', auth()->user());
+        return view('agents.data');
+    }
+
+    public function getData(Request $request)
+    {
+        $agents = Agent::all();
+        return DataTables::of($agents)->toJson();
     }
 
     public function importView()

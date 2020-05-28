@@ -55,6 +55,10 @@ Route::group([
     Route::get('/all-stats', 'StatsController@index')->name('stats.index');
     Route::post('/stats/get-stats', 'StatsController@getStats')->name('stats.get-stats');
 
+    Route::get('/agents/all-data', 'AgentController@allData');
+    Route::get('/agents/get-data', 'AgentController@getData');
+
+
 
     Route::get('/dates', 'StatsController@getDates');
 
