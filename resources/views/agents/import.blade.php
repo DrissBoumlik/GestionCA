@@ -65,9 +65,9 @@
                         </button>
                     </div>
                     <div class="btn-view-data-wrapper">
-                        <button type="button" class="btn btn-primary btn-view-data">
+                        <a href="{{ route('agents.viewData') }}" target="_blank" class="btn btn-primary btn-view-data">
                             <i class="fa fa-eye mr-1"></i> Visualiser les données importées
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>

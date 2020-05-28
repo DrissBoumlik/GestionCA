@@ -205,10 +205,6 @@ $(document).ready(function () {
         PrepareImportDataRequest();
     });
 
-    $('.btn-view-data').on('click', function () {
-        window.open(APP_URL + '/agents/all-data');
-    });
-
     //<editor-fold desc="FUNCTIONS IMPORT">
 
     function PrepareImportDataRequest() {
