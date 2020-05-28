@@ -67,13 +67,13 @@
                             <h1 class="font-w600 text-white mb-0 invisible" data-toggle="appear">Dashboard</h1>
                         @endif
                         <h2 class="h4 font-w400 text-white-75 mb-0 invisible" data-toggle="appear" data-timeout="250">
-                            Welcome {{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</h2>
+                            Bonjour {{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</h2>
                     </div>
                     @if (isAdmin())
                         <div class="flex-sm-00-auto mt-3 mt-sm-0 ml-sm-3">
                         <span class="d-inline-block invisible" data-toggle="appear" data-timeout="350">
-                            <a class="btn btn-primary px-4 py-2" data-toggle="click-ripple" href="stats">
-                                <i class="fa fa-plus mr-1"></i> New Import
+                            <a class="btn btn-primary px-4 py-2" data-toggle="click-ripple" href="/import/stats">
+                                <i class="fa fa-plus mr-1"></i> Nouvelle Importation
                             </a>
                         </span>
                         </div>

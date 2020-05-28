@@ -4165,14 +4165,14 @@ class StatsRepository
             $last->data = 'dossier_hours';
             $last->name = 'dossier_hours';
             $last->text = 'dossier_hours';
-            $last->title = 'dossier/hours';
+            $last->title = 'dossiers/heurse';
             array_push($regions_names, $last);
 
             $last = new \stdClass();
             $last->data = 'ca_genere';
             $last->name = 'ca_genere';
             $last->text = 'ca_genere';
-            $last->title = 'ca genere';
+            $last->title = 'ca généré';
             array_push($regions_names, $last);
 
             $last = new \stdClass();
