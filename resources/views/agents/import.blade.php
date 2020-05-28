@@ -65,9 +65,9 @@
                         </button>
                     </div>
                     <div class="btn-view-data-wrapper">
-                        <a href="agents/all-data" class="btn btn-primary" target="_blank">
+                        <button type="button" class="btn btn-primary btn-view-data">
                             <i class="fa fa-fw fa-view mr-1"></i> Visualiser les données importées
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
