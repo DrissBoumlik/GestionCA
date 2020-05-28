@@ -61,12 +61,12 @@
                     <div class="btn-import-wrapper">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-import"
                                 id="showModalImport">
-                            <i class="fa fa-fw fa-upload mr-1"></i> Importer
+                            <i class="fa fa-upload mr-1"></i> Importer
                         </button>
                     </div>
                     <div class="btn-view-data-wrapper">
                         <button type="button" class="btn btn-primary btn-view-data">
-                            <i class="fa fa-fw fa-eye mr-1"></i> Visualiser les données importées
+                            <i class="fa fa-eye mr-1"></i> Visualiser les données importées
                         </button>
                     </div>
                 </div>
