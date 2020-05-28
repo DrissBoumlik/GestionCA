@@ -885,7 +885,7 @@ class StatsRepository
         }
         if ($agenceCode) {
             $rowsKeys = [];
-        }else{
+        } else {
             $rowsKeys = $rowsKeys->pluck('Nom_Region');
         }
 
@@ -1365,7 +1365,7 @@ class StatsRepository
         }
         if ($agenceCode) {
             $rowsKeys = [];
-        }else{
+        } else {
             $rowsKeys = $rowsKeys->pluck('Nom_Region');
         }
 
@@ -1596,10 +1596,9 @@ class StatsRepository
         }
         if ($agenceCode) {
             $rowsKeys = [];
-        }else{
+        } else {
             $rowsKeys = $rowsKeys->pluck('Nom_Region');
         }
-
 
 
         $keys = $codes->pluck('Code_Intervention');
@@ -2581,7 +2580,7 @@ class StatsRepository
             $first->orderable = false;
             array_unshift($regions_names, $first);
 
-            $data = ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys , 'rowsFilterHeader' => 'Type Intervention'];
+            $data = ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Type Intervention'];
             return $data;
         }
     }
@@ -2774,7 +2773,7 @@ class StatsRepository
                 $col_arr = $keys->all();
                 $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
                     $row->Code_Type_Intervention = $call->Code_Type_Intervention;
-                    $Resultat_Appel =  $call->Resultat_Appel;
+                    $Resultat_Appel = $call->Resultat_Appel;
                     $row->$Resultat_Appel = $call->count . '|' . $call->$Resultat_Appel . '%';
                     $row->values[$Resultat_Appel] = $call->count;
                     $col_arr = array_diff($col_arr, [$Resultat_Appel]);
@@ -2862,7 +2861,7 @@ class StatsRepository
             $first->orderable = false;
             array_unshift($regions_names, $first);
 
-            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys , 'rowsFilterHeader' => 'Type Intervention'];
+            return ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Type Intervention'];
         }
     }
 
@@ -3418,7 +3417,7 @@ class StatsRepository
             $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('st.Nom_Region', 'like'  , "%$agenceCode");
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
 
         $regions = $regions->orderBy('Type_Intervention');
@@ -4025,8 +4024,7 @@ class StatsRepository
         $keys = $this->GetColumnsGlobalViewDetails($request)['columns'];
         array_shift($keys);
         $keys = collect($keys);
-        $keys = $keys->transform(function ($key)
-        {
+        $keys = $keys->transform(function ($key) {
             return $key->title;
         });
 
@@ -4116,8 +4114,8 @@ class StatsRepository
         }
 
         $rowsKeys = \DB::table('stats as st')
-        ->select('utilisateur')
-        ->distinct()
+            ->select('utilisateur')
+            ->distinct()
             ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('utilisateur')
             ->whereNotNull('Groupement');
@@ -4126,7 +4124,7 @@ class StatsRepository
         }
         if ($agenceCode) {
             $rowsKeys = [];
-        }else{
+        } else {
             $rowsKeys = $rowsKeys->pluck('utilisateur');
         }
 
@@ -4164,6 +4162,27 @@ class StatsRepository
             array_unshift($regions_names, $first);
 
             $last = new \stdClass();
+            $last->data = 'dossier_hours';
+            $last->name = 'dossier_hours';
+            $last->text = 'dossier_hours';
+            $last->title = 'dossier/hours';
+            array_push($regions_names, $last);
+
+            $last = new \stdClass();
+            $last->data = 'ca_genere';
+            $last->name = 'ca_genere';
+            $last->text = 'ca_genere';
+            $last->title = 'ca genere';
+            array_push($regions_names, $last);
+
+            $last = new \stdClass();
+            $last->data = 'ca_horaires';
+            $last->name = 'ca_horaires';
+            $last->text = 'ca_horaires';
+            $last->title = 'ca horaires';
+            array_push($regions_names, $last);
+
+            $last = new \stdClass();
             $last->data = 'hours';
             $last->name = 'hours';
             $last->text = 'hours';
@@ -4185,23 +4204,23 @@ class StatsRepository
         $querydate = '';
         $year = 0;
         $month = 0;
-        foreach($filter->date_filter as $filterdate){
-            $year = 'SUBSTRING_INDEX(SUBSTRING_INDEX("'.$filterdate.'","-", 1),"-",-1)';
-            $month = 'CONVERT(SUBSTRING_INDEX(SUBSTRING_INDEX("'.$filterdate.'","-", 2),"-",-1), UNSIGNED INTEGER)';
-            $querydate .=  'concat('.$year.',"-",'.$month.', "-S", week("'.$filterdate.'")+1),';
+        foreach ($filter->date_filter as $filterdate) {
+            $year = 'SUBSTRING_INDEX(SUBSTRING_INDEX("' . $filterdate . '","-", 1),"-",-1)';
+            $month = 'CONVERT(SUBSTRING_INDEX(SUBSTRING_INDEX("' . $filterdate . '","-", 2),"-",-1), UNSIGNED INTEGER)';
+            $querydate .= 'concat(' . $year . ',"-",' . $month . ', "-S", week("' . $filterdate . '")+1),';
         }
-        $querydate = substr($querydate , 0 ,-1);
+        $querydate = substr($querydate, 0, -1);
         $regions = \DB::table('stats as st')
-            ->select('Utilisateur','fullname', 'Groupement',
+            ->select('Utilisateur', 'fullname', 'Groupement',
                 \DB::raw('count(distinct st.Id_Externe) as count'),
                 \DB::raw('(select sum(hours) from agents where pseudo = st.utilisateur
-	                    and imported_at in ('.$querydate.')) hours
+	                    and imported_at in (' . $querydate . ')) hours
                 '))
-            ->join('agents',function ($join){
-                $join->on('st.Utilisateur','=','agents.pseudo');
-                $join->on('st.Date_Heure_Note_Annee','=',\DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(agents.imported_at,"-", 1),"-",-1)'));
-                $join->on(\DB::raw('CONVERT(st.Date_Heure_Note_Mois, UNSIGNED INTEGER)') ,'=',\DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(agents.imported_at,"-", 2),"-",-1)'));
-                $join->on('st.Date_Heure_Note_Semaine','=',\DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(agents.imported_at,"-", 3),"-",-1)'));
+            ->join('agents', function ($join) {
+                $join->on('st.Utilisateur', '=', 'agents.pseudo');
+                $join->on('st.Date_Heure_Note_Annee', '=', \DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(agents.imported_at,"-", 1),"-",-1)'));
+                $join->on(\DB::raw('CONVERT(st.Date_Heure_Note_Mois, UNSIGNED INTEGER)'), '=', \DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(agents.imported_at,"-", 2),"-",-1)'));
+                $join->on('st.Date_Heure_Note_Semaine', '=', \DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(agents.imported_at,"-", 3),"-",-1)'));
             })
             ->whereNotNull('Groupement')
             ->whereNotNull('Utilisateur')
@@ -4214,11 +4233,11 @@ class StatsRepository
             $regions = $regions->where('st.Utilisateur', $agentName);
         }
         if ($agenceCode) {
-            $regions = $regions->where('st.Nom_Region', 'like'  , "%$agenceCode");
+            $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
         //dd($regions->groupBy('Utilisateur','fullname', 'Groupement','hours')->get());
         $regions = $regions->orderBy('Groupement');
-        $regions = $regions->groupBy('Utilisateur','fullname', 'Groupement','hours')->get();
+        $regions = $regions->groupBy('Utilisateur', 'fullname', 'Groupement', 'hours')->get();
         $keys = $regions->groupBy(['Groupement'])->keys();
 
 
@@ -4239,19 +4258,24 @@ class StatsRepository
             });
             $regions = $temp->flatten();
 
-            $regions = $regions->groupBy('Utilisateur','fullname','hours');
+            $regions = $regions->groupBy('Utilisateur', 'fullname', 'hours');
             $regions = $regions->map(function ($region) use ($keys) {
                 $row = new \stdClass();
+                $dossier_hours = 0;
                 $row->values = [];
 
                 $col_arr = $keys->all();
-                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
+                $items = $region->map(function ($call, $index) use (&$row, &$col_arr, &$dossier_hours) {
                     $row->utilisateur = $call->Utilisateur;
                     $row->fullname = $call->fullname;
                     $Groupement = $call->Groupement;
                     $row->$Groupement = $call->count . '|' . $call->$Groupement . '%';
                     $row->hours = $call->hours;
                     $row->values[$Groupement] = $call->count;
+                    $dossier_hours += $call->count;
+                    $row->dossier_hours = round($call->hours ? $dossier_hours / $call->hours : 0, 2);
+                    $row->ca_horaires = $row->dossier_hours * 0.425;
+                    $row->ca_genere = $dossier_hours * 0.425;
                     $col_arr = array_diff($col_arr, [$Groupement]);
                     return $row;
                 });
