@@ -330,7 +330,7 @@ class StatsController extends Controller
 
     public function getAgentProd(Request $request)
     {
-        $data = $this->statsRepository->getgetAgentProd($request);
+        $data = $this->statsRepository->getAgentProd($request);
         return DataTables::of($data['data'])->toJson();
     }
 
