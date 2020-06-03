@@ -158,7 +158,7 @@ if (!function_exists('getStats')) {
             $allStats = DB::select('SELECT * FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
-                ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
+                (($row && $rowValue && $row !== 'Gpmt_Appel_Pre') ? ' and ' . $row . ' like "' . $rowValue . '"' : ' ') .
                 ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : ($col ? ' and ' . $col . ' is null ' : ' ')) .
                 ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
                 ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
