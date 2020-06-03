@@ -4193,7 +4193,7 @@ class StatsRepository
         }
     }
 
-    public function getgetAgentProd(Request $request, $filter = null)
+    public function getAgentProd(Request $request, $filter = null)
     {
         $agenceCode = $request->get('agence_code');
         $agentName = $request->get('agent_name');
@@ -4204,12 +4204,17 @@ class StatsRepository
         $querydate = '';
         $year = 0;
         $month = 0;
-        foreach ($filter->date_filter as $filterdate) {
-            $year = 'SUBSTRING_INDEX(SUBSTRING_INDEX("' . $filterdate . '","-", 1),"-",-1)';
-            $month = 'CONVERT(SUBSTRING_INDEX(SUBSTRING_INDEX("' . $filterdate . '","-", 2),"-",-1), UNSIGNED INTEGER)';
-            $querydate .= 'concat(' . $year . ',"-",' . $month . ', "-S", week("' . $filterdate . '")+1),';
+        if(!empty($filter->date_filter)){
+            foreach ($filter->date_filter as $filterdate) {
+                $year = 'SUBSTRING_INDEX(SUBSTRING_INDEX("' . $filterdate . '","-", 1),"-",-1)';
+                $month = 'CONVERT(SUBSTRING_INDEX(SUBSTRING_INDEX("' . $filterdate . '","-", 2),"-",-1), UNSIGNED INTEGER)';
+                $querydate .= 'concat(' . $year . ',"-",' . $month . ', "-S", week("' . $filterdate . '")+1),';
+            }
+            $querydate = substr($querydate, 0, -1);
+        }else{
+            $querydate = "'". date('Y-m') . '-S'.date('W')."'";
         }
-        $querydate = substr($querydate, 0, -1);
+
         $regions = \DB::table('stats as st')
             ->select('Utilisateur', 'fullname', 'Groupement',
                 \DB::raw('count(distinct st.Id_Externe) as count'),
