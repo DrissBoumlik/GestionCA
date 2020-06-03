@@ -97,7 +97,6 @@ if (!function_exists('replaceAccentedCharacter')) {
 if (!function_exists('getStats')) {
     function getStats(Request $request)
     {
-        $allStatsFilter = Filter::where(['user_id' => getAuthUser()->id, 'isGlobal' => 2])->first();
         $callType = $request->callType;
         $row = $request->row;
         $rowValue = $request->rowValue;
@@ -107,13 +106,27 @@ if (!function_exists('getStats')) {
         $agenceCode = $request->agence ?? $request->agence_code;
         $queryJoin = $request->queryJoin;
 
-        $dates = $request->dates ?? ($allStatsFilter ? join(",", $allStatsFilter->date_filter) : null);
+        $allStatsFilter = Filter::firstOrCreate(['user_id' => getAuthUser()->id, 'isGlobal' => 2]);
         if ($request->dates) {
-            $allStatsFilter = Filter::updateOrCreate([
-                'user_id' => getAuthUser()->id,
-                'date_filter' => explode(',', $dates),
-                'isGlobal' => 2
-            ]);
+            $dates = $request->dates;
+//            $allStatsFilter = Filter::updateOrCreate([
+//                'user_id' => getAuthUser()->id,
+//                'date_filter' => explode(',', $dates),
+//                'isGlobal' => 2
+//            ]);
+            $allStatsFilter->date_filter =  explode(',', $dates);
+            $allStatsFilter->update();
+        } else {
+            if ($request->refreshMode && filter_var($request->refreshMode, FILTER_VALIDATE_BOOLEAN)) {
+                $allStatsFilter->forceDelete();
+                $dates = null;
+            } else {
+                if ($allStatsFilter && $allStatsFilter->date_filter) {
+                    $dates = join(",", $allStatsFilter->date_filter);
+                } else {
+                    $dates = null;
+                }
+            }
         }
 
         $resultat_appel = $request->Resultat_Appel;
@@ -200,7 +213,7 @@ if (!function_exists('makeFilterSubQuery')) {
         $dates = $request->get('dates');
         $rowsFilter = $request->get('rowFilter');
         $currentMonth = date('Y-m') . '%';
-        $filter = Filter::firstOrNew($filters);
+        $filter = Filter::firstOrCreate($filters);
         $queryFilters = null;
         $filterSaved = false;
         if ($request->exists('refreshMode')) {

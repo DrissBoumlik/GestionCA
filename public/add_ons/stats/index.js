@@ -55,6 +55,7 @@ $(document).ready(function () {
         if (dates) {
             data.dates = dates.join(',');
         }
+        data.refreshMode = true;
         stats.elementDT = InitDataTable(stats, data);
     });
 
