@@ -231,7 +231,7 @@ $(function () {
         filterElement: {dates: '#tree-view-3', rows: '#stats-weeks-regions-filter'},
         filterQuery: {
             queryJoin: ' and Groupement not like "Non Renseigné" and Groupement like "Appels préalables" and Gpmt_Appel_Pre not like "Hors Périmètre"',
-            subGroupBy: ' GROUP BY Id_Externe, Date_Heure_Note_Semaine , Gpmt_Appel_Pre, Date_Heure_Note_Annee) groupedst ',
+            subGroupBy: ' GROUP BY Id_Externe, Date_Heure_Note_Semaine, Date_Heure_Note_Annee) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Date_Heure_Note_Semaine , Gpmt_Appel_Pre, Date_Heure_Note_Annee'
         },
         routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine',
