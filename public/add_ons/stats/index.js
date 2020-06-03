@@ -45,7 +45,7 @@ $(document).ready(function () {
     });
 
     function InitDataTable(object, data) {
-        toggleLoader(refreshBtn.parents('.col-12'));
+        toggleLoader($('#refreshAllStats').parents('.col-12'));
         let table = object.element;
         if ($.fn.DataTable.isDataTable(table)) {
             table.off('click', 'td.details-control');
