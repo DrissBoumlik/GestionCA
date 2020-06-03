@@ -12,8 +12,7 @@ if (!function_exists('sortGroupementColumnsPreserveKeys')) {
     function sortGroupementColumnsPreserveKeys($columns)
     {
         $sortWith = config('custom_params.groupement');
-        $columns = $columns->sortBy(function ($item, $key) use ($sortWith)
-        {
+        $columns = $columns->sortBy(function ($item, $key) use ($sortWith) {
             return array_flip($sortWith)[$key];
         });
         return $columns;
@@ -98,7 +97,7 @@ if (!function_exists('replaceAccentedCharacter')) {
 if (!function_exists('getStats')) {
     function getStats(Request $request)
     {
-        $globalFilter = Filter::where(['user_id' => getAuthUser()->id, 'isGlobal' => true])->first();
+        $allStatsFilter = Filter::where(['user_id' => getAuthUser()->id, 'isGlobal' => 2])->first();
         $callType = $request->callType;
         $row = $request->row;
         $rowValue = $request->rowValue;
@@ -107,7 +106,16 @@ if (!function_exists('getStats')) {
         $agentName = $request->agent;
         $agenceCode = $request->agence ?? $request->agence_code;
         $queryJoin = $request->queryJoin;
-        $dates = $request->dates ?? ($globalFilter ? join(",", $globalFilter->date_filter) : null);
+
+        $dates = $request->dates ?? ($allStatsFilter ? join(",", $allStatsFilter->date_filter) : null);
+        if ($request->dates) {
+            $allStatsFilter = Filter::updateOrCreate([
+                'user_id' => getAuthUser()->id,
+                'date_filter' => explode(',', $dates),
+                'isGlobal' => 2
+            ]);
+        }
+
         $resultat_appel = $request->Resultat_Appel;
         $subGroupBy = $request->subGroupBy;
         $queryGroupBy = $request->queryGroupBy;
@@ -119,14 +127,14 @@ if (!function_exists('getStats')) {
         $allStats = null;
 
         if ($appCltquery) {
-            $allStats = DB::select('SELECT * FROM stats AS st WHERE Nom_Region is not null ' . ($queryJoin ?? '') . ' ' . ($parentValue ?? ''). ' ' .
+            $allStats = DB::select('SELECT * FROM stats AS st WHERE Nom_Region is not null ' . ($queryJoin ?? '') . ' ' . ($parentValue ?? '') . ' ' .
                 ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
                 (($row && $rowValue && $row !== 'produit' && $row !== 'utilisateur') ? ' and ' . $row . ' like "%' . $rowValue . '%"' :
-                    ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : '') ) .
+                    ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '"' : '')) .
                 (!$row && $rowValue ? $rowValue : '') .
                 ($col && !$colValue ? ' and ' . $col . ' is null ' : '') .
-                ( $col && $colValue && $col !== 'produit' && $col !== 'Gpmt_Appel_Pre' ? ' and ' . $col . ' like "%' . $colValue . '%"' :
+                ($col && $colValue && $col !== 'produit' && $col !== 'Gpmt_Appel_Pre' ? ' and ' . $col . ' like "%' . $colValue . '%"' :
                     ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '"' : '')) .
                 ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
                 ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
@@ -714,7 +722,7 @@ if (!function_exists('clean')) {
 if (!function_exists('getAuthUser')) {
     function getAuthUser()
     {
-        return auth()->user() ?? User::find(1);
+        return auth()->user();
     }
 }
 

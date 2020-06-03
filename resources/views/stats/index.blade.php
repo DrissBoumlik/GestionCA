@@ -90,6 +90,7 @@
     <div class="content content-narrow">
         <!-- Stats -->
         <div class="container-fluid">
+            <div id="data-request" data-request="{{ json_encode($data) }}" class="d-none"></div>
             <a href="{{ URL::route('ExportXls', array('row' => request('row'), 'rowValue' => request('rowValue'),'col' => request('col') , 'colValue' => request('colValue'),'agent' => request('agent') ,
                                     'agence' => request('agence') , 'dates' => request('dates'), 'Resultat_Appel' => request('Resultat_Appel') , 'queryJoin' => request('queryJoin'),
                                     'subGroupBy'=> request('subGroupBy') , 'queryGroupBy' => request('queryGroupBy'),'appCltquery' => request('appCltquery')  )) }}"
@@ -100,53 +101,58 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title d-inline-block">Stats</h3>
+                            <hr>
+                            <div class="refresh-form">
+                                <div id="tree-view-all-stats" class="tree-view d-inline-flex"></div>
+                                <button type="button" id="refreshAllStats"
+                                        class="btn btn-primary float-right d-none">
+                                    <span class="btn-field font-weight-normal position-relative">Rafraîchir</span>
+                                </button>
+                            </div>
                         </div>
                         <!-- /.card-header -->
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="stats"
-                                       class="table table-bordered table-striped table-valign-middle capitalize">
-                                    <thead>
-                                    <tr>
-                                        <th>Type Note</th>
-                                        <th>Utilisateur</th>
-                                        <th width="200px">Resultat Appel</th>
-                                        <th>Date Nveau RDV</th>
-                                        <th>Heure Nveau RDV</th>
-                                        <th>Marge Nveau RDV</th>
-                                        <th>Id Externe</th>
-                                        <th>Date Creation</th>
-                                        <th>Code Postal Site</th>
-                                        <th>Drapeaux</th>
-                                        <th>Code Type Intervention</th>
-                                        <th>Date Rdv</th>
-                                        <th>Nom Societe</th>
-                                        <th>Nom Region</th>
-                                        <th>Nom Domaine</th>
-                                        <th>Nom Agence</th>
-                                        <th>Nom Activite</th>
-                                        <th>Date Heure Note</th>
-                                        <th>Date Heure Note Annee</th>
-                                        <th>Date Heure Note Mois</th>
-                                        <th>Date Heure Note Semaine</th>
-                                        <th>Date Note</th>
-                                        <th>Groupement</th>
-                                        <th>key Groupement</th>
-                                        <th>Gpmt Appel Pre</th>
-                                        <th>Code Intervention</th>
-                                        <th>EXPORT ALL Nom SITE</th>
-                                        <th>EXPORT ALL Nom TECHNICIEN</th>
-                                        <th>EXPORT ALL PRENom TECHNICIEN</th>
-                                        <th>EXPORT ALL Nom EQUIPEMENT</th>
-                                        <th>EXPORT ALLEXTRACT CUI</th>
-                                        <th>EXPORT ALL Date CHARGEMENT PDA</th>
-                                        <th>EXPORT ALL Date SOLDE</th>
-                                        <th>EXPORT ALL Date VALIDATION</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                                <div id="data-request" data-request="{{ json_encode($data) }}" class="d-none"></div>
-                            </div>
+                        <div class="card-body table-responsive">
+                            <table id="stats"
+                                   class="table table-bordered table-striped table-valign-middle capitalize">
+                                <thead>
+                                <tr>
+                                    <th>Type Note</th>
+                                    <th>Utilisateur</th>
+                                    <th width="200px">Resultat Appel</th>
+                                    <th>Date Nveau RDV</th>
+                                    <th>Heure Nveau RDV</th>
+                                    <th>Marge Nveau RDV</th>
+                                    <th>Id Externe</th>
+                                    <th>Date Creation</th>
+                                    <th>Code Postal Site</th>
+                                    <th>Drapeaux</th>
+                                    <th>Code Type Intervention</th>
+                                    <th>Date Rdv</th>
+                                    <th>Nom Societe</th>
+                                    <th>Nom Region</th>
+                                    <th>Nom Domaine</th>
+                                    <th>Nom Agence</th>
+                                    <th>Nom Activite</th>
+                                    <th>Date Heure Note</th>
+                                    <th>Date Heure Note Annee</th>
+                                    <th>Date Heure Note Mois</th>
+                                    <th>Date Heure Note Semaine</th>
+                                    <th>Date Note</th>
+                                    <th>Groupement</th>
+                                    <th>key Groupement</th>
+                                    <th>Gpmt Appel Pre</th>
+                                    <th>Code Intervention</th>
+                                    <th>EXPORT ALL Nom SITE</th>
+                                    <th>EXPORT ALL Nom TECHNICIEN</th>
+                                    <th>EXPORT ALL PRENom TECHNICIEN</th>
+                                    <th>EXPORT ALL Nom EQUIPEMENT</th>
+                                    <th>EXPORT ALLEXTRACT CUI</th>
+                                    <th>EXPORT ALL Date CHARGEMENT PDA</th>
+                                    <th>EXPORT ALL Date SOLDE</th>
+                                    <th>EXPORT ALL Date VALIDATION</th>
+                                </tr>
+                                </thead>
+                            </table>
                         </div>
                         <!-- /.card-body -->
                     </div>
