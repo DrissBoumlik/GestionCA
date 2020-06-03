@@ -32,7 +32,7 @@ $(document).ready(function () {
     let data = $('#data-request').data('request');
 
     let stats = {
-        element: $('#stats'),
+        element: 'stats',
         elementDT: undefined
     };
     stats.elementDT = InitDataTable(stats, data);
@@ -46,20 +46,27 @@ $(document).ready(function () {
 
     function InitDataTable(object, data) {
         toggleLoader($('#refreshAllStats').parents('.col-12'));
-        let table = object.element;
-        if ($.fn.DataTable.isDataTable(table)) {
-            table.off('click', 'td.details-control');
-            table.DataTable().destroy();
-            let tableID = table.attr('id');
-            let tableParent = table.parents('.card-body');
-            table.remove();
-            $('#' + tableID + '_wrapper').remove();
-            let newTable = '<table id="' + tableID + '" class="table table-bordered table-striped table-valign-middle capitalize">' +
-                '<thead></thead><tbody></tbody></table>';
-            tableParent.append(newTable);
-            object.element = table = $('#' + tableID);
-        }
+        let table = $('#' + object.element);
+        // if ($.fn.DataTable.isDataTable(table)) {
+        //     debugger
+        //     table.DataTable().destroy();
+        //     let tableID = table.attr('id');
+        //     let tableParent = table.parents('.card-body');
+        //     table.remove();
+        //     $('#' + tableID + '_wrapper').remove();
+        //     let newTable = '<table id="' + tableID + '" class="table table-bordered table-striped table-valign-middle capitalize">' +
+        //         '<thead></thead><tbody></tbody></table>';
+        //     tableParent.append(newTable);
+        //     table = $('#' + object.element);
+        // }
+        table.DataTable().destroy();
         return table.DataTable({
+
+            destroy: true,
+            responsive: true,
+            info: false,
+            searching: true,
+
             language: frLang,
             pageLength: 10,
             processing: true,
