@@ -13,6 +13,23 @@ $(document).ready(function () {
                     data: [{id: '-1', text: 'Dates', children: treeData}],
                     closeDepth: 1,
                     loaded: function () {
+                        let _this = this;
+                        if (data.dates) {
+                            _this.values = data.dates.split(',')
+                        } else {
+                            $.ajax({
+                                url: APP_URL + '/stats/filter',
+                                method: 'GET',
+                                success: function (response) {
+                                    if (response) {
+                                        let allStatsFilter = response.allStatsFilter;
+                                        if (allStatsFilter) {
+                                            _this.values = allStatsFilter.date_filter || [];
+                                        }
+                                    }
+                                }
+                            });
+                        }
                     },
                     onChange: function () {
                         dates = this.values;

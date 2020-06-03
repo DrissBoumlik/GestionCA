@@ -54,4 +54,10 @@ class ToolController extends Controller
             'flags' => $flags
         ];
     }
+
+    public function getFilterAllStats()
+    {
+        $allStatsFilter = Filter::where(['user_id' => getAuthUser()->id, 'isGlobal' => 2])->first();
+        return ['allStatsFilter' => $allStatsFilter];
+    }
 }
