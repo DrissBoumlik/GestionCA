@@ -208,7 +208,13 @@ frLang = {
                                 let classHasTotalCol = params.removeTotalColumn ? 'hasTotal' : '';
                                 let removeLinkCol = params.removeLink ? 'removeLink' : '';
                                 let rowClass = full.isTotal ? '' : 'pointer detail-data';
-                                return '<span class="' + rowClass + ' ' + classHasTotalCol + ' ' + removeLinkCol +'">' + newData + '<\span>';
+
+                                let notLink = '';
+                                if (params.linkOrder) {
+                                    if(meta.col >= response.columns.length - params.linkOrder)
+                                        notLink = 'not-link';
+                                }
+                                return '<span class="' + rowClass + ' ' + classHasTotalCol + ' ' + removeLinkCol + ' ' + notLink + '">' + newData + '<\span>';
                             }
                         };
                     });
@@ -332,9 +338,9 @@ frLang = {
                                 if (((params.details && col > 2) || (!params.details && col > 1))
                                     && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
                                     && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))
-                                    && ((!params.removeLink && col > 1) || (params.removeLink && col !== params.linkOrder))) {
+                                    && ((!params.removeLink && col > 1) || (params.removeLink && col < (lastColumnIndex + 1 - params.linkOrder)))) {
                                     let dates = object.filterTree.dates;
-                                    window.location = APP_URL + '/all-stats?' +
+                                    window.open(APP_URL + '/all-stats?' +
                                         'row=' + (object.rowName === undefined || object.rowName === null ? '' : object.rowName) +
                                         '&rowValue=' + rowText +
                                         '&col=' + (object.columnName === undefined || object.columnName === null ? '' : object.columnName) +
@@ -347,7 +353,7 @@ frLang = {
                                         '&queryGroupBy=' + (object.filterQuery.queryGroupBy === undefined || object.filterQuery.queryGroupBy === null ? '' : object.filterQuery.queryGroupBy) +
                                         '&appCltquery=' + (object.filterQuery.appCltquery === undefined || object.filterQuery.appCltquery === null ? '' : object.filterQuery.appCltquery) +
                                         '&parentValue= '+(object.needParentValue === undefined || object.needParentValue === null  ? '' : ' and ' + parentAttributName + ' like "%' + parentAttributValue + '%"') +
-                                        (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : '');
+                                        (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : ''));
                                 }
                             }
                         });
