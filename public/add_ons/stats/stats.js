@@ -185,7 +185,7 @@ $(function () {
         filterElement: {dates: '#tree-view-2', rows: '#stats-call-regions-filter'},
         filterQuery: {
             queryJoin: ' and Groupement not like "Non Renseigné" and Groupement like "Appels préalables" and Gpmt_Appel_Pre not like "Hors Périmètre"',
-            subGroupBy: ' GROUP BY Id_Externe, Nom_region , Gpmt_Appel_Pre) groupedst',
+            subGroupBy: ' GROUP BY Id_Externe, Nom_region) groupedst',
             queryGroupBy: 'group by st.Id_Externe, Nom_region , Gpmt_Appel_Pre'
         },
         routeCol: 'regionsCallState/columns/Nom_Region',

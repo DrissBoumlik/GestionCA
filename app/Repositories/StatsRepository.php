@@ -702,7 +702,7 @@ class StatsRepository
                     ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
                     ' and ' . $queryFilters .
                     ' and isNotReady is null ' .
-                    ' GROUP BY Id_Externe, ' . $column . ', Gpmt_Appel_Pre) groupedst'),
+                    ' GROUP BY Id_Externe, ' . $column . ') groupedst'),
                     function ($join) {
                         $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                         $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
