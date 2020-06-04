@@ -1,0 +1,47 @@
+@media print {
+  .bg-image, .refresh-form, .global-filtre, #printElement, .filter_menu, .separator {
+    display: none;
+  }
+
+  #statsCallsPos {
+    width: 1250px !important;
+  }
+
+  #statsCallsPos > th.sorting_asc, #statsCallsPos > th.sorting_desc, #statsCallsPos > th.sorting, #statsCallsPos > td.sorting_asc, #statsCallsPos > td.sorting_desc, #statsCallsPos > td.sorting {
+    padding-right: 0 !important;
+  }
+
+  #statsCallsPos th, #statsCallsPos td {
+    padding: 0 !important;
+  }
+
+  #statsCallsNeg {
+    width: 1250px !important;
+  }
+
+  th.sorting_asc, th.sorting_desc, th.sorting, td.sorting_asc, td.sorting_desc, td.sorting {
+    padding-right: 0 !important;
+  }
+
+  #statsCallsNeg th, #statsCallsNeg td {
+    padding: 0 !important;
+  }
+
+  .card-header {
+    background-color: #DDEBF7;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .define-height {
+    height: 1900px !important;
+    margin-bottom: 50px;
+  }
+
+  .define-height:first-of-type {
+    margin: 0 !important;
+  }
+
+  .special-case-col {
+    margin: 120px !important;
+  }
+}
