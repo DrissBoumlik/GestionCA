@@ -459,7 +459,7 @@ class StatsRepository
                 ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
                 ($key_groupement ? 'and key_groupement like "' . $key_groupement . '"' : '') .
                 ' and isNotReady is null ' .
-                ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel) groupedst'),
+                ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement) groupedst'),
                 function ($join) {
                     $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
