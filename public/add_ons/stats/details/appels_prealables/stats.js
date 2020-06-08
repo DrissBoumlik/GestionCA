@@ -457,8 +457,9 @@ $(function () {
             filterTree: {dates: [], rows: [], datesTreeObject: undefined},
             filterElement: undefined,
             filterQuery: {
-                appCltquery : true,
-                queryJoin: ' and Groupement like "Appels préalables"',
+                queryJoin: ' and Groupement not like "Non Renseigné" and Groupement like "Appels préalables" and Gpmt_Appel_Pre not like "Hors Périmètre"',
+                subGroupBy: ' GROUP BY Id_Externe ) groupedst',
+                queryGroupBy: 'group by st.Id_Externe, SUBSTRING_INDEX(Code_Type_Intervention,"_",1) , Gpmt_Appel_Pre'
             },
             routeCol: 'RepJoiAutreDepartement/details/columns',
             routeData: 'RepJoiAutreDepartement/details',

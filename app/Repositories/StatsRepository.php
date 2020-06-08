@@ -3408,6 +3408,21 @@ class StatsRepository
         $regions = \DB::table('stats as st')
             ->select(\DB::raw('SUBSTRING_INDEX(Code_Type_Intervention,"_",1) as Type_Intervention'), 'Gpmt_Appel_Pre',
                 \DB::raw('count(distinct st.Id_Externe) as count'))
+            ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
+            where Groupement not like "Non Renseigné"
+            and Groupement like "Appels préalables"
+            and Gpmt_Appel_Pre not like "Hors Périmètre"
+            and Resultat_Appel not like "=%"
+            and Nom_Region is not null '.
+                ($agentName ? 'and Utilisateur like "' . $agentName . '"' : '') .
+                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '"' : '') .
+                ' and ' . $queryFilters .
+                ' and isNotReady is null ' .
+                ' GROUP BY Id_Externe ) groupedst'),
+                function ($join) {
+                    $join->on('st.Id_Externe', '=', 'groupedst.Id_Externe');
+                    $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
+                })
             ->where('Groupement', 'like', 'Appels préalables')
             ->whereIn('Gpmt_Appel_Pre', ['Joignable', 'Injoignable'])
             ->whereNull('isNotReady');
