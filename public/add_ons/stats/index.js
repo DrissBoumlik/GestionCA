@@ -67,7 +67,6 @@ $(document).ready(function () {
 
             destroy: true,
             responsive: true,
-            info: false,
             searching: true,
 
             language: frLang,
