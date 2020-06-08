@@ -32,14 +32,16 @@ class AgentRepository
         $fileName = $file->getClientOriginalName();
         $stored = Storage::disk('public')->put('storage/data_source/' . $fileName, file_get_contents($file));
 
-        $agentsImport = new AgentsImport($request->dates);
+        $data_count = 0;
+        $agentsImport = new AgentsImport($request->dates, $data_count);
         Excel::import($agentsImport, $request->file('file'));
         \DB::table('agents')
             ->whereNotNull('isNotReady')
             ->update(['isNotReady' => null]);
         return [
             'success' => true,
-            'message' => 'Le fichier a été importé avec succès'
+//            'message' => 'Le fichier a été importé avec succès'
+            'message' => $data_count . ' agents importés avec succès'
         ];
     }
 }

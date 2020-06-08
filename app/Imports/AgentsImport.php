@@ -26,9 +26,11 @@ class AgentsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBat
     public $data = [];
     private $index = 0;
     private $user_flag;
+    private $data_count;
 
-    public function __construct($dates)
+    public function __construct($dates, &$data_count)
     {
+        $this->data_count = &$data_count;
         if ($dates) {
             $this->dates = explode(',', $dates);
             \DB::table('agents')->whereIn('imported_at', $this->dates)->delete();
@@ -84,6 +86,7 @@ class AgentsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBat
                 if ($hours == null || $hours == '') {
                     $hours = 0;
                 }
+                $this->data_count++;
                 return new Agent([
                     'pseudo' => isset($row['pseudo']) ? $row['pseudo'] : $rowValues[0],
                     'fullName' => isset( $row['nom_complet']) ?  $row['nom_complet'] : $rowValues[1],
