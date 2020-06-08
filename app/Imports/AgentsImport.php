@@ -32,17 +32,17 @@ class AgentsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBat
         if ($dates) {
             $this->dates = explode(',', $dates);
             \DB::table('agents')->whereIn('imported_at', $this->dates)->delete();
-            if(is_array($this->dates)) {
-                collect($this->dates)->map(function ($date, $index) {
-                    $date_parts = explode('-', $date);
-                    if (count($date_parts) > 1) {
-                        $x = \DB::table('agents')
-                            ->where('imported_at_annee', $date_parts[0])
-                            ->where('imported_at_mois', $date_parts[1])
-                            ->delete();
-                    }
-                });
-            }
+//            if(is_array($this->dates)) {
+//                collect($this->dates)->map(function ($date, $index) {
+//                    $date_parts = explode('-', $date);
+//                    if (count($date_parts) > 1) {
+//                        $x = \DB::table('agents')
+//                            ->where('imported_at_annee', $date_parts[0])
+//                            ->where('imported_at_mois', $date_parts[1])
+//                            ->delete();
+//                    }
+//                });
+//            }
         }
     }
 
