@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Agent;
 use Illuminate\Http\Request;
 use App\Imports\AgentsImport;
 use Illuminate\Support\Facades\Storage;
@@ -9,6 +10,22 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AgentRepository
 {
+    public function allData()
+    {
+        return view('agents.data');
+    }
+
+    public function getData(Request $request)
+    {
+        $agents = Agent::orderBy('updated_at', 'desc')->get();
+        return $agents;
+    }
+
+    public function importView()
+    {
+        return view('agents.import');
+    }
+
     public function import(Request $request)
     {
         $file = $request->file('file');
