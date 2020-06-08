@@ -14,6 +14,9 @@ class Agent extends Model
         'fullName',
         'hours',
         'imported_at',
+        'imported_at_annee',
+        'imported_at_mois',
+        'imported_at_semaine',
         'isNotReady'
     ];
 }

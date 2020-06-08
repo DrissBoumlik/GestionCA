@@ -32,38 +32,18 @@ class AgentsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBat
         if ($dates) {
             $this->dates = explode(',', $dates);
             \DB::table('agents')->whereIn('imported_at', $this->dates)->delete();
-        }
-//        $this->user_flag = getImportedData(false);
-//        $this->user_flag->flags = [
-//            'imported_data' => 0,
-//            'is_importing' => 1
-//        ];
-//        $this->user_flag->update();
-    }
-
-    public function collection(Collection $rows)
-    {
-        $rows->shift();
-        $data = $rows->map(function ($row, $index) {
-            $rowDate = $row['annee'] . '-' . $row['mois'] . '-' . $row['semaine'];
-            if (!$this->dates || in_array($rowDate, $this->dates)) {
-                $hours = $row['heures'];
-                if ($hours == null || $hours == '') {
-                    $hours = 0;
-                }
-                $item = [
-                    'pseudo' => $row['pseudo'],
-                    'fullName' => $row['nom_complet'],
-                    'hours' => $hours,
-                    'imported_at' => $this->dates,
-                    'isNotReady' => true,
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s')
-                ];
-                return $item;
+            if(is_array($this->dates)) {
+                collect($this->dates)->map(function ($date, $index) {
+                    $date_parts = explode('-', $date);
+                    if (count($date_parts) > 1) {
+                        $x = \DB::table('agents')
+                            ->where('imported_at_annee', $date_parts[0])
+                            ->where('imported_at_mois', $date_parts[1])
+                            ->delete();
+                    }
+                });
             }
-        });
-        Stats::insert($data->all());
+        }
     }
 
     /**
@@ -73,26 +53,45 @@ class AgentsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBat
      */
     public function model($row)
     {
-        //            if ($this->user_flag) {
-//                $imported_data = $this->user_flag->flags['imported_data'];
-//                $this->user_flag->flags = [
-//                    'imported_data' => $imported_data + 1,
-//                    'is_importing' => 1
-//                ];
-//                $this->user_flag->save();
-//            }
+        $year = isset($row['annee']) ? $row['annee'] : null;
+        $month = isset($row['mois']) ? $row['mois'] : null;
+        $week = isset($row['semaine']) ? $row['semaine'] : null;
 
-        $rowDate = $row['annee'] . '-' . $row['mois'] . '-' . $row['semaine'];
-        if (!$this->dates || in_array($rowDate, $this->dates)) {
+        $rowDate = null;
+        if ($year && $month) {
+            $rowDate = $year . '-' . $month;
+            if ($week) {
+                $rowDate = $rowDate . '-' . $week;
+            }
+        }
+
+        $inDateWeekMissing = false;
+        if(is_array($this->dates) && !$week) {
+            $inDateWeekMissing = collect($this->dates)->contains(function ($date, $index) use ($year, $month, $rowDate) {
+                $date_parts = explode('-', $date);
+                if (count($date_parts) > 1) {
+                    if ($date_parts[0] == $year && $date_parts[1] == $month) {
+                        return true;
+                    }
+                    return false;
+                }
+                return false;
+            });
+        }
+
+        if (!$this->dates || in_array($rowDate, $this->dates) || (!$week && $inDateWeekMissing)) {
             $hours = $row['heures'];
             if ($hours == null || $hours == '') {
                 $hours = 0;
             }
             return new Agent([
-                'pseudo' => $row['pseudo'],
-                'fullName' => $row['nom_complet'],
+                'pseudo' => isset($row['pseudo']) ? $row['pseudo'] : array_values($row)[0],
+                'fullName' => isset( $row['nom_complet']) ?  $row['nom_complet'] : array_values($row)[1],
                 'hours' => $hours,
                 'imported_at' => $rowDate,
+                'imported_at_annee' => $year,
+                'imported_at_mois' => $month,
+                'imported_at_semaine' => $week,
                 'isNotReady' => true
             ]);
         }

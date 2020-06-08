@@ -17,12 +17,6 @@ class AgentRepository
 
         $agentsImport = new AgentsImport($request->dates);
         Excel::import($agentsImport, $request->file('file'));
-//        $user_flag = getImportedData(false);
-//        $user_flag->flags = [
-//            'imported_data' => $user_flag->flags['imported_data'],
-//            'is_importing' => 2
-//        ];
-//        $user_flag->update();
         \DB::table('agents')
             ->whereNotNull('isNotReady')
             ->update(['isNotReady' => null]);
