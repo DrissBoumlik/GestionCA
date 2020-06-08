@@ -53,9 +53,10 @@ class AgentsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBat
      */
     public function model($row)
     {
-        $year = isset($row['annee']) ? $row['annee'] : null;
-        $month = isset($row['mois']) ? $row['mois'] : null;
-        $week = isset($row['semaine']) ? $row['semaine'] : null;
+        $rowValues = array_values($row);
+        $year = isset($row['annee']) ? $row['annee'] : (isset($rowValues[3]) ? $rowValues[3] : null);
+        $month = isset($row['mois']) ? $row['mois'] : (isset($rowValues[4]) ? $rowValues[4] : null);
+        $week = isset($row['semaine']) ? $row['semaine'] : (isset($rowValues[5]) ? $rowValues[5] : null);
 
         $rowDate = null;
         if ($year && $month) {
@@ -63,37 +64,37 @@ class AgentsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBat
             if ($week) {
                 $rowDate = $rowDate . '-' . $week;
             }
-        }
 
-        $inDateWeekMissing = false;
-        if(is_array($this->dates) && !$week) {
-            $inDateWeekMissing = collect($this->dates)->contains(function ($date, $index) use ($year, $month, $rowDate) {
-                $date_parts = explode('-', $date);
-                if (count($date_parts) > 1) {
-                    if ($date_parts[0] == $year && $date_parts[1] == $month) {
-                        return true;
+            $inDateWeekMissing = false;
+            if(is_array($this->dates) && !$week) {
+                $inDateWeekMissing = collect($this->dates)->contains(function ($date, $index) use ($year, $month, $rowDate) {
+                    $date_parts = explode('-', $date);
+                    if (count($date_parts) > 1) {
+                        if ($date_parts[0] == $year && $date_parts[1] == $month) {
+                            return true;
+                        }
+                        return false;
                     }
                     return false;
-                }
-                return false;
-            });
-        }
-
-        if (!$this->dates || in_array($rowDate, $this->dates) || (!$week && $inDateWeekMissing)) {
-            $hours = $row['heures'];
-            if ($hours == null || $hours == '') {
-                $hours = 0;
+                });
             }
-            return new Agent([
-                'pseudo' => isset($row['pseudo']) ? $row['pseudo'] : array_values($row)[0],
-                'fullName' => isset( $row['nom_complet']) ?  $row['nom_complet'] : array_values($row)[1],
-                'hours' => $hours,
-                'imported_at' => $rowDate,
-                'imported_at_annee' => $year,
-                'imported_at_mois' => $month,
-                'imported_at_semaine' => $week,
-                'isNotReady' => true
-            ]);
+
+            if (!$this->dates || in_array($rowDate, $this->dates) || (!$week && $inDateWeekMissing)) {
+                $hours = isset($row['heures']) ? $row['heures'] : $rowValues[2];
+                if ($hours == null || $hours == '') {
+                    $hours = 0;
+                }
+                return new Agent([
+                    'pseudo' => isset($row['pseudo']) ? $row['pseudo'] : $rowValues[0],
+                    'fullName' => isset( $row['nom_complet']) ?  $row['nom_complet'] : $rowValues[1],
+                    'hours' => $hours,
+                    'imported_at' => $rowDate,
+                    'imported_at_annee' => $year,
+                    'imported_at_mois' => $month,
+                    'imported_at_semaine' => $week,
+                    'isNotReady' => true
+                ]);
+            }
         }
     }
 
