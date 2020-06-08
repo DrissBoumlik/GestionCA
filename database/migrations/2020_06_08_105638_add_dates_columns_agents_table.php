@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class AddDatesColumnsAgentsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('agents', function (Blueprint $table) {
+            $table->string('imported_at_annee')->nullable();
+            $table->string('imported_at_mois')->nullable();
+            $table->string('imported_at_semaine')->nullable();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('agents', function (Blueprint $table) {
+            $table->dropColumn('imported_at_annee');
+            $table->dropColumn('imported_at_mois');
+            $table->dropColumn('imported_at_semaine');
+        });
+    }
+}
