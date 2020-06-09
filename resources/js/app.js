@@ -382,7 +382,8 @@ frLang = {
         removeTotalColumn: false,
         details: false,
         pagination: false,
-        searching: false
+        searching: false,
+        linkOrder: 0
     }) {
         let table = $('#' + object.element);
         if ($.fn.DataTable.isDataTable(table)) {
@@ -445,7 +446,8 @@ frLang = {
                         InitChart(object.objChart, object.columns, response.data, {
                             removeTotal: params.removeTotal,
                             removeTotalColumn: params.removeTotalColumn,
-                            details: params.details
+                            details: params.details,
+                            linkOrder: params.linkOrder
                         });
                         let parent = $('#' + object.element).parents('.col-12');
                         toggleLoader(parent, true);
@@ -460,7 +462,8 @@ frLang = {
     window.InitChart = function (objectChart, columns, data, params = {
         removeTotal: true,
         removeTotalColumn: false,
-        details: false
+        details: false,
+        linkOrder: 0
     }) {
         let labels = [...columns];
         labels = labels.map((column) => {
@@ -475,6 +478,9 @@ frLang = {
         }
         if(objectChart.element_id === 'statsAgentProdChart'){
             labels.shift();
+            labels = labels.filter(function (label, index) {
+                return index <= labels.length - params.linkOrder;
+            });
         }
         let datasets = [...data];
         if (params.removeTotal) {
