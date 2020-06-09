@@ -4223,7 +4223,8 @@ class StatsRepository
             foreach ($filter->date_filter as $filterdate) {
                 $year = 'SUBSTRING_INDEX(SUBSTRING_INDEX("' . $filterdate . '","-", 1),"-",-1)';
                 $month = 'CONVERT(SUBSTRING_INDEX(SUBSTRING_INDEX("' . $filterdate . '","-", 2),"-",-1), UNSIGNED INTEGER)';
-                $querydate .= 'concat(' . $year . ',"-",' . $month . ', "-S", week("' . $filterdate . '")+1),';
+                $week = '"-S", week("' . $filterdate . '")+1)';
+                $querydate .= 'if(agents.imported_at_semaine is null,concat(' . $year . ',"-",' . $month . '),concat(' . $year . ',"-",' . $month . ','.$week.'),' ;
             }
             $querydate = substr($querydate, 0, -1);
         }else{
@@ -4238,9 +4239,9 @@ class StatsRepository
                 '))
             ->join('agents', function ($join) {
                 $join->on('st.Utilisateur', '=', 'agents.pseudo');
-                $join->on('st.Date_Heure_Note_Annee', '=', \DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(agents.imported_at,"-", 1),"-",-1)'));
-                $join->on(\DB::raw('CONVERT(st.Date_Heure_Note_Mois, UNSIGNED INTEGER)'), '=', \DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(agents.imported_at,"-", 2),"-",-1)'));
-                $join->on('st.Date_Heure_Note_Semaine', '=', \DB::raw('SUBSTRING_INDEX(SUBSTRING_INDEX(agents.imported_at,"-", 3),"-",-1)'));
+                $join->on('st.Date_Heure_Note_Annee', '=', 'agents.imported_at_annee');
+                $join->on(\DB::raw('CONVERT(st.Date_Heure_Note_Mois, UNSIGNED INTEGER)'), '=', 'agents.imported_at_mois');
+                $join->whereRaw('if(agents.imported_at_semaine is null, 1=1 , agents.imported_at_semaine = st.Date_Heure_Note_Semaine)');
             })
             ->whereNotNull('Groupement')
             ->whereNotNull('Utilisateur')
@@ -4255,7 +4256,7 @@ class StatsRepository
         if ($agenceCode) {
             $regions = $regions->where('st.Nom_Region', 'like', "%$agenceCode");
         }
-        //dd($regions->groupBy('Utilisateur','fullname', 'Groupement','hours')->get());
+        //dd($regions->groupBy('Utilisateur','fullname', 'Groupement','hours')->toSql(),$regions->getBindings);
         $regions = $regions->orderBy('Groupement');
         $regions = $regions->groupBy('Utilisateur', 'fullname', 'Groupement', 'hours')->get();
         $keys = $regions->groupBy(['Groupement'])->keys();
