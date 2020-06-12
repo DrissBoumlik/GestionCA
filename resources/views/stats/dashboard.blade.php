@@ -159,7 +159,7 @@
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
-            @else
+            @endif
             <div class="row ">
                 <div class="col-12">
                     <div class="card">
@@ -192,7 +192,6 @@
             </div>
             <!-- /.row -->
             <hr>
-            @endif
             <div class="row ">
                 <div class="col-12">
                     <div class="card">

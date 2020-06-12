@@ -153,8 +153,8 @@
                     <!-- /.col -->
                 </div>
                 <!-- /.row -->
-            @else
-            <div class="row ">
+            @endif
+            <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -186,7 +186,6 @@
             </div>
             <!-- /.row -->
             <hr>
-            @endif
             @if($agence)
                 <div class="row ">
                     <div class="col-12">
