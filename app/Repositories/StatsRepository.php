@@ -4177,13 +4177,6 @@ class StatsRepository
             array_unshift($regions_names, $first);
 
             $last = new \stdClass();
-            $last->data = 'dossier_hours';
-            $last->name = 'dossier_hours';
-            $last->text = 'dossier_hours';
-            $last->title = 'dossiers/heurse';
-            array_push($regions_names, $last);
-
-            $last = new \stdClass();
             $last->data = 'ca_genere';
             $last->name = 'ca_genere';
             $last->text = 'ca_genere';
@@ -4195,6 +4188,20 @@ class StatsRepository
             $last->name = 'ca_horaires';
             $last->text = 'ca_horaires';
             $last->title = 'ca horaires';
+            array_push($regions_names, $last);
+
+            $last = new \stdClass();
+            $last->data = 'dossier_hours';
+            $last->name = 'dossier_hours';
+            $last->text = 'dossier_hours';
+            $last->title = 'dossiers/heurse';
+            array_push($regions_names, $last);
+
+            $last = new \stdClass();
+            $last->data = 'dossiers';
+            $last->name = 'dossiers';
+            $last->text = 'dossiers';
+            $last->title = 'dossiers';
             array_push($regions_names, $last);
 
             $last = new \stdClass();
@@ -4282,21 +4289,21 @@ class StatsRepository
             $regions = $regions->groupBy('Utilisateur', 'fullname', 'hours');
             $regions = $regions->map(function ($region) use ($keys) {
                 $row = new \stdClass();
-                $dossier_hours = 0;
+                $row->dossiers = 0;
                 $row->values = [];
 
                 $col_arr = $keys->all();
-                $items = $region->map(function ($call, $index) use (&$row, &$col_arr, &$dossier_hours) {
+                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
                     $row->utilisateur = $call->Utilisateur;
                     $row->fullname = $call->fullname;
                     $Groupement = $call->Groupement;
                     $row->$Groupement = $call->count . '|' . $call->$Groupement . '%';
                     $row->hours = $call->hours;
                     $row->values[$Groupement] = $call->count;
-                    $dossier_hours += $call->count;
-                    $row->dossier_hours = round($call->hours ? $dossier_hours / $call->hours : 0, 2);
-                    $row->ca_horaires = $row->dossier_hours * 0.425;
-                    $row->ca_genere = $dossier_hours * 0.425;
+                    $row->dossiers += $call->count;
+                    $row->dossier_hours = round($call->hours ? $row->dossiers / $call->hours : 0, 2);
+                    $row->ca_horaires = round($row->dossier_hours * 0.425, 2);
+                    $row->ca_genere = round($row->dossiers * 0.425, 2);
                     $col_arr = array_diff($col_arr, [$Groupement]);
                     return $row;
                 });
