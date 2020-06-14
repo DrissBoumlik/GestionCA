@@ -4286,14 +4286,25 @@ class StatsRepository
             });
             $regions = $temp->flatten();
 
+            $agents_production = config('custom_params.agents_production.data');
             $regions = $regions->groupBy('Utilisateur', 'fullname', 'hours');
-            $regions = $regions->map(function ($region) use ($keys) {
+            $regions = $regions->map(function ($region, $agent) use ($keys, $agents_production) {
                 $row = new \stdClass();
                 $row->dossiers = 0;
                 $row->values = [];
 
                 $col_arr = $keys->all();
-                $items = $region->map(function ($call, $index) use (&$row, &$col_arr) {
+
+                $exceptions_data = $agents_production['exceptions']['data'];
+                $result = array_filter($exceptions_data['agents'], function ($agent_exp) use ($agent) {
+                    return strtolower($agent_exp['pseudo']) == strtolower($agent);
+                });
+                $amount = $agents_production['amount'];
+                if (count($result)) {
+                    $amount = $exceptions_data['amount'];
+                }
+
+                $items = $region->map(function ($call, $index) use (&$row, &$col_arr, $amount) {
                     $row->utilisateur = $call->Utilisateur;
                     $row->fullname = $call->fullname;
                     $Groupement = $call->Groupement;
@@ -4302,8 +4313,8 @@ class StatsRepository
                     $row->values[$Groupement] = $call->count;
                     $row->dossiers += $call->count;
                     $row->dossier_hours = round($call->hours ? $row->dossiers / $call->hours : 0, 2);
-                    $row->ca_horaires = round($row->dossier_hours * 0.425, 2);
-                    $row->ca_genere = round($row->dossiers * 0.425, 2);
+                    $row->ca_horaires = round($row->dossier_hours * $amount, 2);
+                    $row->ca_genere = round($row->dossiers * $amount, 2);
                     $col_arr = array_diff($col_arr, [$Groupement]);
                     return $row;
                 });
