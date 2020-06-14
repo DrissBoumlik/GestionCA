@@ -260,6 +260,7 @@ class StatsRepository
                 ($key_groupement ? 'and key_groupement like "' . $key_groupement . '"' : '') .
                 ' and ' . $queryFilters .
                 ' and Resultat_Appel not like "=%"
+                 and Resultat_Appel not like "%Notification par SMS%"
             and Groupement not like "Non Renseigné"
             and Groupement not like "Appels post"
             and isNotReady is null
@@ -270,6 +271,7 @@ class StatsRepository
                 })
             ->whereNotNull('Nom_Region')
             ->where('Resultat_Appel', 'not like', '=%')
+            ->where('Resultat_Appel', 'not like', '%Notification par SMS%')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
             ->whereNull('isNotReady');
@@ -451,6 +453,7 @@ class StatsRepository
             ->select('Nom_Region', 'Groupement', 'Key_Groupement', 'Resultat_Appel', \DB::raw('count(distinct st.Id_Externe) as total'))
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Resultat_Appel not like "=%"
+            and Resultat_Appel not like "%Notification par SMS%"
             and Nom_Region is not null
             and Groupement not like "Non Renseigné"
             and Groupement not like "Appels post" ' .
@@ -465,6 +468,7 @@ class StatsRepository
                     $join->on('st.Date_Heure_Note', '=', 'groupedst.MaxDateTime');
                 })
             ->where('Resultat_Appel', 'not like', '=%')
+            ->where('Resultat_Appel', 'not like', '%Notification par SMS%')
             ->whereNotNull('Nom_Region')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
