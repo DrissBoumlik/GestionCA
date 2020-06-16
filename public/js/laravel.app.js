@@ -19680,7 +19680,8 @@ frLang = {
       removeTotalColumn: false,
       details: false,
       pagination: false,
-      searching: false
+      searching: false,
+      linkOrder: 0
     };
     var table = $('#' + object.element);
 
@@ -19751,7 +19752,8 @@ frLang = {
             InitChart(object.objChart, object.columns, response.data, {
               removeTotal: params.removeTotal,
               removeTotalColumn: params.removeTotalColumn,
-              details: params.details
+              details: params.details,
+              linkOrder: params.linkOrder
             });
             var parent = $('#' + object.element).parents('.col-12');
             toggleLoader(parent, true);
@@ -19767,7 +19769,8 @@ frLang = {
     var params = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
       removeTotal: true,
       removeTotalColumn: false,
-      details: false
+      details: false,
+      linkOrder: 0
     };
 
     var labels = _toConsumableArray(columns);
@@ -19788,6 +19791,9 @@ frLang = {
 
     if (objectChart.element_id === 'statsAgentProdChart') {
       labels.shift();
+      labels = labels.filter(function (label, index) {
+        return index <= labels.length - params.linkOrder;
+      });
     }
 
     var datasets = _toConsumableArray(data);
@@ -20270,14 +20276,14 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\Work\Projects\Circet\circet_gestionCA\resources\js\app.js */"./resources/js/app.js");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet_gestionCA\resources\sass\main.scss */"./resources/sass/main.scss");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet_gestionCA\resources\sass\oneui\themes\amethyst.scss */"./resources/sass/oneui/themes/amethyst.scss");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet_gestionCA\resources\sass\oneui\themes\city.scss */"./resources/sass/oneui/themes/city.scss");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet_gestionCA\resources\sass\oneui\themes\flat.scss */"./resources/sass/oneui/themes/flat.scss");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet_gestionCA\resources\sass\oneui\themes\modern.scss */"./resources/sass/oneui/themes/modern.scss");
-__webpack_require__(/*! D:\Work\Projects\Circet\circet_gestionCA\resources\sass\oneui\themes\smooth.scss */"./resources/sass/oneui/themes/smooth.scss");
-module.exports = __webpack_require__(/*! D:\Work\Projects\Circet\circet_gestionCA\resources\sass\custom\_pages\_dashboard.sass */"./resources/sass/custom/_pages/_dashboard.sass");
+__webpack_require__(/*! C:\xampp\htdocs\gestionca\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! C:\xampp\htdocs\gestionca\resources\sass\main.scss */"./resources/sass/main.scss");
+__webpack_require__(/*! C:\xampp\htdocs\gestionca\resources\sass\oneui\themes\amethyst.scss */"./resources/sass/oneui/themes/amethyst.scss");
+__webpack_require__(/*! C:\xampp\htdocs\gestionca\resources\sass\oneui\themes\city.scss */"./resources/sass/oneui/themes/city.scss");
+__webpack_require__(/*! C:\xampp\htdocs\gestionca\resources\sass\oneui\themes\flat.scss */"./resources/sass/oneui/themes/flat.scss");
+__webpack_require__(/*! C:\xampp\htdocs\gestionca\resources\sass\oneui\themes\modern.scss */"./resources/sass/oneui/themes/modern.scss");
+__webpack_require__(/*! C:\xampp\htdocs\gestionca\resources\sass\oneui\themes\smooth.scss */"./resources/sass/oneui/themes/smooth.scss");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\gestionca\resources\sass\custom\_pages\_dashboard.sass */"./resources/sass/custom/_pages/_dashboard.sass");
 
 
 /***/ })
