@@ -702,7 +702,9 @@ $(function () {
             });
         });
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Agents Production">
     let statsAgentProd = {
         element_dt: undefined,
         element: 'statsAgentProd',
@@ -767,15 +769,15 @@ $(function () {
         statsGlobalDelay,
         statsProcessingDelay,
     ];
-    if(elementExists(globalView)){
+    if (elementExists(globalView)){
         globalElements.push(globalView);
-    }else
-        if(elementExists(statsRegions)){
+    }
+    if (elementExists(statsRegions)){
         globalElements.push(statsRegions);
     }
-        if(elementExists(statsAgentProd)){
-            globalElements.push(statsAgentProd);
-        }
+    if (elementExists(statsAgentProd)) {
+        globalElements.push(statsAgentProd);
+    }
     localStorage.setItem('globalElements', JSON.stringify(globalElements));
 
     detailClick = false;

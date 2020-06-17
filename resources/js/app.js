@@ -128,8 +128,8 @@ frLang = {
         removeTotal: true,
         refreshMode: false,
         details: false,
-        removeLink : false,
-        linkOrder : 0,
+        removeLink: false,
+        linkOrder: 0,
         removeTotalColumn: false,
         pagination: false,
         searching: false
@@ -235,8 +235,8 @@ frLang = {
                         object.element_dt = InitDataTable(object, data, {
                             removeTotal: params.removeTotal,
                             removeTotalColumn: params.removeTotalColumn,
-                            removeLink : params.removeLink,
-                            linkOrder : params.linkOrder,
+                            removeLink: params.removeLink,
+                            linkOrder: params.linkOrder,
                             details: params.details,
                             pagination: params.pagination,
                             searching: params.searching
@@ -259,11 +259,11 @@ frLang = {
                                     object.highlightedRow.splice(object.highlightedRow.indexOf($('#' + object.element + '> tbody > tr').index(tr)));
                                 } else {
                                     // Open this row
-                                    if(object.highlightedRow && object.rowIndex){
+                                    if (object.highlightedRow && object.rowIndex) {
                                         object.rowIndex.push($('tr').index(tr));
                                         object.highlightedRow.push($('#' + object.element + '> tbody > tr').index(tr));
                                     }
-                                    if(object.childneedParentValue && object.childneedParentValue === true){
+                                    if (object.childneedParentValue && object.childneedParentValue === true) {
                                         let row = object.element_dt.cell(this).index().row + 1;
                                         parentAttributName = object.rowName;
                                         parentAttributValue = $('#' + object.element + " > tbody > tr:nth-child(" + row + ") td:" + (params.details ? "nth-child(2)" : "first-child")).text();
@@ -324,7 +324,7 @@ frLang = {
                                             rowText = ' and TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) < 7 ';
                                     }
                                 }
-                                if(object.element === 'statesRepJoiDepartement' && colText !== ''){
+                                if (object.element === 'statesRepJoiDepartement' && colText !== '') {
                                     object.filterQuery.queryJoin += 'and nom_agence not REGEXP "^.*[0-9]{2} .[0-9]{2}"';
                                 }
                                 if (object.columnName === 'Date_Heure_Note_Semaine') {
@@ -360,7 +360,7 @@ frLang = {
                                         '&subGroupBy=' + (object.filterQuery.subGroupBy === undefined || object.filterQuery.subGroupBy === null ? '' : object.filterQuery.subGroupBy) +
                                         '&queryGroupBy=' + (object.filterQuery.queryGroupBy === undefined || object.filterQuery.queryGroupBy === null ? '' : object.filterQuery.queryGroupBy) +
                                         '&appCltquery=' + (object.filterQuery.appCltquery === undefined || object.filterQuery.appCltquery === null ? '' : object.filterQuery.appCltquery) +
-                                        '&parentValue= '+(object.needParentValue === undefined || object.needParentValue === null  ? '' : ' and ' + parentAttributName + ' like "%' + parentAttributValue + '%"') +
+                                        '&parentValue= ' + (object.needParentValue === undefined || object.needParentValue === null ? '' : ' and ' + parentAttributName + ' like "%' + parentAttributValue + '%"') +
                                         (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : ''));
                                 }
                             }
@@ -428,7 +428,7 @@ frLang = {
                 width: '10%'
             });
         }
-        return table.DataTable({
+        let _table_dt = table.DataTable({
             destroy: true,
             language: frLang,
             responsive: true,
@@ -445,23 +445,45 @@ frLang = {
             columns: object.columns,
             initComplete: function (settings, response) {
                 ajaxRequests--;
-                object.data = [...response.data];
                 if (ajaxRequests === 0) {
                     toggleLoader($('#refreshAll').parents('.col-12'), true);
                 }
-                if (object.objChart !== null && object.objChart !== undefined) {
-                    try {
-                        InitChart(object.objChart, object.columns, response.data, {
-                            removeTotal: params.removeTotal,
-                            removeTotalColumn: params.removeTotalColumn,
-                            details: params.details,
-                            linkOrder: params.linkOrder
-                        });
-                        let parent = $('#' + object.element).parents('.col-12');
-                        toggleLoader(parent, true);
-                    } catch (error) {
-                        console.log(error);
-                    }
+                // if (object.objChart !== null && object.objChart !== undefined) {
+                //     try {
+                //         InitChart(object.objChart, object.columns, response.data, {
+                //             removeTotal: params.removeTotal,
+                //             removeTotalColumn: params.removeTotalColumn,
+                //             details: params.details,
+                //             linkOrder: params.linkOrder
+                //         });
+                //         let parent = $('#' + object.element).parents('.col-12');
+                //         toggleLoader(parent, true);
+                //     } catch (error) {
+                //         console.log(error);
+                //     }
+                // }
+            }
+        });
+        // Add loader UI when datatble page links clicked
+        $('#' + object.element + '_wrapper').on('click', '.page-link', function () {
+            let parent = $('#' + object.element).parents('.col-12');
+            toggleLoader(parent);
+        });
+        _table_dt.on('xhr', function () {
+            let response = _table_dt.ajax.json();
+            object.data = [...response.data];
+            if (object.objChart !== null && object.objChart !== undefined) {
+                try {
+                    InitChart(object.objChart, object.columns, object.data, {
+                        removeTotal: params.removeTotal,
+                        removeTotalColumn: params.removeTotalColumn,
+                        details: params.details,
+                        linkOrder: params.linkOrder
+                    });
+                    let parent = $('#' + object.element).parents('.col-12');
+                    toggleLoader(parent, true);
+                } catch (error) {
+                    console.log(error);
                 }
             }
         });
@@ -482,7 +504,7 @@ frLang = {
         }
         let column = labels.shift();
 
-        labels = columns.reduce(function(filteredColumns, column) {
+        labels = columns.reduce(function (filteredColumns, column) {
             if (column.isLink === undefined) {
                 filteredColumns.push(column.data);
             }
@@ -761,12 +783,12 @@ frLang = {
         getColumns(objectChildItem, data, {
             removeTotal: false,
             removeTotalColumn: false,
-            removeLink : false,
-            linkOrder : 0,
+            removeLink: false,
+            linkOrder: 0,
             details: false,
             refreshMode: false,
             pagination: false,
-            searching : false
+            searching: false
         });
         // InitDataTable(objectChild, data, {removeTotal: false, removeTotalColumn: false, details: false});
     };
