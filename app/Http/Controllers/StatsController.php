@@ -389,5 +389,9 @@ class StatsController extends Controller
     {
         return $this->statsRepository->exportXlsCall($request);
     }
+
+    public function agentProdExport(Request $request){
+        return $this->statsRepository->agentProdExportCall($request);
+    }
     //endregion
 }

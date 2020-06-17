@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 
+use App\Exports\AgentProdExport;
 use App\Exports\StatsExport;
 use App\Imports\StatsImport;
 use App\Models\Filter;
@@ -4394,5 +4395,9 @@ class StatsRepository
     public function exportXlsCall(Request $request)
     {
         return Excel::download(new StatsExport($request), 'stats.xlsx');
+    }
+
+    public function agentProdExportCall(Request $request){
+        return Excel::download(new AgentProdExport($request), 'agentsProd.xlsx');
     }
 }

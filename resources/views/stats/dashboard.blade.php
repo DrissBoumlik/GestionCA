@@ -578,6 +578,14 @@
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body table-responsive">
+                                    <div class="row justify-content-center">
+                                        <div class="col-6 text-center">
+                                            <a href="{{ URL::route('agentProdExport', array('agence' => $agence)) }}"
+                                                 class="btn btn-primary mb-3 capitalize-first-letter bg-green w-100">
+                                                 exporter des données au format Excel
+                                            </a>
+                                    </div>
+                                    </div>
                                     <table id="statsAgentProd"
                                            class="table table-bordered table-striped table-valign-middle capitalize">
                                     </table>

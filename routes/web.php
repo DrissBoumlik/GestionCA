@@ -156,7 +156,8 @@ Route::group([
     Route::get('/import/status/edit/{flag}', 'ToolController@editImportingStatus');
 
     Route::get('Export/ExportXls', 'StatsController@exportXls')->name('ExportXls');
-    //endregion
+    Route::get('Export/agentProdExport', 'StatsController@agentProdExport')->name('agentProdExport');
+    //endregion agentProdExport
 
     Route::get('/user/filter', 'FilterController@getUserFilter');
     Route::post('/user/filter', 'FilterController@saveUserFilter');
