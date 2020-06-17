@@ -61,7 +61,7 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-0', rows: '#stats-groupement-filter'},
         filterQuery: {
-            queryJoin: ' and Resultat_Appel not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"',
+            queryJoin: ' and Resultat_Appel not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post" and Resultat_Appel not like "%Notification par SMS%"',
             subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement) groupedst',
             queryGroupBy: ' GROUP BY st.Id_Externe, Nom_Region, Groupement, Key_Groupement'
         },
@@ -137,7 +137,7 @@ $(function () {
         filterTree: {dates: [], rows: [], datesTreeObject: undefined},
         filterElement: {dates: '#tree-view-1', rows: '#stats-regions-filter'},
         filterQuery: {
-            queryJoin: ' and Resultat_Appel not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post"',
+            queryJoin: ' and Resultat_Appel not like "=%" and Groupement not like "Non Renseigné" and Groupement not like "Appels post" and Resultat_Appel not like "%Notification par SMS%"',
             subGroupBy: ' GROUP BY Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Nom_Region, Groupement, Key_Groupement, Resultat_Appel'
         },
