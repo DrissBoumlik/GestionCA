@@ -233,6 +233,7 @@ class StatsRepository
             $first->title = 'Résultats Appels Préalables';
             $first->text = 'Résultats Appels Préalables';
             $first->name = $first->data = $callResult;
+            $first->isLink = false;
             array_unshift($columns, $first);
 
             return ['filter' => $filter, 'columns' => $columns, 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Groupement'];
@@ -431,6 +432,7 @@ class StatsRepository
             $first->text = $key_groupement;
             $first->title = $key_groupement;
             $first->orderable = false;
+            $first->isLink = false;
             array_unshift($columns, $first);
 
             return ['filter' => $filter, 'columns' => $columns, 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Résultat Appel'];
@@ -655,6 +657,7 @@ class StatsRepository
             $last->name =
             $last->text =
             $last->title = 'total';
+            $first->isLink = $last->isLink = false;
             array_unshift($columns, $first);
             array_push($columns, $last);
 
@@ -926,6 +929,7 @@ class StatsRepository
             $last->data =
             $last->name =
             $last->title = 'total';
+            $first->isLink = $last->isLink = false;
             array_unshift($columns, $first);
             array_push($columns, $last);
 
@@ -1162,6 +1166,7 @@ class StatsRepository
             $first->text = $intervCol == 'Code_Intervention' ? 'Code Intervention' : 'Type Intervention';
             $first->name = $first->data = $intervCol;
             $first->orderable = false;
+            $first->isLink = false;
             array_unshift($regions_names, $first);
 
             $data = ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys, 'rowsFilterHeader' => ($intervCol == 'Code_Intervention' ? 'Code Intervention' : 'Type Intervention')];
@@ -1407,6 +1412,7 @@ class StatsRepository
             $last->name =
             $last->text =
             $last->title = 'total';
+            $first->isLink = $last->isLink = false;
             array_unshift($column_names, $first);
             array_push($column_names, $last);
 
@@ -1634,6 +1640,7 @@ class StatsRepository
             $last->text =
             $last->data =
             $last->name = 'total';
+            $first->isLink = $last->isLink = false;
             array_unshift($codes_names, $first);
             array_push($codes_names, $last);
 
@@ -1861,6 +1868,7 @@ class StatsRepository
             $first->name = 'Nom_region';
             $first->data = 'Nom_region';
             $first->orderable = false;
+            $first->isLink = false;
             array_unshift($regions_names, $first);
 
             return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
@@ -1998,6 +2006,7 @@ class StatsRepository
             $first->name = 'Nom_region';
             $first->data = 'Nom_region';
             $first->orderable = false;
+            $first->isLink = false;
             array_unshift($regions_names, $first);
 
             return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
@@ -2133,6 +2142,7 @@ class StatsRepository
             $first->name = 'EXPORT_ALL_EXTRACT_CUI';
             $first->data = 'EXPORT_ALL_EXTRACT_CUI';
             $first->orderable = false;
+            $first->isLink = false;
             array_unshift($regions_names, $first);
 
             return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
@@ -2582,6 +2592,7 @@ class StatsRepository
             $first->name = 'Type_Intervention';
             $first->data = 'Type_Intervention';
             $first->orderable = false;
+            $first->isLink = false;
             array_unshift($regions_names, $first);
 
             $data = ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Type Intervention'];
@@ -2715,6 +2726,7 @@ class StatsRepository
             $first->name = 'Code_Type_Intervention';
             $first->data = 'Code_Type_Intervention';
             $first->orderable = false;
+            $first->isLink = false;
             array_unshift($regions_names, $first);
 
             return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
@@ -2863,6 +2875,7 @@ class StatsRepository
             $first->name = 'Type_Intervention';
             $first->data = 'Type_Intervention';
             $first->orderable = false;
+            $first->isLink = false;
             array_unshift($regions_names, $first);
 
             return ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Type Intervention'];
@@ -2992,6 +3005,7 @@ class StatsRepository
             $first->name = 'Code_Type_Intervention';
             $first->data = 'Code_Type_Intervention';
             $first->orderable = false;
+            $first->isLink = false;
             array_unshift($regions_names, $first);
 
             return ['filter' => $filter, 'columns' => $regions_names, 'rows' => [], 'rowsFilterHeader' => ''];
@@ -3721,6 +3735,7 @@ class StatsRepository
             $last->name =
             $last->text =
             $last->title = 'total';
+            $first->isLink = $last->isLink = false;
             array_unshift($column_names, $first);
 //            array_unshift($column_names, $header);
             array_push($column_names, $last);
@@ -3955,6 +3970,7 @@ class StatsRepository
             $first->text = 'Agence';
             $first->name = $first->data = 'Nom_Agence';
             $first->orderable = false;
+            $first->isLink = false;
 //            $last = new \stdClass();
 //            $last->data =
 //            $last->name =
@@ -4098,10 +4114,10 @@ class StatsRepository
                 $_item->values = collect($_item->values)->values();
                 return $_item;
             });
-            $total->Produit = 'Total Général';
-            $total->total = round(array_sum($total->values), 2);
-            $total->values = collect($total->values)->values();
-            $total->isTotal = true;
+//            $total->Produit = 'Total Général';
+//            $total->total = round(array_sum($total->values), 2);
+//            $total->values = collect($total->values)->values();
+//            $total->isTotal = true;
 //            $results->push($total);
             $results = $results->values();
 
@@ -4166,54 +4182,62 @@ class StatsRepository
                 return ($item1->data == $item2->data) ? 0 :
                     ($item1->data < $item2->data) ? -1 : 1;
             });
-            $second = new \stdClass();
-            $second->title = 'nom complet';
-            $second->name = 'fullname';
-            $second->data = 'fullname';
-            $second->orderable = false;
-            array_unshift($regions_names, $second);
 
-            $first = new \stdClass();
-            $first->title = 'pseudo';
-            $first->name = 'utilisateur';
-            $first->data = 'utilisateur';
-            $first->orderable = false;
-            array_unshift($regions_names, $first);
+            $full_name = new \stdClass();
+            $full_name->title = 'nom complet';
+            $full_name->name = 'fullname';
+            $full_name->data = 'fullname';
+            $full_name->orderable = false;
+            $full_name->isLink = false;
+            array_unshift($regions_names, $full_name);
 
-            $last = new \stdClass();
-            $last->data = 'ca_genere';
-            $last->name = 'ca_genere';
-            $last->text = 'ca_genere';
-            $last->title = 'ca généré';
-            array_push($regions_names, $last);
+            $user = new \stdClass();
+            $user->title = 'pseudo';
+            $user->name = 'utilisateur';
+            $user->data = 'utilisateur';
+            $user->orderable = false;
+            $user->isLink = false;
+            array_unshift($regions_names, $user);
 
-            $last = new \stdClass();
-            $last->data = 'ca_horaires';
-            $last->name = 'ca_horaires';
-            $last->text = 'ca_horaires';
-            $last->title = 'ca horaires';
-            array_push($regions_names, $last);
+            $ca_genere = new \stdClass();
+            $ca_genere->data = 'ca_genere';
+            $ca_genere->name = 'ca_genere';
+            $ca_genere->text = 'ca_genere';
+            $ca_genere->title = 'ca généré';
+            $ca_genere->isLink = false;
+            array_push($regions_names, $ca_genere);
 
-            $last = new \stdClass();
-            $last->data = 'dossier_hours';
-            $last->name = 'dossier_hours';
-            $last->text = 'dossier_hours';
-            $last->title = 'dossiers/heurse';
-            array_push($regions_names, $last);
+            $ca_horaires = new \stdClass();
+            $ca_horaires->data = 'ca_horaires';
+            $ca_horaires->name = 'ca_horaires';
+            $ca_horaires->text = 'ca_horaires';
+            $ca_horaires->title = 'ca horaires';
+            $ca_horaires->isLink = false;
+            array_push($regions_names, $ca_horaires);
 
-            $last = new \stdClass();
-            $last->data = 'dossiers';
-            $last->name = 'dossiers';
-            $last->text = 'dossiers';
-            $last->title = 'dossiers';
-            array_push($regions_names, $last);
+            $dossier_hours = new \stdClass();
+            $dossier_hours->data = 'dossier_hours';
+            $dossier_hours->name = 'dossier_hours';
+            $dossier_hours->text = 'dossier_hours';
+            $dossier_hours->title = 'dossiers/heurse';
+            $dossier_hours->isLink = false;
+            array_push($regions_names, $dossier_hours);
 
-            $last = new \stdClass();
-            $last->data = 'hours';
-            $last->name = 'hours';
-            $last->text = 'hours';
-            $last->title = 'heures';
-            array_push($regions_names, $last);
+            $dossiers = new \stdClass();
+            $dossiers->data = 'dossiers';
+            $dossiers->name = 'dossiers';
+            $dossiers->text = 'dossiers';
+            $dossiers->title = 'dossiers';
+            $dossiers->isLink = false;
+            array_push($regions_names, $dossiers);
+
+            $hours = new \stdClass();
+            $hours->data = 'hours';
+            $hours->name = 'hours';
+            $hours->text = 'hours';
+            $hours->title = 'heures';
+            $hours->isLink = false;
+            array_push($regions_names, $hours);
 
             return ['filter' => $filter, 'columns' => $regions_names, 'rows' => $rowsKeys, 'rowsFilterHeader' => 'Utilisateurs'];
         }

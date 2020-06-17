@@ -205,16 +205,21 @@ frLang = {
                                 } else {
                                     newData = '';
                                 }
-                                let classHasTotalCol = params.removeTotalColumn ? 'hasTotal' : '';
-                                let removeLinkCol = params.removeLink ? 'removeLink' : '';
-                                let rowClass = full.isTotal ? '' : 'pointer detail-data';
+                                // let classHasTotalCol = params.removeTotalColumn ? 'hasTotal' : '';
+                                // let removeLinkCol = params.removeLink ? 'removeLink' : '';
+                                // let rowClass = full.isTotal ? '' : 'pointer detail-data';
 
-                                let notLink = '';
-                                if (params.linkOrder) {
-                                    if(meta.col >= response.columns.length - params.linkOrder)
-                                        notLink = 'not-link';
+                                // let notLink = '';
+                                // if (params.linkOrder) {
+                                //     if(meta.col >= response.columns.length - params.linkOrder)
+                                //         notLink = 'not-link';
+                                // }
+                                // return '<span class="' + rowClass + ' ' + classHasTotalCol + ' ' + removeLinkCol + ' ' + notLink + '">' + newData + '<\span>';
+                                let cellClass = 'clickable';
+                                if (column.isLink === false || full.isTotal) {
+                                    cellClass = '';
                                 }
-                                return '<span class="' + rowClass + ' ' + classHasTotalCol + ' ' + removeLinkCol + ' ' + notLink + '">' + newData + '<\span>';
+                                return '<span class="' + cellClass + '">' + newData + '<\span>';
                             }
                         };
                     });
@@ -272,8 +277,9 @@ frLang = {
                         }
                         // CELL CLICK
                         let tableId = '#' + object.element;
-                        $(tableId + ' tbody').on('click', 'td', function () {
-                            if (!$(this).hasClass('details-control')) {
+                        $(tableId + ' tbody').on('click', 'td', function (event) {
+                            if (!$(this).hasClass('details-control') && $(this).children('.clickable').length) {
+                                event.stopPropagation();
                                 let agent_name = $('#agent_name').val();
                                 let agence_name = $('#agence_name').val();
                                 let col = object.element_dt.cell(this).index().column + 1;
@@ -324,10 +330,11 @@ frLang = {
                                 if (object.columnName === 'Date_Heure_Note_Semaine') {
                                     colText = colText.split('_')[0];
                                 }
+                                let rowName = object.rowName;
                                 if (object.element === 'globalViewTable') {
                                     let _cols = object.rowName.split(' / ');
                                     let _values = rowText.split(' / ');
-                                    object.rowName = _cols[1];
+                                    rowName = _cols[1];
                                     rowText = ' ' + _values[1] + '" AND ' + _cols[0] + ' LIKE "%' + _values[0] + '%';
                                 }
                                 if (object.parentElement === 'globalViewTable') {
@@ -335,13 +342,14 @@ frLang = {
                                 }
                                 let lastRowIndex = object.element_dt.rows().count();
                                 let lastColumnIndex = object.element_dt.columns().count();
-                                if (((params.details && col > 2) || (!params.details && col > 1))
-                                    && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
-                                    && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))
-                                    && ((!params.removeLink && col > 1) || (params.removeLink && col < (lastColumnIndex + 1 - params.linkOrder)))) {
+                                // if (((params.details && col > 2) || (!params.details && col > 1))
+                                //     && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
+                                //     && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))
+                                //     && ((!params.removeLink && col > 1) || (params.removeLink && col < (lastColumnIndex + 1 - params.linkOrder))))
+                                if ($(this).find('.clickable').length) {
                                     let dates = object.filterTree.dates;
                                     window.open(APP_URL + '/all-stats?' +
-                                        'row=' + (object.rowName === undefined || object.rowName === null ? '' : object.rowName) +
+                                        'row=' + (rowName === undefined || rowName === null ? '' : rowName) +
                                         '&rowValue=' + rowText +
                                         '&col=' + (object.columnName === undefined || object.columnName === null ? '' : object.columnName) +
                                         '&colValue=' + colText +
@@ -473,15 +481,23 @@ frLang = {
             labels.shift();
         }
         let column = labels.shift();
-        if (params.removeTotalColumn) {
-            labels.pop();
-        }
-        if(objectChart.element_id === 'statsAgentProdChart'){
-            labels.shift();
-            labels = labels.filter(function (label, index) {
-                return index <= labels.length - params.linkOrder;
-            });
-        }
+
+        labels = columns.reduce(function(filteredColumns, column) {
+            if (column.isLink === undefined) {
+                filteredColumns.push(column.data);
+            }
+            return filteredColumns;
+        }, []);
+
+        // if (params.removeTotalColumn) {
+        //     labels.pop();
+        // }
+        // if(objectChart.element_id === 'statsAgentProdChart'){
+        //     labels.shift();
+        //     labels = labels.filter(function (label, index) {
+        //         return index <= labels.length - params.linkOrder;
+        //     });
+        // }
         let datasets = [...data];
         if (params.removeTotal) {
             datasets.pop();
