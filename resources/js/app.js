@@ -487,6 +487,7 @@ frLang = {
                 }
             }
         });
+        return _table_dt;
     };
 
     window.InitChart = function (objectChart, columns, data, params = {
