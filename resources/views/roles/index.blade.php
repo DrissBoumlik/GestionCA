@@ -40,13 +40,6 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header d-none">
-                        <h3 class="card-title float-left">Rôles</h3>
-{{--                        <button class="btn btn-primary mgl-10 round" title="Add User">--}}
-                            <a href="{{ route('users.create') }}" class="link btn btn-primary mgl-10 round" title="Add User"><i class="fas fa-plus"></i></a>
-{{--                        </button>--}}
-                    </div>
-                    <!-- /.card-header -->
                     <div class="card-body table-responsive">
                         <table id="roles-data" class="table table-bordered table-striped table-valign-middle capitalize">
                             <thead>

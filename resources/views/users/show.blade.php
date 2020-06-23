@@ -56,7 +56,7 @@
 @endsection
 @section('content')
     <div class="user-profile profile">
-        @php $isAdmin = isAdmin() @endphp
+        @php $isInAdminGroup = isInAdminGroup() @endphp
         <form method="POST" action="{{ route('users.update', $user->id) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
@@ -68,7 +68,7 @@
                                 <div class="profile-header clearfix">
                                     <div class="user-picture">
                                         <img
-                                            src="{{ getPicture($user) ?? '//images2.imgbox.com/75/b0/NyZk9Glf_o.png' }}"
+                                            src="{{ getPicture($user) }}"
                                             id="user-picture" alt=""
                                             class="round auth-w">
                                         <label for="picture" class="pointer">
@@ -154,7 +154,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if($isAdmin)
+                                @if($isInAdminGroup)
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-4">
@@ -229,13 +229,13 @@
                                     </div>
                                 @endif
                                 <div class="row update-btn mt-lg-5 mt-sm-0">
-                                    <div class="{{ $isAdmin ? 'col-md-3' : 'col-md-6' }} mt-3">
+                                    <div class="{{ $isInAdminGroup ? 'col-md-3' : 'col-md-6' }} mt-3">
                                         <button type="submit" class="btn btn-primary full-w">
                                                 <span
                                                     class="btn-field font-weight-normal fa-edit pr-4 position-relative">Editer</span>
                                         </button>
                                     </div>
-                                    @if($isAdmin)
+                                    @if($isInAdminGroup)
                                         <div class="col-md-3 mt-3">
                                             <button class="btn btn-danger full-w delete-user"
                                                     data-user="{{ $user->id }}">

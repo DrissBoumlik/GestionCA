@@ -738,6 +738,21 @@ if (!function_exists('getAuthUser')) {
     }
 }
 
+if (!function_exists('isInAdminGroup')) {
+    function isInAdminGroup($user = null)
+    {
+        $roleName = ($user ?? auth()->user())->role->name;
+        return $roleName == 'superAdmin' || $roleName == 'admin';
+    }
+}
+
+if (!function_exists('isSuperAdmin')) {
+    function isSuperAdmin($user = null)
+    {
+        return ($user ?? auth()->user())->role->name == 'superAdmin';
+    }
+}
+
 if (!function_exists('isAdmin')) {
     function isAdmin($user = null)
     {

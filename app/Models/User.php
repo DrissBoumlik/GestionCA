@@ -39,6 +39,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
+    public function isInAdminGroup()
+    {
+        $roleName = $this->role->name;
+        return $roleName == 'superAdmin' || $roleName == 'admin';
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->role->name == 'superAdmin';
+    }
+
     public function isAdmin()
     {
         return $this->role->name == 'admin';

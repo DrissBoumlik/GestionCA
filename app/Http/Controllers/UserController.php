@@ -88,7 +88,7 @@ class UserController extends Controller
     public function changeStatus(Request $request, User $user)
     {
         // Authorization
-        if (!auth()->user()->isAdmin()) {
+        if (!auth()->user()->isInAdminGroup()) {
             return response()->json(['message' => 'You are not authorized'], 401);
         }
 
@@ -199,7 +199,7 @@ class UserController extends Controller
     {
         $user = auth()->user();
         $roles = Role::all();
-        return view('users.profile')->with(['user' => $user, 'roles' => $roles, 'isAdmin' => $user->isAdmin()]);
+        return view('users.profile')->with(['user' => $user, 'roles' => $roles]);
     }
 
     public function show(User $user)
@@ -217,7 +217,7 @@ class UserController extends Controller
         // Authorization
 //        $this->authorize('deleteUser', $user, auth()->user());
 
-        if ($user->isAdmin()) {
+        if ($user->isInAdminGroup()) {
             return response()->json(['message' => 'You can\'t delete Admin'], 401);
         }
         $deleted = $user->delete();
