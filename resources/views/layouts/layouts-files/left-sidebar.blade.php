@@ -30,7 +30,7 @@
                     <span class="nav-main-link-name">Tableau de bord</span>
                 </a>
             </li>
-            @if(isAdmin())
+            @if(isInAdminGroup())
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ (request()->is('all-stats') || request()->is('all-stats/*')) ? ' active' : '' }}" href="{{ route('stats.index') }}">
                         <i class="nav-main-link-icon far fa-chart-bar"></i>

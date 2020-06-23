@@ -82,7 +82,7 @@
                         <h2 class="h4 font-w400 text-white-75 mb-0 invisible" data-toggle="appear" data-timeout="250">
                             Bonjour {{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</h2>
                     </div>
-                    @if (isAdmin())
+                    @if (isInAdminGroup())
                         <div class="flex-sm-00-auto mt-3 mt-sm-0 ml-sm-3">
                         <span class="d-inline-block invisible" data-toggle="appear" data-timeout="350">
                             <a class="btn btn-primary px-4 py-2" data-toggle="click-ripple"

@@ -29,7 +29,7 @@ class UserPolicy
      */
     public function view(User $user, User $model)
     {
-        return $user->isAdmin();
+        return $user->isInAdminGroup();
     }
 
     /**
@@ -40,7 +40,7 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        return $user->isAdmin();
+        return $user->isInAdminGroup();
     }
 
     /**
@@ -52,7 +52,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        return $user->isAdmin();
+        return $user->isInAdminGroup();
     }
 
     /**
@@ -64,7 +64,7 @@ class UserPolicy
      */
     public function deleteUser(User $user, User $model)
     {
-        return $user->isAdmin() && !$model->isAdmin();
+        return $user->isInAdminGroup() && !$model->isInAdminGroup();
     }
 
     /**
@@ -88,11 +88,11 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model)
     {
-        return $user->isAdmin() && !$model->isAdmin();
+        return $user->isInAdminGroup() && !$model->isInAdminGroup();
     }
 
     public function delete(User $user)
     {
-        return $user->isAdmin();
+        return $user->isInAdminGroup();
     }
 }
