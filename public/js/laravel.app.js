@@ -19484,18 +19484,24 @@ frLang = {
                   }
                 } else {
                   newData = '';
+                } // let classHasTotalCol = params.removeTotalColumn ? 'hasTotal' : '';
+                // let removeLinkCol = params.removeLink ? 'removeLink' : '';
+                // let rowClass = full.isTotal ? '' : 'pointer detail-data';
+                // let notLink = '';
+                // if (params.linkOrder) {
+                //     if(meta.col >= response.columns.length - params.linkOrder)
+                //         notLink = 'not-link';
+                // }
+                // return '<span class="' + rowClass + ' ' + classHasTotalCol + ' ' + removeLinkCol + ' ' + notLink + '">' + newData + '<\span>';
+
+
+                var cellClass = 'clickable';
+
+                if (column.isLink === false || full.isTotal) {
+                  cellClass = '';
                 }
 
-                var classHasTotalCol = params.removeTotalColumn ? 'hasTotal' : '';
-                var removeLinkCol = params.removeLink ? 'removeLink' : '';
-                var rowClass = full.isTotal ? '' : 'pointer detail-data';
-                var notLink = '';
-
-                if (params.linkOrder) {
-                  if (meta.col >= response.columns.length - params.linkOrder) notLink = 'not-link';
-                }
-
-                return '<span class="' + rowClass + ' ' + classHasTotalCol + ' ' + removeLinkCol + ' ' + notLink + '">' + newData + '<\span>';
+                return '<span class="' + cellClass + '">' + newData + '<\span>';
               }
             });
           }); // object.columns = [...response.columns];
@@ -19567,8 +19573,10 @@ frLang = {
 
 
             var tableId = '#' + object.element;
-            $(tableId + ' tbody').on('click', 'td', function () {
-              if (!$(this).hasClass('details-control')) {
+            $(tableId + ' tbody').on('click', 'td', function (event) {
+              if (!$(this).hasClass('details-control') && $(this).children('.clickable').length) {
+                event.stopPropagation();
+
                 var _agent_name = $('#agent_name').val();
 
                 var agence_name = $('#agence_name').val();
@@ -19632,12 +19640,14 @@ frLang = {
                   colText = colText.split('_')[0];
                 }
 
+                var rowName = object.rowName;
+
                 if (object.element === 'globalViewTable') {
                   var _cols = object.rowName.split(' / ');
 
                   var _values = rowText.split(' / ');
 
-                  object.rowName = _cols[1];
+                  rowName = _cols[1];
                   rowText = ' ' + _values[1] + '" AND ' + _cols[0] + ' LIKE "%' + _values[0] + '%';
                 }
 
@@ -19646,11 +19656,14 @@ frLang = {
                 }
 
                 var lastRowIndex = object.element_dt.rows().count();
-                var lastColumnIndex = object.element_dt.columns().count();
+                var lastColumnIndex = object.element_dt.columns().count(); // if (((params.details && col > 2) || (!params.details && col > 1))
+                //     && ((params.removeTotal && row < lastRowIndex) || (!params.removeTotal && row <= lastRowIndex))
+                //     && ((params.removeTotalColumn && col < lastColumnIndex) || (!params.removeTotalColumn && col <= lastColumnIndex))
+                //     && ((!params.removeLink && col > 1) || (params.removeLink && col < (lastColumnIndex + 1 - params.linkOrder))))
 
-                if ((params.details && col > 2 || !params.details && col > 1) && (params.removeTotal && row < lastRowIndex || !params.removeTotal && row <= lastRowIndex) && (params.removeTotalColumn && col < lastColumnIndex || !params.removeTotalColumn && col <= lastColumnIndex) && (!params.removeLink && col > 1 || params.removeLink && col < lastColumnIndex + 1 - params.linkOrder)) {
+                if ($(this).find('.clickable').length) {
                   var dates = object.filterTree.dates;
-                  window.open(APP_URL + '/all-stats?' + 'row=' + (object.rowName === undefined || object.rowName === null ? '' : object.rowName) + '&rowValue=' + rowText + '&col=' + (object.columnName === undefined || object.columnName === null ? '' : object.columnName) + '&colValue=' + colText + '&agent=' + (_agent_name === undefined || _agent_name === null ? '' : _agent_name) + '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) + '&dates=' + (dates === undefined || dates === null ? '' : dates) + '&queryJoin=' + (object.filterQuery.queryJoin === undefined || object.filterQuery.queryJoin === null ? '' : object.filterQuery.queryJoin) + '&subGroupBy=' + (object.filterQuery.subGroupBy === undefined || object.filterQuery.subGroupBy === null ? '' : object.filterQuery.subGroupBy) + '&queryGroupBy=' + (object.filterQuery.queryGroupBy === undefined || object.filterQuery.queryGroupBy === null ? '' : object.filterQuery.queryGroupBy) + '&appCltquery=' + (object.filterQuery.appCltquery === undefined || object.filterQuery.appCltquery === null ? '' : object.filterQuery.appCltquery) + '&parentValue= ' + (object.needParentValue === undefined || object.needParentValue === null ? '' : ' and ' + parentAttributName + ' like "%' + parentAttributValue + '%"') + (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : ''));
+                  window.open(APP_URL + '/all-stats?' + 'row=' + (rowName === undefined || rowName === null ? '' : rowName) + '&rowValue=' + rowText + '&col=' + (object.columnName === undefined || object.columnName === null ? '' : object.columnName) + '&colValue=' + colText + '&agent=' + (_agent_name === undefined || _agent_name === null ? '' : _agent_name) + '&agence=' + (agence_name === undefined || agence_name === null ? '' : agence_name) + '&dates=' + (dates === undefined || dates === null ? '' : dates) + '&queryJoin=' + (object.filterQuery.queryJoin === undefined || object.filterQuery.queryJoin === null ? '' : object.filterQuery.queryJoin) + '&subGroupBy=' + (object.filterQuery.subGroupBy === undefined || object.filterQuery.subGroupBy === null ? '' : object.filterQuery.subGroupBy) + '&queryGroupBy=' + (object.filterQuery.queryGroupBy === undefined || object.filterQuery.queryGroupBy === null ? '' : object.filterQuery.queryGroupBy) + '&appCltquery=' + (object.filterQuery.appCltquery === undefined || object.filterQuery.appCltquery === null ? '' : object.filterQuery.appCltquery) + '&parentValue= ' + (object.needParentValue === undefined || object.needParentValue === null ? '' : ' and ' + parentAttributName + ' like "%' + parentAttributValue + '%"') + (object.routeData.includes('nonValidatedFolders') ? '&Resultat_Appel=Appels clôture - CRI non conforme' : ''));
                 }
               }
             });
@@ -19724,7 +19737,7 @@ frLang = {
       });
     }
 
-    return table.DataTable({
+    var _table_dt = table.DataTable({
       destroy: true,
       language: frLang,
       responsive: true,
@@ -19741,28 +19754,55 @@ frLang = {
       columns: object.columns,
       initComplete: function initComplete(settings, response) {
         ajaxRequests--;
-        object.data = _toConsumableArray(response.data);
 
         if (ajaxRequests === 0) {
           toggleLoader($('#refreshAll').parents('.col-12'), true);
-        }
+        } // if (object.objChart !== null && object.objChart !== undefined) {
+        //     try {
+        //         InitChart(object.objChart, object.columns, response.data, {
+        //             removeTotal: params.removeTotal,
+        //             removeTotalColumn: params.removeTotalColumn,
+        //             details: params.details,
+        //             linkOrder: params.linkOrder
+        //         });
+        //         let parent = $('#' + object.element).parents('.col-12');
+        //         toggleLoader(parent, true);
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
+        // }
 
-        if (object.objChart !== null && object.objChart !== undefined) {
-          try {
-            InitChart(object.objChart, object.columns, response.data, {
-              removeTotal: params.removeTotal,
-              removeTotalColumn: params.removeTotalColumn,
-              details: params.details,
-              linkOrder: params.linkOrder
-            });
-            var parent = $('#' + object.element).parents('.col-12');
-            toggleLoader(parent, true);
-          } catch (error) {
-            console.log(error);
-          }
+      }
+    }); // Add loader UI when datatble page links clicked
+
+
+    $('#' + object.element + '_wrapper').on('click', '.page-link', function () {
+      var parent = $('#' + object.element).parents('.col-12');
+      toggleLoader(parent);
+    });
+
+    _table_dt.on('xhr', function () {
+      var response = _table_dt.ajax.json();
+
+      object.data = _toConsumableArray(response.data);
+
+      if (object.objChart !== null && object.objChart !== undefined) {
+        try {
+          InitChart(object.objChart, object.columns, object.data, {
+            removeTotal: params.removeTotal,
+            removeTotalColumn: params.removeTotalColumn,
+            details: params.details,
+            linkOrder: params.linkOrder
+          });
+          var parent = $('#' + object.element).parents('.col-12');
+          toggleLoader(parent, true);
+        } catch (error) {
+          console.log(error);
         }
       }
     });
+
+    return _table_dt;
   };
 
   window.InitChart = function (objectChart, columns, data) {
@@ -19784,17 +19824,21 @@ frLang = {
     }
 
     var column = labels.shift();
+    labels = columns.reduce(function (filteredColumns, column) {
+      if (column.isLink === undefined) {
+        filteredColumns.push(column.data);
+      }
 
-    if (params.removeTotalColumn) {
-      labels.pop();
-    }
-
-    if (objectChart.element_id === 'statsAgentProdChart') {
-      labels.shift();
-      labels = labels.filter(function (label, index) {
-        return index <= labels.length - params.linkOrder;
-      });
-    }
+      return filteredColumns;
+    }, []); // if (params.removeTotalColumn) {
+    //     labels.pop();
+    // }
+    // if(objectChart.element_id === 'statsAgentProdChart'){
+    //     labels.shift();
+    //     labels = labels.filter(function (label, index) {
+    //         return index <= labels.length - params.linkOrder;
+    //     });
+    // }
 
     var datasets = _toConsumableArray(data);
 
