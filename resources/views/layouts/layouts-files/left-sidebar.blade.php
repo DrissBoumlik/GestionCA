@@ -102,10 +102,15 @@
                             </a>
                         </li>
                     </ul>
-{{--                    <a class="nav-main-link{{ request()->is('stats') ? ' active' : '' }}" href="{{ route('stats.import') }}">--}}
-{{--                        <i class="nav-main-link-icon si si-cursor"></i>--}}
-{{--                        <span class="nav-main-link-name">Importation</span>--}}
-{{--                    </a>--}}
+                </li>
+            @endif
+            @if(isSuperAdmin())
+                <li class="nav-main-item">
+                    <a class="nav-main-link{{ (request()->is('wiki') || request()->is('wiki/*')) ? ' active' : '' }}"
+                       href="{{ route('wiki.index') }}">
+                        <i class="nav-main-link-icon fas fa-book"></i>
+                        <span class="nav-main-link-name">Wiki</span>
+                    </a>
                 </li>
             @endif
         </ul>

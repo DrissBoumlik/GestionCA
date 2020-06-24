@@ -163,6 +163,8 @@ Route::group([
     Route::post('/user/filter', 'FilterController@saveUserFilter');
 
 
-
+    //region WIKI routes
+    Route::get('/wiki', 'WikiController@index')->name('wiki.index');
+    //endregion
 
 });
