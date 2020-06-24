@@ -12,6 +12,7 @@ class RolesTableSeeder extends Seeder
     public function run()
     {
         \Illuminate\Support\Facades\DB::table('roles')->insert([
+            ['name' => 'superAdmin', 'description' => 'super admin'],
             ['name' => 'admin', 'description' => 'admin'],
             ['name' => 'agence', 'description' => 'Agence'],
             ['name' => 'agent', 'description' => 'Agent'],
