@@ -49,47 +49,6 @@
                     <!-- /.card-header -->
                     <div class="card-body table-responsive">
                         <table id="users-data" class="table table-bordered table-striped table-valign-middle">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th>Image</th>
-                                <th>Prénom</th>
-                                <th>Nom</th>
-                                <th>Genre</th>
-                                <th>Email</th>
-                                <th>Rôle</th>
-                                <th>Etat</th>
-                                <th>Options</th>
-                            </tr>
-                            </thead>
-                            {{--                        <tbody>--}}
-                            {{--                        @foreach($users as $user)--}}
-                            {{--                            <tr id="user-{{ $user->id }}">--}}
-                            {{--                                <td>View</td>--}}
-                            {{--                                <td><img src="{{ $user->picture }}" width="50" alt=""></td>--}}
-                            {{--                                <td>{{ $user->firstname }}</td>--}}
-                            {{--                                <td>{{ $user->lastname }}</td>--}}
-                            {{--                                <td>{{ $user->email }}</td>--}}
-                            {{--                                <td>{{ $user->role->name }}</td>--}}
-                            {{--                                <td>{{ $user->status }}</td>--}}
-                            {{--                                <td>--}}
-                            {{--                                    <a href="/users/{{ $user->id }}/edit" class="d-none"><i--}}
-                            {{--                                            class="fas fa-user-edit mgr-10"></i></a>--}}
-                            {{--                                    <a data-user="{{ $user->id }}" class="delete-user pointer"><i--}}
-                            {{--                                            class="fas fa-trash-alt"></i></a>--}}
-                            {{--                                </td>--}}
-                            {{--                            </tr>--}}
-                            {{--                        @endforeach--}}
-                            {{--                        </tbody>--}}
-                            {{--                        <tfoot>--}}
-                            {{--                        <tr>--}}
-                            {{--                            <th>Picture</th>--}}
-                            {{--                            <th>Name</th>--}}
-                            {{--                            <th>Role</th>--}}
-                            {{--                            <th>Email</th>--}}
-                            {{--                            <th></th>--}}
-                            {{--                        </tr>--}}
-                            {{--                        </tfoot>--}}
                         </table>
                     </div>
                     <!-- /.card-body -->

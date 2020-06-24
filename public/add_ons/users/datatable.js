@@ -17,25 +17,26 @@ $(function () {
         searching: false,
         ajax: 'getUsers',
         columns: [
+            // {
+            //     data: 'id', name: 'id', orderable: false,
+            //     render: function (data, type, full, meta) {
+            //         return "<a href='" + APP_URL + "/users/" + data + "' class='align-center blue d-block'><i class='far fa-edit big-icon-fz'></i></a>";
+            //     }
+            // },
             {
-                data: 'id', name: 'id',
+                data: 'picture', name: 'picture', title: 'Image', orderable: false,
                 render: function (data, type, full, meta) {
-                    return "<a href='" + APP_URL + "/users/" + data + "' class='align-center blue d-block'><i class='far fa-edit big-icon-fz'></i></a>";
-                }
-            },
-            {
-                data: 'picture', name: 'picture',
-                render: function (data, type, full, meta) {
-                    return "<img src='" + data + "' height=50 class='round'/>";
+                    return "<div class='align-center'><img src='" + data + "' height=50 class='round'/></div>";
                 },
             },
-            {data: 'firstname', name: 'firstname'},
-            {data: 'lastname', name: 'lastname'},
-            {data: 'gender', name: 'gender'},
-            {data: 'email', name: 'email'},
-            {data: 'role', name: 'role.name'},
+            {data: 'firstname', name: 'firstname', title: 'Prénom', class: 'capitalize'},
+            {data: 'lastname', name: 'lastname', title: 'Nom', class: 'capitalize'},
+            // {data: 'gender', name: 'gender', title: 'Genre'},
+            {data: 'email', name: 'email', title: 'Email', class: 'capitalize'},
+            {data: 'role', name: 'role', title: 'Rôle', class: 'capitalize'},
             {
-                data: 'status', name: 'status', render: function (data, type, full, meta) {
+                data: 'status', name: 'status', title: 'Etat',
+                render: function (data, type, full, meta) {
                     return "<label for='status-" + full.id + "' class='m-0'>" +
                         "<input class='data-status d-none change-status' data-status='" + full.id + "' " +
                         "id='status-" + full.id + "' type='checkbox'" +
@@ -46,14 +47,18 @@ $(function () {
                 }
             },
             {
-                data: 'id', name: 'id',
+                data: 'id', name: 'id', title: 'Options', orderable: false,
                 render: function (data, type, full, meta) {
-                    return "<a data-user='" + data + "' class='delete-user blue pointer'>" +
-                        "<i class='fas fa-trash-alt'></i></a>";
+                    return "<div class='options'>" +
+                        "<a href='" + APP_URL + "/users/" + data + "' class='align-center blue d-inline-block'>" +
+                        "<i class='far fa-edit big-icon-fz'></i></a>" +
+                        "<a data-user='" + data + "' class='delete-user blue pointer align-center d-inline-block'>" +
+                        "<i class='fas fa-trash-alt big-icon-fz'></i></a>" +
+                        "</div>";
                 }
             },
         ],
-        order: [[0, "desc"]]
+        // order: [[0, "desc"]]
     });
     let element;
     $('#users-data').on('click', '.delete-user', function () {

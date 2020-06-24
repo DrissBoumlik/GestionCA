@@ -220,7 +220,7 @@ class UserController extends Controller
 //        $this->authorize('deleteUser', $user, auth()->user());
 
         if ($user->isInAdminGroup()) {
-            return response()->json(['message' => 'You can\'t delete Admin'], 401);
+            return response()->json(['message' => "Vous n'avez pas le droit de supprimer :<br>Admin / Super Admin"], 422);
         }
         $deleted = $user->delete();
         if ($deleted) {
