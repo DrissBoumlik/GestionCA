@@ -21,7 +21,9 @@ class UserController extends Controller
 
     public function getUsers(Request $request, YDT $dataTables)
     {
-        $users = User::with('role');
+        $users = User::whereHas('role', function ($query) {
+            $query->where('name', 'not like', 'superAdmin');
+        })->get();
         return DataTables::of($users)
             ->setRowId(function ($user) {
                 return 'user-' . $user->id;
