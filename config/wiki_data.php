@@ -21,7 +21,7 @@ return [
                         'title' => 'Résultats Appels',
                         'link' => '/dashboard#statsRegions',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -29,7 +29,7 @@ return [
                         'title' => 'Répartition des dossiers traités par périmètre',
                         'link' => '/dashboard#statsFolders',
                         'specifications' => [
-                            'content' => [],
+                            'content' => '',
                             'extra' => []
                         ]
                     ],
@@ -37,7 +37,7 @@ return [
                         'title' => 'Résultats Appels Préalables par agence',
                         'link' => '/dashboard#callsStatesAgencies',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -53,7 +53,7 @@ return [
                         'title' => 'Code Interventions liés aux RDV Confirmés (Clients Joignables)',
                         'link' => '/dashboard#statsCallsPos',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -69,7 +69,7 @@ return [
                         'title' => 'Répartition des dossiers non validés par Code Type intervention',
                         'link' => '/dashboard#statsFoldersByType',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -85,7 +85,7 @@ return [
                         'title' => 'Production Globale CAM',
                         'link' => '/dashboard#statsPerimeters',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -101,28 +101,91 @@ return [
                         'title' => 'Délai global de traitement OT',
                         'link' => '/dashboard#statsGlobalDelay',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
                     11 => [
-                        'title' => 'Délai de traitement BF5 et BF8',
-                        'link' => '/dashboard#statsProcessingDelay',
+                        'title' => 'Production d\'agent par groupement des appels',
+                        'link' => '/dashboard#statsAgentProd',
                         'specifications' => [
                             'content' => '',
                             'extra' => []
                         ]
                     ],
-//                    2 => [
+                ]
+            ],
+            1 => [
+                'pageTitle' => 'Appel préalable',
+                'items' => [
+                    0 => [
+                        'title' => 'Résultats Appels Préalables',
+                        'link' => '/dashboard/appels-pralables#statsCallsPrealable',
+                        'specifications' => [
+                            'content' => [],
+                            'extra' => []
+                        ]
+                    ]
+                    ,
+
+                    1 => [
+                        'title' => 'Résultats Appels Préalables par agence',
+                        'link' => '/dashboard/appels-pralables#callsStatesAgencies',
+                        'specifications' => [
+                            'content' => '',
+                            'extra' => []
+                        ]
+                    ]
+                    ,
+
+                    2 => [
+                        'title' => 'Résultats Appels Préalables par semaine',
+                        'link' => '/dashboard/appels-pralables#callsStatesWeeks',
+                        'specifications' => [
+                            'content' => [],
+                            'extra' => []
+                        ]
+                    ]
+                    ,
+
+                    3 => [
+                        'title' => 'Code Interventions liés aux RDV Confirmés (Clients Joignables)',
+                        'link' => '/dashboard/appels-pralables#statsCallsPos',
+                        'specifications' => [
+                            'content' => '',
+                            'extra' => []
+                        ]
+                    ]
+                    ,
+
+                    4 => [
+                        'title' => 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)',
+                        'link' => '/dashboard/appels-pralables#statsCallsNeg',
+                        'specifications' => [
+                            'content' => [],
+                            'extra' => []
+                        ]
+                    ]
+                    ,
+
+                    5 => [
+                        'title' => 'Global Résultat Appels Préalables',
+                        'link' => '/dashboard/appels-pralables#CallResultPrealable',
+                        'specifications' => [
+                            'content' => '',
+                            'extra' => []
+                        ]
+                    ]
+                    ,
+                ]
+            ]
+
+        ]
+    ]
+    //                    2 => [
 //                        'specifications' => [
-//                            'content' => '',
+//                            'content' => [],
 //                            'extra' => []
 //                        ]
 //                    ],
-                ]
-            ],
-
-        ]
-
-    ]
 ];

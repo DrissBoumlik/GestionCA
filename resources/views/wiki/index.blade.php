@@ -32,59 +32,55 @@
 @section('content')
     <div class="container-fluid">
         <div class="wiki py-5 px-3">
-            <div class="container">
-                <div class="row">
-                    @foreach ($wikiData as $page)
-                        <div class="pages">
-                            <div class="col-12">
-                                <div class="header">
-                                    <h3 class="capitalize mb-2"><i class="fas fa-file-alt"></i> Page : {{ $page['pageTitle'] }}</h3>
-                                </div>
-                                <div class="body">
-                                    @foreach ($page['items'] as $item)
-                                        <div class="card p-3 pb-4">
-                                            <div class="card-header pb-2">
-                                                <div class="table-title">
-                                                    <span class="font-weight-bold">
-                                                        <h4 class="mb-2 capitalize d-inline-block"><i class="fas fa-tasks"></i> {{ $item['title'] }}</h4>
-                                                    </span> -
-                                                    <a href="{{ url('/') . $item['link'] }}" target="_blank" class="underline table-link">Lien</a>
+            <div class="pages">
+                <div class="container">
+                    <div class="row">
+                        @php $faker = Faker\Factory::create(); @endphp
+                        @foreach ($wikiData as $page)
+                            <div class="page mb-4 mt-3">
+                                <div class="col-12">
+                                    <div class="header">
+                                        <h3 class="capitalize mb-2"><i class="fas fa-file-alt"></i> Page
+                                            : {{ $page['pageTitle'] }}</h3>
+                                    </div>
+                                    <div class="body">
+                                        @foreach ($page['items'] as $item)
+                                            <div class="card pt-3 ml-4">
+                                                <div class="card-header pb-2">
+                                                    <div class="table-title">
+                                                        <h4 class="font-weight-bold mb-2 capitalize d-inline-block">
+                                                            <i class="fas fa-tasks"></i> {{ $item['title'] }}</h4>
+                                                        -
+                                                        <a href="{{ url('/') . $item['link'] }}" target="_blank"
+                                                           class="underline table-link">Lien <i class="fas fa-external-link-alt icon-link"></i></a>
+                                                    </div>
                                                 </div>
+                                                <!-- /.card-header -->
+                                                <div class="card-body ml-4">
+                                                    <span class="rules">
+                                                        <h5 class="mb-2 capitalize">spécifications</h5>
+                                                    </span>
+                                                    @foreach ($item['specifications'] as $key => $rule)
+                                                        @if (!is_array($rule) && $key == 'content')
+                                                            <p>{{ $faker->text(200) }}</p>
+                                                        @elseif ($key == 'content')
+                                                            <ul class="rules-list pl-4">
+                                                                @for ($i = 0; $i < 2; $i++)
+                                                                    <li class="">{{ $faker->text(100) }}</li>
+                                                                @endfor
+                                                            </ul>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                                <!-- /.card-body -->
                                             </div>
-                                            <!-- /.card-header -->
-                                            <div class="card-body">
-                                                <span class="rules">
-                                                    <h5 class="mb-2 capitalize">spécifications</h5>
-                                                </span>
-                                                @foreach ($item['specifications'] as $key => $rule)
-                                                    @if (!is_array($rule) && $key == 'content')
-{{--                                                        !is_array($rule))--}}
-                                                        <p>{{ file_get_contents('https://loripsum.net/api/plaintext/short/1') }}</p>
-                                                    @elseif($key == 'content')
-                                                        <ul>
-                                                        @for ($i = 0; $i < 2; $i++)
-                                                            <li>{{ file_get_contents('https://loripsum.net/api/plaintext/short/1') }}</li>
-                                                        @endfor
-                                                        </ul>
-{{--                                                        <hr>--}}
-{{--                                                        <h5 class="mb-2 capitalize">spécifications supplementaires</h5>--}}
-{{--                                                        @if (is_array($rule))--}}
-{{--                                                            <p>{{ $key }}</p>--}}
-{{--                                                            @foreach ($rule as $user)--}}
-
-{{--                                                            @endforeach--}}
-{{--                                                        @endif--}}
-                                                    @endif
-                                                @endforeach
-                                            </div>
-                                            <!-- /.card-body -->
-                                        </div>
-{{--                                        @break(true)--}}
-                                    @endforeach
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                            <hr class="w-100">
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
