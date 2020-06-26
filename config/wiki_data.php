@@ -178,6 +178,123 @@ return [
                     ]
                     ,
                 ]
+            ],
+            2 => [
+                'pageTitle' => 'Clôture OT & Traitement BL',
+                'items' => [
+                    0 => [
+                        'title' => 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement',
+                        'link' => '/dashboard/	appels-clture#statsCallsCloture',
+                        'specifications' => [
+                            'content' => '',
+                            'extra' => []
+                        ]
+                    ],
+                    1 => [
+                        'title' => 'Répartition des dossiers non validés par Code Type intervention',
+                        'link' => '/dashboard/	appels-clture#statsFoldersByType',
+                        'specifications' => [
+                            'content' => '',
+                            'extra' => []
+                        ]
+                    ],
+                    2 => [
+                        'title' => 'Répartition des dossiers non validés par code intervention',
+                        'link' => '/dashboard/	appels-clture#statsFoldersByCode',
+                        'specifications' => [
+                            'content' => '',
+                            'extra' => []
+                        ]
+                    ],
+                    3 => [
+                        'title' => 'Délai de validation post solde',
+                        'link' => '/dashboard/	appels-clture#statsColturetech',
+                        'specifications' => [
+                            'content' => '',
+                            'extra' => []
+                        ]
+                    ],
+                    4 => [
+                        'title' => 'Délai global de traitement OT',
+                        'link' => '/dashboard/	appels-clture#statsGlobalDelay',
+                        'specifications' => [
+                            'content' => '',
+                            'extra' => []
+                        ]
+                    ],
+                    5 => [
+                        'title' => 'Résultat Validation par Type Intervention',
+                        'link' => '/dashboard/	appels-clture#statsValTypeIntervention',
+                        'specifications' => [
+                            'content' => '',
+                            'extra' => []
+                        ]
+                    ],
+                    6 => [
+                        'title' => 'Répartition Codes Intervention par Type Intervention',
+                        'link' => '/dashboard/	appels-clture#statsRepTypeIntervention',
+                        'specifications' => [
+                            'content' => '',
+                            'extra' => []
+                        ]
+                    ],
+
+                ]
+            ],
+            3 => [
+                'pageTitle' => 'Appel GEM',
+                'items' => [
+                    0 => [
+                        'title' => 'Résultats Appels GEM',
+                        'link' => '/dashboard/appels-gem#statsCallsGem',
+                        'specifications' => [
+                            'content' => '',
+                            'extra' => []
+                        ]
+                    ],
+                    1 => [
+                        'title' => 'Résultats Appels Préalables par agence',
+                        'link' => '/dashboard/appels-gem#callsStatesAgencies',
+                        'specifications' => [
+                            'content' => '',
+                            'extra' => []
+                        ]
+                    ],
+                    2 => [
+                        'title' => 'Résultats Appels Préalables par semaine',
+                        'link' => '/dashboard/appels-gem#callsStatesWeeks',
+                        'specifications' => [
+                            'content' => '',
+                            'extra' => []
+                        ]
+                    ],
+
+                ]
+            ],
+            4 => [
+                'pageTitle' => 'Appel CAM',
+                'items' => [
+                    0 => [
+                        'title' => 'Production Globale CAM',
+                        'link' => '/dashboard/production_globale_cam#statsPerimeters',
+                        'specifications' => [
+                            'content' => [],
+                            'extra' => []
+                        ]
+                    ]
+                ]
+            ],
+            5 => [
+                'pageTitle' => 'Traitement assistance',
+                'items' => [
+                    0 => [
+                        'title' => 'Délai de traitement BF5 et BF8',
+                        'link' => '/dashboard/traitement-assistance#statsProcessingDelay',
+                        'specifications' => [
+                            'content' => '', 'extra' => []
+                        ]
+                    ],
+                ]
             ]
 
         ]

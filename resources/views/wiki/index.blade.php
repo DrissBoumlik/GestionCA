@@ -40,19 +40,25 @@
                             <div class="page mb-4 mt-3">
                                 <div class="col-12">
                                     <div class="header">
-                                        <h3 class="capitalize mb-2"><i class="fas fa-file-alt"></i> Page
+                                        <h3 class="capitalize mb-2"><i class="fas fa-file-alt pr-2"></i> Page
                                             : {{ $page['pageTitle'] }}</h3>
                                     </div>
                                     <div class="body">
-                                        @foreach ($page['items'] as $item)
+                                        @foreach ($page['items'] as $key => $item)
                                             <div class="card pt-3 ml-4">
                                                 <div class="card-header pb-2">
                                                     <div class="table-title">
                                                         <h4 class="font-weight-bold mb-2 capitalize d-inline-block">
-                                                            <i class="fas fa-tasks"></i> {{ $item['title'] }}</h4>
-                                                        -
+{{--                                                            <i class="fas fa-table medium-icon"></i>--}}
+                                                            <i class="fas fa-angle-right pr-2"></i>
+                                                            {{ $item['title'] }}</h4>
+                                                        <span class="separator px-2">|</span>
+{{--                                                        <i class="fas fa-long-arrow-alt-right px-2"></i>--}}
                                                         <a href="{{ url('/') . $item['link'] }}" target="_blank"
-                                                           class="underline table-link">Lien <i class="fas fa-external-link-alt icon-link"></i></a>
+                                                           class="underline table-link">Lien
+                                                            <i class="fas fa-link icon-link"></i>
+                                                            {{--                                                            <i class="fas fa-external-link-alt icon-link"></i>--}}
+                                                        </a>
                                                     </div>
                                                 </div>
                                                 <!-- /.card-header -->
