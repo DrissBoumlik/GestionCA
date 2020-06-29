@@ -44,6 +44,8 @@
                         <span class="nav-main-link-name">Utilisateurs</span>
                     </a>
                 </li>
+            @endif
+            @if(isSuperAdmin())
                 <li class="nav-main-item">
                     <a class="nav-main-link{{ (request()->is('roles') || request()->is('roles/*')) ? ' active' : '' }}"
                        href="{{ route('roles.index') }}">
@@ -51,6 +53,8 @@
                         <span class="nav-main-link-name">Rôles</span>
                     </a>
                 </li>
+            @endif
+            @if(isInAdminGroup())
                 <li class="nav-main-item{{ request()->is('agences') ? ' open' : '' }}">
                     <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                         <i class="nav-main-link-icon fas fa-building"></i>

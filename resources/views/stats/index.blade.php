@@ -113,7 +113,7 @@
                         <!-- /.card-header -->
                         <div class="card-body table-responsive">
                             <table id="stats"
-                                   class="table table-bordered table-striped table-valign-middle capitalize">
+                                   class="not-stats-table table table-bordered table-striped table-valign-middle capitalize">
                                 <thead>
                                 <tr>
                                     <th>Type Note</th>

@@ -41,16 +41,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body table-responsive">
-                        <table id="roles-data" class="table table-bordered table-striped table-valign-middle capitalize">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th>Nom</th>
-                                <th>Description</th>
-                                <th>Utilisateurs</th>
-                                <th>Options</th>
-                            </tr>
-                            </thead>
+                        <table id="roles-data" class="not-stats-table table table-bordered table-striped table-valign-middle capitalize">
                         </table>
                     </div>
                     <!-- /.card-body -->

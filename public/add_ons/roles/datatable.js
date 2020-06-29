@@ -8,20 +8,13 @@ $(function () {
         searching: false,
         ajax: 'getRoles',
         columns: [
+            {data: 'name', name: 'name', title: 'Nom', class: 'capitalize'},
+            {data: 'description', name: 'description', title: 'Description', class: 'capitalize'},
+            {data: 'users_count', name: 'users_count', title: 'Utilisateurs', class: 'capitalize'},
             {
-                data: 'id', name: 'id',
+                data: 'id', name: 'id', title: 'Options',
                 render: function (data, type, full, meta) {
                     return `<a href="${APP_URL}/roles/${data}" class="align-center blue d-block"><i class="far fa-edit big-icon-fz"></i></a>`;
-                }
-            },
-            {data: 'name', name: 'name', class: 'capitalize'},
-            {data: 'description', name: 'description', class: 'capitalize'},
-            {data: 'users_count', name: 'users_count', class: 'capitalize'},
-            {
-                data: 'id', name: 'id',
-                render: function (data, type, full, meta) {
-                    return "<a data-role='" + data + "' class='delete-role blue pointer'>" +
-                        "<i class='fas fa-trash-alt'></i></a>";
                 }
             },
         ]

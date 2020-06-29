@@ -48,7 +48,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive">
-                        <table id="users-data" class="table table-bordered table-striped table-valign-middle">
+                        <table id="users-data" class="not-stats-table table table-bordered table-striped table-valign-middle">
                         </table>
                     </div>
                     <!-- /.card-body -->
