@@ -25,29 +25,6 @@
                 <i class="si si-grid"></i>
             </button>
             <!-- END Apps Modal -->
-
-            <!-- Open Search Section (visible on smaller screens) -->
-            <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-{{--            <button type="button" class="btn btn-sm btn-dual d-sm-none d-none" data-toggle="layout"--}}
-{{--                    data-action="header_search_on">--}}
-{{--                <i class="si si-magnifier"></i>--}}
-{{--            </button>--}}
-{{--            <!-- END Open Search Section -->--}}
-
-{{--            <!-- Search Form (visible on larger screens) -->--}}
-{{--            <form class="d-none d-sm-inline-block d-none" action="/dashboard" method="POST">--}}
-{{--                @csrf--}}
-{{--                <div class="input-group input-group-sm">--}}
-{{--                    <input type="text" class="form-control form-control-alt" placeholder="Search.."--}}
-{{--                           id="page-header-search-input2" name="page-header-search-input2">--}}
-{{--                    <div class="input-group-append">--}}
-{{--                        <span class="input-group-text bg-body border-0">--}}
-{{--                            <i class="si si-magnifier"></i>--}}
-{{--                        </span>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </form>--}}
-            <!-- END Search Form -->
         </div>
         <!-- END Left Section -->
 
@@ -70,14 +47,6 @@
                     </div>
                     <div class="p-2">
                         <h5 class="dropdown-header text-uppercase">Utilisateur</h5>
-{{--                        <a class="dropdown-item d-flex align-items-center justify-content-between"--}}
-{{--                           href="javascript:void(0)">--}}
-{{--                            <span>Inbox</span>--}}
-{{--                            <span>--}}
-{{--                                <span class="badge badge-pill badge-primary">3</span>--}}
-{{--                                <i class="si si-envelope-open ml-1"></i>--}}
-{{--                            </span>--}}
-{{--                        </a>--}}
                         <a class="dropdown-item d-flex align-items-center justify-content-between"
                            href="{{ route('users.show', Auth::user()->id) }}">
                             <span>Profil</span>
@@ -85,18 +54,6 @@
                                 <i class="si si-user ml-1"></i>
                             </span>
                         </a>
-{{--                        <a class="dropdown-item d-flex align-items-center justify-content-between"--}}
-{{--                           href="javascript:void(0)">--}}
-{{--                            <span>Settings</span>--}}
-{{--                            <i class="si si-settings"></i>--}}
-{{--                        </a>--}}
-{{--                        <div role="separator" class="dropdown-divider"></div>--}}
-{{--                        <h5 class="dropdown-header text-uppercase">Actions</h5>--}}
-{{--                        <a class="dropdown-item d-flex align-items-center justify-content-between"--}}
-{{--                           href="javascript:void(0)">--}}
-{{--                            <span>Lock Account</span>--}}
-{{--                            <i class="si si-lock ml-1"></i>--}}
-{{--                        </a>--}}
                         <a class="dropdown-item d-flex align-items-center justify-content-between"
                            href="{{ route('logout') }}"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

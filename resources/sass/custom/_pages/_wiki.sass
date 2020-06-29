@@ -1,6 +1,24 @@
 .wiki
   background-color: $white
-
+  .wiki-wrapper
+    position: relative
+  .wiki-summary-wrapper
+    position: absolute
+    right: 30px
+  .wiki-summary
+    width: 350px
+    position: fixed
+    opacity: 0.2
+    top: 50%
+    border-radius: 5px
+    z-index: 1000
+    color: #1f1f1f
+    background-color: #FAFAFA
+    transform: translate(100%, -50%)
+    transition: opacity .5s ease, transform .5s ease
+    &.visible
+      opacity: 1
+      transform: translate(-60%, -50%)
   .card
     //padding: 0.75rem 1.25rem
     border: none
@@ -8,17 +26,17 @@
       padding: 0
       background-color: transparent
       border: none
-      .table-link
-        color: $white
-        background-color: #5c80d1
-        padding: 5px
-        display: inline-block
-        word-break: keep-all
-        .icon-link
-          margin-left: 5px
-          font-size: .7rem
-          position: relative
-          top: -2px
+  .table-link
+    color: $white
+    background-color: #5c80d1
+    padding: 5px
+    display: inline-block
+    word-break: keep-all
+    .icon-link
+      margin-left: 5px
+      font-size: .7rem
+      position: relative
+      top: -2px
       .separator
         font-weight: 700
         top: -2px

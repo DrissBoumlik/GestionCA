@@ -15,7 +15,8 @@ return [
     'wiki_data' => [
         'pages' => [
             0 => [
-                'pageTitle' => 'dashboard',
+                'pageTitle' => 'Dashboard',
+                'pageLink' => '/dashboard',
                 'items' => [
                     0 => [
                         'title' => 'Résultats Appels',
@@ -29,7 +30,7 @@ return [
                         'title' => 'Répartition des dossiers traités par périmètre',
                         'link' => '/dashboard#statsFolders',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -45,7 +46,7 @@ return [
                         'title' => 'Résultats Appels Préalables par semaine',
                         'link' => '/dashboard#callsStatesWeeks',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -61,7 +62,7 @@ return [
                         'title' => 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)',
                         'link' => '/dashboard#statsCallsNeg',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -77,7 +78,7 @@ return [
                         'title' => 'Répartition des dossiers non validés par code intervention',
                         'link' => '/dashboard#statsFoldersByCode',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -93,7 +94,7 @@ return [
                         'title' => 'Délai de validation post solde',
                         'link' => '/dashboard#statsColturetech',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -109,7 +110,7 @@ return [
                         'title' => 'Production d\'agent par groupement des appels',
                         'link' => '/dashboard#statsAgentProd',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -117,6 +118,7 @@ return [
             ],
             1 => [
                 'pageTitle' => 'Appel préalable',
+                'pageLink' => '/dashboard/appels-pralables',
                 'items' => [
                     0 => [
                         'title' => 'Résultats Appels Préalables',
@@ -125,19 +127,16 @@ return [
                             'content' => [],
                             'extra' => []
                         ]
-                    ]
-                    ,
+                    ],
 
                     1 => [
                         'title' => 'Résultats Appels Préalables par agence',
                         'link' => '/dashboard/appels-pralables#callsStatesAgencies',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
-                    ]
-                    ,
-
+                    ],
                     2 => [
                         'title' => 'Résultats Appels Préalables par semaine',
                         'link' => '/dashboard/appels-pralables#callsStatesWeeks',
@@ -145,19 +144,15 @@ return [
                             'content' => [],
                             'extra' => []
                         ]
-                    ]
-                    ,
-
+                    ],
                     3 => [
                         'title' => 'Code Interventions liés aux RDV Confirmés (Clients Joignables)',
                         'link' => '/dashboard/appels-pralables#statsCallsPos',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
-                    ]
-                    ,
-
+                    ],
                     4 => [
                         'title' => 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)',
                         'link' => '/dashboard/appels-pralables#statsCallsNeg',
@@ -165,76 +160,74 @@ return [
                             'content' => [],
                             'extra' => []
                         ]
-                    ]
-                    ,
-
+                    ],
                     5 => [
                         'title' => 'Global Résultat Appels Préalables',
                         'link' => '/dashboard/appels-pralables#CallResultPrealable',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
-                    ]
-                    ,
+                    ],
                 ]
             ],
             2 => [
                 'pageTitle' => 'Clôture OT & Traitement BL',
+                'pageLink' => '/dashboard/appels-clture',
                 'items' => [
                     0 => [
                         'title' => 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement',
-                        'link' => '/dashboard/	appels-clture#statsCallsCloture',
+                        'link' => '/dashboard/appels-clture#statsCallsCloture',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
                     1 => [
                         'title' => 'Répartition des dossiers non validés par Code Type intervention',
-                        'link' => '/dashboard/	appels-clture#statsFoldersByType',
+                        'link' => '/dashboard/appels-clture#statsFoldersByType',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
                     2 => [
                         'title' => 'Répartition des dossiers non validés par code intervention',
-                        'link' => '/dashboard/	appels-clture#statsFoldersByCode',
+                        'link' => '/dashboard/appels-clture#statsFoldersByCode',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
                     3 => [
                         'title' => 'Délai de validation post solde',
-                        'link' => '/dashboard/	appels-clture#statsColturetech',
+                        'link' => '/dashboard/appels-clture#statsColturetech',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
                     4 => [
                         'title' => 'Délai global de traitement OT',
-                        'link' => '/dashboard/	appels-clture#statsGlobalDelay',
+                        'link' => '/dashboard/appels-clture#statsGlobalDelay',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
                     5 => [
                         'title' => 'Résultat Validation par Type Intervention',
-                        'link' => '/dashboard/	appels-clture#statsValTypeIntervention',
+                        'link' => '/dashboard/appels-clture#statsValTypeIntervention',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
                     6 => [
                         'title' => 'Répartition Codes Intervention par Type Intervention',
-                        'link' => '/dashboard/	appels-clture#statsRepTypeIntervention',
+                        'link' => '/dashboard/appels-clture#statsRepTypeIntervention',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -243,12 +236,13 @@ return [
             ],
             3 => [
                 'pageTitle' => 'Appel GEM',
+                'pageLink' => '/dashboard/appels-gem',
                 'items' => [
                     0 => [
                         'title' => 'Résultats Appels GEM',
                         'link' => '/dashboard/appels-gem#statsCallsGem',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -256,7 +250,7 @@ return [
                         'title' => 'Résultats Appels Préalables par agence',
                         'link' => '/dashboard/appels-gem#callsStatesAgencies',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -264,7 +258,7 @@ return [
                         'title' => 'Résultats Appels Préalables par semaine',
                         'link' => '/dashboard/appels-gem#callsStatesWeeks',
                         'specifications' => [
-                            'content' => '',
+                            'content' => [],
                             'extra' => []
                         ]
                     ],
@@ -273,6 +267,7 @@ return [
             ],
             4 => [
                 'pageTitle' => 'Appel CAM',
+                'pageLink' => '/dashboard/production_globale_cam',
                 'items' => [
                     0 => [
                         'title' => 'Production Globale CAM',
@@ -286,14 +281,15 @@ return [
             ],
             5 => [
                 'pageTitle' => 'Traitement assistance',
+                'pageLink' => '/dashboard/traitement-assistance',
                 'items' => [
                     0 => [
                         'title' => 'Délai de traitement BF5 et BF8',
                         'link' => '/dashboard/traitement-assistance#statsProcessingDelay',
                         'specifications' => [
-                            'content' => '', 'extra' => []
+                            'content' => [], 'extra' => []
                         ]
-                    ],
+                    ]
                 ]
             ]
 
