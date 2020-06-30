@@ -6,6 +6,7 @@ use App\Models\Permission;
 use App\Models\PermissionRole;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables as YDT;
 use Yajra\DataTables\Facades\DataTables;
@@ -20,7 +21,10 @@ class RoleController extends Controller
     public function index()
     {
         // Authorization
-        $this->authorize('view', auth()->user());
+        $user = getAuthUser();
+        if (!$user->isSuperAdmin()) {
+            throw new AuthorizationException();
+        }
 
         return view('roles.index');
     }
@@ -129,13 +133,13 @@ class RoleController extends Controller
 
     public function destroy(Role $role)
     {
-        // Authorization
-        $this->authorize('delete', auth()->user());
-
-        $deleted = $role->delete();
-        if ($deleted) {
-            return response()->json(['message' => 'Role Deleted Successfully'], 200);
-        }
-        return response()->json(['message' => 'Un problème est survenue'], 422);
+//        // Authorization
+//        $this->authorize('delete', auth()->user());
+//
+//        $deleted = $role->delete();
+//        if ($deleted) {
+//            return response()->json(['message' => 'Role Deleted Successfully'], 200);
+//        }
+//        return response()->json(['message' => 'Un problème est survenue'], 422);
     }
 }

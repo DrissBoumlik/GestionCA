@@ -215,9 +215,9 @@ frLang = {
                                 //         notLink = 'not-link';
                                 // }
                                 // return '<span class="' + rowClass + ' ' + classHasTotalCol + ' ' + removeLinkCol + ' ' + notLink + '">' + newData + '<\span>';
-                                let cellClass = 'clickable';
+                                let cellClass = 'clickable d-block';
                                 if (column.isLink === false || full.isTotal) {
-                                    cellClass = '';
+                                    cellClass = 'd-block';
                                 }
                                 return '<span class="' + cellClass + '">' + newData + '<\span>';
                             }

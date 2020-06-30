@@ -1,14 +1,13 @@
-.table th, .table td
-    padding: .3rem!important
+.table
+    th, td
+        padding: .3rem!important
 
-.table.table-valign-middle tbody > tr > td,
-.table.table-valign-middle tbody > tr > th,
-.table.table-valign-middle thead > tr > td,
-.table.table-valign-middle thead > tr > th
-    vertical-align: middle
+    &.table-valign-middle tbody > tr
+        > td, > th, > td, > th
+            vertical-align: middle
 
-.table.capitalize thead > tr > th
-    text-transform: capitalize
+    &.capitalize thead > tr > th
+        text-transform: capitalize
 
 td.details-control
     cursor: pointer
@@ -17,17 +16,16 @@ td.details-control
 .details td.details-control, .shown .details-control
     background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center
 
-.table-striped tbody tr:nth-of-type(odd)
-    background-color: #DDEBF7
-
-.table-striped tbody tr
-    background-color: #FFF!important
-
-.table-striped tbody tr.odd
-    background-color: #DDEBF7!important
-
-.table-striped tbody tr.even
-    background-color: #FFF!important
+.table-striped
+    tbody
+        tr
+            background-color: #FFF!important
+            &:nth-of-type(odd)
+                background-color: #DDEBF7
+            &.odd
+                background-color: #DDEBF7!important
+            &.even
+                background-color: #FFF!important
 
 
 .table-details
@@ -64,10 +62,20 @@ tr + tr .table-details
 //.not-link
 //    cursor: default!important
 //    text-decoration: none!important
+
+.table td
+    &:not(.details-control)
+        pointer-events: none
+    &:hover:not([colspan]):not(.details-control), &:hover:not([colspan]):not(.details-control) *
+        color: #fff
+        background-color: #5c80d1
 span.clickable
     cursor: pointer
     text-decoration: underline
+    pointer-events: auto
 
 .options
     display: flex
     justify-content: space-evenly
+.table.not-stats-table td
+    pointer-events: auto

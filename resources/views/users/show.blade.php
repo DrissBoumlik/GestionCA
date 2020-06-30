@@ -56,7 +56,10 @@
 @endsection
 @section('content')
     <div class="user-profile profile">
-        @php $isInAdminGroup = isInAdminGroup() @endphp
+        @php
+            $isInAdminGroup = isInAdminGroup();
+            $isSuperAdmin = isSuperAdmin()
+        @endphp
         <form method="POST" action="{{ route('users.update', $user->id) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
@@ -154,7 +157,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if($isInAdminGroup)
+                                @if($isSuperAdmin)
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-4">

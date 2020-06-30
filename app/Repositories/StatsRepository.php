@@ -179,6 +179,7 @@ class StatsRepository
             ->distinct()
             ->whereNotNull('Nom_Region')
             ->where('Resultat_Appel', 'not like', '=%')
+            ->where('Resultat_Appel', 'not like', '%Notification par SMS%')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
             ->whereNull('isNotReady');
@@ -371,6 +372,7 @@ class StatsRepository
             ->select('Nom_Region')
             ->distinct()
             ->where('Resultat_Appel', 'not like', '=%')
+            ->where('Resultat_Appel', 'not like', '%Notification par SMS%')
             ->whereNotNull('Nom_Region')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
