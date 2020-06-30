@@ -4257,10 +4257,10 @@ class StatsRepository
         $month = 0;
         if(!empty($filter->date_filter)){
             foreach ($filter->date_filter as $filterdate) {
-                $year = 'SUBSTRING_INDEX(SUBSTRING_INDEX("' . $filterdate . '","-", 1),"-",-1)';
-                $month = 'CONVERT(SUBSTRING_INDEX(SUBSTRING_INDEX("' . $filterdate . '","-", 2),"-",-1), UNSIGNED INTEGER)';
-                $week = '"-S", week("' . $filterdate . '")+1)';
-                $querydate .= 'if(agents.imported_at_semaine is null,concat(' . $year . ',"-",' . $month . '),concat(' . $year . ',"-",' . $month . ','.$week.'),' ;
+                $year = '"'.explode('-',$filterdate)[0].'"';
+                $month = '"'.(int)explode('-',$filterdate)[1].'"';
+                $week = '"-S","'.Carbon::parse($filterdate)->weekOfYear.'"';
+                $querydate .= 'if(agents.imported_at_semaine is null,concat(' . $year . ',"-",' . $month . '),concat(' . $year . ',"-",' . $month . ','.$week.')),' ;
             }
             $querydate = substr($querydate, 0, -1);
         }else{

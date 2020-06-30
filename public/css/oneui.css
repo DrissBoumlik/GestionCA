@@ -25745,6 +25745,11 @@ span.clickable {
   text-decoration: underline;
 }
 
+.options {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 .box-wrapper .box-container .box-content .box-content-wrapper {
   border-radius: 10px;
   padding: 20px;
