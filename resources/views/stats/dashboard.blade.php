@@ -580,7 +580,7 @@
                                 <div class="card-body table-responsive">
                                     <div class="row justify-content-center">
                                         <div class="col-6 text-center">
-                                            <a href="{{ URL::route('agentProdExport', array('agence' => $agence)) }}"
+                                            <a id = 'exportAgentProdDataExcel' style="color: #ffffff"
                                                  class="btn btn-primary mb-3 capitalize-first-letter bg-green w-100">
                                                  exporter des données au format Excel
                                             </a>

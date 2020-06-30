@@ -930,6 +930,11 @@ $(function () {
             });
         }
     });
+
+
+    $("#exportAgentProdDataExcel").on("click", function (e) {
+        window.location.replace(APP_URL+'/Export/agentProdExport?dates='+statsAgentProd.filterTree.dates);
+    });
     //</editor-fold>
     $("#printElement").on("click", function () {
 
