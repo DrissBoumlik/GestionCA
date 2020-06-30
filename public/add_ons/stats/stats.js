@@ -932,8 +932,8 @@ $(function () {
     });
 
 
-    $("#exportAgentProdDataExcel").on("click", function (e) {
-        window.location.replace(APP_URL+'/Export/agentProdExport?dates='+statsAgentProd.filterTree.dates+'&refreshMode=true');
+    $("#exportAgentProdDataExcel").on("click", function () {
+        window.location.replace(APP_URL+'/Export/agentProdExport?refreshMode=true&dates='+statsAgentProd.filterTree.dates);
     });
     //</editor-fold>
     $("#printElement").on("click", function () {

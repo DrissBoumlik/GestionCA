@@ -216,6 +216,9 @@ if (!function_exists('makeFilterSubQuery')) {
         $queryFilters = null;
         $filterSaved = false;
         if ($request->exists('refreshMode')) {
+            if(!is_array($dates)){
+                $dates = explode(',',$dates);
+            }
             $dates = $dates ? array_values($dates) : null;
             $rowsFilter = $rowsFilter ? array_values($rowsFilter) : null;
             $filter->date_filter = $dates;
