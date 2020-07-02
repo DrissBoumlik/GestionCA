@@ -134,9 +134,8 @@ if (!function_exists('getStats')) {
         $queryGroupBy = $request->queryGroupBy;
         $appCltquery = $request->appCltquery;
         $parentValue = $request->parentValue;
-        if(!$col && !$row){
-            $subGroupBy = ' GROUP BY Id_Externe,utilisateur ) groupedst';
-        }
+        $agentMode = (!$col && !$row) ? true : false;
+
         $key_groupement = $request->get('key_groupement');
         $key_groupement = $key_groupement ? clean($key_groupement) : null;
         $allStats = null;
@@ -157,25 +156,38 @@ if (!function_exists('getStats')) {
                 ' group by Id_Externe'
             );
         } else {
-            $allStats = DB::select('SELECT * FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
-                ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
-                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
-                (($row && $rowValue && $row !== 'Gpmt_Appel_Pre') ? ' and ' . $row . ' like "' . $rowValue . '%"' : ' ') .
-                ($col && $colValue && $col !== 'Gpmt_Appel_Pre' ? ' and ' . $col . ' like "' . $colValue . '%"' : ($col && $col !== 'Gpmt_Appel_Pre' ? ' and ' . $col . ' is null ' : ' ')) .
-                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
-                ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
-                ' and Resultat_Appel not like "=%" ' .
-                ($queryJoin ?? '') . ' ' . ($subGroupBy ?? ' GROUP BY Id_Externe ) groupedst')
-                . ' on st.Id_Externe = groupedst.Id_Externe and st.Date_Heure_Note = groupedst.MaxDateTime where Nom_Region is not null ' .
-                ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
-                ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
-                ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '%"' : ' ') .
-                ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '%"' : ($col ? ' and ' . $col . ' is null ' : ' ')) .
-                ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
-                ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
-                ' and Resultat_Appel not like "=%" ' .
-                ($queryJoin ?? '') . ' ' . ($queryGroupBy ?? ' ')
-            );
+            if($agentMode){
+                $allStats = DB::select('SELECT * FROM stats AS st where Nom_Region is not null ' .
+                    ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
+                    ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
+                    ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '%"' : ' ') .
+                    ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '%"' : ($col ? ' and ' . $col . ' is null ' : ' ')) .
+                    ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
+                    ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
+                    ' and Resultat_Appel not like "=%" ' .
+                    ($queryJoin ?? '') . ' ' . ($queryGroupBy ?? ' ')
+                );
+            }else{
+                $allStats = DB::select('SELECT * FROM stats AS st INNER JOIN (SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats  where Nom_Region is not null ' .
+                    ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
+                    ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
+                    (($row && $rowValue && $row !== 'Gpmt_Appel_Pre') ? ' and ' . $row . ' like "' . $rowValue . '%"' : ' ') .
+                    ($col && $colValue && $col !== 'Gpmt_Appel_Pre' ? ' and ' . $col . ' like "' . $colValue . '%"' : ($col && $col !== 'Gpmt_Appel_Pre' ? ' and ' . $col . ' is null ' : ' ')) .
+                    ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
+                    ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
+                    ' and Resultat_Appel not like "=%" ' .
+                    ($queryJoin ?? '') . ' ' . ($subGroupBy ?? ' GROUP BY Id_Externe ) groupedst')
+                    . ' on st.Id_Externe = groupedst.Id_Externe and st.Date_Heure_Note = groupedst.MaxDateTime where Nom_Region is not null ' .
+                    ($agentName ? 'and Utilisateur like "' . $agentName . '" ' : ' ') .
+                    ($agenceCode ? 'and Nom_Region like "%' . $agenceCode . '" ' : ' ') .
+                    ($row && $rowValue ? ' and ' . $row . ' like "' . $rowValue . '%"' : ' ') .
+                    ($col && $colValue ? ' and ' . $col . ' like "' . $colValue . '%"' : ($col ? ' and ' . $col . ' is null ' : ' ')) .
+                    ($dates ? ' and Date_Note in ("' . str_replace(',', '","', $dates) . '")' : ' and Date_Heure_Note_Mois = MONTH(NOW()) and Date_Heure_Note_Annee = YEAR(NOW())') .
+                    ($key_groupement ? ' and key_groupement like "' . $key_groupement . '"' : '') .
+                    ' and Resultat_Appel not like "=%" ' .
+                    ($queryJoin ?? '') . ' ' . ($queryGroupBy ?? ' ')
+                );
+            }
         }
         return $allStats;
     }
