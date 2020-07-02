@@ -106,7 +106,7 @@ if (!function_exists('getStats')) {
         $agenceCode = $request->agence ?? $request->agence_code;
         $queryJoin = $request->queryJoin;
 
-        $allStatsFilter = Filter::firstOrCreate(['user_id' => getAuthUser()->id, 'isGlobal' => 2]);
+        $allStatsFilter = Filter::firstOrCreate(['user_id' => getAuthUser()->id, 'isGlobal' => 1]);
         if ($request->dates) {
             $dates = $request->dates;
 //            $allStatsFilter = Filter::updateOrCreate([
