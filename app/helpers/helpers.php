@@ -134,7 +134,9 @@ if (!function_exists('getStats')) {
         $queryGroupBy = $request->queryGroupBy;
         $appCltquery = $request->appCltquery;
         $parentValue = $request->parentValue;
-
+        if(!$col && !$row){
+            $subGroupBy = ' GROUP BY Id_Externe,utilisateur ) groupedst';
+        }
         $key_groupement = $request->get('key_groupement');
         $key_groupement = $key_groupement ? clean($key_groupement) : null;
         $allStats = null;
