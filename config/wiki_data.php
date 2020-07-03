@@ -22,7 +22,11 @@ return [
                         'title' => 'Résultats Appels',
                         'link' => '/dashboard#statsRegions',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Suppression des Groupement "appels Non Renseigné"',
+                                1 => 'Suppression des Groupement "appels Post"',
+                                2 => 'Suppression des Resultat_Appel "Notification par SMS"',
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -30,7 +34,12 @@ return [
                         'title' => 'Répartition des dossiers traités par périmètre',
                         'link' => '/dashboard#statsFolders',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels clôture"',
+                                1 => 'Suppression des Groupement "appels Non Renseigné"',
+                                2 => 'Suppression des Groupement "appels Post"',
+                                3 => 'Suppression des Resultat_Appel "Notification par SMS"'
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -38,7 +47,11 @@ return [
                         'title' => 'Résultats Appels Préalables par agence',
                         'link' => '/dashboard#callsStatesAgencies',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels préalables"',
+                                1 => 'Suppression des Groupement "Non Renseigné"',
+                                2 => 'Suppression des Gpmt_Appel_Pre "Hors Périmètre"',
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -46,7 +59,11 @@ return [
                         'title' => 'Résultats Appels Préalables par semaine',
                         'link' => '/dashboard#callsStatesWeeks',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels préalables"',
+                                1 => 'Suppression des Groupement "Non Renseigné"',
+                                2 => 'Suppression des Gpmt_Appel_Pre "Hors Périmètre"',
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -54,7 +71,16 @@ return [
                         'title' => 'Code Interventions liés aux RDV Confirmés (Clients Joignables)',
                         'link' => '/dashboard#statsCallsPos',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => [
+                                    'title' => 'Resultat_Appel inclus :',
+                                    'values' => [
+                                        0 => 'Appels préalables - RDV confirmé',
+                                        1 => 'Appels préalables - RDV confirmé Client non informé',
+                                        2 => 'Appels préalables - RDV repris et confirmé'
+                                    ]
+                                ]
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -62,7 +88,28 @@ return [
                         'title' => 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)',
                         'link' => '/dashboard#statsCallsNeg',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => [
+                                    'title' => 'Resultat_Appel inclus :',
+                                    'values' => [
+                                        0 => 'Appels préalables - Annulation RDV client non informé',
+                                        1 => 'Appels préalables - Client sauvé',
+                                        2 => 'Appels préalables - Client Souhaite être rappelé plus tard',
+                                        3 => 'Appels préalables - Injoignable / Absence de répondeur',
+                                        4 => 'Appels préalables - Injoignable 2ème Tentative',
+                                        5 => 'Appels préalables - Injoignable 3ème Tentative',
+                                        6 => 'Appels préalables - Injoignable avec Répondeur',
+                                        7 => 'Appels préalables - Numéro erroné',
+                                        8 => 'Appels préalables - Numéro Inaccessible',
+                                        9 => 'Appels préalables - Numéro non attribué',
+                                        10 => 'Appels préalables - Numéro non Renseigné',
+                                        11 => 'Appels préalables - RDV annulé le client ne souhaite plus d’intervention',
+                                        12 => 'Appels préalables - RDV annulé Rétractation/Résiliation',
+                                        13 => 'Appels préalables - RDV planifié mais non confirmé',
+                                        14 => 'Appels préalables - RDV repris Mais non confirmé',
+                                    ]
+                                ]
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -70,7 +117,9 @@ return [
                         'title' => 'Répartition des dossiers non validés par Code Type intervention',
                         'link' => '/dashboard#statsFoldersByType',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels clôture"'
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -78,7 +127,9 @@ return [
                         'title' => 'Répartition des dossiers non validés par code intervention',
                         'link' => '/dashboard#statsFoldersByCode',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels clôture"'
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -86,7 +137,11 @@ return [
                         'title' => 'Production Globale CAM',
                         'link' => '/dashboard#statsPerimeters',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Type_Note "CAM"',
+                                1 => 'Suppression des Groupement "appels Non Renseigné"',
+                                2 => 'Suppression des Groupement "appels Post"',
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -124,16 +179,23 @@ return [
                         'title' => 'Résultats Appels Préalables',
                         'link' => '/dashboard/appels-pralables#statsCallsPrealable',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels préalables"',
+                                1 => 'Suppression des Groupement "appels Non Renseigné"',
+                                2 => 'Suppression des Groupement "appels Post"',
+                            ],
                             'extra' => []
                         ]
                     ],
-
                     1 => [
                         'title' => 'Résultats Appels Préalables par agence',
                         'link' => '/dashboard/appels-pralables#callsStatesAgencies',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels préalables"',
+                                1 => 'Suppression des Groupement "Non Renseigné"',
+                                2 => 'Suppression des Gpmt_Appel_Pre "Hors Périmètre"',
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -141,7 +203,11 @@ return [
                         'title' => 'Résultats Appels Préalables par semaine',
                         'link' => '/dashboard/appels-pralables#callsStatesWeeks',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels préalables"',
+                                1 => 'Suppression des Groupement "Non Renseigné"',
+                                2 => 'Suppression des Gpmt_Appel_Pre "Hors Périmètre"',
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -149,7 +215,17 @@ return [
                         'title' => 'Code Interventions liés aux RDV Confirmés (Clients Joignables)',
                         'link' => '/dashboard/appels-pralables#statsCallsPos',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels préalables"',
+                                1 => [
+                                    'title' => 'Resultat_Appel inclus :',
+                                    'values' => [
+                                        0 => 'Appels préalables - RDV confirmé',
+                                        1 => 'Appels préalables - RDV confirmé Client non informé',
+                                        2 => 'Appels préalables - RDV repris et confirmé'
+                                    ]
+                                ]
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -157,7 +233,29 @@ return [
                         'title' => 'Code Interventions liés aux RDV Non Confirmés (Clients Injoignables)',
                         'link' => '/dashboard/appels-pralables#statsCallsNeg',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels préalables"',
+                                1 => [
+                                    'title' => 'Resultat_Appel inclus :',
+                                    'values' => [
+                                        0 => 'Appels préalables - Annulation RDV client non informé',
+                                        1 => 'Appels préalables - Client sauvé',
+                                        2 => 'Appels préalables - Client Souhaite être rappelé plus tard',
+                                        3 => 'Appels préalables - Injoignable / Absence de répondeur',
+                                        4 => 'Appels préalables - Injoignable 2ème Tentative',
+                                        5 => 'Appels préalables - Injoignable 3ème Tentative',
+                                        6 => 'Appels préalables - Injoignable avec Répondeur',
+                                        7 => 'Appels préalables - Numéro erroné',
+                                        8 => 'Appels préalables - Numéro Inaccessible',
+                                        9 => 'Appels préalables - Numéro non attribué',
+                                        10 => 'Appels préalables - Numéro non Renseigné',
+                                        11 => 'Appels préalables - RDV annulé le client ne souhaite plus d’intervention',
+                                        12 => 'Appels préalables - RDV annulé Rétractation/Résiliation',
+                                        13 => 'Appels préalables - RDV planifié mais non confirmé',
+                                        14 => 'Appels préalables - RDV repris Mais non confirmé',
+                                    ]
+                                ],
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -165,11 +263,37 @@ return [
                         'title' => 'Global Résultat Appels Préalables',
                         'link' => '/dashboard/appels-pralables#CallResultPrealable',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels préalables"',
+                                1 => [
+                                    'title' => 'Resultat_Appel inclus :',
+                                    'values' => [
+                                        0 => 'Appels préalables - RDV confirmé',
+                                        1 => 'Appels préalables - RDV confirmé Client non informé',
+                                        2 => 'Appels préalables - RDV repris et confirmé',
+                                        3 => 'Appels préalables - Annulation RDV client non informé',
+                                        4 => 'Appels préalables - Client sauvé',
+                                        5 => 'Appels préalables - Client Souhaite être rappelé plus tard',
+                                        6 => 'Appels préalables - Injoignable / Absence de répondeur',
+                                        7 => 'Appels préalables - Injoignable 2ème Tentative',
+                                        8 => 'Appels préalables - Injoignable 3ème Tentative',
+                                        9 => 'Appels préalables - Injoignable avec Répondeur',
+                                        10 => 'Appels préalables - Numéro erroné',
+                                        11 => 'Appels préalables - Numéro Inaccessible',
+                                        12 => 'Appels préalables - Numéro non attribué',
+                                        13 => 'Appels préalables - Numéro non Renseigné',
+                                        14 => 'Appels préalables - RDV annulé le client ne souhaite plus d’intervention',
+                                        15 => 'Appels préalables - RDV annulé Rétractation/Résiliation',
+                                        16 => 'Appels préalables - RDV planifié mais non confirmé',
+                                        17 => 'Appels préalables - RDV repris Mais non confirmé',
+                                    ]
+
+                                ]
+                            ],
                             'extra' => []
                         ]
                     ],
-                ]
+                ],
             ],
             2 => [
                 'pageTitle' => 'Clôture OT & Traitement BL',
@@ -179,7 +303,12 @@ return [
                         'title' => 'Répartition des dossiers traités sur le périmètre validation, par catégorie de traitement',
                         'link' => '/dashboard/appels-clture#statsCallsCloture',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels clôture"',
+                                1 => 'Suppression des Groupement "appels Non Renseigné"',
+                                2 => 'Suppression des Groupement "appels Post"',
+                                3 => 'Suppression des Resultat_Appel "Notification par SMS"'
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -187,7 +316,9 @@ return [
                         'title' => 'Répartition des dossiers non validés par Code Type intervention',
                         'link' => '/dashboard/appels-clture#statsFoldersByType',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels clôture"'
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -195,7 +326,9 @@ return [
                         'title' => 'Répartition des dossiers non validés par code intervention',
                         'link' => '/dashboard/appels-clture#statsFoldersByCode',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels clôture"'
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -203,7 +336,9 @@ return [
                         'title' => 'Délai de validation post solde',
                         'link' => '/dashboard/appels-clture#statsColturetech',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels clôture"'
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -211,7 +346,9 @@ return [
                         'title' => 'Délai global de traitement OT',
                         'link' => '/dashboard/appels-clture#statsGlobalDelay',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels clôture"'
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -219,7 +356,16 @@ return [
                         'title' => 'Résultat Validation par Type Intervention',
                         'link' => '/dashboard/appels-clture#statsValTypeIntervention',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels clôture"',
+                                1 => [
+                                    'title' => 'Resultat_Appel inclus',
+                                    'values' => [
+                                        'Appels clôture - Validé conforme',
+                                        'Appels clôture - CRI non conforme'
+                                    ]
+                                ]
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -227,7 +373,9 @@ return [
                         'title' => 'Répartition Codes Intervention par Type Intervention',
                         'link' => '/dashboard/appels-clture#statsRepTypeIntervention',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels clôture"',
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -242,7 +390,12 @@ return [
                         'title' => 'Résultats Appels GEM',
                         'link' => '/dashboard/appels-gem#statsCallsGem',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels GEM"',
+                                1 => 'Suppression des Groupement "appels Non Renseigné"',
+                                2 => 'Suppression des Groupement "appels Post"',
+                                3 => 'Suppression des Resultat_Appel "Notification par SMS"'
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -250,7 +403,11 @@ return [
                         'title' => 'Résultats Appels Préalables par agence',
                         'link' => '/dashboard/appels-gem#callsStatesAgencies',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appel GEM"',
+                                1 => 'Suppression des Groupement "Non Renseigné"',
+                                2 => 'Suppression des Gpmt_Appel_Pre "Hors Périmètre"',
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -258,7 +415,11 @@ return [
                         'title' => 'Résultats Appels Préalables par semaine',
                         'link' => '/dashboard/appels-gem#callsStatesWeeks',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Groupement "Appels GEM"',
+                                1 => 'Suppression des Groupement "Non Renseigné"',
+                                2 => 'Suppression des Gpmt_Appel_Pre "Hors Périmètre"',
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -273,7 +434,11 @@ return [
                         'title' => 'Production Globale CAM',
                         'link' => '/dashboard/production_globale_cam#statsPerimeters',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Inclusion des Type_Note "CAM"',
+                                1 => 'Suppression des Groupement "appels Non Renseigné"',
+                                2 => 'Suppression des Groupement "appels Post"',
+                            ],
                             'extra' => []
                         ]
                     ]
@@ -287,18 +452,20 @@ return [
                         'title' => 'Délai de traitement BF5 et BF8',
                         'link' => '/dashboard/traitement-assistance#statsProcessingDelay',
                         'specifications' => [
-                            'content' => [], 'extra' => []
+                            'content' => [
+                                0 => [
+                                    'title' => 'EXPORT_ALL_EXTRACT_CUI inclus',
+                                    'values' => [
+                                        0 => 'bf5',
+                                        1 => 'bf8'
+                                    ]
+                                ]
+                            ],
+                            'extra' => []
                         ]
                     ]
                 ]
             ]
-
         ]
     ]
-    //                    2 => [
-//                        'specifications' => [
-//                            'content' => [],
-//                            'extra' => []
-//                        ]
-//                    ],
 ];

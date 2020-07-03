@@ -97,15 +97,28 @@
                           </div>
                           <!-- /.card-header -->
                           <div class="card-body ml-4">
-                                                    <span class="rules">
-                                                        <h5 class="mb-2 capitalize">spécifications</h5>
-                                                    </span>
-                            @foreach ($item['specifications'] as $key => $rule)
-                              @if (is_array($rule) && $key == 'content')
+                            <span class="rules">
+                                <h5 class="mb-2 capitalize">spécifications</h5>
+                            </span>
+                            @foreach ($item['specifications'] as $key => $content)
+                              @if (is_array($content) && $key == 'content')
                                 <ul class="rules-list pl-4">
-                                  @for ($i = 0; $i < $faker->numberBetween(2, 6); $i++)
-                                    <li class="">{{ $faker->text(100) }}</li>
-                                  @endfor
+                                  @if (!count($content))
+                                    <li class="">Pas de spécifications !!</li>
+                                  @endif
+                                  @foreach ($content as $content_item)
+                                    @if (is_array($content_item))
+                                        <li class="">{{ $content_item['title'] }}
+                                          <ul class="rules-list pl-4">
+                                            @foreach ($content_item['values'] as $content_item_value)
+                                              <li class="">{{ $content_item_value }}</li>
+                                            @endforeach
+                                          </ul>
+                                        </li>
+                                    @else
+                                      <li class="">{{ $content_item }}</li>
+                                    @endif
+                                  @endforeach
                                 </ul>
                               @endif
                             @endforeach
