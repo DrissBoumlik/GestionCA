@@ -115,8 +115,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Nom_region , Gpmt_Appel_Pre) groupedst',
             queryGroupBy: 'group by st.Id_Externe, Nom_region , Gpmt_Appel_Pre'
         },
-        routeCol: 'regionsCallState/columns/Nom_Region',
-        routeData: 'regionsCallState/Nom_Region',
+        routeCol: 'regionsCallState/columns/Nom_Region?key_groupement=Appels GEM',
+        routeData: 'regionsCallState/Nom_Region?key_groupement=Appels GEM',
         objChart: {
             element_chart: undefined,
             element_id: 'callsStatesAgenciesChart',
@@ -159,8 +159,8 @@ $(function () {
             subGroupBy: ' GROUP BY Id_Externe, Date_Heure_Note_Semaine , Gpmt_Appel_Pre, Date_Heure_Note_Annee) groupedst ',
             queryGroupBy: 'group by st.Id_Externe, Date_Heure_Note_Semaine , Gpmt_Appel_Pre, Date_Heure_Note_Annee'
         },
-        routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine',
-        routeData: 'regionsCallState/Date_Heure_Note_Semaine',
+        routeCol: 'regionsCallState/columns/Date_Heure_Note_Semaine?key_groupement=Appels GEM',
+        routeData: 'regionsCallState/Date_Heure_Note_Semaine?key_groupement=Appels GEM',
         objChart: {
             element_chart: undefined,
             element_id: 'callsStatesWeeksChart',
