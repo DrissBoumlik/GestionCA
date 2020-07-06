@@ -696,7 +696,6 @@ class StatsRepository
             $regions = $regions->select($column, 'Gpmt_Appel_Pre', 'Date_Heure_Note_Annee', \DB::raw('count(distinct st.Id_Externe) as total'))
                 ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Groupement not like "Non Renseigné"
-            and Groupement like "Appels préalables"
             and Gpmt_Appel_Pre not like "Hors Périmètre"
             and Resultat_Appel not like "=%"
             and Nom_Region is not null ' .
@@ -718,7 +717,6 @@ class StatsRepository
             $regions = $regions->select($column, 'Gpmt_Appel_Pre', \DB::raw('count(distinct st.Id_Externe) as total'))
                 ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Groupement not like "Non Renseigné"
-            and Groupement like "Appels préalables"
             and Gpmt_Appel_Pre not like "Hors Périmètre"
             and Resultat_Appel not like "=%"
             and Nom_Region is not null ' .
@@ -735,7 +733,6 @@ class StatsRepository
             }
         }
         $regions = $regions->where('Groupement', 'not like', 'Non Renseigné')
-            ->where('Groupement', 'like', 'Appels préalables')
             ->where('Gpmt_Appel_Pre', 'not like', 'Hors Périmètre')
             ->where('Resultat_Appel', 'not like', '=%')
             ->whereNotNull('Nom_Region')
