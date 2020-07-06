@@ -4317,7 +4317,10 @@ class StatsRepository
         $querydate = '';
         $year = 0;
         $month = 0;
-        if (!empty($filter->date_filter)) {
+
+        if (is_null($filter->date_filter) || empty($filter->date_filter) || $filter->date_filter[0] == '' ) {
+            $querydate = "'" . date('Y-m') . '-S' . date('W') . "'";
+        } else {
             foreach ($filter->date_filter as $filterdate) {
                 $year = '"' . explode('-', $filterdate)[0] . '"';
                 $month = '"' . (int)explode('-', $filterdate)[1] . '"';
@@ -4325,8 +4328,6 @@ class StatsRepository
                 $querydate .= 'if(agents.imported_at_semaine is null,concat(' . $year . ',"-",' . $month . '),concat(' . $year . ',"-",' . $month . ',' . $week . ')),';
             }
             $querydate = substr($querydate, 0, -1);
-        } else {
-            $querydate = "'" . date('Y-m') . '-S' . date('W') . "'";
         }
 
         $regions = \DB::table('stats as st');
