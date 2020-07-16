@@ -57,7 +57,7 @@ class ToolController extends Controller
 
     public function getFilterAllStats()
     {
-        $allStatsFilter = Filter::where(['user_id' => getAuthUser()->id, 'isGlobal' => 2])->first();
+        $allStatsFilter = Filter::where(['user_id' => getAuthUser()->id, 'isGlobal' => 1])->first();
         return ['allStatsFilter' => $allStatsFilter];
     }
 }
