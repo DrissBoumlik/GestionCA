@@ -180,6 +180,7 @@ class StatsRepository
             ->whereNotNull('Nom_Region')
             ->where('Resultat_Appel', 'not like', '=%')
             ->where('Resultat_Appel', 'not like', '%Notification par SMS%')
+            ->where('Resultat_Appel', 'not like', '%Appels Entrants – Suite Envoi SMS%')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
             ->whereNull('isNotReady');
@@ -267,6 +268,7 @@ class StatsRepository
                 ' and ' . $queryFilters .
                 ' and Resultat_Appel not like "=%"
                  and Resultat_Appel not like "%Notification par SMS%"
+                 and Resultat_Appel not like "%Appels Entrants – Suite Envoi SMS%"
             and Groupement not like "Non Renseigné"
             and Groupement not like "Appels post"
             and isNotReady is null
@@ -279,6 +281,7 @@ class StatsRepository
         $regions = $regions->whereNotNull('Nom_Region')
             ->where('Resultat_Appel', 'not like', '=%')
             ->where('Resultat_Appel', 'not like', '%Notification par SMS%')
+            ->where('Resultat_Appel', 'not like', '%Appels Entrants – Suite Envoi SMS%')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
             ->whereNull('isNotReady');
@@ -377,6 +380,7 @@ class StatsRepository
             ->distinct()
             ->where('Resultat_Appel', 'not like', '=%')
             ->where('Resultat_Appel', 'not like', '%Notification par SMS%')
+            ->where('Resultat_Appel', 'not like', '%Appels Entrants – Suite Envoi SMS%')
             ->whereNotNull('Nom_Region')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
@@ -466,6 +470,7 @@ class StatsRepository
             ->join(\DB::raw('(SELECT Id_Externe, MAX(Date_Heure_Note) AS MaxDateTime FROM stats
             where Resultat_Appel not like "=%"
             and Resultat_Appel not like "%Notification par SMS%"
+            and Resultat_Appel not like "%Appels Entrants – Suite Envoi SMS%"
             and Nom_Region is not null
             and Groupement not like "Non Renseigné"
             and Groupement not like "Appels post" ' .
@@ -482,6 +487,7 @@ class StatsRepository
         }
         $regions = $regions->where('Resultat_Appel', 'not like', '=%')
             ->where('Resultat_Appel', 'not like', '%Notification par SMS%')
+            ->where('Resultat_Appel', 'not like', '%Appels Entrants – Suite Envoi SMS%')
             ->whereNotNull('Nom_Region')
             ->where('Groupement', 'not like', 'Non Renseigné')
             ->where('Groupement', 'not like', 'Appels post')
