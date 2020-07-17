@@ -184,7 +184,7 @@ return [
                         'specifications' => [
                             'content' => [
                                 0 => 'Liaison par l’utilisateur, année, mois, semaine. cette deniere est optionnel.',
-                                1 => 'On n’a rien exclure que les groupement vides et les utilisateurs vides et les résultats d’appels[not like ‘=%’]'
+                                1 => 'Exclusion de tous les groupement et les utilisateurs de valeur vides'
                             ],
                             'extra' => []
                         ]
