@@ -13,6 +13,16 @@ return [
     */
 
     'wiki_data' => [
+        'global' => [
+            'title' => 'Global',
+            'specifications' => [
+                'content' => [
+                    0 => 'Exclusion des valeurs commençant par "="',
+                ],
+                'extra' => []
+            ]
+
+        ],
         'pages' => [
             0 => [
                 'pageTitle' => 'Dashboard',
@@ -23,9 +33,9 @@ return [
                         'link' => '/dashboard#statsRegions',
                         'specifications' => [
                             'content' => [
-                                0 => 'Suppression des Groupement "appels Non Renseigné"',
-                                1 => 'Suppression des Groupement "appels Post"',
-                                2 => 'Suppression des Resultat_Appel "Notification par SMS"',
+                                0 => 'Exclusion des Groupement "appels Non Renseigné"',
+                                1 => 'Exclusion des Groupement "appels Post"',
+                                2 => 'Exclusion des Resultat_Appel "Notification par SMS"',
                             ],
                             'extra' => []
                         ]
@@ -36,9 +46,9 @@ return [
                         'specifications' => [
                             'content' => [
                                 0 => 'Inclusion des Groupement "Appels clôture"',
-                                1 => 'Suppression des Groupement "appels Non Renseigné"',
-                                2 => 'Suppression des Groupement "appels Post"',
-                                3 => 'Suppression des Resultat_Appel "Notification par SMS"'
+                                1 => 'Exclusion des Groupement "appels Non Renseigné"',
+                                2 => 'Exclusion des Groupement "appels Post"',
+                                3 => 'Exclusion des Resultat_Appel "Notification par SMS"'
                             ],
                             'extra' => []
                         ]
@@ -49,8 +59,8 @@ return [
                         'specifications' => [
                             'content' => [
                                 0 => 'Inclusion des Groupement "Appels préalables"',
-                                1 => 'Suppression des Groupement "Non Renseigné"',
-                                2 => 'Suppression des Gpmt_Appel_Pre "Hors Périmètre"',
+                                1 => 'Exclusion des Groupement "Non Renseigné"',
+                                2 => 'Exclusion des Gpmt_Appel_Pre "Hors Périmètre"',
                             ],
                             'extra' => []
                         ]
@@ -61,8 +71,8 @@ return [
                         'specifications' => [
                             'content' => [
                                 0 => 'Inclusion des Groupement "Appels préalables"',
-                                1 => 'Suppression des Groupement "Non Renseigné"',
-                                2 => 'Suppression des Gpmt_Appel_Pre "Hors Périmètre"',
+                                1 => 'Exclusion des Groupement "Non Renseigné"',
+                                2 => 'Exclusion des Gpmt_Appel_Pre "Hors Périmètre"',
                             ],
                             'extra' => []
                         ]
@@ -139,8 +149,8 @@ return [
                         'specifications' => [
                             'content' => [
                                 0 => 'Inclusion des Type_Note "CAM"',
-                                1 => 'Suppression des Groupement "appels Non Renseigné"',
-                                2 => 'Suppression des Groupement "appels Post"',
+                                1 => 'Exclusion des Groupement "appels Non Renseigné"',
+                                2 => 'Exclusion des Groupement "appels Post"',
                             ],
                             'extra' => []
                         ]
@@ -149,7 +159,11 @@ return [
                         'title' => 'Délai de validation post solde',
                         'link' => '/dashboard#statsColturetech',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'La requête se base sur la différence (en minutes) entre EXPORT_ALL_Date_SOLDE et EXPORT_ALL_Date_VALIDATION',
+                                1 => 'Exclure toutes les lignes avec un EXPORT_ALL_Date_SOLDE, EXPORT_ALL_Date_VALIDATION ou groupement vide.',
+                                2 => 'Exclure toutes les lignes avec une différence de dates précitées compris entre 6h et 1 jours'
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -157,7 +171,10 @@ return [
                         'title' => 'Délai global de traitement OT',
                         'link' => '/dashboard#statsGlobalDelay',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'La requête se base sur la différence (en jours) entre Date_Creation et EXPORT_ALL_Date_VALIDATION',
+                                1 => 'Exclure toutes les lignes avec un Date_Creation, EXPORT_ALL_Date_VALIDATION ou groupement vide.'
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -165,7 +182,10 @@ return [
                         'title' => 'Production d\'agent par groupement des appels',
                         'link' => '/dashboard#statsAgentProd',
                         'specifications' => [
-                            'content' => [],
+                            'content' => [
+                                0 => 'Liaison par l’utilisateur, année, mois, semaine. cette deniere est optionnel.',
+                                1 => 'On n’a rien exclure que les groupement vides et les utilisateurs vides et les résultats d’appels[not like ‘=%’]'
+                            ],
                             'extra' => []
                         ]
                     ],
@@ -181,8 +201,8 @@ return [
                         'specifications' => [
                             'content' => [
                                 0 => 'Inclusion des Groupement "Appels préalables"',
-                                1 => 'Suppression des Groupement "appels Non Renseigné"',
-                                2 => 'Suppression des Groupement "appels Post"',
+                                1 => 'Exclusion des Groupement "appels Non Renseigné"',
+                                2 => 'Exclusion des Groupement "appels Post"',
                             ],
                             'extra' => []
                         ]
@@ -193,8 +213,8 @@ return [
                         'specifications' => [
                             'content' => [
                                 0 => 'Inclusion des Groupement "Appels préalables"',
-                                1 => 'Suppression des Groupement "Non Renseigné"',
-                                2 => 'Suppression des Gpmt_Appel_Pre "Hors Périmètre"',
+                                1 => 'Exclusion des Groupement "Non Renseigné"',
+                                2 => 'Exclusion des Gpmt_Appel_Pre "Hors Périmètre"',
                             ],
                             'extra' => []
                         ]
@@ -205,8 +225,8 @@ return [
                         'specifications' => [
                             'content' => [
                                 0 => 'Inclusion des Groupement "Appels préalables"',
-                                1 => 'Suppression des Groupement "Non Renseigné"',
-                                2 => 'Suppression des Gpmt_Appel_Pre "Hors Périmètre"',
+                                1 => 'Exclusion des Groupement "Non Renseigné"',
+                                2 => 'Exclusion des Gpmt_Appel_Pre "Hors Périmètre"',
                             ],
                             'extra' => []
                         ]
@@ -305,9 +325,9 @@ return [
                         'specifications' => [
                             'content' => [
                                 0 => 'Inclusion des Groupement "Appels clôture"',
-                                1 => 'Suppression des Groupement "appels Non Renseigné"',
-                                2 => 'Suppression des Groupement "appels Post"',
-                                3 => 'Suppression des Resultat_Appel "Notification par SMS"'
+                                1 => 'Exclusion des Groupement "appels Non Renseigné"',
+                                2 => 'Exclusion des Groupement "appels Post"',
+                                3 => 'Exclusion des Resultat_Appel "Notification par SMS"'
                             ],
                             'extra' => []
                         ]
@@ -392,9 +412,9 @@ return [
                         'specifications' => [
                             'content' => [
                                 0 => 'Inclusion des Groupement "Appels GEM"',
-                                1 => 'Suppression des Groupement "appels Non Renseigné"',
-                                2 => 'Suppression des Groupement "appels Post"',
-                                3 => 'Suppression des Resultat_Appel "Notification par SMS"'
+                                1 => 'Exclusion des Groupement "appels Non Renseigné"',
+                                2 => 'Exclusion des Groupement "appels Post"',
+                                3 => 'Exclusion des Resultat_Appel "Notification par SMS"'
                             ],
                             'extra' => []
                         ]
@@ -405,8 +425,8 @@ return [
                         'specifications' => [
                             'content' => [
                                 0 => 'Inclusion des Groupement "Appel GEM"',
-                                1 => 'Suppression des Groupement "Non Renseigné"',
-                                2 => 'Suppression des Gpmt_Appel_Pre "Hors Périmètre"',
+                                1 => 'Exclusion des Groupement "Non Renseigné"',
+                                2 => 'Exclusion des Gpmt_Appel_Pre "Hors Périmètre"',
                             ],
                             'extra' => []
                         ]
@@ -417,8 +437,8 @@ return [
                         'specifications' => [
                             'content' => [
                                 0 => 'Inclusion des Groupement "Appels GEM"',
-                                1 => 'Suppression des Groupement "Non Renseigné"',
-                                2 => 'Suppression des Gpmt_Appel_Pre "Hors Périmètre"',
+                                1 => 'Exclusion des Groupement "Non Renseigné"',
+                                2 => 'Exclusion des Gpmt_Appel_Pre "Hors Périmètre"',
                             ],
                             'extra' => []
                         ]
@@ -436,8 +456,8 @@ return [
                         'specifications' => [
                             'content' => [
                                 0 => 'Inclusion des Type_Note "CAM"',
-                                1 => 'Suppression des Groupement "appels Non Renseigné"',
-                                2 => 'Suppression des Groupement "appels Post"',
+                                1 => 'Exclusion des Groupement "appels Non Renseigné"',
+                                2 => 'Exclusion des Groupement "appels Post"',
                             ],
                             'extra' => []
                         ]
@@ -464,6 +484,24 @@ return [
                             'extra' => []
                         ]
                     ]
+                ]
+            ]
+        ],
+        'pages_types' => [
+            0 => [
+                'title' => 'agent',
+                'specifications' => [
+                    'content' => [
+                        0 => 'Garder les doublons'
+                    ],
+                    'extra' => []
+                ]
+            ],
+            1 => [
+                'title' => 'agence',
+                'specifications' => [
+                    'content' => [],
+                    'extra' => []
                 ]
             ]
         ]

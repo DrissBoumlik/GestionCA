@@ -13,7 +13,10 @@ class WikiController extends Controller
         if (!$user->isSuperAdmin()) {
             throw new AuthorizationException();
         }
-        $wikiData =  config('wiki_data.wiki_data.pages');
-        return view('wiki.index')->with(['wikiData' => $wikiData]);
+        $wikiData = config('wiki_data.wiki_data');
+        $global = $wikiData['global'];
+        $pages = $wikiData['pages'];
+        $pages_types = $wikiData['pages_types'];
+        return view('wiki.index')->with(['pages' => $pages, 'global' => $global, 'pages_types' => $pages_types]);
     }
 }
