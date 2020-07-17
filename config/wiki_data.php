@@ -492,7 +492,7 @@ return [
                 'title' => 'agent',
                 'specifications' => [
                     'content' => [
-                        0 => 'Garder les doublons'
+                        0 => 'Inclusion les doublons'
                     ],
                     'extra' => []
                 ]
