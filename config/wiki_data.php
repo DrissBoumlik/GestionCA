@@ -36,6 +36,7 @@ return [
                                 0 => 'Exclusion des Groupement "appels Non Renseigné"',
                                 1 => 'Exclusion des Groupement "appels Post"',
                                 2 => 'Exclusion des Resultat_Appel "Notification par SMS"',
+                                3 => 'Appels Entrants – Suite Envoi SMS'
                             ],
                             'extra' => []
                         ]
@@ -48,7 +49,8 @@ return [
                                 0 => 'Inclusion des Groupement "Appels clôture"',
                                 1 => 'Exclusion des Groupement "appels Non Renseigné"',
                                 2 => 'Exclusion des Groupement "appels Post"',
-                                3 => 'Exclusion des Resultat_Appel "Notification par SMS"'
+                                3 => 'Exclusion des Resultat_Appel "Notification par SMS"',
+                                4 => 'Appels Entrants – Suite Envoi SMS'
                             ],
                             'extra' => []
                         ]
@@ -203,6 +205,8 @@ return [
                                 0 => 'Inclusion des Groupement "Appels préalables"',
                                 1 => 'Exclusion des Groupement "appels Non Renseigné"',
                                 2 => 'Exclusion des Groupement "appels Post"',
+                                3 => 'Exclusion des Resultat_Appel "Notification par SMS"',
+                                4 => 'Appels Entrants – Suite Envoi SMS'
                             ],
                             'extra' => []
                         ]
@@ -327,7 +331,8 @@ return [
                                 0 => 'Inclusion des Groupement "Appels clôture"',
                                 1 => 'Exclusion des Groupement "appels Non Renseigné"',
                                 2 => 'Exclusion des Groupement "appels Post"',
-                                3 => 'Exclusion des Resultat_Appel "Notification par SMS"'
+                                3 => 'Exclusion des Resultat_Appel "Notification par SMS"',
+                                4 => 'Appels Entrants – Suite Envoi SMS'
                             ],
                             'extra' => []
                         ]
@@ -414,7 +419,8 @@ return [
                                 0 => 'Inclusion des Groupement "Appels GEM"',
                                 1 => 'Exclusion des Groupement "appels Non Renseigné"',
                                 2 => 'Exclusion des Groupement "appels Post"',
-                                3 => 'Exclusion des Resultat_Appel "Notification par SMS"'
+                                3 => 'Exclusion des Resultat_Appel "Notification par SMS"',
+                                4 => 'Appels Entrants – Suite Envoi SMS'
                             ],
                             'extra' => []
                         ]
