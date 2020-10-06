@@ -14,7 +14,7 @@ class AddProduitStatsTable extends Migration
     public function up()
     {
         Schema::table('stats',function (Blueprint $table){
-            $table->String('produit');
+            $table->string('produit', 100)->nullable();
         });
     }
 
