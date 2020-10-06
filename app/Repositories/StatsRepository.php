@@ -4452,12 +4452,12 @@ class StatsRepository
         try {
             $statImport = new StatsImport($request->days);
             Excel::import($statImport, $request->file('file'));
-            \DB::table('stats')->whereIn('date_note', $request->days)->delete();
+            \DB::table('stats')->whereIn('isNotReady', -1)->delete();
         } catch (\Exception $e) {
             // Delete Imported Data
             \DB::table('stats')->where('isNotReady', 1)->delete();
             // Restore Prepared Data for deletion
-            \DB::table('stats')->whereIn('date_note', $request->days)->update(['isNotReady' => null]);
+            \DB::table('stats')->whereIn('isNotReady', -1)->update(['isNotReady' => null]);
         }
         $user_flag = getImportedData(false);
         $user_flag->flags = [
