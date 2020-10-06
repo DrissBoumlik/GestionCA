@@ -4452,7 +4452,7 @@ class StatsRepository
         try {
             $statImport = new StatsImport($request->days);
             Excel::import($statImport, $request->file('file'));
-            \DB::table('stats')->whereIn('isNotReady', -1)->delete();
+            \DB::table('stats')->where('isNotReady', -1)->delete();
         } catch (\Exception $e) {
             // Delete Imported Data
             \DB::table('stats')->where('isNotReady', 1)->delete();
