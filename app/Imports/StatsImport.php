@@ -25,9 +25,9 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
     public $data = [];
     private $index = 0;
     private $user_flag;
-    private $cuivreArray = array('MAINTENANCE_AMS','MAINTENANCE_BL','MAINTENANCE_NUM','MAINTENANCE_OPT','MAINTENANCE_PLU','MAINTENANCE_POTEAU','MAINTENANCE_RET','PRODUCTION_ENT','PRODUCTION_POI','PRODUCTION_R02','PRODUCTION_R03','PRODUCTION_R10');
-    private $ftthArray = array('MAINTENANCE_FTH','PRODUCTION_FTH','PRODUCTION_POI_FO');
-    private $cuivreFtthArray = array('MAINTENANCE','PRODUCTION','MAINTENANCE_ENT','AUTRE');
+    private $cuivreArray = array('MAINTENANCE_AMS', 'MAINTENANCE_BL', 'MAINTENANCE_NUM', 'MAINTENANCE_OPT', 'MAINTENANCE_PLU', 'MAINTENANCE_POTEAU', 'MAINTENANCE_RET', 'PRODUCTION_ENT', 'PRODUCTION_POI', 'PRODUCTION_R02', 'PRODUCTION_R03', 'PRODUCTION_R10');
+    private $ftthArray = array('MAINTENANCE_FTH', 'PRODUCTION_FTH', 'PRODUCTION_POI_FO');
+    private $cuivreFtthArray = array('MAINTENANCE', 'PRODUCTION', 'MAINTENANCE_ENT', 'AUTRE');
     private $produit;
 
     public function __construct($days)
@@ -106,14 +106,24 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
     public function model($row)
     {
         $formatted_date = $this->transformDate($row['dimension_notesdate_note']);
-        if(in_array($row['dimension_notescode_type_intervention'] , $this->cuivreArray)){
-            $this->produit = 'CUIVRE';
+
+        try {
+            if (in_array($row['dimension_notescode_type_intervention'], $this->cuivreArray)) {
+                $this->produit = 'CUIVRE';
+            }
+        } catch (Exception $e) {
         }
-        if(in_array($row['dimension_notescode_type_intervention'] , $this->ftthArray)){
-            $this->produit = 'FTTH';
+        try {
+            if (in_array($row['dimension_notescode_type_intervention'], $this->ftthArray)) {
+                $this->produit = 'FTTH';
+            }
+        } catch (Exception $e) {
         }
-        if(in_array($row['dimension_notescode_type_intervention'] , $this->cuivreFtthArray)){
-            $this->produit = 'CUIVRE/FTTH';
+        try {
+            if (in_array($row['dimension_notescode_type_intervention'], $this->cuivreFtthArray)) {
+                $this->produit = 'CUIVRE/FTTH';
+            }
+        } catch (Exception $e) {
         }
         if (!$this->days || in_array($formatted_date, $this->days)) {
             if ($this->user_flag) {
