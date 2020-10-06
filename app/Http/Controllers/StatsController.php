@@ -374,7 +374,11 @@ class StatsController extends Controller
         // Authorization
         $this->authorize('view', auth()->user());
 //        try {
-        return response()->json($this->statsRepository->importStats($request));
+        $response = $this->statsRepository->importStats($request);
+        if(array_key_exists('success', $response))
+            return response()->json($response, 200);
+        else
+            return response()->json($response, 500);
 //        } catch (\Exception $exception) {
 //            return response()->json([
 //                'success' => false,

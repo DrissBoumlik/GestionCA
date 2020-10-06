@@ -4458,6 +4458,11 @@ class StatsRepository
             \DB::table('stats')->where('isNotReady', 1)->delete();
             // Restore Prepared Data for deletion
             \DB::table('stats')->where('isNotReady', -1)->update(['isNotReady' => null]);
+
+            return [
+                'error' => true,
+                'message' => "Le fichier n'était pas importé"
+            ];
         }
         $user_flag = getImportedData(false);
         $user_flag->flags = [
