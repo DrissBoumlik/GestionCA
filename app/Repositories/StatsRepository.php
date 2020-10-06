@@ -4449,8 +4449,16 @@ class StatsRepository
         $fileName = $file->getClientOriginalName();
         $stored = Storage::disk('public')->put('storage/data_source/' . $fileName, file_get_contents($file));
 
-        $statImport = new StatsImport($request->days);
-        Excel::import($statImport, $request->file('file'));
+        try {
+            $statImport = new StatsImport($request->days);
+            Excel::import($statImport, $request->file('file'));
+            \DB::table('stats')->whereIn('date_note', $request->days)->delete();
+        } catch (\Exception $e) {
+            // Delete Imported Data
+            \DB::table('stats')->where('isNotReady', 1)->delete();
+            // Restore Prepared Data for deletion
+            \DB::table('stats')->whereIn('date_note', $request->days)->update(['isNotReady' => null]);
+        }
         $user_flag = getImportedData(false);
         $user_flag->flags = [
             'imported_data' => $user_flag->flags['imported_data'],

@@ -34,7 +34,9 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
     {
         if ($days) {
             $this->days = explode(',', $days);
-            \DB::table('stats')->whereIn('date_note', $this->days)->delete();
+//            \DB::table('stats')->whereIn('date_note', $this->days)->delete();
+            // Prepare to be deleted
+            \DB::table('stats')->whereIn('date_note', $this->days)->update(['isNotReady' => -1]);
         }
         $this->user_flag = getImportedData(false);
         $this->user_flag->flags = [
@@ -172,7 +174,7 @@ class StatsImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatc
                 'EXPORT_ALL_Date_CHARGEMENT_PDA' => $row['dimension_notesexport_all_date_chargement_pda'],
                 'EXPORT_ALL_Date_SOLDE' => $row['dimension_notesexport_all_date_solde'],
                 'EXPORT_ALL_Date_VALIDATION' => $row['dimension_notesexport_all_date_validation'],
-                'isNotReady' => true,
+                'isNotReady' => 1,
                 'produit' => $this->produit
             ]);
         }
