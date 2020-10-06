@@ -4457,7 +4457,7 @@ class StatsRepository
             // Delete Imported Data
             \DB::table('stats')->where('isNotReady', 1)->delete();
             // Restore Prepared Data for deletion
-            \DB::table('stats')->whereIn('isNotReady', -1)->update(['isNotReady' => null]);
+            \DB::table('stats')->where('isNotReady', -1)->update(['isNotReady' => null]);
         }
         $user_flag = getImportedData(false);
         $user_flag->flags = [
