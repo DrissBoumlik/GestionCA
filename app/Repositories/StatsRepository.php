@@ -4450,6 +4450,8 @@ class StatsRepository
         $stored = Storage::disk('public')->put('storage/data_source/' . $fileName, file_get_contents($file));
 
         try {
+            $fileName = $request->file('file')->getClientOriginalName();
+            $request->file('file')->storeAs('data_source', $fileName);
             $statImport = new StatsImport($request->days);
             Excel::import($statImport, $request->file('file'));
             \DB::table('stats')->where('isNotReady', -1)->delete();
