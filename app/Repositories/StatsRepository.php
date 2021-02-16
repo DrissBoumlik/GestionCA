@@ -1872,6 +1872,7 @@ class StatsRepository
             ->whereNotNull('EXPORT_ALL_Date_VALIDATION')
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
             ->whereNotNull('Nom_Region')
+            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme'])
             ->whereNull('isNotReady');
 
         $columns = applyFilter($columns, $filter);
@@ -1931,6 +1932,7 @@ class StatsRepository
             ->whereNotNull('EXPORT_ALL_Date_VALIDATION')
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
             ->whereNotNull('Nom_Region')
+            ->whereIn('Resultat_Appel', ['Appels clôture - Validé conforme', 'Appels clôture - CRI non conforme'])
             ->whereRaw('TIMESTAMPDIFF(MINUTE,EXPORT_ALL_Date_SOLDE,EXPORT_ALL_Date_VALIDATION) not between 360 and 1440')
             ->whereNull('isNotReady');
         if ($agentName) {
@@ -2008,7 +2010,7 @@ class StatsRepository
         $columns = \DB::table('stats as st')
             ->select('Nom_Region')
             ->distinct()
-            ->whereNotNull('EXPORT_ALL_Date_VALIDATION')
+            ->whereNotNull('Date_Creation')
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
             ->whereNotNull('Nom_Region')
             ->whereNull('isNotReady');
@@ -2067,7 +2069,7 @@ class StatsRepository
                         WHEN TIMESTAMPDIFF(DAY,Date_Creation,EXPORT_ALL_Date_VALIDATION) between 7 and 15   then "2-Entre une semaine et 15 jours"
                         ELSE "1-Moins une semaine"
                     END as Title'))
-            ->whereNotNull('EXPORT_ALL_Date_VALIDATION')
+            ->whereNotNull('Date_Creation')
             ->whereNotNull('EXPORT_ALL_Date_SOLDE')
             ->whereNotNull('Nom_Region')
             ->whereNull('isNotReady');
