@@ -17,8 +17,4 @@ yarn-error.log
 **/*.xlsx
 *.demo.php
 # GENERATED MIX FILES
-/public/css
-/public/js/pages
-/public/js/laravel.app.js
-/public/js/oneui.app.js
 /public/mix-manifest.json
