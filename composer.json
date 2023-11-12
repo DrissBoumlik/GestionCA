@@ -8,23 +8,20 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.2",
-        "box/spout": "^3.1",
-        "doctrine/dbal": "^2.10",
-        "fideloper/proxy": "^4.0",
-        "laravel/framework": "^6.0",
-        "laravel/tinker": "^1.0",
-        "laravel/ui": "^1.1",
+        "php": "^8.1",
+        "doctrine/dbal": "^3.0",
+        "laravel/framework": "^10.0",
+        "laravel/tinker": "^2.0",
+        "laravel/ui": "^4.2",
         "maatwebsite/excel": "^3.1",
-        "phpoffice/phpspreadsheet": "^1.10",
-        "yajra/laravel-datatables": "1.5"
+        "phpoffice/phpspreadsheet": "^1.23",
+        "yajra/laravel-datatables": "10.0"
     },
     "require-dev": {
-        "facade/ignition": "^1.4",
-        "fzaninotto/faker": "^1.4",
+        "spatie/laravel-ignition": "^2.0",
         "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^3.0",
-        "phpunit/phpunit": "^8.0"
+        "nunomaduro/collision": "^7.0",
+        "phpunit/phpunit": "^10.0"
     },
     "config": {
         "optimize-autoloader": true,
@@ -41,19 +38,17 @@
             "app/helpers/helpers.php"
         ],
         "psr-4": {
-            "App\\": "app/"
-        },
-        "classmap": [
-            "database/seeds",
-            "database/factories"
-        ]
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
         "post-autoload-dump": [

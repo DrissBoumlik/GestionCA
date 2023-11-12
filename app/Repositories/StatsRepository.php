@@ -229,8 +229,9 @@ class StatsRepository
                 $columns[$index + 1]->title = $key;
             });
             usort($columns, function ($item1, $item2) {
-                return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                return ($item1->data == $item2->data) ? 0 
+                    : (($item1->data < $item2->data) ? -1 
+                    : 1);
             });
             $first = new \stdClass();
             $first->title = 'Résultats Appels Préalables';
@@ -434,8 +435,9 @@ class StatsRepository
                 $columns[$index + 1]->title = $key;
             });
             usort($columns, function ($item1, $item2) {
-                return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                return ($item1->data == $item2->data) ? 0 
+                    : (($item1->data < $item2->data) ? -1 
+                    : 1);
             });
             $first = new \stdClass();
             $first->name = 'Resultat_Appel';
@@ -644,8 +646,9 @@ class StatsRepository
                 $columns[$index + 1]->title = $key;
             });
             usort($columns, function ($item1, $item2) {
-                return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                return ($item1->data == $item2->data) ? 0 
+                    : (($item1->data < $item2->data) ? -1 
+                    : 1);
             });
             if ($column == 'Date_Heure_Note_Semaine') {
                 usort($columns, function ($item1, $item2) {
@@ -654,13 +657,13 @@ class StatsRepository
                     $year1 = $date1[1];
                     $year2 = $date2[1];
                     if ($year1 != $year2) {
-                        return ($year1 == $year2) ? 0 :
-                            ($year1 < $year2) ? -1 : 1;
+                        return ($year1 == $year2) ? 0 
+                            : (($year1 < $year2) ? -1 : 1);
                     } else {
                         $week1 = $date1[0];
                         $week2 = $date2[0];
-                        return ($week1 == $week2) ? 0 :
-                            ($week1 < $week2) ? -1 : 1;
+                        return ($week1 == $week2) ? 0 
+                            : (($week1 < $week2) ? -1 : 1);
                     }
                 });
             }
@@ -937,8 +940,9 @@ class StatsRepository
                 $columns[$index + 1]->title = $key ?? '';
             });
             usort($columns, function ($item1, $item2) {
-                return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                return ($item1->data == $item2->data) ? 0 
+                    : (($item1->data < $item2->data) ? -1 
+                    : 1);
             });
 
             $first = new \stdClass();
@@ -1185,7 +1189,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
             $first = new \stdClass();
             $first->title = $intervCol == 'Code_Intervention' ? 'Code Intervention' : 'Type Intervention';
@@ -1428,8 +1432,8 @@ class StatsRepository
 //            return $_value;
             });
             usort($column_names, function ($item1, $item2) {
-                return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                return ($item1->data == $item2->data) ? 0 
+                    : (($item1->data < $item2->data) ? -1 : 1);
             });
 
             $first = new \stdClass();
@@ -1661,7 +1665,7 @@ class StatsRepository
             });
             usort($codes_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
 
             $first = new \stdClass();
@@ -1900,7 +1904,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
             $first = new \stdClass();
             $first->title = 'Nom region';
@@ -2040,7 +2044,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
             $first = new \stdClass();
             $first->title = 'Nom region';
@@ -2177,7 +2181,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
             $first = new \stdClass();
             $first->title = 'EXPORT ALL EXTRACT CUI';
@@ -2350,7 +2354,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
             $first = new \stdClass();
             $first->title = 'produit';
@@ -2481,7 +2485,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
             $first = new \stdClass();
             $first->title = 'produit';
@@ -2630,7 +2634,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
             $first = new \stdClass();
             $first->title = 'Resultat Appel';
@@ -2765,7 +2769,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
             $first = new \stdClass();
             $first->title = 'Code Type Intervention';
@@ -2915,7 +2919,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
             $first = new \stdClass();
             $first->title = 'Code Intervention';
@@ -3046,7 +3050,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
             $first = new \stdClass();
             $first->title = 'Code Type Intervention';
@@ -3181,7 +3185,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
             $first = new \stdClass();
             $first->title = 'departement';
@@ -3316,7 +3320,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
             $first = new \stdClass();
             $first->title = 'departement';
@@ -3452,7 +3456,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
             $first = new \stdClass();
             $first->title = 'Joignabilité';
@@ -3605,7 +3609,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
             $first = new \stdClass();
             $first->title = 'joignabilité';
@@ -4248,7 +4252,7 @@ class StatsRepository
             });
             usort($regions_names, function ($item1, $item2) {
                 return ($item1->data == $item2->data) ? 0 :
-                    ($item1->data < $item2->data) ? -1 : 1;
+                    (($item1->data < $item2->data) ? -1 : 1);
             });
 
             $full_name = new \stdClass();
