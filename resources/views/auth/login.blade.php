@@ -22,7 +22,7 @@
                             </div>
                             <div class="block-content">
                                 <div class="p-sm-3 px-lg-4 py-lg-5">
-                                    <img src="{{ asset('media/circetwhite.png') }}" alt="" style="width: 100%">
+                                    <img src="{{ asset('media/logo-placeholder.png') }}" alt="" style="width: 100%">
                                     <p>Bienvenue, veuillez vous connecter.</p>
                                     <form class="js-validation-signin" action="{{ route('login') }}" method="POST">
                                         @csrf
@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div class="content content-full font-size-sm text-muted text-center">
-                <strong>CIRCET</strong> &copy; <span data-toggle="year-copy"></span>
+                <strong>COMPANY</strong> &copy; <span data-toggle="year-copy"></span>
             </div>
         </div>
     </div>

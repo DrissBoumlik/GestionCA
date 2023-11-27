@@ -3,7 +3,7 @@
     <div class="content-header bg-white-5">
         <!-- Logo -->
         <a class="font-w600 text-dual" href="{{ URL::to('/') }}">
-            <img src="{{ asset('media/circetwhite.png') }}" alt="" class="logo">
+            <img src="{{ asset('media/logo-placeholder.png') }}" alt="" class="logo">
         </a>
         <!-- END Logo -->
 

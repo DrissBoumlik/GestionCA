@@ -17,7 +17,7 @@
                             </div>
                             <div class="block-content">
                                 <div class="p-sm-3 px-lg-4 py-lg-5">
-                                    <img src="{{ asset('media/circetwhite.png') }}" alt="" style="width: 100%">
+                                    <img src="{{ asset('media/logo-placeholder.png') }}" alt="" style="width: 100%">
                                     <div class="card-body">
                                         @if (session('status'))
                                             <div class="alert alert-success" role="alert">
@@ -62,7 +62,7 @@
                 </div>
             </div>
             <div class="content content-full font-size-sm text-muted text-center">
-                <strong>CIRCET</strong> &copy; <span data-toggle="year-copy"></span>
+                <strong>COMPANY</strong> &copy; <span data-toggle="year-copy"></span>
             </div>
         </div>
     </div>
